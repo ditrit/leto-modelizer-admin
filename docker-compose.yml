@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+  front:
+    image: leto-modelizer-admin
+    ports:
+      - 9000:80
