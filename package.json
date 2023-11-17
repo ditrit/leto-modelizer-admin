@@ -1,0 +1,59 @@
+{
+  "name": "leto-modelizer-admin",
+  "version": "0.0.1",
+  "description": "Administration application for leto-modelizer.",
+  "productName": "leto-modelizer-admin",
+  "author": "Vincent Moittié <moittie.vincent@gmail.com>",
+  "private": true,
+  "scripts": {
+    "build": "quasar build",
+    "dev": "quasar dev",
+    "lint": "eslint --max-warnings=0 --ext .js,.vue . && npx gherkin-lint",
+    "lint:fix": "eslint --fix --ext .js,.vue .",
+    "lint:report": "eslint --max-warnings=0 --ext .js,.vue . -f json-relative > eslint.json && npx gherkin-lint",
+    "test": "vitest",
+    "test:e2e": "cypress run --browser chrome",
+    "test:ui": "vitest --ui",
+    "test:ci": "vitest run"
+  },
+  "dependencies": {
+    "@quasar/extras": "^1.16.8",
+    "axios": "^1.6.2",
+    "pinia": "^2.1.7",
+    "quasar": "^2.14.0",
+    "vue": "^3.3.8",
+    "vue-i18n": "^9.7.0",
+    "vue-router": "^4.2.5"
+  },
+  "devDependencies": {
+    "@4tw/cypress-drag-drop": "=2.2.5",
+    "@badeball/cypress-cucumber-preprocessor": "=19.1.0",
+    "@cypress/browserify-preprocessor": "=3.0.2",
+    "@intlify/vite-plugin-vue-i18n": "^6.0.3",
+    "@quasar/app-vite": "^1.7.0",
+    "@quasar/quasar-app-extension-testing-unit-vitest": "^0.4.0",
+    "@vitest/coverage-v8": "^0.34.6",
+    "@vue/test-utils": "^2.4.2",
+    "autoprefixer": "^10.4.16",
+    "cypress": "=13.5.1",
+    "cypress-real-events": "=1.11.0",
+    "eslint": "^8.53.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-cypress": "=2.15.1",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-jsdoc": "=46.9.0",
+    "eslint-plugin-vue": "^9.18.1",
+    "gherkin-lint": "=4.2.2",
+    "jsdoc": "=4.0.2",
+    "nunjucks": "=3.2.4",
+    "vitest": "^0.34.6"
+  },
+  "engines": {
+    "node": "^18 || ^16 || ^14.19",
+    "npm": ">= 6.13.4",
+    "yarn": ">= 1.21.1"
+  },
+  "cypress-cucumber-preprocessor": {
+    "stepDefinitions": "tests/e2e/support/**/*.js"
+  }
+}
