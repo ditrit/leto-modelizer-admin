@@ -1,0 +1,166 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  delete-comments:
+    name: Delete bot comment(s)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: izhangzhihao/delete-comment@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          delete_user_name: github-actions[bot]
+          issue_number: ${{ github.event.number }}
+
+  branch-naming-rules:
+    name: Check branch name
+    runs-on: ubuntu-latest
+    steps:
+      - uses: deepakputhraya/action-branch-name@master
+        with:
+          regex: '^(feature|bugfix|improvement|library|prerelease|release|hotfix)\/[a-z0-9_.-]+$'
+          allowed_prefixes: 'feature,bugfix,improvement,library,prerelease,release,hotfix'
+          ignore: main
+          min_length: 5
+          max_length: 50
+
+  build:
+    name: Setup app
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.14
+      - name: Setup npm
+        run: npm install -g npm@8.19.3
+      - uses: actions/cache/restore@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-build-cache-node-modules-${{ hashFiles('./package-lock.json') }}
+      - name: Install dependencies
+        run: npm ci
+      - run: git status
+      - name: Set node_modules cache
+        uses: actions/cache/save@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-build-cache-node-modules-${{ hashFiles('./package-lock.json') }}
+
+  check-style:
+    name: Code style
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.14
+      - name: Setup npm
+        run: npm install -g npm@8.19.3
+      - uses: actions/cache/restore@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-build-cache-node-modules-${{ hashFiles('./package-lock.json') }}
+      - name: Check style
+        run: npm run lint
+
+  unit-tests:
+    name: Unit tests
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.14
+      - name: Setup npm
+        run: npm install -g npm@8.19.3
+      - uses: actions/cache/restore@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-build-cache-node-modules-${{ hashFiles('./package-lock.json') }}
+      - name: Run unit tests
+        run: export NODE_OPTIONS=--max_old_space_size=8192 && npm run test:ci
+      - name: Upload line coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: reports-lcov-${{ github.sha }}
+          path: reports/
+
+  check-dependencies:
+    name: Check dependencies
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.14
+      - name: Setup npm
+        run: npm install -g npm@8.19.3
+      - uses: actions/cache/restore@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-build-cache-node-modules-${{ hashFiles('./package-lock.json') }}
+      - name: Install dependencies
+        run: npm install npm-check-updates
+      - name: Run check dependencies
+        run: echo '```bash' > dependencies.txt && npx ncu >> dependencies.txt && echo '```' >> dependencies.txt
+      - name: Post comment
+        uses: machine-learning-apps/pr-comment@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          path: dependencies.txt
+
+  sonarcloud:
+    name: SonarCloud
+    needs: [check-style, unit-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+      - name: Download line coverage report
+        uses: actions/download-artifact@v3
+        with:
+          name: reports-lcov-${{ github.sha }}
+          path: reports/
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  e2e-tests:
+    name: E2E tests
+    needs: [sonarcloud]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.14
+      - uses: actions/cache/restore@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-build-cache-node-modules-${{ hashFiles('./package-lock.json') }}
+      - name: Build application
+        run: |
+          npm install -g npm@8.19.3 &&  \
+          npm ci && \
+          docker build -t leto-modelizer-admin .
+      - name: Run application
+        run: docker compose up -d
+      - name: Run functional tests
+        run: npm run test:e2e
