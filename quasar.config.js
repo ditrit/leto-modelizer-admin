@@ -13,6 +13,19 @@
 const { configure } = require('quasar/wrappers');
 const path = require('path');
 const { version } = require('./package.json');
+const configuration = require('./global.config.json');
+
+if (!configuration?.backendUrl || configuration.backendUrl.length === 0) {
+  throw new Error('Configuration key "backendUrl" is mandatory!');
+}
+
+if (!configuration?.backendAppId || configuration.backendAppId.length === 0) {
+  throw new Error('Configuration key "backendAppId" is mandatory!');
+}
+
+if (!configuration?.letoModelizerUrl || configuration.letoModelizerUrl.length === 0) {
+  throw new Error('Configuration key "letoModelizerUrl" is mandatory!');
+}
 
 module.exports = configure((/* ctx */) => ({
   eslint: {
@@ -61,7 +74,13 @@ module.exports = configure((/* ctx */) => ({
       node: 'node16',
     },
 
-    vueRouterMode: 'hash', // available values: 'hash', 'history'
+    env: {
+      VERSION: version,
+      BACKEND_APP_ID: configuration.backendAppId,
+      LETO_MODELIZER_URL: configuration.letoModelizerUrl,
+    },
+
+    vueRouterMode: 'history', // available values: 'hash', 'history'
     // vueRouterBase,
     // vueDevtools,
     // vueOptionsAPI: false,
@@ -91,14 +110,20 @@ module.exports = configure((/* ctx */) => ({
     ],
   },
 
-  env: {
-    VERSION: version,
-  },
-
   // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
   devServer: {
     // https: true
-    open: false, // opens browser window automatically
+    port: 9000,
+    open: false, // opens browser window automatically configuration.backendUrl
+    cors: false,
+    proxy: {
+      '/backend': {
+        target: configuration.backendUrl,
+        changeOrigin: true,
+        secure: false,
+        rewrite: (p) => p.replace(/^\/backend/, ''),
+      },
+    },
   },
 
   // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework

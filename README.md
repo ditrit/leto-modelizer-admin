@@ -16,7 +16,6 @@
 
 [![](https://dcbadge.vercel.app/api/server/zkKfj9gj2C?style=flat&theme=default-inverted)](https://discord.gg/zkKfj9gj2C)
 
-
 Administration application for leto-modelizer.
 
 ## Features
@@ -52,6 +51,27 @@ cd leto-modelizer-admin
 ```
 
 ## How to build this app
+
+:warning: Leto-Modelizer-Admin can't work without [Leto-Modelizer-Api](https://github.com/ditrit/leto-modelizer-api) and [Leto-Modelizer](https://github.com/ditrit/leto-modelizer), you must setup both of them first!
+
+### Configuration
+
+We are using [Leto-Modelizer-Api](https://github.com/ditrit/leto-modelizer-api) authentication (as a backend). To configure it, you must fill the configuration inside `global.config.json` root file.
+
+All the fields are mandatory.
+
+```json
+{
+  "backendUrl": "http://localhost:1337/",
+  "backendAppId": "leto-modelizer-api-dev",
+  "letoModelizerUrl": "http://localhost:8080"
+}
+```
+
+Here's a description of each key in the provided configuration:
+- `backendUrl`: the url of the backend.
+- `backendAppId`: the application ID of the backend.
+- `letoModelizerUrl`: the url of the leto-modelizer application.
 
 ### Native build
 
