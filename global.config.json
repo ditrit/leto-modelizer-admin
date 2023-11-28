@@ -1,0 +1,5 @@
+{
+  "backendUrl": "http://localhost:1337/",
+  "backendAppId": "leto-modelizer-api-dev",
+  "letoModelizerUrl": "http://localhost:8080"
+}

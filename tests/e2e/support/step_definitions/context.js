@@ -1,6 +1,7 @@
 import { Before, Given, Then } from '@badeball/cypress-cucumber-preprocessor';
 
 Before(() => {
+  localStorage.setItem('sessionToken', 'token');
   cy.context = {};
 });
 

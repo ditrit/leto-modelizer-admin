@@ -17,6 +17,3 @@
 // eslint-disable-next-line no-restricted-imports
 import 'cypress-real-events';
 import '@4tw/cypress-drag-drop';
-
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
