@@ -1,1 +1,8 @@
 // app global css in SCSS form
+.logo  {
+  width: 50px;
+  height: 50px;
+  margin: 10px;
+  background-color: white;
+  mask: url(../assets/logo.svg) no-repeat center;
+}
