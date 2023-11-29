@@ -2,14 +2,14 @@
   <div class="fullscreen bg-primary text-white text-center q-pa-md flex flex-center">
     <div>
       <div style="font-size: 30vh">
-        {{ $t('error404.title') }}
+        {{ $t('ErrorNotFoundPage.text.title') }}
       </div>
 
       <div
         class="text-h2"
         style="opacity:.4"
       >
-        {{ $t('error404.content') }}
+        {{ $t('ErrorNotFoundPage.text.content') }}
       </div>
 
       <q-btn

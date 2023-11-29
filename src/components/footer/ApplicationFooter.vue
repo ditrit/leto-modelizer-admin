@@ -6,7 +6,7 @@
         class="text-white q-ml-md"
         target="_blank"
       >
-        {{ $t('footer.version', { version }) }}
+        {{ $t('ApplicationFooter.text.version', { version }) }}
       </a>
     </q-toolbar>
   </q-footer>

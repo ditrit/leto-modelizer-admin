@@ -28,11 +28,11 @@
         <q-item-section avatar>
           <q-icon
             color="primary"
-            name="fa-solid fa-right-from-bracket"
+            :name="$t('UserButton.icon.goLeto')"
           />
         </q-item-section>
         <q-item-section no-wrap>
-          {{ $t('page.settings.goLeto') }}
+          {{ $t('UserButton.text.goLeto') }}
         </q-item-section>
       </q-item>
     </q-list>

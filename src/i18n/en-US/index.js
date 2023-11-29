@@ -1,14 +1,40 @@
 export default {
-  application: {
-    name: 'Leto Modelizer Admin',
-  },
-  actions: {
-    default: {
-      goToHome: 'Go to homepage',
+  ApplicationDrawer: {
+    text: {
+      users: 'Users',
+    },
+    icon: {
+      users: 'fa-solid fa-user',
     },
   },
-  error404: {
-    title: '404',
-    content: 'Oops. Nothing here...',
+  ApplicationFooter: {
+    text: {
+      version: 'Version {version}',
+    },
+  },
+  ApplicationHeader: {
+    text: {
+      applicationName: 'Leto Modelizer Admin',
+      title: 'Administration area',
+    },
+  },
+  ErrorNotFoundPage: {
+    text: {
+      title: '404',
+      content: 'Oops. Nothing here...',
+    },
+  },
+  IndexPage: {
+    text: {
+      title: 'Users',
+    },
+  },
+  UserButton: {
+    text: {
+      goLeto: 'Go to leto-modelizer',
+    },
+    icon: {
+      goLeto: 'fa-solid fa-right-from-bracket',
+    },
   },
 };

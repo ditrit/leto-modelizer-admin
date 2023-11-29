@@ -9,7 +9,7 @@
         class="vertical-middle text-subtitle1 cursor-pointer text-white"
         data-cy="application-name"
       >
-        {{ $t('application.name') }}
+        {{ $t('ApplicationHeader.text.applicationName') }}
       </label>
     </div>
     <div class="project-info">
@@ -17,11 +17,11 @@
         class="application-title q-ma-none"
         data-cy="application-title"
       >
-        {{ $t('application.title') }}
+        {{ $t('ApplicationHeader.text.title') }}
       </h5>
     </div>
     <div class="row justify-between items-center">
-      <user-button/>
+      <user-button />
     </div>
   </q-header>
 </template>

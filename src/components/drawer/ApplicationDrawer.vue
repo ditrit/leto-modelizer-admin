@@ -38,14 +38,9 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 const menuList = ref([
   {
-    icon: 'fa-solid fa-user',
-    label: t('page.drawer.users'),
+    icon: t('ApplicationDrawer.icon.users'),
+    label: t('ApplicationDrawer.text.users'),
     url: '/',
-  },
-  {
-    icon: 'fa-solid fa-users',
-    label: 'User groups',
-    url: '/groups',
   },
 ]);
 </script>
