@@ -14,10 +14,10 @@ describe('Test component: App', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = mount(App, {});
+    wrapper = mount(App);
   });
 
-  it('should mount component', () => {
+  it('should mount the component', () => {
     expect(wrapper).not.toBeNull();
   });
 });
