@@ -1,0 +1,54 @@
+<template>
+  <q-drawer
+    show-if-above
+    :width="200"
+    :breakpoint="500"
+    bordered
+  >
+    <q-scroll-area class="fit">
+      <q-list>
+        <template
+          v-for="(menuItem, index) in menuList"
+          :key="index"
+        >
+          <q-item
+            v-ripple
+            clickable
+            :active="menuItem.url === $route.path"
+            @click="$router.push(menuItem.url)"
+          >
+            <q-item-section avatar>
+              <q-icon :name="menuItem.icon" />
+            </q-item-section>
+            <q-item-section>
+              {{ menuItem.label }}
+            </q-item-section>
+          </q-item>
+          <q-separator />
+        </template>
+      </q-list>
+    </q-scroll-area>
+  </q-drawer>
+</template>
+
+<script setup>
+import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+const menuList = ref([
+  {
+    icon: t('ApplicationDrawer.icon.users'),
+    label: t('ApplicationDrawer.text.users'),
+    url: '/',
+  },
+]);
+</script>
+
+<style lang="scss" scoped>
+.q-item--active {
+  border-right: solid $primary 5px;
+  background: $secondary;
+  color: white;
+}
+</style>

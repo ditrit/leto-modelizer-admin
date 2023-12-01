@@ -5,16 +5,21 @@ import {
   expect,
   it,
   beforeEach,
+  vi,
 } from 'vitest';
-import App from 'src/App.vue';
+import ApplicationFooter from 'src/components/footer/ApplicationFooter.vue';
+import { createPinia, setActivePinia } from 'pinia';
 
 installQuasarPlugin();
 
-describe('Test component: App', () => {
+vi.stubGlobal('$sanitize', true);
+
+describe('Test component: ApplicationFooter', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = mount(App);
+    setActivePinia(createPinia());
+    wrapper = mount(ApplicationFooter);
   });
 
   it('should mount the component', () => {

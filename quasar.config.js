@@ -46,6 +46,7 @@ module.exports = configure((/* ctx */) => ({
   boot: [
     'i18n',
     'axios',
+    'vue-sanitize',
   ],
 
   // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
@@ -64,7 +65,7 @@ module.exports = configure((/* ctx */) => ({
     // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
     'roboto-font', // optional, you are not bound to it
-    'material-icons', // optional, you are not bound to it
+    'fontawesome-v6', // optional, you are not bound to it
   ],
 
   // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
@@ -130,6 +131,7 @@ module.exports = configure((/* ctx */) => ({
   framework: {
     config: {},
 
+    iconSet: 'fontawesome-v6',
     // iconSet: 'material-icons', // Quasar icon set
     // lang: 'en-US', // Quasar language pack
 

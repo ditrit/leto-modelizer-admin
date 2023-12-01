@@ -1,20 +1,20 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest';
-import { mount } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import {
   describe,
   expect,
   it,
   beforeEach,
 } from 'vitest';
-import App from 'src/App.vue';
+import MainLayout from 'src/layouts/MainLayout.vue';
 
 installQuasarPlugin();
 
-describe('Test component: App', () => {
+describe('Test component: MainLayout', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = mount(App);
+    wrapper = shallowMount(MainLayout);
   });
 
   it('should mount the component', () => {

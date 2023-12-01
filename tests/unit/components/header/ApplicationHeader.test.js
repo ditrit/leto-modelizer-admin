@@ -6,15 +6,17 @@ import {
   it,
   beforeEach,
 } from 'vitest';
-import App from 'src/App.vue';
+import ApplicationHeader from 'src/components/header/ApplicationHeader.vue';
+import { createPinia, setActivePinia } from 'pinia';
 
 installQuasarPlugin();
 
-describe('Test component: App', () => {
+describe('Test component: ApplicationHeader', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = mount(App);
+    setActivePinia(createPinia());
+    wrapper = mount(ApplicationHeader, {});
   });
 
   it('should mount the component', () => {
