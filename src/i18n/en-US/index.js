@@ -3,10 +3,12 @@ export default {
     text: {
       users: 'Users',
       libraries: 'Libraries',
+      roles: 'Roles',
     },
     icon: {
       users: 'fa-solid fa-user',
       libraries: 'fa-solid fa-book-open',
+      roles: 'fa-solid fa-screwdriver-wrench',
     },
   },
   ApplicationFooter: {
@@ -34,6 +36,11 @@ export default {
   LibrariesPage: {
     text: {
       title: 'Libraries',
+    },
+  },
+  RolesPage: {
+    text: {
+      title: 'Roles',
     },
   },
   UserButton: {

@@ -44,6 +44,11 @@ const menuList = ref([
     url: '/users',
   },
   {
+    icon: t('ApplicationDrawer.icon.roles'),
+    label: t('ApplicationDrawer.text.roles'),
+    url: '/roles',
+  },
+  {
     icon: t('ApplicationDrawer.icon.libraries'),
     label: t('ApplicationDrawer.text.libraries'),
     url: '/libraries',
