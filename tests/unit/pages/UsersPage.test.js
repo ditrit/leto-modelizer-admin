@@ -1,20 +1,14 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest';
 import { shallowMount } from '@vue/test-utils';
-import {
-  describe,
-  expect,
-  it,
-  beforeEach,
-} from 'vitest';
-import IndexPage from 'src/pages/IndexPage.vue';
+import UsersPage from 'pages/UsersPage.vue';
 
 installQuasarPlugin();
 
-describe('Test component: IndexPage', () => {
+describe('Test component: UsersPage', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallowMount(IndexPage);
+    wrapper = shallowMount(UsersPage);
   });
 
   it('should mount the component', () => {

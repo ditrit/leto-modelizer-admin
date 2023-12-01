@@ -1,11 +1,5 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest';
 import { shallowMount } from '@vue/test-utils';
-import {
-  describe,
-  expect,
-  it,
-  beforeEach,
-} from 'vitest';
 import ApplicationDrawer from 'src/components/drawer/ApplicationDrawer.vue';
 import { createPinia, setActivePinia } from 'pinia';
 

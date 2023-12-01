@@ -4,12 +4,7 @@ import {
 } from 'src/composables/UserAuthentication';
 import { setActivePinia, createPinia } from 'pinia';
 import { useUserStore } from 'src/stores/UserStore';
-import {
-  describe,
-  expect,
-  it,
-  vi,
-} from 'vitest';
+import { vi } from 'vitest';
 
 vi.mock('src/composables/LetoModelizerApi');
 
