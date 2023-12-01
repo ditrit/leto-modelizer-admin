@@ -1,11 +1,5 @@
 import { setActivePinia, createPinia } from 'pinia';
 import { useUserStore } from 'src/stores/UserStore';
-import {
-  describe,
-  expect,
-  it,
-  beforeEach,
-} from 'vitest';
 
 describe('User Store', () => {
   let store = null;

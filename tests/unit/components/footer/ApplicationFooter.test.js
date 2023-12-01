@@ -1,12 +1,6 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest';
 import { mount } from '@vue/test-utils';
-import {
-  describe,
-  expect,
-  it,
-  beforeEach,
-  vi,
-} from 'vitest';
+import { vi } from 'vitest';
 import ApplicationFooter from 'src/components/footer/ApplicationFooter.vue';
 import { createPinia, setActivePinia } from 'pinia';
 

@@ -27,6 +27,7 @@ export default defineConfig({
       all: true,
       reportsDirectory: './reports',
     },
+    globals: true,
   },
   plugins: [
     vue({

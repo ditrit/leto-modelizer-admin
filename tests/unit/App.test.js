@@ -1,11 +1,5 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest';
 import { mount } from '@vue/test-utils';
-import {
-  describe,
-  expect,
-  it,
-  beforeEach,
-} from 'vitest';
 import App from 'src/App.vue';
 
 installQuasarPlugin();

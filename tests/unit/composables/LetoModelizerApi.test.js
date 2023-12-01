@@ -2,12 +2,7 @@ import {
   getUserInformation,
   getUserRoles,
 } from 'src/composables/LetoModelizerApi';
-import {
-  describe,
-  expect,
-  it,
-  vi,
-} from 'vitest';
+import { vi } from 'vitest';
 
 vi.mock('boot/axios');
 
