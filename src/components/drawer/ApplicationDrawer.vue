@@ -15,6 +15,7 @@
             v-ripple
             clickable
             :active="menuItem.url === $route.path"
+            :data-cy="`drawer_item_${menuItem.label}`"
             @click="$router.push(menuItem.url)"
           >
             <q-item-section avatar>
