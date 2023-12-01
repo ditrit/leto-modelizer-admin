@@ -29,6 +29,11 @@ export default {
       title: 'Users',
     },
   },
+  LibrariesPage: {
+    text: {
+      title: 'Libraries',
+    },
+  },
   UserButton: {
     text: {
       goLeto: 'Go to leto-modelizer',
