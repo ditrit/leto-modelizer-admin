@@ -1,13 +1,21 @@
 const routes = [
   {
     path: '/',
-    redirect: '/users',
-  },
-  {
-    path: '/users',
     component: () => import('layouts/MainLayout.vue'),
+    redirect: '/users',
     children: [
-      { path: '', component: () => import('pages/UsersPage.vue') },
+      {
+        path: '/users',
+        children: [
+          { path: '', component: () => import('pages/UsersPage.vue') },
+        ],
+      },
+      {
+        path: '/libraries',
+        children: [
+          { path: '', component: () => import('pages/LibrariesPage.vue') },
+        ],
+      },
     ],
   },
   {
