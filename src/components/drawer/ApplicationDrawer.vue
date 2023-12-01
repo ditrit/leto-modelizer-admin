@@ -40,7 +40,12 @@ const menuList = ref([
   {
     icon: t('ApplicationDrawer.icon.users'),
     label: t('ApplicationDrawer.text.users'),
-    url: '/',
+    url: '/users',
+  },
+  {
+    icon: t('ApplicationDrawer.icon.libraries'),
+    label: t('ApplicationDrawer.text.libraries'),
+    url: '/libraries',
   },
 ]);
 </script>
