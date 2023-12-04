@@ -2,9 +2,11 @@ export default {
   ApplicationDrawer: {
     text: {
       users: 'Users',
+      libraries: 'Libraries',
     },
     icon: {
       users: 'fa-solid fa-user',
+      libraries: 'fa-solid fa-book-open',
     },
   },
   ApplicationFooter: {
@@ -27,6 +29,11 @@ export default {
   IndexPage: {
     text: {
       title: 'Users',
+    },
+  },
+  LibrariesPage: {
+    text: {
+      title: 'Libraries',
     },
   },
   UserButton: {

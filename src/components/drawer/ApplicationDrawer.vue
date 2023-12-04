@@ -15,6 +15,7 @@
             v-ripple
             clickable
             :active="menuItem.url === $route.path"
+            :data-cy="`drawer_item_${menuItem.label}`"
             @click="$router.push(menuItem.url)"
           >
             <q-item-section avatar>
@@ -40,7 +41,12 @@ const menuList = ref([
   {
     icon: t('ApplicationDrawer.icon.users'),
     label: t('ApplicationDrawer.text.users'),
-    url: '/',
+    url: '/users',
+  },
+  {
+    icon: t('ApplicationDrawer.icon.libraries'),
+    label: t('ApplicationDrawer.text.libraries'),
+    url: '/libraries',
   },
 ]);
 </script>
