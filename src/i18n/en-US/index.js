@@ -2,11 +2,13 @@ export default {
   ApplicationDrawer: {
     text: {
       users: 'Users',
+      userGroups: 'User Groups',
       libraries: 'Libraries',
       roles: 'Roles',
     },
     icon: {
       users: 'fa-solid fa-user',
+      userGroups: 'fa-solid fa-users',
       libraries: 'fa-solid fa-book-open',
       roles: 'fa-solid fa-screwdriver-wrench',
     },
@@ -33,14 +35,19 @@ export default {
       title: 'Users',
     },
   },
-  LibrariesPage: {
+  UserGroupsPage: {
     text: {
-      title: 'Libraries',
+      title: 'User Groups',
     },
   },
   RolesPage: {
     text: {
       title: 'Roles',
+    },
+  },
+  LibrariesPage: {
+    text: {
+      title: 'Libraries',
     },
   },
   UserButton: {

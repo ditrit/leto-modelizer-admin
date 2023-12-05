@@ -11,6 +11,12 @@ const routes = [
         ],
       },
       {
+        path: '/user-groups',
+        children: [
+          { path: '', component: () => import('pages/UserGroupsPage.vue') },
+        ],
+      },
+      {
         path: '/roles',
         children: [
           { path: '', component: () => import('pages/RolesPage.vue') },
