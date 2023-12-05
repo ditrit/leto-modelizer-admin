@@ -1,4 +1,5 @@
 import { api } from 'boot/axios';
+import { getUserSessionToken } from 'src/composables/UserAuthentication';
 
 /**
  * Retrieve (GET request) information about the current user.
@@ -37,4 +38,21 @@ export async function getUserRoles(userId, sessionToken) {
   const queryParameters = `where={"users":{"__type":"Pointer","className":"_User","objectId":"${userId}"}}`;
 
   return api.get(`/api/roles?${queryParameters}`, headers);
+}
+
+/**
+ * Get all libraries.
+ * @returns {Promise<object[]>} Return an array of libraries.
+ */
+export async function getLibraries() {
+  const config = {
+    headers: {
+      Accept: 'application/json',
+      'X-Parse-Application-Id': process.env.BACKEND_APP_ID,
+      'X-Parse-Session-Token': getUserSessionToken(),
+    },
+  };
+  const queryParameters = 'limit=10';
+
+  return api.get(`/api/classes/Library?${queryParameters}`, config);
 }
