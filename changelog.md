@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Setup global application design.
 * Setup authentication from `leto-modelizer`.
 * Setup Users page
-* Setup Libraries page
+* Setup Libraries page with:
+  * Table to display all libraries
 * Setup Roles page
 * Setup User Groups page
