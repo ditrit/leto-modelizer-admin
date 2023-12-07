@@ -16,6 +16,9 @@ Feature: Test roundtrip of the application
     When I click on '[data-cy="drawer_item_roles"]'
     Then I expect '[data-cy="page_roles_title"]' is 'Roles'
     And  I expect current url is '/roles'
+    And  I expect '[data-cy="roles_table"]' exists
+    And  I expect '[data-cy="roles_table"] thead tr' appear 1 time on screen
+    And  I expect '[data-cy="roles_table"] tbody tr' appear 1 time on screen
 
     # Navigate to LibrariesPage
     When I click on '[data-cy="drawer_item_libraries"]'

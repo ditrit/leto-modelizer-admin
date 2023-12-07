@@ -28,4 +28,12 @@ Before(() => {
     },
     { results: [{ name: 'admin' }] },
   );
+
+  cy.intercept(
+    {
+      method: 'GET',
+      url: '/backend/api/classes/_Role*',
+    },
+    { results: [{ name: 'CF_createProject' }] },
+  );
 });
