@@ -28,6 +28,7 @@ export default {
     text: {
       title: '404',
       content: 'Oops. Nothing here...',
+      goToHome: 'Back to homepage',
     },
   },
   IndexPage: {

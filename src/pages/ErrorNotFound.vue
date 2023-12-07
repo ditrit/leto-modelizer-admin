@@ -18,7 +18,7 @@
         text-color="primary"
         unelevated
         to="/"
-        :label="$t('actions.default.goToHome')"
+        :label="$t('ErrorNotFoundPage.text.goToHome')"
         no-caps
       />
     </div>
