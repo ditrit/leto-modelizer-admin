@@ -58,4 +58,13 @@ export default {
       goLeto: 'fa-solid fa-right-from-bracket',
     },
   },
+  RolesTable: {
+    text: {
+      nameColumn: 'Role Name',
+      typeColumn: 'Role Type',
+      typeColumnLibrary: 'Library',
+      typeColumnSystem: 'System',
+      typeColumnFunctionnal: 'Functionnal',
+    },
+  },
 };
