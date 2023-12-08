@@ -20,4 +20,12 @@ Before(() => {
     },
     [{ name: 'admin' }],
   );
+
+  cy.intercept(
+    {
+      method: 'GET',
+      url: '/backend/api/classes/Library*',
+    },
+    { results: [{ name: 'admin' }] },
+  );
 });

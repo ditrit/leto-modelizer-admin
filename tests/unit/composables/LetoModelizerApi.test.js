@@ -1,6 +1,7 @@
 import {
   getUserInformation,
   getUserRoles,
+  getLibraries,
 } from 'src/composables/LetoModelizerApi';
 import { vi } from 'vitest';
 
@@ -53,6 +54,31 @@ describe('User Authentication', () => {
 
       const res = await getUserRoles('r:dead779dcda4970cc7f96c09a328d771');
       expect(res.results).toEqual([{ name: 'admin' }]);
+    });
+  });
+
+  describe('Test function: getLibraries', () => {
+    it('should return the libraries', async () => {
+      const libraries = [{
+        author: 'Vincent Moittie <moittie.vincent@gmail.com>',
+        createdAt: '2023-12-04T15:22:15.841Z',
+        description: 'Library that contains all default templates for leto-modelizer.',
+        name: 'Leto-modelizer-templates-library',
+        objectId: 'w2U52H05zx',
+        roleName: 'test',
+        updatedAt: '2023-12-04T15:22:15.841Z',
+        url: 'https://raw.githubusercontent.com/ditrit/leto-modelizer-templates-library/leto-modelizer/e2e_test/index.json',
+        version: '0.1.0',
+      }];
+      const resultGetLibraries = {
+        results: libraries,
+      };
+
+      const { api } = await import('boot/axios');
+      api.get.mockImplementation(() => Promise.resolve(resultGetLibraries));
+
+      const res = await getLibraries();
+      expect(res.results).toEqual(libraries);
     });
   });
 });
