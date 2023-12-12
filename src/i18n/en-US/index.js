@@ -51,6 +51,18 @@ export default {
       title: 'Libraries',
     },
   },
+  LibraryPage: {
+    text: {
+      author: 'Author:',
+      description: 'Description:',
+      version: 'Version:',
+      goBack: 'Return to previous page',
+      notFound: 'Library not found.',
+    },
+    icon: {
+      goBack: 'fa-solid fa-chevron-left',
+    },
+  },
   UserButton: {
     text: {
       goLeto: 'Go to leto-modelizer',

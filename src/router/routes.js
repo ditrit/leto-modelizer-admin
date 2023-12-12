@@ -26,6 +26,7 @@ const routes = [
         path: '/libraries',
         children: [
           { path: '', component: () => import('pages/LibrariesPage.vue') },
+          { path: '/libraries/:id', component: () => import('pages/LibraryPage.vue') },
         ],
       },
     ],
