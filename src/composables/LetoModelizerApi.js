@@ -42,7 +42,8 @@ export async function getUserRoles(userId, sessionToken) {
 
 /**
  * Get all libraries.
- * @returns {Promise<object[]>} Return an array of libraries.
+ * @returns {Promise<object[]>} Promise with an array of libraries on success
+ * otherwise an error.
  */
 export async function getLibraries() {
   const config = {

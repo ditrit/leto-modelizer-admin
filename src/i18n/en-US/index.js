@@ -59,6 +59,11 @@ export default {
       goLeto: 'fa-solid fa-right-from-bracket',
     },
   },
+  LibrariesTable: {
+    text: {
+      nameColumn: 'Name',
+    },
+  },
   RolesTable: {
     text: {
       nameColumn: 'Role Name',
