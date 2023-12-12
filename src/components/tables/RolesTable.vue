@@ -63,7 +63,7 @@ async function getRolesWithType() {
       role.type = t('RolesTable.text.typeColumnSystem');
       role.color = 'orange';
     } else {
-      role.type = t('RolesTable.text.typeColumnFunctionnal');
+      role.type = t('RolesTable.text.typeColumnFunctional');
       role.color = 'teal';
     }
 
