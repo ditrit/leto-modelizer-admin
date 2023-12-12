@@ -91,3 +91,22 @@ export async function getRoles() {
   return api.get(`/api/classes/_Role?${queryParameters}`, config)
     .catch(manageError);
 }
+
+/**
+ * Get library by id.
+ * @param {string} id - Library id.
+ * @returns {Promise<object>} Return a library.
+ */
+export async function getLibraryById(id) {
+  const config = {
+    headers: {
+      Accept: 'application/json',
+      'X-Parse-Application-Id': process.env.BACKEND_APP_ID,
+      'X-Parse-Session-Token': getUserSessionToken(),
+    },
+  };
+
+  return api.get(`/api/classes/Library/${id}`, config)
+    .then(({ data }) => data)
+    .catch(manageError);
+}
