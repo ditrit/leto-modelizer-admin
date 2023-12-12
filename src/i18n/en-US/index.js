@@ -74,6 +74,7 @@ export default {
   LibrariesTable: {
     text: {
       nameColumn: 'Name',
+      actionsColumn: 'Actions',
     },
   },
   RolesTable: {
