@@ -40,12 +40,14 @@ const columns = ref([{
   label: t('RolesTable.text.nameColumn'),
   align: 'left',
   field: 'name',
+  classes: 'role-name',
 }, {
   name: 'type',
   required: true,
   label: t('RolesTable.text.typeColumn'),
   align: 'left',
   field: 'type',
+  classes: 'role-type',
 }]);
 const roles = ref([]);
 const rowKey = ref('objectId');

@@ -14,7 +14,7 @@ Then('I expect {string} not exists', (templateSelector) => {
 Then('I expect {string} is {string}', (templateSelector, templateExpectedValue) => {
   const selector = nunjucks.renderString(templateSelector, cy.context);
   const expectedValue = nunjucks.renderString(templateExpectedValue, cy.context);
-  cy.get(selector).contains(expectedValue);
+  cy.get(selector).should('contain', expectedValue);
 });
 
 Then('I expect checkbox {string} is checked', (templateSelector) => {
