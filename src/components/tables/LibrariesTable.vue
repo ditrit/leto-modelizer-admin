@@ -7,21 +7,23 @@
     :columns="columns"
     :rows="libraries"
     :row-key="rowKey"
-    data-cy="page_libraries_table"
+    data-cy="libraries_table"
   />
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue';
 import { getLibraries } from 'src/composables/LetoModelizerApi';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const pagination = ref({
   rowsPerPage: 0, // infinite
 });
 const columns = ref([{
   name: 'name',
   required: true,
-  label: 'Name',
+  label: t('LibrariesTable.text.nameColumn'),
   align: 'left',
   field: 'name',
 }]);

@@ -28,6 +28,7 @@ export default {
     text: {
       title: '404',
       content: 'Oops. Nothing here...',
+      goToHome: 'Back to homepage',
     },
   },
   IndexPage: {
@@ -56,6 +57,20 @@ export default {
     },
     icon: {
       goLeto: 'fa-solid fa-right-from-bracket',
+    },
+  },
+  LibrariesTable: {
+    text: {
+      nameColumn: 'Name',
+    },
+  },
+  RolesTable: {
+    text: {
+      nameColumn: 'Role Name',
+      typeColumn: 'Role Type',
+      typeColumnLibrary: 'Library',
+      typeColumnSystem: 'System',
+      typeColumnFunctionnal: 'Functionnal',
     },
   },
 };

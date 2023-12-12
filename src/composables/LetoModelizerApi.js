@@ -42,7 +42,8 @@ export async function getUserRoles(userId, sessionToken) {
 
 /**
  * Get all libraries.
- * @returns {Promise<object[]>} Return an array of libraries.
+ * @returns {Promise<object[]>} Promise with an array of libraries on success
+ * otherwise an error.
  */
 export async function getLibraries() {
   const config = {
@@ -55,4 +56,22 @@ export async function getLibraries() {
   const queryParameters = 'limit=10';
 
   return api.get(`/api/classes/Library?${queryParameters}`, config);
+}
+
+/**
+ * Get all roles.
+ * @returns {Promise<object[]>} Promise with an array of roles on success
+ * otherwise an error.
+ */
+export async function getRoles() {
+  const config = {
+    headers: {
+      Accept: 'application/json',
+      'X-Parse-Application-Id': process.env.BACKEND_APP_ID,
+      'X-Parse-Session-Token': getUserSessionToken(),
+    },
+  };
+  const queryParameters = 'limit=10';
+
+  return api.get(`/api/classes/_Role?${queryParameters}`, config);
 }

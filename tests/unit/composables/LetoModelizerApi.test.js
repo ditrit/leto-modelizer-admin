@@ -2,6 +2,7 @@ import {
   getUserInformation,
   getUserRoles,
   getLibraries,
+  getRoles,
 } from 'src/composables/LetoModelizerApi';
 import { vi } from 'vitest';
 
@@ -79,6 +80,23 @@ describe('User Authentication', () => {
 
       const res = await getLibraries();
       expect(res.results).toEqual(libraries);
+    });
+  });
+
+  describe('Test function: getRoles', () => {
+    it('should return the roles', async () => {
+      const roles = [{
+        name: 'CF_createProject',
+      }];
+      const resultGetRoles = {
+        results: roles,
+      };
+
+      const { api } = await import('boot/axios');
+      api.get.mockImplementation(() => Promise.resolve(resultGetRoles));
+
+      const res = await getRoles();
+      expect(res.results).toEqual(roles);
     });
   });
 });

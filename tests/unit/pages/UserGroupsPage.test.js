@@ -1,6 +1,6 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest';
 import { shallowMount } from '@vue/test-utils';
-import UserGroupsPage from 'pages/RolesPage.vue';
+import UserGroupsPage from 'pages/UserGroupsPage.vue';
 
 installQuasarPlugin();
 
