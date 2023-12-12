@@ -2,6 +2,18 @@ import { api } from 'boot/axios';
 import { getUserSessionToken } from 'src/composables/UserAuthentication';
 
 /**
+ * Redirect on Leto-modelizer on status 503, otherwise throw error.
+ * @param {Error} error - Error from axios.
+ */
+export function manageError(error) {
+  if (error.response.status === 503) {
+    window.location.href = process.env.LETO_MODELIZER_URL;
+    return;
+  }
+  throw error;
+}
+
+/**
  * Retrieve (GET request) information about the current user.
  * @param {string} sessionToken - The current user's session token.
  * @returns {Promise<object>} Promise with the logged-in user information on success
@@ -16,7 +28,8 @@ export async function getUserInformation(sessionToken) {
     },
   };
 
-  return api.get('/api/users/me', headers);
+  return api.get('/api/users/me', headers)
+    .catch(manageError);
 }
 
 /**
@@ -37,7 +50,8 @@ export async function getUserRoles(userId, sessionToken) {
   };
   const queryParameters = `where={"users":{"__type":"Pointer","className":"_User","objectId":"${userId}"}}`;
 
-  return api.get(`/api/roles?${queryParameters}`, headers);
+  return api.get(`/api/roles?${queryParameters}`, headers)
+    .catch(manageError);
 }
 
 /**
@@ -55,7 +69,8 @@ export async function getLibraries() {
   };
   const queryParameters = 'limit=10';
 
-  return api.get(`/api/classes/Library?${queryParameters}`, config);
+  return api.get(`/api/classes/Library?${queryParameters}`, config)
+    .catch(manageError);
 }
 
 /**
@@ -73,5 +88,6 @@ export async function getRoles() {
   };
   const queryParameters = 'limit=10';
 
-  return api.get(`/api/classes/_Role?${queryParameters}`, config);
+  return api.get(`/api/classes/_Role?${queryParameters}`, config)
+    .catch(manageError);
 }
