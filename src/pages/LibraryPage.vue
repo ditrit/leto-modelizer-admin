@@ -50,7 +50,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { getLibraryById } from 'src/composables/LetoModelizerApi';
+import * as LibraryService from 'src/services/LibraryService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 
@@ -67,7 +67,7 @@ const library = ref({});
 async function loadLibrary() {
   loading.value = true;
 
-  return getLibraryById(route.params.id)
+  return LibraryService.findById(route.params.id)
     .then((data) => {
       library.value = data;
     })

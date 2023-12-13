@@ -3,14 +3,14 @@ import { shallowMount } from '@vue/test-utils';
 import LibraryPage from 'pages/LibraryPage.vue';
 import { Notify } from 'quasar';
 import { vi } from 'vitest';
-import * as api from 'src/composables/LetoModelizerApi';
+import * as LibraryService from 'src/services/LibraryService';
 import { useRoute, useRouter } from 'vue-router';
 
 installQuasarPlugin({
   plugins: [Notify],
 });
 
-vi.mock('src/composables/LetoModelizerApi');
+vi.mock('src/services/LibraryService');
 vi.mock('vue-router');
 
 describe('Test component: LibraryPage', () => {
@@ -26,7 +26,7 @@ describe('Test component: LibraryPage', () => {
     useRoute.mockImplementation(() => ({ params: { id: 'id1' } }));
     useRouter.mockImplementation(() => ({ push }));
 
-    api.getLibraryById.mockImplementation(() => Promise.resolve(library));
+    LibraryService.findById.mockImplementation(() => Promise.resolve(library));
 
     wrapper = shallowMount(LibraryPage);
   });
@@ -47,7 +47,7 @@ describe('Test component: LibraryPage', () => {
     });
 
     it('should redirect on unknown library', async () => {
-      api.getLibraryById.mockImplementation(() => Promise.reject());
+      LibraryService.findById.mockImplementation(() => Promise.reject());
 
       await wrapper.vm.loadLibrary();
 
