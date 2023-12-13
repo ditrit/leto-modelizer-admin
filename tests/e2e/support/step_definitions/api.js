@@ -65,4 +65,13 @@ Before(() => {
     statusCode: 404,
     body: 'Not Found',
   });
+
+  cy.intercept('GET', '/backend/api/classes/Group*', {
+    statusCode: 200,
+    body: {
+      results: [
+        { name: 'group' },
+      ],
+    },
+  });
 });
