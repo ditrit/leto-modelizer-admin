@@ -46,11 +46,7 @@ export default route(async () => {
       // Redirect to admin without token in url.
       window.location.href = window.location.href.replaceAll(/\?.+$/g, '');
     } else if (getUserSessionToken()) {
-      initUser(getUserSessionToken())
-        .catch(() => {
-          // Redirect to leto-modelizer in case of unauthorized.
-          window.location.href = process.env.LETO_MODELIZER_URL;
-        });
+      initUser(getUserSessionToken());
       next();
     } else {
       // Redirect to leto-modelizer in case of not connected user.

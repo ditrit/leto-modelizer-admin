@@ -40,12 +40,14 @@ const columns = ref([{
   label: t('RolesTable.text.nameColumn'),
   align: 'left',
   field: 'name',
+  classes: 'role-name',
 }, {
   name: 'type',
   required: true,
   label: t('RolesTable.text.typeColumn'),
   align: 'left',
   field: 'type',
+  classes: 'role-type',
 }]);
 const roles = ref([]);
 const rowKey = ref('objectId');
@@ -63,7 +65,7 @@ async function getRolesWithType() {
       role.type = t('RolesTable.text.typeColumnSystem');
       role.color = 'orange';
     } else {
-      role.type = t('RolesTable.text.typeColumnFunctionnal');
+      role.type = t('RolesTable.text.typeColumnFunctional');
       role.color = 'teal';
     }
 

@@ -53,7 +53,7 @@ describe('Test component: RolesTable', async () => {
         {
           color: 'teal',
           name: '',
-          type: 'Functionnal',
+          type: 'Functional',
         },
       ]);
     });
