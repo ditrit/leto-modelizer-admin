@@ -1,5 +1,6 @@
-import { getUserInformation, getUserRoles } from 'src/composables/LetoModelizerApi';
 import { useUserStore } from 'stores/UserStore';
+import * as UserService from 'src/services/UserService';
+import * as RoleService from 'src/services/RoleService';
 
 /**
  * Set the current user's session token in the local storage.
@@ -30,15 +31,15 @@ export async function initUser(sessionToken) {
     return;
   }
 
-  let response = await getUserInformation(sessionToken);
+  const user = await UserService.findCurrent(sessionToken);
 
-  userStore.id = response.data.objectId;
-  userStore.username = response.data.username;
-  userStore.firstname = response.data.firstname;
+  userStore.id = user.objectId;
+  userStore.username = user.username;
+  userStore.firstname = user.firstname;
 
-  response = await getUserRoles(response.data.objectId, sessionToken);
+  const roles = await RoleService.findByUserId(user.objectId, sessionToken);
 
-  userStore.roles = response.data.results.map(({ name }) => name);
+  userStore.roles = roles.map(({ name }) => name);
   userStore.ready = true;
 
   if (!userStore.roles.includes('admin')) {
