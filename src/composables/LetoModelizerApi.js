@@ -110,3 +110,22 @@ export async function getLibraryById(id) {
     .then(({ data }) => data)
     .catch(manageError);
 }
+
+/**
+ * Get all userGroups.
+ * @param {string} sessionToken - The current user's session token.
+ * @returns {Promise<object[]>} Promise with an array of userGroups on success
+ * otherwise an error.
+ */
+export async function getUserGroups(sessionToken) {
+  const config = {
+    headers: {
+      Accept: 'application/json',
+      'X-Parse-Application-Id': process.env.BACKEND_APP_ID,
+      'X-Parse-Session-Token': sessionToken,
+    },
+  };
+  const queryParameters = 'limit=10';
+
+  return api.get(`/api/classes/Group?${queryParameters}`, config);
+}
