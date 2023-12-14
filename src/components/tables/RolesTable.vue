@@ -27,7 +27,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
-import { getRoles } from 'src/composables/LetoModelizerApi';
+import * as RoleService from 'src/services/RoleService';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -57,7 +57,7 @@ const rowKey = ref('objectId');
  * @returns {Promise<Array>} Promise with roles on success otherwise an error.
  */
 async function getRolesWithType() {
-  return getRoles().then((response) => response.data.results.map((role) => {
+  return RoleService.find().then((data) => data.map((role) => {
     if (role.name.startsWith('lib_')) {
       role.type = t('RolesTable.text.typeColumnLibrary');
       role.color = 'blue';

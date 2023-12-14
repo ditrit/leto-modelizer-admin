@@ -13,9 +13,8 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
-import { getUserGroups } from 'src/composables/LetoModelizerApi';
-import { getUserSessionToken } from 'src/composables/UserAuthentication';
 import { useI18n } from 'vue-i18n';
+import * as UserGroupService from 'src/services/UserGroupService';
 
 const { t } = useI18n();
 const pagination = ref({
@@ -31,8 +30,8 @@ const columns = ref([{
 const userGroups = ref([]);
 
 onMounted(async () => {
-  await getUserGroups(getUserSessionToken()).then((response) => {
-    userGroups.value = response.data.results;
+  await UserGroupService.find().then((data) => {
+    userGroups.value = data;
   });
 });
 </script>

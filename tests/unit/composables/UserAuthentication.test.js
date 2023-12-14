@@ -2,13 +2,16 @@ import {
   setUserSessionToken,
   getUserSessionToken, initUser,
 } from 'src/composables/UserAuthentication';
+import * as UserService from 'src/services/UserService';
+import * as RoleService from 'src/services/RoleService';
 import { setActivePinia, createPinia } from 'pinia';
 import { useUserStore } from 'src/stores/UserStore';
 import { vi } from 'vitest';
 
-vi.mock('src/composables/LetoModelizerApi');
+vi.mock('src/services/UserService');
+vi.mock('src/services/RoleService');
 
-describe('User Authentication', () => {
+describe('Test: User Authentication', () => {
   describe('Test function: setUserSessionToken', () => {
     it('should set the session token in the local storage', () => {
       const setItem = vi.spyOn(Storage.prototype, 'setItem');
@@ -33,36 +36,28 @@ describe('User Authentication', () => {
     it('should do nothing if user is already initialized', async () => {
       setActivePinia(createPinia());
 
-      const api = await import('src/composables/LetoModelizerApi');
       const store = useUserStore();
 
       store.ready = true;
-      api.getUserInformation.mockImplementation(() => Promise.resolve());
+      UserService.findCurrent.mockImplementation(() => Promise.resolve());
 
       await initUser('userId', 'tempCode');
 
-      expect(api.getUserInformation).not.toBeCalled();
+      expect(UserService.findCurrent).not.toBeCalled();
     });
 
     it('should initialize user information and role if user has admin role but has not been initialized yet', async () => {
       setActivePinia(createPinia());
 
-      const api = await import('src/composables/LetoModelizerApi');
       const store = useUserStore();
 
-      api.getUserInformation.mockImplementation(() => Promise.resolve({
-        data: {
-          objectId: 'a',
-          username: 'b',
-          firstname: 'c',
-        },
+      UserService.findCurrent.mockImplementation(() => Promise.resolve({
+        objectId: 'a',
+        username: 'b',
+        firstname: 'c',
       }));
 
-      api.getUserRoles.mockImplementation(() => Promise.resolve({
-        data: {
-          results: [{ name: 'admin' }],
-        },
-      }));
+      RoleService.findByUserId.mockImplementation(() => Promise.resolve([{ name: 'admin' }]));
 
       await initUser('userId', 'tempCode');
 
@@ -75,21 +70,13 @@ describe('User Authentication', () => {
     it('should throw an error if user does not have admin role', async () => {
       setActivePinia(createPinia());
 
-      const api = await import('src/composables/LetoModelizerApi');
-
-      api.getUserInformation.mockImplementation(() => Promise.resolve({
-        data: {
-          objectId: 'a',
-          username: 'b',
-          firstname: 'c',
-        },
+      UserService.findCurrent.mockImplementation(() => Promise.resolve({
+        objectId: 'a',
+        username: 'b',
+        firstname: 'c',
       }));
 
-      api.getUserRoles.mockImplementation(() => Promise.resolve({
-        data: {
-          results: [{ name: 'other' }],
-        },
-      }));
+      RoleService.findByUserId.mockImplementation(() => Promise.resolve([{ name: 'other' }]));
       let error = null;
 
       try {

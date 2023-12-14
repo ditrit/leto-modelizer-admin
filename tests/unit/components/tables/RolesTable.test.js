@@ -1,28 +1,24 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest';
 import { shallowMount } from '@vue/test-utils';
 import RolesTable from 'src/components/tables/RolesTable.vue';
+import * as RoleService from 'src/services/RoleService';
 import { vi } from 'vitest';
 
 installQuasarPlugin();
 
-vi.mock('src/composables/LetoModelizerApi');
+vi.mock('src/services/RoleService');
 
 describe('Test component: RolesTable', async () => {
   let wrapper;
-  const api = await import('src/composables/LetoModelizerApi');
-
-  api.getRoles.mockImplementation(() => Promise.resolve({
-    data: {
-      results: [
-        { name: 'lib_' },
-        { name: 'CF_' },
-        { name: 'admin' },
-        { name: '' },
-      ],
-    },
-  }));
 
   beforeEach(() => {
+    RoleService.find.mockImplementation(() => Promise.resolve([
+      { name: 'lib_' },
+      { name: 'CF_' },
+      { name: 'admin' },
+      { name: '' },
+    ]));
+
     wrapper = shallowMount(RolesTable);
   });
 

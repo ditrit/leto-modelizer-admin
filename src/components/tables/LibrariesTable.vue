@@ -30,7 +30,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
-import { getLibraries } from 'src/composables/LetoModelizerApi';
+import * as LibraryService from 'src/services/LibraryService';
 import { useI18n } from 'vue-i18n';
 
 defineEmits(['show']);
@@ -57,8 +57,8 @@ const columns = ref([{
 const libraries = ref([]);
 
 onMounted(async () => {
-  await getLibraries().then((response) => {
-    libraries.value = response.data.results;
+  await LibraryService.find().then((data) => {
+    libraries.value = data;
   });
 });
 </script>

@@ -5,13 +5,13 @@ import { vi } from 'vitest';
 
 installQuasarPlugin();
 
-vi.mock('src/composables/LetoModelizerApi');
+vi.mock('src/services/UserGroupService');
 
 describe('Test component: UserGroupsTable', async () => {
   let wrapper;
-  const api = await import('src/composables/LetoModelizerApi');
+  const UserGroupService = await import('src/services/UserGroupService');
 
-  api.getUserGroups.mockImplementation(() => Promise.resolve({ data: { results: [] } }));
+  UserGroupService.find.mockImplementation(() => Promise.resolve([]));
 
   beforeEach(() => {
     wrapper = shallowMount(UserGroupsTable);
