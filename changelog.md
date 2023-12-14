@@ -21,4 +21,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Setup Library page with:
   * Display all information of a library.
 * Setup Roles page.
-* Setup User Groups page.
+* Setup User Groups page with:
+  * Table to display all user groups.

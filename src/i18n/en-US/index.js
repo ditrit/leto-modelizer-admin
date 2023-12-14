@@ -77,6 +77,11 @@ export default {
       actionsColumn: 'Actions',
     },
   },
+  UserGroupsTable: {
+    text: {
+      nameColumn: 'Name',
+    },
+  },
   RolesTable: {
     text: {
       nameColumn: 'Role Name',

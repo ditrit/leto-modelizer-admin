@@ -5,6 +5,7 @@ import {
   getRoles,
   getLibraryById,
   manageError,
+  getUserGroups,
 } from 'src/composables/LetoModelizerApi';
 import { vi } from 'vitest';
 
@@ -143,6 +144,23 @@ describe('User Authentication', () => {
         error = e;
       }
       expect(error).toBeNull();
+    });
+  });
+
+  describe('Test function: getUserGroups', () => {
+    it('should return the userGroups', async () => {
+      const userGroups = [{
+        name: 'userGroups',
+      }];
+      const resultGetUserGroups = {
+        results: userGroups,
+      };
+
+      const { api } = await import('boot/axios');
+      api.get.mockImplementation(() => Promise.resolve(resultGetUserGroups));
+
+      const res = await getUserGroups();
+      expect(res.results).toEqual(userGroups);
     });
   });
 });
