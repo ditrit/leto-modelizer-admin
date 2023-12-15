@@ -2,14 +2,14 @@ import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-v
 import { shallowMount } from '@vue/test-utils';
 import UserGroupsTable from 'src/components/tables/UserGroupsTable.vue';
 import { vi } from 'vitest';
+import * as UserGroupService from 'src/services/UserGroupService';
 
 installQuasarPlugin();
 
 vi.mock('src/services/UserGroupService');
 
-describe('Test component: UserGroupsTable', async () => {
+describe('Test component: UserGroupsTable', () => {
   let wrapper;
-  const UserGroupService = await import('src/services/UserGroupService');
 
   UserGroupService.find.mockImplementation(() => Promise.resolve([]));
 
