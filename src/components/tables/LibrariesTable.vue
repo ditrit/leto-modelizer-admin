@@ -23,17 +23,27 @@
           :data-cy="`library_${props.row.objectId}_button_show`"
           @click="$emit('show', props.row.objectId)"
         />
+        <q-btn
+          dense
+          flat
+          rounded
+          color="negative"
+          icon="fa-solid fa-trash"
+          :data-cy="`library_${props.row.objectId}_button_remove`"
+          @click="$emit('remove', props.row)"
+        />
       </q-td>
     </template>
   </q-table>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import * as LibraryService from 'src/services/LibraryService';
 import { useI18n } from 'vue-i18n';
+import ReloadLibrariesEvent from 'src/composables/ReloadLibrariesEvent';
 
-defineEmits(['show']);
+defineEmits(['remove', 'show']);
 
 const { t } = useI18n();
 const pagination = ref({
@@ -56,9 +66,23 @@ const columns = ref([{
 }]);
 const libraries = ref([]);
 
-onMounted(async () => {
-  await LibraryService.find().then((data) => {
+let reloadLibrariesEventRef;
+
+/**
+ * Search and display libraries.
+ * @returns {Promise<void>} Promise with nothing on success.
+ */
+async function search() {
+  return LibraryService.find().then((data) => {
     libraries.value = data;
   });
+}
+
+onMounted(async () => {
+  reloadLibrariesEventRef = ReloadLibrariesEvent.subscribe(search);
+  await search();
+});
+onUnmounted(() => {
+  reloadLibrariesEventRef.unsubscribe();
 });
 </script>
