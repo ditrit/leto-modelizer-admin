@@ -1,5 +1,6 @@
 import * as UserService from 'src/services/UserService';
 import { vi } from 'vitest';
+import { api } from 'boot/axios';
 
 vi.mock('boot/axios');
 
@@ -27,7 +28,6 @@ describe('Test: UserService', () => {
         sessionToken: 'r:dead779dcda4970cc7f96c09a328d771',
       };
 
-      const { api } = await import('boot/axios');
       api.get.mockImplementation(() => Promise.resolve({ data }));
 
       const user = await UserService.findCurrent('r:dead779dcda4970cc7f96c09a328d771');

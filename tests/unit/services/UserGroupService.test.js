@@ -1,5 +1,6 @@
 import * as UserGroupService from 'src/services/UserGroupService';
 import { vi } from 'vitest';
+import { api } from 'boot/axios';
 
 vi.mock('boot/axios');
 
@@ -10,7 +11,6 @@ describe('Test: UserGroupService', () => {
         name: 'userGroups',
       }];
 
-      const { api } = await import('boot/axios');
       api.get.mockImplementation(() => Promise.resolve({ data: { results: userGroups } }));
 
       const data = await UserGroupService.find();

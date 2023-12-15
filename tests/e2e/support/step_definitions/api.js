@@ -1,6 +1,7 @@
 import { Before } from '@badeball/cypress-cucumber-preprocessor';
 
 Before(() => {
+  let isDeleted = false;
   const library1 = {
     objectId: 'id_1',
     name: 'lib1',
@@ -44,11 +45,13 @@ Before(() => {
     },
   });
 
-  cy.intercept('GET', '/backend/api/classes/Library?*', {
-    statusCode: 200,
-    body: {
-      results: [library1, library2],
-    },
+  cy.intercept('GET', '/backend/api/classes/Library?*', (request) => {
+    request.reply({
+      statusCode: 200,
+      body: {
+        results: isDeleted ? [library1] : [library1, library2],
+      },
+    });
   });
 
   cy.intercept('GET', '/backend/api/classes/Library/id_1', {
@@ -59,6 +62,11 @@ Before(() => {
   cy.intercept('GET', '/backend/api/classes/Library/id_2', {
     statusCode: 200,
     body: library2,
+  });
+
+  cy.intercept('DELETE', '/backend/api/classes/Library/id_2', (request) => {
+    isDeleted = true;
+    request.reply({ statusCode: 204 });
   });
 
   cy.intercept('GET', '/backend/api/classes/Library/id_3', {
