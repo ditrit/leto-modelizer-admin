@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Setup Libraries page with:
   * Table to display all libraries.
   * Add action to redirect on library page.
+  * Add action to delete a library.
 * Setup Library page with:
   * Display all information of a library.
 * Setup Roles page.
