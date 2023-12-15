@@ -91,4 +91,13 @@ export default {
       typeColumnFunctional: 'Functional',
     },
   },
+  RemoveLibraryDialog: {
+    text: {
+      title: 'Do you want to delete the library {name} ?',
+      content: 'Please note, this action is irrerversible.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifySuccess: 'Library is removed.',
+    },
+  },
 };
