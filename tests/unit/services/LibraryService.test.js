@@ -1,5 +1,6 @@
 import * as LibraryService from 'src/services/LibraryService';
 import { vi } from 'vitest';
+import { api } from 'boot/axios';
 
 vi.mock('boot/axios');
 
@@ -18,7 +19,6 @@ describe('Test: LibraryService', () => {
         version: '0.1.0',
       };
 
-      const { api } = await import('boot/axios');
       api.get.mockImplementation(() => Promise.resolve({ data: library }));
 
       const res = await LibraryService.findById(library.objectId);
@@ -40,11 +40,19 @@ describe('Test: LibraryService', () => {
         version: '0.1.0',
       }];
 
-      const { api } = await import('boot/axios');
       api.get.mockImplementation(() => Promise.resolve({ data: { results: libraries } }));
 
       const data = await LibraryService.find();
       expect(data).toEqual(libraries);
+    });
+  });
+
+  describe('Test function: remove', () => {
+    it('should remove the library corresponding to the given id', async () => {
+      api.delete.mockImplementation(() => Promise.resolve());
+
+      await LibraryService.remove('test');
+      expect(api.delete).toBeCalledWith('/api/classes/Library/test', { headers: undefined });
     });
   });
 });
