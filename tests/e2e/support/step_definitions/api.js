@@ -26,6 +26,20 @@ Before(() => {
     },
   });
 
+  cy.intercept('GET', '/backend/api/Users*', {
+    statusCode: 200,
+    body: {
+      results: [
+        {
+          objectId: 'id',
+          username: 'Username',
+          firstname: 'Firstname',
+          email: 'test@test.com',
+        },
+      ],
+    },
+  });
+
   cy.intercept('GET', '/backend/api/roles*', {
     statusCode: 200,
     body: {

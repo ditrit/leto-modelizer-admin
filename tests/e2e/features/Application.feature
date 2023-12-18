@@ -7,6 +7,11 @@ Feature: Test roundtrip of the application
     And  I expect '[data-cy="page_users_title"]' is 'Users'
     And  I expect current url is '/users'
 
+    # Navigate to UsersPage
+    When I click on '[data-cy="drawer_item_users"]'
+    Then I expect '[data-cy="page_users_title"]' is 'Users'
+    And  I expect current url is '/users'
+
     # Navigate to UserGroupsPage
     When I click on '[data-cy="drawer_item_userGroups"]'
     Then I expect '[data-cy="page_userGroups_title"]' is 'User Groups'
