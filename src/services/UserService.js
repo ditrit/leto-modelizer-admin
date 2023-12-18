@@ -11,3 +11,16 @@ export async function findCurrent(sessionToken) {
     .then(({ data }) => data)
     .catch(manageError);
 }
+
+/**
+ * Get all users.
+ * @returns {Promise<object[]>} Promise with an array of users on success
+ * otherwise an error.
+ */
+export async function find() {
+  const queryParameters = 'limit=10';
+
+  return api.get(`/api/Users?${queryParameters}`, { headers: getDefaultHeaders() })
+    .then(({ data }) => data.results)
+    .catch(manageError);
+}
