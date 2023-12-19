@@ -67,6 +67,10 @@ export default {
   LibrariesPage: {
     text: {
       title: 'Libraries',
+      add: 'Add',
+    },
+    icon: {
+      add: 'fa-solid fa-plus',
     },
   },
   LibraryPage: {
