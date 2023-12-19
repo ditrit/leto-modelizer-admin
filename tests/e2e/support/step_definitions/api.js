@@ -1,7 +1,9 @@
 import { Before } from '@badeball/cypress-cucumber-preprocessor';
 
 Before(() => {
-  let isDeleted = false;
+  let isUserDeleted = false;
+  let isLibraryDeleted = false;
+  let isGroupDeleted = false;
   const user1 = {
     objectId: 'id_1',
     username: 'Username',
@@ -40,7 +42,7 @@ Before(() => {
     request.reply({
       statusCode: 200,
       body: {
-        results: isDeleted ? [] : [user1],
+        results: isUserDeleted ? [] : [user1],
       },
     });
   });
@@ -56,7 +58,7 @@ Before(() => {
   });
 
   cy.intercept('DELETE', '/backend/api/Users/id_1', (request) => {
-    isDeleted = true;
+    isUserDeleted = true;
     request.reply({ statusCode: 204 });
   });
 
@@ -83,7 +85,7 @@ Before(() => {
     request.reply({
       statusCode: 200,
       body: {
-        results: isDeleted ? [library1] : [library1, library2],
+        results: isLibraryDeleted ? [library1] : [library1, library2],
       },
     });
   });
@@ -99,7 +101,7 @@ Before(() => {
   });
 
   cy.intercept('DELETE', '/backend/api/classes/Library/id_2', (request) => {
-    isDeleted = true;
+    isLibraryDeleted = true;
     request.reply({ statusCode: 204 });
   });
 
@@ -108,11 +110,45 @@ Before(() => {
     body: 'Not Found',
   });
 
+  cy.intercept('POST', '/backend/api/classes/Library', (request) => {
+    const { url, roleName } = request.body;
+
+    if (url === 'alreadyExist') {
+      request.reply({
+        statusCode: 400,
+        body: {
+          error: 'Library with this url already exists',
+        },
+      });
+    } else if (url === 'notFound') {
+      request.reply({
+        statusCode: 400,
+        body: {
+          error: 'Other error',
+        },
+      });
+    } else if (roleName === 'alreadyExist') {
+      request.reply({
+        statusCode: 400,
+        body: {
+          error: 'Library with this roleName already exists',
+        },
+      });
+    } else {
+      request.reply({
+        statusCode: 200,
+        body: {
+          objectId: 'id_1',
+        },
+      });
+    }
+  });
+
   cy.intercept('GET', '/backend/api/classes/Group*', (request) => {
     request.reply({
       statusCode: 200,
       body: {
-        results: isDeleted ? [] : [group1],
+        results: isGroupDeleted ? [] : [group1],
       },
     });
   });
@@ -123,7 +159,7 @@ Before(() => {
   });
 
   cy.intercept('DELETE', '/backend/api/classes/Group/id_1', (request) => {
-    isDeleted = true;
+    isGroupDeleted = true;
     request.reply({ statusCode: 204 });
   });
 
