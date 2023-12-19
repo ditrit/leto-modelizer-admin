@@ -82,6 +82,13 @@ export default {
       nameColumn: 'Name',
     },
   },
+  UsersTable: {
+    text: {
+      nameColumn: 'Name',
+      userNameColumn: 'UserName',
+      emailColumn: 'Email',
+    },
+  },
   RolesTable: {
     text: {
       nameColumn: 'Role Name',

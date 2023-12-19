@@ -36,4 +36,19 @@ describe('Test: UserService', () => {
       expect(user.firstname).toEqual('Pradeep');
     });
   });
+
+  describe('Test function: find', () => {
+    it('should return all users information', async () => {
+      const users = [{
+        firstname: 'firstname',
+        username: 'username',
+        email: 'email',
+      }];
+
+      api.get.mockImplementation(() => Promise.resolve({ data: { results: users } }));
+
+      const data = await UserService.find();
+      expect(data).toEqual(users);
+    });
+  });
 });

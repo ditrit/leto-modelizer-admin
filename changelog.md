@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Setup project.
 * Setup global application design.
 * Setup authentication from `leto-modelizer`.
-* Setup Users page.
+* Setup Users page with:
+  * Table to display all users.
 * Setup Roles page with:
   * Table to display all roles.
 * Setup Libraries page with:
@@ -21,6 +22,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Add action to delete a library.
 * Setup Library page with:
   * Display all information of a library.
-* Setup Roles page.
 * Setup User Groups page with:
   * Table to display all user groups.
