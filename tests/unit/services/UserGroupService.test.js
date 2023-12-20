@@ -17,4 +17,18 @@ describe('Test: UserGroupService', () => {
       expect(data).toEqual(userGroups);
     });
   });
+
+  describe('Test function: findById', () => {
+    it('should return the userGroup', async () => {
+      const userGroup = {
+        name: 'userGroup',
+        objectId: 'w2U52H05zx',
+      };
+
+      api.get.mockImplementation(() => Promise.resolve({ data: userGroup }));
+
+      const res = await UserGroupService.findById(userGroup.objectId);
+      expect(res).toEqual(userGroup);
+    });
+  });
 });

@@ -14,7 +14,7 @@ export async function find() {
 }
 
 /**
- * get library by id.
+ * Get library by id.
  * @param {string} id - Library id.
  * @returns {Promise<object>} Return a library.
  */

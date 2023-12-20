@@ -12,3 +12,14 @@ export async function find() {
     .then(({ data }) => data.results)
     .catch(manageError);
 }
+
+/**
+ * Get userGroup by id.
+ * @param {string} id - UserGroup id.
+ * @returns {Promise<object>} Return a userGroup.
+ */
+export async function findById(id) {
+  return api.get(`/api/classes/Group/${id}`, { headers: getDefaultHeaders() })
+    .then(({ data }) => data)
+    .catch(manageError);
+}
