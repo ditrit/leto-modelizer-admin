@@ -16,6 +16,10 @@ Before(() => {
     author: 'Author_2',
     description: 'description_2',
   };
+  const group1 = {
+    objectId: 'id_1',
+    name: 'group1',
+  };
 
   cy.intercept('GET', '/backend/api/users/me', {
     statusCode: 200,
@@ -92,8 +96,17 @@ Before(() => {
     statusCode: 200,
     body: {
       results: [
-        { name: 'group' },
+        group1,
       ],
     },
+  });
+  cy.intercept('GET', '/backend/api/classes/Group/id_1', {
+    statusCode: 200,
+    body: group1,
+  });
+
+  cy.intercept('GET', '/backend/api/classes/Group/id_3', {
+    statusCode: 404,
+    body: 'Not Found',
   });
 });
