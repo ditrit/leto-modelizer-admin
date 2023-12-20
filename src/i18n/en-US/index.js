@@ -89,6 +89,7 @@ export default {
   UserGroupsTable: {
     text: {
       nameColumn: 'Name',
+      actionsColumn: 'Actions',
     },
   },
   UsersTable: {
