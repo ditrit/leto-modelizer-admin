@@ -41,6 +41,15 @@ export default {
       title: 'User Groups',
     },
   },
+  UserGroupPage: {
+    text: {
+      goBack: 'Return to previous page',
+      notFound: 'User Group not found.',
+    },
+    icon: {
+      goBack: 'fa-solid fa-chevron-left',
+    },
+  },
   RolesPage: {
     text: {
       title: 'Roles',
@@ -80,6 +89,7 @@ export default {
   UserGroupsTable: {
     text: {
       nameColumn: 'Name',
+      actionsColumn: 'Actions',
     },
   },
   UsersTable: {

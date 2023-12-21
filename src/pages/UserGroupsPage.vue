@@ -6,10 +6,23 @@
     >
       {{ $t('UserGroupsPage.text.title') }}
     </h4>
-    <user-groups-table />
+    <user-groups-table
+      @show="goToUserGroup"
+    />
   </q-page>
 </template>
 
 <script setup>
 import UserGroupsTable from 'src/components/tables/UserGroupsTable.vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+/**
+ * Go to user group page.
+ * @param {string} id - User group id.
+ */
+function goToUserGroup(id) {
+  router.push(`/user-groups/${id}`);
+}
 </script>

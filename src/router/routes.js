@@ -14,6 +14,7 @@ const routes = [
         path: '/user-groups',
         children: [
           { path: '', component: () => import('pages/UserGroupsPage.vue') },
+          { path: '/user-groups/:id', component: () => import('pages/UserGroupPage.vue') },
         ],
       },
       {
