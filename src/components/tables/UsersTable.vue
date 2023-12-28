@@ -8,13 +8,32 @@
     :columns="columns"
     :rows="users"
     data-cy="users_table"
-  />
+  >
+    <template #body-cell-actions="props">
+      <q-td
+        key="actions"
+        :props="props"
+      >
+        <q-btn
+          dense
+          flat
+          rounded
+          color="primary"
+          icon="fa-solid fa-pen-to-square"
+          :data-cy="`user_${props.row.objectId}_button_show`"
+          @click="$emit('show', props.row.objectId)"
+        />
+      </q-td>
+    </template>
+  </q-table>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import * as UsersService from 'src/services/UserService';
+
+defineEmits(['show']);
 
 const { t } = useI18n();
 const pagination = ref({
@@ -41,6 +60,13 @@ const columns = ref([{
   align: 'left',
   field: 'email',
   classes: 'user-email',
+}, {
+  name: 'actions',
+  required: true,
+  label: t('UserGroupsTable.text.actionsColumn'),
+  align: 'left',
+  field: 'objectId',
+  classes: 'user-group-actions',
 }]);
 const users = ref([]);
 

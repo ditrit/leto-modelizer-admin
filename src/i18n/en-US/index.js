@@ -106,6 +106,7 @@ export default {
       nameColumn: 'Name',
       userNameColumn: 'UserName',
       emailColumn: 'Email',
+      actionsColumn: 'Actions',
     },
   },
   RolesTable: {
