@@ -8,6 +8,7 @@ const routes = [
         path: '/users',
         children: [
           { path: '', component: () => import('pages/UsersPage.vue') },
+          { path: '/users/:id', component: () => import('pages/UserPage.vue') },
         ],
       },
       {
