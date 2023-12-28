@@ -23,3 +23,13 @@ export async function findById(id) {
     .then(({ data }) => data)
     .catch(manageError);
 }
+
+/**
+ * Remove userGroup by id.
+ * @param {string} id - UserGroup id.
+ * @returns {Promise<void>} Promise with nothing on success.
+ */
+export async function remove(id) {
+  return api.delete(`/api/classes/Group/${id}`, { headers: getDefaultHeaders() })
+    .catch(manageError);
+}
