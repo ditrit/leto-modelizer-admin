@@ -108,18 +108,23 @@ Before(() => {
     body: 'Not Found',
   });
 
-  cy.intercept('GET', '/backend/api/classes/Group*', {
-    statusCode: 200,
-    body: {
-      results: [
-        group1,
-      ],
-    },
+  cy.intercept('GET', '/backend/api/classes/Group*', (request) => {
+    request.reply({
+      statusCode: 200,
+      body: {
+        results: isDeleted ? [] : [group1],
+      },
+    });
   });
 
   cy.intercept('GET', '/backend/api/classes/Group/id_1', {
     statusCode: 200,
     body: group1,
+  });
+
+  cy.intercept('DELETE', '/backend/api/classes/Group/id_1', (request) => {
+    isDeleted = true;
+    request.reply({ statusCode: 204 });
   });
 
   cy.intercept('GET', '/backend/api/classes/Group/id_3', {
