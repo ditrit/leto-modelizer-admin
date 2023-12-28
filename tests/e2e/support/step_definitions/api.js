@@ -2,6 +2,12 @@ import { Before } from '@badeball/cypress-cucumber-preprocessor';
 
 Before(() => {
   let isDeleted = false;
+  const user1 = {
+    objectId: 'id_1',
+    username: 'Username',
+    firstname: 'Firstname',
+    email: 'test@test.com',
+  };
   const library1 = {
     objectId: 'id_1',
     name: 'lib1',
@@ -33,15 +39,18 @@ Before(() => {
   cy.intercept('GET', '/backend/api/Users*', {
     statusCode: 200,
     body: {
-      results: [
-        {
-          objectId: 'id',
-          username: 'Username',
-          firstname: 'Firstname',
-          email: 'test@test.com',
-        },
-      ],
+      results: [user1],
     },
+  });
+
+  cy.intercept('GET', '/backend/api/Users/id_1', {
+    statusCode: 200,
+    body: user1,
+  });
+
+  cy.intercept('GET', '/backend/api/Users/id_3', {
+    statusCode: 404,
+    body: 'Not Found',
   });
 
   cy.intercept('GET', '/backend/api/roles*', {
@@ -100,6 +109,7 @@ Before(() => {
       ],
     },
   });
+
   cy.intercept('GET', '/backend/api/classes/Group/id_1', {
     statusCode: 200,
     body: group1,

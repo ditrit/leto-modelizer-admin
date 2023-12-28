@@ -3,9 +3,9 @@ Feature: Test roundtrip of the application: UserGroups
   ################## List UserGroups ##################
   ## 101 Should display all userGroups
 
-  ################## Select library ##################
-  ## 201 Should display all library information
-  ## 202 Should redirect to libraries in library is not found
+  ################## Select userGroup ##################
+  ## 201 Should display all userGroups information
+  ## 202 Should redirect to userGroups if userGroup is not found
 
   Scenario: Roundtrip about UserGroups
     Given I visit the '/'
