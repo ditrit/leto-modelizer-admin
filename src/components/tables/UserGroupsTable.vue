@@ -23,17 +23,31 @@
           :data-cy="`userGroup_${props.row.objectId}_button_show`"
           @click="$emit('show', props.row.objectId)"
         />
+        <q-btn
+          dense
+          flat
+          rounded
+          color="negative"
+          icon="fa-solid fa-trash"
+          :data-cy="`userGroup_${props.row.objectId}_button_remove`"
+          @click="$emit('remove', props.row)"
+        />
       </q-td>
     </template>
   </q-table>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import {
+  onMounted,
+  onUnmounted,
+  ref,
+} from 'vue';
 import { useI18n } from 'vue-i18n';
 import * as UserGroupService from 'src/services/UserGroupService';
+import ReloadUserGroupsEvent from 'src/composables/ReloadUserGroupsEvent';
 
-defineEmits(['show']);
+defineEmits(['remove', 'show']);
 
 const { t } = useI18n();
 const pagination = ref({
@@ -56,9 +70,23 @@ const columns = ref([{
 }]);
 const userGroups = ref([]);
 
-onMounted(async () => {
-  await UserGroupService.find().then((data) => {
+let reloadUserGroupsEventRef;
+
+/**
+ * Search and display userGroups.
+ * @returns {Promise<void>} Promise with nothing on success.
+ */
+async function search() {
+  return UserGroupService.find().then((data) => {
     userGroups.value = data;
   });
+}
+
+onMounted(async () => {
+  reloadUserGroupsEventRef = ReloadUserGroupsEvent.subscribe(search);
+  await search();
+});
+onUnmounted(() => {
+  reloadUserGroupsEventRef.unsubscribe();
 });
 </script>
