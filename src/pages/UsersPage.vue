@@ -8,6 +8,7 @@
     </h4>
     <users-table
       @show="goToUser"
+      @remove="openRemoveUserDialog"
     />
   </q-page>
 </template>
@@ -15,6 +16,7 @@
 <script setup>
 import UsersTable from 'src/components/tables/UsersTable.vue';
 import { useRouter } from 'vue-router';
+import DialogEvent from 'src/composables/DialogEvent';
 
 const router = useRouter();
 
@@ -24,5 +26,17 @@ const router = useRouter();
  */
 function goToUser(id) {
   router.push(`/users/${id}`);
+}
+
+/**
+ * Open dialog to remove user.
+ * @param {object} user - User object to remove for the dialog.
+ */
+function openRemoveUserDialog(user) {
+  DialogEvent.next({
+    key: 'remove-user',
+    type: 'open',
+    user,
+  });
 }
 </script>

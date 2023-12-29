@@ -127,4 +127,13 @@ export default {
       notifySuccess: 'Library is removed.',
     },
   },
+  RemoveUserDialog: {
+    text: {
+      title: 'Do you want to delete the user {name} ?',
+      content: 'Please note, this action is irrerversible.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifySuccess: 'User is removed.',
+    },
+  },
 };
