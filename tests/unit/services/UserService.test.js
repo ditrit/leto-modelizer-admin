@@ -65,4 +65,13 @@ describe('Test: UserService', () => {
       expect(res).toEqual(user);
     });
   });
+
+  describe('Test function: remove', () => {
+    it('should remove the user corresponding to the given id', async () => {
+      api.delete.mockImplementation(() => Promise.resolve());
+
+      await UserService.remove('test');
+      expect(api.delete).toBeCalledWith('/api/Users/test', { headers: undefined });
+    });
+  });
 });

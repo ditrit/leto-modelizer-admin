@@ -36,11 +36,13 @@ Before(() => {
     },
   });
 
-  cy.intercept('GET', '/backend/api/Users*', {
-    statusCode: 200,
-    body: {
-      results: [user1],
-    },
+  cy.intercept('GET', '/backend/api/Users*', (request) => {
+    request.reply({
+      statusCode: 200,
+      body: {
+        results: isDeleted ? [] : [user1],
+      },
+    });
   });
 
   cy.intercept('GET', '/backend/api/Users/id_1', {
@@ -51,6 +53,11 @@ Before(() => {
   cy.intercept('GET', '/backend/api/Users/id_3', {
     statusCode: 404,
     body: 'Not Found',
+  });
+
+  cy.intercept('DELETE', '/backend/api/Users/id_1', (request) => {
+    isDeleted = true;
+    request.reply({ statusCode: 204 });
   });
 
   cy.intercept('GET', '/backend/api/roles*', {

@@ -35,3 +35,13 @@ export async function findById(id) {
     .then(({ data }) => data)
     .catch(manageError);
 }
+
+/**
+ * Remove user by id.
+ * @param {string} id - User id.
+ * @returns {Promise<void>} Promise with nothing on success.
+ */
+export async function remove(id) {
+  return api.delete(`/api/Users/${id}`, { headers: getDefaultHeaders() })
+    .catch(manageError);
+}

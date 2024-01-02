@@ -23,17 +23,27 @@
           :data-cy="`user_${props.row.objectId}_button_show`"
           @click="$emit('show', props.row.objectId)"
         />
+        <q-btn
+          dense
+          flat
+          rounded
+          color="negative"
+          icon="fa-solid fa-trash"
+          :data-cy="`user_${props.row.objectId}_button_remove`"
+          @click="$emit('remove', props.row)"
+        />
       </q-td>
     </template>
   </q-table>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import * as UsersService from 'src/services/UserService';
+import ReloadUsersEvent from 'src/composables/ReloadUsersEvent';
 
-defineEmits(['show']);
+defineEmits(['remove', 'show']);
 
 const { t } = useI18n();
 const pagination = ref({
@@ -70,6 +80,8 @@ const columns = ref([{
 }]);
 const users = ref([]);
 
+let reloadUsersEventRef;
+
 /**
  * Search and display users.
  * @returns {Promise<void>} Promise with nothing on success.
@@ -81,6 +93,11 @@ async function search() {
 }
 
 onMounted(async () => {
+  reloadUsersEventRef = ReloadUsersEvent.subscribe(search);
   await search();
+});
+
+onUnmounted(() => {
+  reloadUsersEventRef.unsubscribe();
 });
 </script>
