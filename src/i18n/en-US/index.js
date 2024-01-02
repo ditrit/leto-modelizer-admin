@@ -50,6 +50,15 @@ export default {
       goBack: 'fa-solid fa-chevron-left',
     },
   },
+  UserPage: {
+    text: {
+      goBack: 'Return to previous page',
+      notFound: 'User not found.',
+    },
+    icon: {
+      goBack: 'fa-solid fa-chevron-left',
+    },
+  },
   RolesPage: {
     text: {
       title: 'Roles',
@@ -97,6 +106,7 @@ export default {
       nameColumn: 'Name',
       userNameColumn: 'UserName',
       emailColumn: 'Email',
+      actionsColumn: 'Actions',
     },
   },
   RolesTable: {

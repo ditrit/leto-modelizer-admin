@@ -51,4 +51,18 @@ describe('Test: UserService', () => {
       expect(data).toEqual(users);
     });
   });
+
+  describe('Test function: findById', () => {
+    it('should return the user', async () => {
+      const user = {
+        name: 'user',
+        objectId: 'w2U52H05zx',
+      };
+
+      api.get.mockImplementation(() => Promise.resolve({ data: user }));
+
+      const res = await UserService.findById(user.objectId);
+      expect(res).toEqual(user);
+    });
+  });
 });

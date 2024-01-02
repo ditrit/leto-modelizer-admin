@@ -24,3 +24,14 @@ export async function find() {
     .then(({ data }) => data.results)
     .catch(manageError);
 }
+
+/**
+ * Get user by id.
+ * @param {string} id - User id.
+ * @returns {Promise<object>} Return a user.
+ */
+export async function findById(id) {
+  return api.get(`/api/Users/${id}`, { headers: getDefaultHeaders() })
+    .then(({ data }) => data)
+    .catch(manageError);
+}

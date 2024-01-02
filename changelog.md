@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Setup authentication from `leto-modelizer`.
 * Setup Users page with:
   * Table to display all users.
+* Setup User page with:
+  * Display all information of a user.
 * Setup Roles page with:
   * Table to display all roles.
 * Setup Libraries page with:
