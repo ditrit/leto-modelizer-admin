@@ -3,12 +3,12 @@ import { shallowMount } from '@vue/test-utils';
 import LibrariesTable from 'src/components/tables/LibrariesTable.vue';
 import * as LibraryService from 'src/services/LibraryService';
 import { vi } from 'vitest';
-import ReloadLibrariesEvent from 'src/composables/ReloadLibrariesEvent';
+import ReloadLibrariesEvent from 'src/composables/events/ReloadLibrariesEvent';
 
 installQuasarPlugin();
 
 vi.mock('src/services/LibraryService');
-vi.mock('src/composables/ReloadLibrariesEvent');
+vi.mock('src/composables/events/ReloadLibrariesEvent');
 
 describe('Test component: LibrariesTable', async () => {
   let wrapper;

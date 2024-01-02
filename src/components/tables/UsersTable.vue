@@ -41,7 +41,7 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import * as UsersService from 'src/services/UserService';
-import ReloadUsersEvent from 'src/composables/ReloadUsersEvent';
+import ReloadUsersEvent from 'src/composables/events/ReloadUsersEvent';
 
 defineEmits(['remove', 'show']);
 

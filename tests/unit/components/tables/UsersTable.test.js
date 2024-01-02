@@ -3,12 +3,12 @@ import { shallowMount } from '@vue/test-utils';
 import UsersTable from 'src/components/tables/UsersTable.vue';
 import { vi } from 'vitest';
 import * as UserService from 'src/services/UserService';
-import ReloadUsersEvent from 'src/composables/ReloadUsersEvent';
+import ReloadUsersEvent from 'src/composables/events/ReloadUsersEvent';
 
 installQuasarPlugin();
 
 vi.mock('src/services/UserService');
-vi.mock('src/composables/ReloadUsersEvent');
+vi.mock('src/composables/events/ReloadUsersEvent');
 
 describe('Test component: UsersTable', () => {
   let wrapper;

@@ -41,7 +41,7 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 import * as LibraryService from 'src/services/LibraryService';
 import { useI18n } from 'vue-i18n';
-import ReloadLibrariesEvent from 'src/composables/ReloadLibrariesEvent';
+import ReloadLibrariesEvent from 'src/composables/events/ReloadLibrariesEvent';
 
 defineEmits(['remove', 'show']);
 

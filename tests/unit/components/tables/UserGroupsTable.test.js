@@ -3,12 +3,12 @@ import { shallowMount } from '@vue/test-utils';
 import UserGroupsTable from 'src/components/tables/UserGroupsTable.vue';
 import { vi } from 'vitest';
 import * as UserGroupService from 'src/services/UserGroupService';
-import ReloadUserGroupsEvent from 'src/composables/ReloadUserGroupsEvent';
+import ReloadUserGroupsEvent from 'src/composables/events/ReloadUserGroupsEvent';
 
 installQuasarPlugin();
 
 vi.mock('src/services/UserGroupService');
-vi.mock('src/composables/ReloadUserGroupsEvent');
+vi.mock('src/composables/events/ReloadUserGroupsEvent');
 
 describe('Test component: UserGroupsTable', () => {
   let wrapper;
