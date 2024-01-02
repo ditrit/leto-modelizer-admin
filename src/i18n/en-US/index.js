@@ -67,6 +67,10 @@ export default {
   LibrariesPage: {
     text: {
       title: 'Libraries',
+      add: 'Add',
+    },
+    icon: {
+      add: 'fa-solid fa-plus',
     },
   },
   LibraryPage: {
@@ -143,6 +147,19 @@ export default {
       cancel: 'Cancel',
       confirm: 'Confirm',
       notifySuccess: 'Group is removed.',
+    },
+  },
+  AddLibraryPage: {
+    text: {
+      title: 'Add library',
+      url: 'Url of library',
+      roleName: 'Name of library role',
+      notEmpty: 'Field is required.',
+      notifyError: 'Error during library creation.',
+      notifySuccess: 'Library is created.',
+      urlAlreadyExists: 'Library with this url already exists.',
+      urlNotFound: 'Library with this url can not be downloaded.',
+      roleNameAlreadyExists: 'Library with this roleName already exists.',
     },
   },
 };

@@ -14,7 +14,7 @@
           <q-item
             v-ripple
             clickable
-            :active="$route.path.startsWith(menuItem.url)"
+            :active="$route.meta.name === menuItem.name"
             :data-cy="`drawer_item_${menuItem.name}`"
             @click="$router.push(menuItem.url)"
           >

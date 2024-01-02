@@ -55,4 +55,16 @@ describe('Test: LibraryService', () => {
       expect(api.delete).toBeCalledWith('/api/classes/Library/test', { headers: undefined });
     });
   });
+
+  describe('Test function: create', () => {
+    it('should create the corresponding library', async () => {
+      api.post.mockImplementation(() => Promise.resolve({
+        data: { objectId: 1 },
+      }));
+
+      const result = await LibraryService.create('url', 'role');
+      expect(api.post).toBeCalledWith('/api/classes/Library', { url: 'url', roleName: 'role' }, { headers: undefined });
+      expect(result).toEqual({ objectId: 1 });
+    });
+  });
 });

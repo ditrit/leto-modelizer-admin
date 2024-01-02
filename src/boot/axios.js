@@ -30,7 +30,7 @@ function getDefaultHeaders(sessionToken) {
  */
 function manageError(error) {
   if (error.response.status !== 503) {
-    throw error;
+    throw new Error(error.response.data.error);
   }
   window.location.href = process.env.LETO_MODELIZER_URL;
 }
