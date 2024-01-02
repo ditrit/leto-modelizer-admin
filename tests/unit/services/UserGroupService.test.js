@@ -31,4 +31,13 @@ describe('Test: UserGroupService', () => {
       expect(res).toEqual(userGroup);
     });
   });
+
+  describe('Test function: remove', () => {
+    it('should remove the userGroup corresponding to the given id', async () => {
+      api.delete.mockImplementation(() => Promise.resolve());
+
+      await UserGroupService.remove('test');
+      expect(api.delete).toBeCalledWith('/api/classes/Group/test', { headers: undefined });
+    });
+  });
 });

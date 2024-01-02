@@ -8,6 +8,7 @@
     <application-footer />
     <remove-library-dialog />
     <remove-user-dialog />
+    <remove-user-group-dialog />
   </q-layout>
 </template>
 <script setup>
@@ -16,4 +17,5 @@ import ApplicationFooter from 'components/footer/ApplicationFooter.vue';
 import ApplicationDrawer from 'components/drawer/ApplicationDrawer.vue';
 import RemoveLibraryDialog from 'components/dialog/RemoveLibraryDialog.vue';
 import RemoveUserDialog from 'components/dialog/RemoveUserDialog.vue';
+import RemoveUserGroupDialog from 'components/dialog/RemoveUserGroupDialog.vue';
 </script>

@@ -7,6 +7,9 @@ Feature: Test roundtrip of the application: UserGroups
   ## 201 Should display all userGroups information
   ## 202 Should redirect to userGroups if userGroup is not found
 
+  ################## Delete userGroup ##################
+  ## 301 Should delete selected userGroup
+
   Scenario: Roundtrip about UserGroups
     Given I visit the '/'
     When  I click on '[data-cy="drawer_item_userGroups"]'
@@ -37,3 +40,15 @@ Feature: Test roundtrip of the application: UserGroups
     When I visit the '/user-groups/id_3'
     Then I expect current url is '/user-groups$'
     And  I expect 'negative' toast to appear with text 'Group not found.'
+
+    ####################################################
+    ################## Delete userGroup ################
+    ####################################################
+
+    ## 301 Should delete selected userGroup
+    When I click on '[data-cy="userGroup_id_1_button_remove"]'
+    Then I expect '[data-cy="button_confirm"]' exists
+
+    When I click on '[data-cy="button_confirm"]'
+    Then I expect 'positive' toast to appear with text 'UserGroup is removed.'
+    And  I expect '[data-cy="userGroups_table"] tbody tr' appear 0 time on screen

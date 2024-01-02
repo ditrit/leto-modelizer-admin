@@ -121,7 +121,7 @@ export default {
   RemoveLibraryDialog: {
     text: {
       title: 'Do you want to delete the library {name} ?',
-      content: 'Please note, this action is irrerversible.',
+      content: 'Please note, this action is irreversible.',
       cancel: 'Cancel',
       confirm: 'Confirm',
       notifySuccess: 'Library is removed.',
@@ -130,10 +130,19 @@ export default {
   RemoveUserDialog: {
     text: {
       title: 'Do you want to delete the user {name} ?',
-      content: 'Please note, this action is irrerversible.',
+      content: 'Please note, this action is irreversible.',
       cancel: 'Cancel',
       confirm: 'Confirm',
       notifySuccess: 'User is removed.',
+    },
+  },
+  RemoveUserGroupDialog: {
+    text: {
+      title: 'Do you want to delete the group "{name}" ?',
+      content: 'Please note, this action is irreversible.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifySuccess: 'Group is removed.',
     },
   },
 };

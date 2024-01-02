@@ -8,6 +8,7 @@
     </h4>
     <user-groups-table
       @show="goToUserGroup"
+      @remove="openRemoveUserGroupDialog"
     />
   </q-page>
 </template>
@@ -15,6 +16,7 @@
 <script setup>
 import UserGroupsTable from 'src/components/tables/UserGroupsTable.vue';
 import { useRouter } from 'vue-router';
+import DialogEvent from 'src/composables/DialogEvent';
 
 const router = useRouter();
 
@@ -24,5 +26,17 @@ const router = useRouter();
  */
 function goToUserGroup(id) {
   router.push(`/user-groups/${id}`);
+}
+
+/**
+ * Open dialog to remove user group.
+ * @param {object} userGroup - User group object to remove for the dialog.
+ */
+function openRemoveUserGroupDialog(userGroup) {
+  DialogEvent.next({
+    key: 'remove-userGroup',
+    type: 'open',
+    userGroup,
+  });
 }
 </script>

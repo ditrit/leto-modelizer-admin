@@ -3,21 +3,44 @@ import { shallowMount } from '@vue/test-utils';
 import UserGroupsTable from 'src/components/tables/UserGroupsTable.vue';
 import { vi } from 'vitest';
 import * as UserGroupService from 'src/services/UserGroupService';
+import ReloadUserGroupsEvent from 'src/composables/ReloadUserGroupsEvent';
 
 installQuasarPlugin();
 
 vi.mock('src/services/UserGroupService');
+vi.mock('src/composables/ReloadUserGroupsEvent');
 
 describe('Test component: UserGroupsTable', () => {
   let wrapper;
+  let subscribe;
+  let unsubscribe;
 
-  UserGroupService.find.mockImplementation(() => Promise.resolve([]));
+  beforeEach(async () => {
+    subscribe = vi.fn();
+    unsubscribe = vi.fn();
 
-  beforeEach(() => {
+    UserGroupService.find.mockImplementation(() => Promise.resolve([]));
+
+    ReloadUserGroupsEvent.subscribe.mockImplementation(() => {
+      subscribe();
+      return { unsubscribe };
+    });
+
     wrapper = shallowMount(UserGroupsTable);
+    await wrapper.vm.$nextTick();
   });
 
-  it('should mount the component', () => {
-    expect(wrapper).not.toBeNull();
+  describe('Test hook function: onMounted', () => {
+    it('should subscribe DialogEvent', () => {
+      expect(subscribe).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Test hook function: onUnmounted', () => {
+    it('should unsubscribe DialogEvent', () => {
+      expect(unsubscribe).toHaveBeenCalledTimes(0);
+      wrapper.unmount();
+      expect(unsubscribe).toHaveBeenCalledTimes(1);
+    });
   });
 });
