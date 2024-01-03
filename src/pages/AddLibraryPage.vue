@@ -104,7 +104,7 @@ async function onSubmit() {
     .then(({ objectId }) => {
       Notify.create({
         type: 'positive',
-        message: t('LibraryPage.text.notifySuccess'),
+        message: t('AddLibraryPage.text.notifySuccess'),
         html: true,
       });
       router.push(`/libraries/${objectId}`);
