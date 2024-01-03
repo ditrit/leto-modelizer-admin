@@ -1,8 +1,8 @@
 <template>
   <q-dialog v-model="show">
     <q-card>
-      <q-card-section class="flex row">
-        <span class="text-h6 text-center">
+      <q-card-section class="flex row justify-center">
+        <span class="text-h6">
           {{ $t('RemoveUserDialog.text.title', { name: user.name }) }}
         </span>
       </q-card-section>
