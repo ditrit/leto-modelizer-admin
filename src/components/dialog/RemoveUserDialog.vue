@@ -36,7 +36,7 @@
 <script setup>
 import { useDialog } from 'src/composables/Dialog';
 import { ref } from 'vue';
-import ReloadUsersEvent from 'src/composables/ReloadUsersEvent';
+import ReloadUsersEvent from 'src/composables/events/ReloadUsersEvent';
 import * as UserService from 'src/services/UserService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';

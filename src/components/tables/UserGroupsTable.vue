@@ -45,7 +45,7 @@ import {
 } from 'vue';
 import { useI18n } from 'vue-i18n';
 import * as UserGroupService from 'src/services/UserGroupService';
-import ReloadUserGroupsEvent from 'src/composables/ReloadUserGroupsEvent';
+import ReloadUserGroupsEvent from 'src/composables/events/ReloadUserGroupsEvent';
 
 defineEmits(['remove', 'show']);
 

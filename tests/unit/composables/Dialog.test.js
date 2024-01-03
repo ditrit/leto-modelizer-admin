@@ -1,9 +1,9 @@
 import { mount } from '@vue/test-utils';
 import { useDialog } from 'src/composables/Dialog';
-import DialogEvent from 'src/composables/DialogEvent';
+import DialogEvent from 'src/composables/events/DialogEvent';
 import { vi } from 'vitest';
 
-vi.mock('src/composables/DialogEvent');
+vi.mock('src/composables/events/DialogEvent');
 
 describe('Test: Dialog', () => {
   let wrapper;

@@ -28,7 +28,7 @@
 <script setup>
 import LibrariesTable from 'src/components/tables/LibrariesTable.vue';
 import { useRouter } from 'vue-router';
-import DialogEvent from 'src/composables/DialogEvent';
+import DialogEvent from 'src/composables/events/DialogEvent';
 
 const router = useRouter();
 

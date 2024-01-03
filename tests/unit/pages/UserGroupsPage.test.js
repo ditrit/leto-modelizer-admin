@@ -3,12 +3,12 @@ import { shallowMount } from '@vue/test-utils';
 import UserGroupsPage from 'pages/UserGroupsPage.vue';
 import { useRouter } from 'vue-router';
 import { vi } from 'vitest';
-import DialogEvent from 'src/composables/DialogEvent';
+import DialogEvent from 'src/composables/events/DialogEvent';
 
 installQuasarPlugin();
 
 vi.mock('vue-router');
-vi.mock('src/composables/DialogEvent');
+vi.mock('src/composables/events/DialogEvent');
 
 describe('Test component: UserGroupsPage', () => {
   let wrapper;

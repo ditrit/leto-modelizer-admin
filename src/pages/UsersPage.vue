@@ -16,7 +16,7 @@
 <script setup>
 import UsersTable from 'src/components/tables/UsersTable.vue';
 import { useRouter } from 'vue-router';
-import DialogEvent from 'src/composables/DialogEvent';
+import DialogEvent from 'src/composables/events/DialogEvent';
 
 const router = useRouter();
 

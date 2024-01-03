@@ -1,5 +1,5 @@
 import { onMounted, onUnmounted, ref } from 'vue';
-import DialogEvent from 'src/composables/DialogEvent';
+import DialogEvent from 'src/composables/events/DialogEvent';
 
 /**
  * Composable that sets up specific dialog referenced by key.
