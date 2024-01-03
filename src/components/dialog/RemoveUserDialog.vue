@@ -3,7 +3,7 @@
     <q-card>
       <q-card-section class="flex row justify-center">
         <span class="text-h6">
-          {{ $t('RemoveUserDialog.text.title', { name: user.name }) }}
+          {{ $t('RemoveUserDialog.text.title', { name: user.username }) }}
         </span>
       </q-card-section>
       <q-form @submit="onSubmit">
