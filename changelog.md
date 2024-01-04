@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Setup Add Library page.
 * Setup Library page with:
   * Display all information of a library.
+  * Add form to synchronize library.
 * Setup User Groups page with:
   * Table to display all user groups.
   * Add action to redirect on user group page.

@@ -63,7 +63,21 @@ describe('Test: LibraryService', () => {
       }));
 
       const result = await LibraryService.create('url', 'role');
+
       expect(api.post).toBeCalledWith('/api/classes/Library', { url: 'url', roleName: 'role' }, { headers: undefined });
+      expect(result).toEqual({ objectId: 1 });
+    });
+  });
+
+  describe('Test function: synchronize', () => {
+    it('should synchronize the corresponding library', async () => {
+      api.put.mockImplementation(() => Promise.resolve({
+        data: { objectId: 1 },
+      }));
+
+      const result = await LibraryService.synchronize('id', 'url');
+
+      expect(api.put).toBeCalledWith('/api/classes/Library/id', { url: 'url' }, { headers: undefined });
       expect(result).toEqual({ objectId: 1 });
     });
   });

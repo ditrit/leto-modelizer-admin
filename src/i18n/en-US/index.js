@@ -80,6 +80,7 @@ export default {
       version: 'Version:',
       goBack: 'Return to previous page',
       notFound: 'Library not found.',
+      informationTab: 'Information',
     },
     icon: {
       goBack: 'fa-solid fa-chevron-left',
@@ -160,6 +161,20 @@ export default {
       urlAlreadyExists: 'Library with this url already exists.',
       urlNotFound: 'Library with this url can not be downloaded.',
       roleNameAlreadyExists: 'Library with this roleName already exists.',
+    },
+  },
+  InformationLibraryTabPanel: {
+    text: {
+      notEmpty: 'Field is required.',
+      synchronizeTitle: 'Library URL',
+      synchronize: 'Synchronize',
+      synchronizeSuccess: 'Library is synchronized.',
+      synchronizeError: 'Error during library synchronization.',
+      urlAlreadyExists: 'Library with this url already exists.',
+      urlNotFound: 'Library with this url can not be downloaded.',
+    },
+    icon: {
+      synchronize: 'fa-solid fa-rotate',
     },
   },
 };

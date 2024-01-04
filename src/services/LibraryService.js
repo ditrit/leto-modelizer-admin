@@ -45,3 +45,15 @@ export async function create(url, roleName) {
     .then(({ data }) => data)
     .catch(manageError);
 }
+
+/**
+ * Synchronize library url.
+ * @param {string} id - Library id.
+ * @param {string} url - Url of the library.
+ * @returns {Promise<object>} Promise with library object on success otherwise an error.
+ */
+export async function synchronize(id, url) {
+  return api.put(`/api/classes/Library/${id}`, { url }, { headers: getDefaultHeaders() })
+    .then(({ data }) => data)
+    .catch(manageError);
+}
