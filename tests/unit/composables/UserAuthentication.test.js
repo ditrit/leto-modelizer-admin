@@ -1,6 +1,8 @@
 import {
   setUserSessionToken,
-  getUserSessionToken, initUser,
+  getUserSessionToken,
+  removeUserSessionToken,
+  initUser,
 } from 'src/composables/UserAuthentication';
 import * as UserService from 'src/services/UserService';
 import * as RoleService from 'src/services/RoleService';
@@ -29,6 +31,16 @@ describe('Test: User Authentication', () => {
       getUserSessionToken();
 
       expect(getItem).toHaveBeenCalledWith('sessionToken');
+    });
+  });
+
+  describe('Test function: removeUserSessionToken', () => {
+    it('should remove the session token from the local storage', () => {
+      const removeItem = vi.spyOn(Storage.prototype, 'removeItem');
+
+      removeUserSessionToken();
+
+      expect(removeItem).toHaveBeenCalledWith('sessionToken');
     });
   });
 

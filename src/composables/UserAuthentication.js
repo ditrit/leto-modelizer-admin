@@ -19,6 +19,13 @@ export function getUserSessionToken() {
 }
 
 /**
+ * Remove the current user's session token from the local storage.
+ */
+export function removeUserSessionToken() {
+  localStorage.removeItem('sessionToken');
+}
+
+/**
  * Init user information and roles.
  * @param {string} sessionToken - The current user's session token.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error. Error is thrown if
