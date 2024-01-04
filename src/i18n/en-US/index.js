@@ -139,6 +139,7 @@ export default {
       cancel: 'Cancel',
       confirm: 'Confirm',
       notifySuccess: 'User is removed.',
+      warning: 'You will delete yourself. If you confirm, you will be redirected to leto modelizer.',
     },
   },
   RemoveUserGroupDialog: {
