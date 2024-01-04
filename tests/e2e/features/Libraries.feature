@@ -19,6 +19,12 @@ Feature: Test roundtrip of the application: Libraries
   ## 406 Should display an error on not found library url
   ## 407 Should create library and go to its page
 
+  ################## Synchronize library ##################
+  ## 501 Should display an error on empty library url
+  ## 502 Should display an error on not found library url
+  ## 503 Should display an error on duplicate library url
+  ## 504 Should Synchronize library
+
   Scenario: Roundtrip about Libraries
     Given I visit the '/'
     When  I click on '[data-cy="drawer_item_libraries"]'
@@ -135,3 +141,35 @@ Feature: Test roundtrip of the application: Libraries
 
     Then I expect current url is '/libraries/id_1'
     And  I expect 'positive' toast to appear with text 'Library is created.'
+    And  I expect field '[data-cy="library-field-url"]' is 'url_1'
+
+    ####################################################
+    ################## Add library    ##################
+    ####################################################
+
+    ## 501 Should display an error on empty library url
+    When I set on '[data-cy="library-field-url"]' text ''
+    Then I expect '.library-field-url div[role="alert"]' is 'Field is required'
+
+    ## 502 Should display an error on not found library url
+    When I set on '[data-cy="library-field-url"]' text 'notFound'
+    And  I expect '.library-field-url div[role="alert"]' not exists
+    And  I click on '[data-cy="library-button-synchronize"]'
+
+    Then I expect 'negative' toast to appear with text 'Error during library synchronization.'
+    And  I expect '.library-field-url div[role="alert"]' is 'Library with this url can not be downloaded.'
+
+    ## 503 Should display an error on duplicate library url
+    When I set on '[data-cy="library-field-url"]' text 'alreadyExist'
+    And  I expect '.library-field-url div[role="alert"]' not exists
+    And  I click on '[data-cy="library-button-synchronize"]'
+
+    Then I expect 'negative' toast to appear with text 'Error during library synchronization.'
+    And  I expect '.library-field-url div[role="alert"]' is 'Library with this url already exists.'
+
+    ## 504 Should Synchronize library
+    When I set on '[data-cy="library-field-url"]' text 'url_1'
+    And  I expect '.library-field-url div[role="alert"]' not exists
+    And  I click on '[data-cy="library-button-synchronize"]'
+
+    Then  I expect 'positive' toast to appear with text 'Library is synchronized.'

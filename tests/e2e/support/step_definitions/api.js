@@ -16,6 +16,7 @@ Before(() => {
     version: '1.0.0',
     author: 'Author_1',
     description: 'description_1',
+    url: 'url_1',
   };
   const library2 = {
     objectId: 'id_2',
@@ -132,6 +133,33 @@ Before(() => {
         statusCode: 400,
         body: {
           error: 'Library with this roleName already exists',
+        },
+      });
+    } else {
+      request.reply({
+        statusCode: 200,
+        body: {
+          objectId: 'id_1',
+        },
+      });
+    }
+  });
+
+  cy.intercept('PUT', '/backend/api/classes/Library/id_1', (request) => {
+    const { url } = request.body;
+
+    if (url === 'notFound') {
+      request.reply({
+        statusCode: 400,
+        body: {
+          error: 'Other error',
+        },
+      });
+    } else if (url === 'alreadyExist') {
+      request.reply({
+        statusCode: 400,
+        body: {
+          error: 'Library with this url already exists',
         },
       });
     } else {
