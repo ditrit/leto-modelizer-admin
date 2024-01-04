@@ -70,7 +70,7 @@ const { show } = useDialog('remove-user', (event) => {
 });
 
 /**
- * Remove user, send event to reload all users and close dialogue.
+ * Remove user, send event to reload all users and close dialog.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function onSubmit() {

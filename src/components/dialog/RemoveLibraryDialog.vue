@@ -50,7 +50,7 @@ const { show } = useDialog('remove-library', (event) => {
 });
 
 /**
- * Remove library, send event to reload all libraries and close dialogue.
+ * Remove library, send event to reload all libraries and close dialog.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function onSubmit() {
