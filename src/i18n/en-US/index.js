@@ -80,6 +80,7 @@ export default {
       version: 'Version:',
       goBack: 'Return to previous page',
       notFound: 'Library not found.',
+      informationTab: 'Information',
     },
     icon: {
       goBack: 'fa-solid fa-chevron-left',

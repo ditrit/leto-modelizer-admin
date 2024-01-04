@@ -37,6 +37,19 @@
           <span data-cy="page_library_description">{{ library.description }}</span>
         </div>
       </q-card-section>
+      <q-card-section class="q-pa-none">
+        <q-tabs
+          v-model="currentTab"
+          no-caps
+          active-color="primary"
+          align="left"
+        >
+          <q-tab
+            name="information"
+            :label="$t('LibraryPage.text.informationTab')"
+          />
+        </q-tabs>
+      </q-card-section>
       <q-linear-progress
         v-if="loading"
         indeterminate
@@ -44,6 +57,17 @@
         data-cy="page_library_loading"
       />
     </q-card>
+    <q-tab-panels
+      v-model="currentTab"
+      animated
+      class="bg-grey-1"
+    >
+      <information-library-tab-panel
+        name="information"
+        :library="library"
+        @synchronize="loadLibrary"
+      />
+    </q-tab-panels>
   </q-page>
 </template>
 
@@ -53,12 +77,14 @@ import { useRoute, useRouter } from 'vue-router';
 import * as LibraryService from 'src/services/LibraryService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
+import InformationLibraryTabPanel from 'components/tab-panel/InformationLibraryTabPanel.vue';
 
 const loading = ref(false);
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const library = ref({});
+const currentTab = ref('information');
 
 /**
  * Load library from id in url. If the library does not exist, redirect to the libraries page.
