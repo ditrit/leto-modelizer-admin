@@ -10,6 +10,7 @@
         <q-card-section
           v-if="user && deleteCurrentUser"
           class="column flex-center"
+          data-cy="remove_current_user_warning"
         >
           <q-banner
             class="bg-negative text-white text-weight-bold"

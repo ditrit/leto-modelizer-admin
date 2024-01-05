@@ -2,6 +2,7 @@ import { Before } from '@badeball/cypress-cucumber-preprocessor';
 
 Before(() => {
   let isUserDeleted = false;
+  let isCurrentUserDeleted = false;
   let isLibraryDeleted = false;
   let isGroupDeleted = false;
   const user1 = {
@@ -9,6 +10,12 @@ Before(() => {
     username: 'Username',
     firstname: 'Firstname',
     email: 'test@test.com',
+  };
+  const currentUser = {
+    objectId: 'id_2',
+    username: 'Current User',
+    firstname: 'Admin',
+    email: 'admin@admin.com',
   };
   const library1 = {
     objectId: 'id_1',
@@ -33,17 +40,27 @@ Before(() => {
   cy.intercept('GET', '/backend/api/users/me', {
     statusCode: 200,
     body: {
-      objectId: 'id',
-      username: 'Username',
-      firstname: 'Firstname',
+      objectId: 'id_2',
+      username: 'User',
+      firstname: 'First',
     },
   });
 
   cy.intercept('GET', '/backend/api/Users*', (request) => {
+    let results = [user1, currentUser];
+
+    if (isUserDeleted) {
+      results = [currentUser];
+
+      if (isCurrentUserDeleted) {
+        results = [];
+      }
+    }
+
     request.reply({
       statusCode: 200,
       body: {
-        results: isUserDeleted ? [] : [user1],
+        results,
       },
     });
   });
@@ -60,6 +77,11 @@ Before(() => {
 
   cy.intercept('DELETE', '/backend/api/Users/id_1', (request) => {
     isUserDeleted = true;
+    request.reply({ statusCode: 204 });
+  });
+
+  cy.intercept('DELETE', '/backend/api/Users/id_2', (request) => {
+    isCurrentUserDeleted = true;
     request.reply({ statusCode: 204 });
   });
 
@@ -195,4 +217,6 @@ Before(() => {
     statusCode: 404,
     body: 'Not Found',
   });
+
+  cy.intercept('http://localhost:8080/token/clear', 'ok');
 });
