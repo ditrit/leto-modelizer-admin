@@ -6,9 +6,7 @@ import { api, getDefaultHeaders, manageError } from 'boot/axios';
  * otherwise an error.
  */
 export async function find() {
-  const queryParameters = 'limit=10';
-
-  return api.get(`/api/classes/Library?${queryParameters}`, { headers: getDefaultHeaders() })
+  return api.get('/api/classes/Library', { headers: getDefaultHeaders() })
     .then(({ data }) => data.results)
     .catch(manageError);
 }

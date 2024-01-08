@@ -46,7 +46,7 @@ Before(() => {
     },
   });
 
-  cy.intercept('GET', '/backend/api/Users*', (request) => {
+  cy.intercept('GET', '/backend/api/Users', (request) => {
     let results = [user1, currentUser];
 
     if (isUserDeleted) {
@@ -92,7 +92,7 @@ Before(() => {
     },
   });
 
-  cy.intercept('GET', '/backend/api/classes/_Role*', {
+  cy.intercept('GET', '/backend/api/classes/_Role', {
     statusCode: 200,
     body: {
       results: [
@@ -104,7 +104,7 @@ Before(() => {
     },
   });
 
-  cy.intercept('GET', '/backend/api/classes/Library?*', (request) => {
+  cy.intercept('GET', '/backend/api/classes/Library', (request) => {
     request.reply({
       statusCode: 200,
       body: {
@@ -194,7 +194,7 @@ Before(() => {
     }
   });
 
-  cy.intercept('GET', '/backend/api/classes/Group*', (request) => {
+  cy.intercept('GET', '/backend/api/classes/Group', (request) => {
     request.reply({
       statusCode: 200,
       body: {
