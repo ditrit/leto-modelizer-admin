@@ -4,6 +4,7 @@ import UserPage from 'pages/UserPage.vue';
 import { Notify } from 'quasar';
 import { vi } from 'vitest';
 import * as UserService from 'src/services/UserService';
+import * as UserGroupService from 'src/services/UserGroupService';
 import { useRoute, useRouter } from 'vue-router';
 
 installQuasarPlugin({
@@ -12,6 +13,7 @@ installQuasarPlugin({
 
 vi.mock('src/services/UserService');
 vi.mock('vue-router');
+vi.mock('src/services/UserGroupService');
 
 describe('Test component: UserPage', () => {
   let wrapper;
@@ -27,6 +29,7 @@ describe('Test component: UserPage', () => {
     useRouter.mockImplementation(() => ({ push }));
 
     UserService.findById.mockImplementation(() => Promise.resolve(user));
+    UserGroupService.findByUserId.mockImplementation(() => Promise.resolve(['group']));
 
     wrapper = shallowMount(UserPage);
   });
@@ -52,6 +55,16 @@ describe('Test component: UserPage', () => {
       await wrapper.vm.loadUser();
 
       expect(push).toBeCalledWith('/users');
+    });
+  });
+
+  describe('Test function: loadGroups', () => {
+    it('should set userGroups', async () => {
+      wrapper.vm.userGroups = [];
+
+      await wrapper.vm.loadGroups();
+
+      expect(wrapper.vm.userGroups).toEqual(['group']);
     });
   });
 });

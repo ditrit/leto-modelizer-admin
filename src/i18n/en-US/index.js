@@ -54,6 +54,7 @@ export default {
     text: {
       goBack: 'Return to previous page',
       notFound: 'User not found.',
+      groupList: 'Group of {user}',
     },
     icon: {
       goBack: 'fa-solid fa-chevron-left',
