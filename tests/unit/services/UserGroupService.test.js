@@ -40,4 +40,17 @@ describe('Test: UserGroupService', () => {
       expect(api.delete).toBeCalledWith('/api/classes/Group/test', { headers: undefined });
     });
   });
+
+  describe('Test function: findByUserId', () => {
+    it('should return the current user groups', async () => {
+      const groups = [{
+        name: 'group',
+      }];
+
+      api.get.mockImplementation(() => Promise.resolve({ data: { results: groups } }));
+
+      const data = await UserGroupService.findByUserId('r:ded779dcda4970cc7f96c09a328d771');
+      expect(data).toEqual([{ name: 'group' }]);
+    });
+  });
 });
