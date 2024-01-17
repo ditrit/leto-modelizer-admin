@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Add action to delete a user.
 * Setup User page with:
   * Display all information of a user.
+  * Display all groups related to a user.
   * Redirect to leto-modelizer if current user is deleted.
 * Setup Roles page with:
   * Table to display all roles.
