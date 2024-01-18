@@ -1,46 +1,85 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest';
 import { shallowMount } from '@vue/test-utils';
 import UserGroupsTable from 'src/components/tables/UserGroupsTable.vue';
-import { vi } from 'vitest';
-import * as UserGroupService from 'src/services/UserGroupService';
-import ReloadUserGroupsEvent from 'src/composables/events/ReloadUserGroupsEvent';
 
 installQuasarPlugin();
 
-vi.mock('src/services/UserGroupService');
-vi.mock('src/composables/events/ReloadUserGroupsEvent');
-
 describe('Test component: UserGroupsTable', () => {
   let wrapper;
-  let subscribe;
-  let unsubscribe;
 
   beforeEach(async () => {
-    subscribe = vi.fn();
-    unsubscribe = vi.fn();
-
-    UserGroupService.find.mockImplementation(() => Promise.resolve([]));
-
-    ReloadUserGroupsEvent.subscribe.mockImplementation(() => {
-      subscribe();
-      return { unsubscribe };
+    wrapper = shallowMount(UserGroupsTable, {
+      props: {
+        userGroups: [],
+        showAction: true,
+        removeAction: false,
+      },
     });
-
-    wrapper = shallowMount(UserGroupsTable);
     await wrapper.vm.$nextTick();
   });
 
-  describe('Test hook function: onMounted', () => {
-    it('should subscribe DialogEvent', () => {
-      expect(subscribe).toHaveBeenCalledTimes(1);
+  describe('Test computed: displayActionsColumn', () => {
+    it('should be true if showAction is true', () => {
+      expect(wrapper.vm.displayActionsColumn).toBeTruthy();
+    });
+
+    it('should be true if removeAction is true', async () => {
+      await wrapper.setProps({
+        showAction: false,
+        removeAction: true,
+      });
+
+      expect(wrapper.vm.displayActionsColumn).toBeTruthy();
+    });
+
+    it('should be false if removeAction and showAction are false', async () => {
+      await wrapper.setProps({
+        showAction: false,
+        removeAction: false,
+      });
+
+      expect(wrapper.vm.displayActionsColumn).toBeFalsy();
     });
   });
 
-  describe('Test hook function: onUnmounted', () => {
-    it('should unsubscribe DialogEvent', () => {
-      expect(unsubscribe).toHaveBeenCalledTimes(0);
-      wrapper.unmount();
-      expect(unsubscribe).toHaveBeenCalledTimes(1);
+  describe('Test computed: columns', () => {
+    it('should return array with two elements when displayColumns is truthy', () => {
+      expect(wrapper.vm.columns).toStrictEqual([
+        {
+          name: 'name',
+          required: true,
+          label: 'Name',
+          align: 'left',
+          field: 'name',
+          classes: 'user-group-name',
+        },
+        {
+          name: 'actions',
+          required: true,
+          label: 'Actions',
+          align: 'left',
+          field: 'objectId',
+          classes: 'user-group-actions',
+        },
+      ]);
+    });
+
+    it('should return array with one element when displayColumns is falsy', async () => {
+      await wrapper.setProps({
+        showAction: false,
+        removeAction: false,
+      });
+
+      expect(wrapper.vm.columns).toStrictEqual([
+        {
+          name: 'name',
+          required: true,
+          label: 'Name',
+          align: 'left',
+          field: 'name',
+          classes: 'user-group-name',
+        },
+      ]);
     });
   });
 });

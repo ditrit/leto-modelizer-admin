@@ -31,3 +31,16 @@ export async function remove(id) {
   return api.delete(`/api/classes/Group/${id}`, { headers: getDefaultHeaders() })
     .catch(manageError);
 }
+
+/**
+ * Get all groups of a user.
+ * @param {string} userId - User id.
+ * @returns {Promise<object[]>} Return an array of groups.
+ */
+export async function findByUserId(userId) {
+  const queryParameters = `where={"users":{"__type":"Pointer","className":"_User","objectId":"${userId}"}}`;
+
+  return api.get(`/api/classes/Group?${queryParameters}`, { headers: getDefaultHeaders() })
+    .then(({ data }) => data.results)
+    .catch(manageError);
+}

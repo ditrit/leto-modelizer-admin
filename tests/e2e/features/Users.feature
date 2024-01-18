@@ -4,7 +4,7 @@ Feature: Test roundtrip of the application: Users
   ## 101 Should display all users
 
   ################## Select user ##################
-  ## 201 Should display all users information
+  ## 201 Should display all users information and related groups
   ## 202 Should redirect to users if user is not found
 
   ################## Delete user ##################
@@ -34,11 +34,14 @@ Feature: Test roundtrip of the application: Users
     ################## Select users ###############
     ####################################################
 
-    ## 201 Should display all users information
+    ## 201 Should display all users information and related groups
     When I click on '[data-cy="users_table"] [data-cy="user_id_1_button_show"]'
     Then I expect current url is '/users/id_1'
     And  I expect '[data-cy="page_user_loading"]' not exists
     And  I expect '[data-cy="page_user_title"]' is 'Firstname'
+    And  I expect '[data-cy="page_user_subtitle"]' exists
+    And  I expect '[data-cy="userGroups_table"]' exists
+    And  I expect '[data-cy="userGroups_table"] tbody tr td' is 'group1'
 
     When I click on '[data-cy="page_user_go_back"]'
     Then I expect current url is '/users'

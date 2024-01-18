@@ -218,5 +218,14 @@ Before(() => {
     body: 'Not Found',
   });
 
+  cy.intercept('GET', '/backend/api/classes/Group?*', (request) => {
+    request.reply({
+      statusCode: 200,
+      body: {
+        results: [group1],
+      },
+    });
+  });
+
   cy.intercept('http://localhost:8080/token/clear', 'ok');
 });

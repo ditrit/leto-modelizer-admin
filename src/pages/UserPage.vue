@@ -15,7 +15,7 @@
       </q-card-section>
       <q-card-section class=" q-py-none">
         <h4
-          class="q-ma-none"
+          class="q-ma-none q-mb-sm"
           data-cy="page_user_title"
         >
           {{ user.firstname }}
@@ -28,6 +28,19 @@
         data-cy="page_user_loading"
       />
     </q-card>
+    <q-card-section>
+      <h6
+        class="q-ma-none q-mb-sm"
+        data-cy="page_user_subtitle"
+      >
+        {{ $t('UserPage.text.groupList', { user: user.firstname }) }}
+      </h6>
+      <user-groups-table
+        :user-groups="userGroups"
+        :show-action="false"
+        :remove-action="false"
+      />
+    </q-card-section>
   </q-page>
 </template>
 
@@ -37,20 +50,21 @@ import { useRoute, useRouter } from 'vue-router';
 import * as UserService from 'src/services/UserService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
+import UserGroupsTable from 'src/components/tables/UserGroupsTable.vue';
+import * as UserGroupService from 'src/services/UserGroupService';
 
 const loading = ref(false);
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const user = ref({});
+const userGroups = ref([]);
 
 /**
  * Load user from id in url. If the user does not exist, redirect to the users page.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function loadUser() {
-  loading.value = true;
-
   return UserService.findById(route.params.id)
     .then((data) => {
       user.value = data;
@@ -62,13 +76,32 @@ async function loadUser() {
         html: true,
       });
       router.push('/users');
-    })
+    });
+}
+
+/**
+ * Get user groups using user Id.
+ * @returns {Promise<void>} Promise with nothing on success.
+ */
+async function loadGroups() {
+  return UserGroupService.findByUserId(route.params.id).then((data) => {
+    userGroups.value = data;
+  });
+}
+
+/**
+ * Search user and associated groups.
+ */
+async function search() {
+  loading.value = true;
+
+  Promise.allSettled([loadUser(), loadGroups()])
     .finally(() => {
       loading.value = false;
     });
 }
 
-onMounted(() => {
-  loadUser();
+onMounted(async () => {
+  await search();
 });
 </script>
