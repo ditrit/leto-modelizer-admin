@@ -35,6 +35,16 @@
       >
         {{ $t('UserPage.text.groupList', { user: user.firstname }) }}
       </h6>
+      <q-btn
+        outline
+        no-caps
+        color="primary"
+        class="bg-white q-mb-md"
+        data-cy="page_user_button_attach_group"
+        :label="$t('UserPage.text.attach')"
+        :icon="$t('UserPage.icon.attach')"
+        @click="openAttachGroupToUserDialog"
+      />
       <user-groups-table
         :user-groups="userGroups"
         :show-action="false"
@@ -45,13 +55,15 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import * as UserService from 'src/services/UserService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import UserGroupsTable from 'src/components/tables/UserGroupsTable.vue';
 import * as UserGroupService from 'src/services/UserGroupService';
+import DialogEvent from 'src/composables/events/DialogEvent';
+import ReloadUserAttachedGroupsEvent from 'src/composables/events/ReloadUserAttachedGroupsEvent';
 
 const loading = ref(false);
 const { t } = useI18n();
@@ -59,6 +71,8 @@ const route = useRoute();
 const router = useRouter();
 const user = ref({});
 const userGroups = ref([]);
+
+let reloadUserAttachedGroupsEventRef;
 
 /**
  * Load user from id in url. If the user does not exist, redirect to the users page.
@@ -101,7 +115,23 @@ async function search() {
     });
 }
 
+/**
+ * Open dialog to attach a group to user.
+ */
+function openAttachGroupToUserDialog() {
+  DialogEvent.next({
+    key: 'attach-group-to-user',
+    type: 'open',
+    userId: route.params.id,
+  });
+}
+
 onMounted(async () => {
+  reloadUserAttachedGroupsEventRef = ReloadUserAttachedGroupsEvent.subscribe(loadGroups);
   await search();
+});
+
+onUnmounted(() => {
+  reloadUserAttachedGroupsEventRef.unsubscribe();
 });
 </script>
