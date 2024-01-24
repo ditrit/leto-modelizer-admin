@@ -43,3 +43,46 @@ export async function remove(id) {
   return api.delete(`/api/Users/${id}`, { headers: getDefaultHeaders() })
     .catch(manageError);
 }
+
+/**
+ * Add user to the "users" field of the group.
+ * @param {string} userId - User id.
+ * @param {string} groupId - Group id.
+ * @returns {Promise<object>} Promise with nothing on success otherwise an error.
+ */
+async function addUserToGroup(userId, groupId) {
+  return api.put(
+    `/api/classes/Group/${groupId}`,
+    {
+      users: {
+        __op: 'AddRelation',
+        objects: [
+          {
+            __type: 'Pointer',
+            className: '_User',
+            objectId: userId,
+          },
+        ],
+      },
+    },
+    { headers: getDefaultHeaders() },
+  );
+}
+
+/**
+ * Attach groups to user.
+ * @param {string} userId - User id.
+ * @param {string[]} groupIds - Array of group id.
+ * @returns {Promise<object>} Promise with nothing on success otherwise an error.
+ */
+export async function attachGroups(userId, groupIds) {
+  return Promise.allSettled(groupIds.map((groupId) => addUserToGroup(userId, groupId)))
+    .then((results) => {
+      results.forEach((result) => {
+        if (result.status === 'rejected') {
+          return manageError(result.reason);
+        }
+        return result;
+      });
+    });
+}

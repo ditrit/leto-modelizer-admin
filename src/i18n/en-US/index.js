@@ -55,9 +55,11 @@ export default {
       goBack: 'Return to previous page',
       notFound: 'User not found.',
       groupList: 'Group of {user}',
+      attach: 'Attach group',
     },
     icon: {
       goBack: 'fa-solid fa-chevron-left',
+      attach: 'fa-solid fa-plus',
     },
   },
   RolesPage: {
@@ -150,6 +152,15 @@ export default {
       cancel: 'Cancel',
       confirm: 'Confirm',
       notifySuccess: 'Group is removed.',
+    },
+  },
+  AttachGroupToUserDialog: {
+    text: {
+      title: 'Attach one or more groups to user',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifyError: 'Error during attachment of a group to the user.',
+      notifySuccess: 'Group(s) successfully attached to the user.',
     },
   },
   AddLibraryPage: {

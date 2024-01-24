@@ -74,4 +74,27 @@ describe('Test: UserService', () => {
       expect(api.delete).toBeCalledWith('/api/Users/test', { headers: undefined });
     });
   });
+
+  describe('Test function: attachGroups', () => {
+    it('should call api.put with endpoint using "groupId"', async () => {
+      api.put.mockImplementation(() => Promise.resolve());
+
+      const userObject = {
+        users: {
+          __op: 'AddRelation',
+          objects: [
+            {
+              __type: 'Pointer',
+              className: '_User',
+              objectId: 'userId',
+            },
+          ],
+        },
+      };
+
+      await UserService.attachGroups('userId', ['groupId']);
+
+      expect(api.put).toBeCalledWith('/api/classes/Group/groupId', userObject, { headers: undefined });
+    });
+  });
 });
