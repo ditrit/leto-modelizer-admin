@@ -227,5 +227,11 @@ Before(() => {
     });
   });
 
+  cy.intercept('PUT', '/backend/api/classes/Group/id_1', (request) => {
+    request.reply({
+      statusCode: 200,
+    });
+  });
+
   cy.intercept('http://localhost:8080/token/clear', 'ok');
 });
