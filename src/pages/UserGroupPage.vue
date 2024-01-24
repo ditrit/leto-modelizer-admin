@@ -7,25 +7,25 @@
           dense
           size="sm"
           color="primary"
-          data-cy="page_userGroup_go_back"
-          :label="$t('UserGroupPage.text.goBack')"
-          :icon="$t('UserGroupPage.icon.goBack')"
-          @click="$router.push('/user-groups')"
+          data-cy="page_group_go_back"
+          :label="$t('GroupPage.text.goBack')"
+          :icon="$t('GroupPage.icon.goBack')"
+          @click="$router.push('/groups')"
         />
       </q-card-section>
       <q-card-section class=" q-py-none">
         <h4
           class="q-ma-none"
-          data-cy="page_userGroup_title"
+          data-cy="page_group_title"
         >
-          {{ userGroup.name }}
+          {{ group.name }}
         </h4>
       </q-card-section>
       <q-linear-progress
         v-if="loading"
         indeterminate
         color="primary"
-        data-cy="page_userGroup_loading"
+        data-cy="page_group_loading"
       />
     </q-card>
   </q-page>
@@ -34,7 +34,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import * as UserGroupService from 'src/services/UserGroupService';
+import * as GroupService from 'src/services/GroupService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 
@@ -42,26 +42,26 @@ const loading = ref(false);
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
-const userGroup = ref({});
+const group = ref({});
 
 /**
- * Load userGroup from id in url. If the userGroup does not exist, redirect to the libraries page.
+ * Load group from id in url. If the group does not exist, redirect to the libraries page.
  * @returns {Promise<void>} Promise with nothing on success.
  */
-async function loadUserGroup() {
+async function loadGroup() {
   loading.value = true;
 
-  return UserGroupService.findById(route.params.id)
+  return GroupService.findById(route.params.id)
     .then((data) => {
-      userGroup.value = data;
+      group.value = data;
     })
     .catch(() => {
       Notify.create({
         type: 'negative',
-        message: t('UserGroupPage.text.notFound'),
+        message: t('GroupPage.text.notFound'),
         html: true,
       });
-      router.push('/user-groups');
+      router.push('/groups');
     })
     .finally(() => {
       loading.value = false;
@@ -69,6 +69,6 @@ async function loadUserGroup() {
 }
 
 onMounted(() => {
-  loadUserGroup();
+  loadGroup();
 });
 </script>

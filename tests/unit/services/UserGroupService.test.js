@@ -1,42 +1,42 @@
-import * as UserGroupService from 'src/services/UserGroupService';
+import * as GroupService from 'src/services/GroupService';
 import { vi } from 'vitest';
 import { api } from 'boot/axios';
 
 vi.mock('boot/axios');
 
-describe('Test: UserGroupService', () => {
+describe('Test: GroupService', () => {
   describe('Test function: find', () => {
-    it('should return the userGroups', async () => {
-      const userGroups = [{
-        name: 'userGroups',
+    it('should return the groups', async () => {
+      const groups = [{
+        name: 'groups',
       }];
 
-      api.get.mockImplementation(() => Promise.resolve({ data: { results: userGroups } }));
+      api.get.mockImplementation(() => Promise.resolve({ data: { results: groups } }));
 
-      const data = await UserGroupService.find();
-      expect(data).toEqual(userGroups);
+      const data = await GroupService.find();
+      expect(data).toEqual(groups);
     });
   });
 
   describe('Test function: findById', () => {
-    it('should return the userGroup', async () => {
-      const userGroup = {
-        name: 'userGroup',
+    it('should return the group', async () => {
+      const group = {
+        name: 'group',
         objectId: 'w2U52H05zx',
       };
 
-      api.get.mockImplementation(() => Promise.resolve({ data: userGroup }));
+      api.get.mockImplementation(() => Promise.resolve({ data: group }));
 
-      const res = await UserGroupService.findById(userGroup.objectId);
-      expect(res).toEqual(userGroup);
+      const res = await GroupService.findById(group.objectId);
+      expect(res).toEqual(group);
     });
   });
 
   describe('Test function: remove', () => {
-    it('should remove the userGroup corresponding to the given id', async () => {
+    it('should remove the group corresponding to the given id', async () => {
       api.delete.mockImplementation(() => Promise.resolve());
 
-      await UserGroupService.remove('test');
+      await GroupService.remove('test');
       expect(api.delete).toBeCalledWith('/api/classes/Group/test', { headers: undefined });
     });
   });
@@ -49,7 +49,7 @@ describe('Test: UserGroupService', () => {
 
       api.get.mockImplementation(() => Promise.resolve({ data: { results: groups } }));
 
-      const data = await UserGroupService.findByUserId('r:ded779dcda4970cc7f96c09a328d771');
+      const data = await GroupService.findByUserId('r:ded779dcda4970cc7f96c09a328d771');
       expect(data).toEqual([{ name: 'group' }]);
     });
   });

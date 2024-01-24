@@ -2,20 +2,20 @@
   <q-page class="column q-pa-md bg-grey-1">
     <h4
       class="q-ma-none q-mt-md q-mb-lg"
-      data-cy="page_userGroups_title"
+      data-cy="page_groups_title"
     >
-      {{ $t('UserGroupsPage.text.title') }}
+      {{ $t('GroupsPage.text.title') }}
     </h4>
-    <user-groups-table
-      :user-groups="userGroups"
-      @show="goToUserGroup"
-      @remove="openRemoveUserGroupDialog"
+    <groups-table
+      :groups="groups"
+      @show="goToGroup"
+      @remove="openRemoveGroupDialog"
     />
   </q-page>
 </template>
 
 <script setup>
-import UserGroupsTable from 'src/components/tables/UserGroupsTable.vue';
+import GroupsTable from 'src/components/tables/GroupsTable.vue';
 import { useRouter } from 'vue-router';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import {
@@ -23,49 +23,49 @@ import {
   onUnmounted,
   ref,
 } from 'vue';
-import * as UserGroupService from 'src/services/UserGroupService';
-import ReloadUserGroupsEvent from 'src/composables/events/ReloadUserGroupsEvent';
+import * as GroupService from 'src/services/GroupService';
+import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 
 const router = useRouter();
-const userGroups = ref([]);
+const groups = ref([]);
 
-let reloadUserGroupsEventRef;
+let reloadGroupsEventRef;
 
 /**
  * Go to user group page.
  * @param {string} id - User group id.
  */
-function goToUserGroup(id) {
-  router.push(`/user-groups/${id}`);
+function goToGroup(id) {
+  router.push(`/groups/${id}`);
 }
 
 /**
  * Open dialog to remove user group.
- * @param {object} userGroup - User group object to remove for the dialog.
+ * @param {object} group - User group object to remove for the dialog.
  */
-function openRemoveUserGroupDialog(userGroup) {
+function openRemoveGroupDialog(group) {
   DialogEvent.next({
-    key: 'remove-userGroup',
+    key: 'remove-group',
     type: 'open',
-    userGroup,
+    group,
   });
 }
 
 /**
- * Get user groups.
+ * Get groups.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function search() {
-  return UserGroupService.find().then((data) => {
-    userGroups.value = data;
+  return GroupService.find().then((data) => {
+    groups.value = data;
   });
 }
 
 onMounted(async () => {
-  reloadUserGroupsEventRef = ReloadUserGroupsEvent.subscribe(search);
+  reloadGroupsEventRef = ReloadGroupsEvent.subscribe(search);
   await search();
 });
 onUnmounted(() => {
-  reloadUserGroupsEventRef.unsubscribe();
+  reloadGroupsEventRef.unsubscribe();
 });
 </script>

@@ -45,8 +45,8 @@
         :icon="$t('UserPage.icon.attach')"
         @click="openAttachGroupToUserDialog"
       />
-      <user-groups-table
-        :user-groups="userGroups"
+      <groups-table
+        :groups="groups"
         :show-action="false"
         :remove-action="false"
       />
@@ -60,19 +60,19 @@ import { useRoute, useRouter } from 'vue-router';
 import * as UserService from 'src/services/UserService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
-import UserGroupsTable from 'src/components/tables/UserGroupsTable.vue';
-import * as UserGroupService from 'src/services/UserGroupService';
+import GroupsTable from 'src/components/tables/GroupsTable.vue';
+import * as GroupService from 'src/services/GroupService';
 import DialogEvent from 'src/composables/events/DialogEvent';
-import ReloadUserAttachedGroupsEvent from 'src/composables/events/ReloadUserAttachedGroupsEvent';
+import ReloadUserGroupsEvent from 'src/composables/events/ReloadUserGroupsEvent';
 
 const loading = ref(false);
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const user = ref({});
-const userGroups = ref([]);
+const groups = ref([]);
 
-let reloadUserAttachedGroupsEventRef;
+let reloadUserGroupsEventRef;
 
 /**
  * Load user from id in url. If the user does not exist, redirect to the users page.
@@ -94,12 +94,12 @@ async function loadUser() {
 }
 
 /**
- * Get user groups using user Id.
+ * Get groups using user Id.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function loadGroups() {
-  return UserGroupService.findByUserId(route.params.id).then((data) => {
-    userGroups.value = data;
+  return GroupService.findByUserId(route.params.id).then((data) => {
+    groups.value = data;
   });
 }
 
@@ -127,11 +127,11 @@ function openAttachGroupToUserDialog() {
 }
 
 onMounted(async () => {
-  reloadUserAttachedGroupsEventRef = ReloadUserAttachedGroupsEvent.subscribe(loadGroups);
+  reloadUserGroupsEventRef = ReloadUserGroupsEvent.subscribe(loadGroups);
   await search();
 });
 
 onUnmounted(() => {
-  reloadUserAttachedGroupsEventRef.unsubscribe();
+  reloadUserGroupsEventRef.unsubscribe();
 });
 </script>

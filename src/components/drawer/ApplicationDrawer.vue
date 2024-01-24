@@ -45,10 +45,10 @@ const menuList = ref([
     name: 'users',
   },
   {
-    icon: t('ApplicationDrawer.icon.userGroups'),
-    label: t('ApplicationDrawer.text.userGroups'),
-    url: '/user-groups',
-    name: 'userGroups',
+    icon: t('ApplicationDrawer.icon.groups'),
+    label: t('ApplicationDrawer.text.groups'),
+    url: '/groups',
+    name: 'groups',
   },
   {
     icon: t('ApplicationDrawer.icon.roles'),

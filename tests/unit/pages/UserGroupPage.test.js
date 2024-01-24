@@ -1,22 +1,22 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest';
 import { shallowMount } from '@vue/test-utils';
-import UserGroupPage from 'pages/UserGroupPage.vue';
+import GroupPage from 'pages/GroupPage.vue';
 import { Notify } from 'quasar';
 import { vi } from 'vitest';
-import * as UserGroupService from 'src/services/UserGroupService';
+import * as GroupService from 'src/services/GroupService';
 import { useRoute, useRouter } from 'vue-router';
 
 installQuasarPlugin({
   plugins: [Notify],
 });
 
-vi.mock('src/services/UserGroupService');
+vi.mock('src/services/GroupService');
 vi.mock('vue-router');
 
-describe('Test component: UserGroupPage', () => {
+describe('Test component: GroupPage', () => {
   let wrapper;
   let push;
-  const userGroup = {
+  const group = {
     id: 1,
   };
 
@@ -26,32 +26,32 @@ describe('Test component: UserGroupPage', () => {
     useRoute.mockImplementation(() => ({ params: { id: 'id1' } }));
     useRouter.mockImplementation(() => ({ push }));
 
-    UserGroupService.findById.mockImplementation(() => Promise.resolve(userGroup));
+    GroupService.findById.mockImplementation(() => Promise.resolve(group));
 
-    wrapper = shallowMount(UserGroupPage);
+    wrapper = shallowMount(GroupPage);
   });
 
   it('should mount the component', () => {
     expect(wrapper).not.toBeNull();
   });
 
-  describe('Test function: loadUserGroup', () => {
-    it('should set data on valid userGroup', async () => {
-      wrapper.vm.userGroup = {};
+  describe('Test function: loadGroup', () => {
+    it('should set data on valid group', async () => {
+      wrapper.vm.group = {};
       wrapper.vm.loading = true;
 
-      await wrapper.vm.loadUserGroup();
+      await wrapper.vm.loadGroup();
 
-      expect(wrapper.vm.userGroup).toEqual(userGroup);
+      expect(wrapper.vm.group).toEqual(group);
       expect(wrapper.vm.loading).toBeFalsy();
     });
 
-    it('should redirect on unknown userGroup', async () => {
-      UserGroupService.findById.mockImplementation(() => Promise.reject());
+    it('should redirect on unknown group', async () => {
+      GroupService.findById.mockImplementation(() => Promise.reject());
 
-      await wrapper.vm.loadUserGroup();
+      await wrapper.vm.loadGroup();
 
-      expect(push).toBeCalledWith('/user-groups');
+      expect(push).toBeCalledWith('/groups');
     });
   });
 });

@@ -3,8 +3,8 @@ import { Subject } from 'rxjs';
 /**
  * Represent a rxjs Event object to emit and to receive events to force reloading
  * the groups attached to a user.
- * @typedef {Subject} ReloadUserAttachedGroupsEvent
+ * @typedef {Subject} ReloadUserGroupsEvent
  */
-const ReloadUserAttachedGroupsEvent = new Subject();
+const ReloadUserGroupsEvent = new Subject();
 
-export default ReloadUserAttachedGroupsEvent;
+export default ReloadUserGroupsEvent;

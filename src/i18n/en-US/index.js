@@ -2,13 +2,13 @@ export default {
   ApplicationDrawer: {
     text: {
       users: 'Users',
-      userGroups: 'User Groups',
+      groups: 'User Groups',
       libraries: 'Libraries',
       roles: 'Roles',
     },
     icon: {
       users: 'fa-solid fa-user',
-      userGroups: 'fa-solid fa-users',
+      groups: 'fa-solid fa-users',
       libraries: 'fa-solid fa-book-open',
       roles: 'fa-solid fa-screwdriver-wrench',
     },
@@ -36,15 +36,15 @@ export default {
       title: 'Users',
     },
   },
-  UserGroupsPage: {
+  GroupsPage: {
     text: {
       title: 'User Groups',
     },
   },
-  UserGroupPage: {
+  GroupPage: {
     text: {
       goBack: 'Return to previous page',
-      notFound: 'User Group not found.',
+      notFound: 'Group not found.',
     },
     icon: {
       goBack: 'fa-solid fa-chevron-left',
@@ -103,7 +103,7 @@ export default {
       actionsColumn: 'Actions',
     },
   },
-  UserGroupsTable: {
+  GroupsTable: {
     text: {
       nameColumn: 'Name',
       actionsColumn: 'Actions',
@@ -145,7 +145,7 @@ export default {
       warning: 'You will delete yourself. If you confirm, you will be redirected to leto modelizer.',
     },
   },
-  RemoveUserGroupDialog: {
+  RemoveGroupDialog: {
     text: {
       title: 'Do you want to delete the group "{name}" ?',
       content: 'Please note, this action is irreversible.',

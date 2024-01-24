@@ -4,10 +4,10 @@ import UserPage from 'pages/UserPage.vue';
 import { Notify } from 'quasar';
 import { vi } from 'vitest';
 import * as UserService from 'src/services/UserService';
-import * as UserGroupService from 'src/services/UserGroupService';
+import * as GroupService from 'src/services/GroupService';
 import { useRoute, useRouter } from 'vue-router';
 import DialogEvent from 'src/composables/events/DialogEvent';
-import ReloadUserAttachedGroupsEvent from 'src/composables/events/ReloadUserAttachedGroupsEvent';
+import ReloadUserGroupsEvent from 'src/composables/events/ReloadUserGroupsEvent';
 
 installQuasarPlugin({
   plugins: [Notify],
@@ -15,8 +15,8 @@ installQuasarPlugin({
 
 vi.mock('src/services/UserService');
 vi.mock('vue-router');
-vi.mock('src/services/UserGroupService');
-vi.mock('src/composables/events/ReloadUserAttachedGroupsEvent');
+vi.mock('src/services/GroupService');
+vi.mock('src/composables/events/ReloadUserGroupsEvent');
 vi.mock('src/composables/events/DialogEvent');
 
 describe('Test component: UserPage', () => {
@@ -37,9 +37,9 @@ describe('Test component: UserPage', () => {
     useRouter.mockImplementation(() => ({ push }));
 
     UserService.findById.mockImplementation(() => Promise.resolve(user));
-    UserGroupService.findByUserId.mockImplementation(() => Promise.resolve(['group']));
+    GroupService.findByUserId.mockImplementation(() => Promise.resolve(['group']));
 
-    ReloadUserAttachedGroupsEvent.subscribe.mockImplementation(() => {
+    ReloadUserGroupsEvent.subscribe.mockImplementation(() => {
       subscribe();
       return { unsubscribe };
     });
@@ -72,12 +72,12 @@ describe('Test component: UserPage', () => {
   });
 
   describe('Test function: loadGroups', () => {
-    it('should set userGroups', async () => {
-      wrapper.vm.userGroups = [];
+    it('should set groups', async () => {
+      wrapper.vm.groups = [];
 
       await wrapper.vm.loadGroups();
 
-      expect(wrapper.vm.userGroups).toEqual(['group']);
+      expect(wrapper.vm.groups).toEqual(['group']);
     });
   });
 
@@ -95,13 +95,13 @@ describe('Test component: UserPage', () => {
   });
 
   describe('Test hook function: onMounted', () => {
-    it('should subscribe ReloadUserAttachedGroupsEvent', () => {
+    it('should subscribe ReloadUserGroupsEvent', () => {
       expect(subscribe).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('Test hook function: onUnmounted', () => {
-    it('should unsubscribe ReloadUserAttachedGroupsEvent', () => {
+    it('should unsubscribe ReloadUserGroupsEvent', () => {
       expect(unsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(unsubscribe).toHaveBeenCalledTimes(1);

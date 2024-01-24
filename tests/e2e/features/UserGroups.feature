@@ -1,54 +1,54 @@
-Feature: Test roundtrip of the application: UserGroups
+Feature: Test roundtrip of the application: Groups
 
-  ################## List UserGroups ##################
-  ## 101 Should display all userGroups
+  ################## List groups ##################
+  ## 101 Should display all groups
 
-  ################## Select userGroup ##################
-  ## 201 Should display all userGroups information
-  ## 202 Should redirect to userGroups if userGroup is not found
+  ################## Select group ##################
+  ## 201 Should display all groups information
+  ## 202 Should redirect to groups if group is not found
 
-  ################## Delete userGroup ##################
-  ## 301 Should delete selected userGroup
+  ################## Delete group ##################
+  ## 301 Should delete selected group
 
-  Scenario: Roundtrip about UserGroups
+  Scenario: Roundtrip about Groups
     Given I visit the '/'
-    When  I click on '[data-cy="drawer_item_userGroups"]'
-    Then  I expect current url is '/user-groups'
+    When  I click on '[data-cy="drawer_item_groups"]'
+    Then  I expect current url is '/groups'
 
     ####################################################
-    ################## List userGroups #################
+    ################## List groups #################
     ####################################################
 
-    ## 101 Should display all userGroups
-    And I expect '[data-cy="userGroups_table"] tbody tr' appear 1 time on screen
-    And I expect '[data-cy="userGroups_table"] tbody tr td' is 'group'
+    ## 101 Should display all groups
+    And I expect '[data-cy="groups_table"] tbody tr' appear 1 time on screen
+    And I expect '[data-cy="groups_table"] tbody tr td' is 'group'
 
     ####################################################
-    ################## Select userGroups ###############
+    ################## Select groups ###############
     ####################################################
 
-    ## 201 Should display all userGroups information
-    When I click on '[data-cy="userGroups_table"] [data-cy="userGroup_id_1_button_show"]'
-    Then I expect current url is '/user-groups/id_1'
-    And  I expect '[data-cy="page_userGroup_loading"]' not exists
-    And  I expect '[data-cy="page_userGroup_title"]' is 'group1'
+    ## 201 Should display all groups information
+    When I click on '[data-cy="groups_table"] [data-cy="group_id_1_button_show"]'
+    Then I expect current url is '/groups/id_1'
+    And  I expect '[data-cy="page_group_loading"]' not exists
+    And  I expect '[data-cy="page_group_title"]' is 'group1'
 
-    When I click on '[data-cy="page_userGroup_go_back"]'
-    Then I expect current url is '/user-groups'
+    When I click on '[data-cy="page_group_go_back"]'
+    Then I expect current url is '/groups'
 
-    ## 202 Should redirect to userGroups if userGroup is not found
-    When I visit the '/user-groups/id_3'
-    Then I expect current url is '/user-groups$'
+    ## 202 Should redirect to groups if group is not found
+    When I visit the '/groups/id_3'
+    Then I expect current url is '/groups$'
     And  I expect 'negative' toast to appear with text 'Group not found.'
 
     ####################################################
-    ################## Delete userGroup ################
+    ################## Delete group ################
     ####################################################
 
-    ## 301 Should delete selected userGroup
-    When I click on '[data-cy="userGroup_id_1_button_remove"]'
+    ## 301 Should delete selected group
+    When I click on '[data-cy="group_id_1_button_remove"]'
     Then I expect '[data-cy="button_confirm"]' exists
 
     When I click on '[data-cy="button_confirm"]'
-    Then I expect 'positive' toast to appear with text 'UserGroup is removed.'
-    And  I expect '[data-cy="userGroups_table"] tbody tr' appear 0 time on screen
+    Then I expect 'positive' toast to appear with text 'group is removed.'
+    And  I expect '[data-cy="groups_table"] tbody tr' appear 0 time on screen

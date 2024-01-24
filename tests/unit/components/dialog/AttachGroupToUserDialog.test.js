@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils';
 import { vi } from 'vitest';
 import AttachGroupToUserDialog from 'src/components/dialog/AttachGroupToUserDialog.vue';
 import * as UserService from 'src/services/UserService';
-import * as UserGroupService from 'src/services/UserGroupService';
+import * as GroupService from 'src/services/GroupService';
 import { Notify } from 'quasar';
 
 installQuasarPlugin({
@@ -11,25 +11,25 @@ installQuasarPlugin({
 });
 
 vi.mock('src/services/UserService');
-vi.mock('src/services/UserGroupService');
+vi.mock('src/services/GroupService');
 vi.stubGlobal('$sanitize', true);
 
 describe('Test component: AttachGroupToUserDialog', () => {
   let wrapper;
 
   beforeEach(() => {
-    UserGroupService.find.mockImplementation(() => Promise.resolve(['group']));
+    GroupService.find.mockImplementation(() => Promise.resolve(['group']));
 
     wrapper = mount(AttachGroupToUserDialog);
   });
 
   describe('Test function: search', () => {
-    it('should set userGroups', async () => {
-      wrapper.vm.userGroups = [];
+    it('should set groups', async () => {
+      wrapper.vm.groups = [];
 
       await wrapper.vm.search();
 
-      expect(wrapper.vm.userGroups).toEqual(['group']);
+      expect(wrapper.vm.groups).toEqual(['group']);
     });
   });
 

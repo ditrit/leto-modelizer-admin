@@ -12,10 +12,10 @@ Feature: Test roundtrip of the application
     Then I expect '[data-cy="page_users_title"]' is 'Users'
     And  I expect current url is '/users'
 
-    # Navigate to UserGroupsPage
-    When I click on '[data-cy="drawer_item_userGroups"]'
-    Then I expect '[data-cy="page_userGroups_title"]' is 'User Groups'
-    And  I expect current url is '/user-groups'
+    # Navigate to GroupsPage
+    When I click on '[data-cy="drawer_item_groups"]'
+    Then I expect '[data-cy="page_groups_title"]' is 'User Groups'
+    And  I expect current url is '/groups'
 
     # Navigate to RolesPage
     When I click on '[data-cy="drawer_item_roles"]'
