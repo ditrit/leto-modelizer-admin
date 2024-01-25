@@ -73,10 +73,10 @@ const columns = ref([{
 }, {
   name: 'actions',
   required: true,
-  label: t('UserGroupsTable.text.actionsColumn'),
+  label: t('GroupsTable.text.actionsColumn'),
   align: 'left',
   field: 'objectId',
-  classes: 'user-group-actions',
+  classes: 'group-actions',
 }]);
 const users = ref([]);
 

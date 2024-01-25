@@ -1,16 +1,16 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest';
 import { shallowMount } from '@vue/test-utils';
-import UserGroupsTable from 'src/components/tables/UserGroupsTable.vue';
+import GroupsTable from 'src/components/tables/GroupsTable.vue';
 
 installQuasarPlugin();
 
-describe('Test component: UserGroupsTable', () => {
+describe('Test component: GroupsTable', () => {
   let wrapper;
 
   beforeEach(async () => {
-    wrapper = shallowMount(UserGroupsTable, {
+    wrapper = shallowMount(GroupsTable, {
       props: {
-        userGroups: [],
+        groups: [],
         showAction: true,
         removeAction: false,
       },
@@ -51,7 +51,7 @@ describe('Test component: UserGroupsTable', () => {
           label: 'Name',
           align: 'left',
           field: 'name',
-          classes: 'user-group-name',
+          classes: 'group-name',
         },
         {
           name: 'actions',
@@ -59,7 +59,7 @@ describe('Test component: UserGroupsTable', () => {
           label: 'Actions',
           align: 'left',
           field: 'objectId',
-          classes: 'user-group-actions',
+          classes: 'group-actions',
         },
       ]);
     });
@@ -77,7 +77,7 @@ describe('Test component: UserGroupsTable', () => {
           label: 'Name',
           align: 'left',
           field: 'name',
-          classes: 'user-group-name',
+          classes: 'group-name',
         },
       ]);
     });

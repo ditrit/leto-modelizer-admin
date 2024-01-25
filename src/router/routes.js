@@ -15,14 +15,14 @@ const routes = [
     ],
   },
   {
-    path: '/user-groups',
+    path: '/groups',
     meta: {
-      name: 'userGroups',
+      name: 'groups',
     },
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/UserGroupsPage.vue') },
-      { path: '/user-groups/:id', component: () => import('pages/UserGroupPage.vue') },
+      { path: '', component: () => import('pages/GroupsPage.vue') },
+      { path: '/groups/:id', component: () => import('pages/GroupPage.vue') },
     ],
   },
   {

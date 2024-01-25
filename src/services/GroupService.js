@@ -1,8 +1,8 @@
 import { api, getDefaultHeaders, manageError } from 'boot/axios';
 
 /**
- * Get all userGroups.
- * @returns {Promise<object[]>} Promise with an array of userGroups on success
+ * Get all groups.
+ * @returns {Promise<object[]>} Promise with an array of groups on success
  * otherwise an error.
  */
 export async function find() {
@@ -12,9 +12,9 @@ export async function find() {
 }
 
 /**
- * Get userGroup by id.
- * @param {string} id - UserGroup id.
- * @returns {Promise<object>} Return a userGroup.
+ * Get group by id.
+ * @param {string} id - Group id.
+ * @returns {Promise<object>} Return a group.
  */
 export async function findById(id) {
   return api.get(`/api/classes/Group/${id}`, { headers: getDefaultHeaders() })
@@ -23,8 +23,8 @@ export async function findById(id) {
 }
 
 /**
- * Remove userGroup by id.
- * @param {string} id - UserGroup id.
+ * Remove group by id.
+ * @param {string} id - Group id.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 export async function remove(id) {

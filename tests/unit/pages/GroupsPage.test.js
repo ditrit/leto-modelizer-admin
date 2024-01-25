@@ -1,20 +1,20 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest';
 import { shallowMount } from '@vue/test-utils';
-import UserGroupsPage from 'pages/UserGroupsPage.vue';
+import GroupsPage from 'pages/GroupsPage.vue';
 import { useRouter } from 'vue-router';
 import { vi } from 'vitest';
 import DialogEvent from 'src/composables/events/DialogEvent';
-import * as UserGroupService from 'src/services/UserGroupService';
-import ReloadUserGroupsEvent from 'src/composables/events/ReloadUserGroupsEvent';
+import * as GroupService from 'src/services/GroupService';
+import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 
 installQuasarPlugin();
 
 vi.mock('vue-router');
 vi.mock('src/composables/events/DialogEvent');
-vi.mock('src/services/UserGroupService');
-vi.mock('src/composables/events/ReloadUserGroupsEvent');
+vi.mock('src/services/GroupService');
+vi.mock('src/composables/events/ReloadGroupsEvent');
 
-describe('Test component: UserGroupsPage', () => {
+describe('Test component: GroupsPage', () => {
   let wrapper;
   let push;
   let subscribe;
@@ -27,48 +27,48 @@ describe('Test component: UserGroupsPage', () => {
 
     useRouter.mockImplementation(() => ({ push }));
 
-    UserGroupService.find.mockImplementation(() => Promise.resolve(['group']));
+    GroupService.find.mockImplementation(() => Promise.resolve(['group']));
 
-    ReloadUserGroupsEvent.subscribe.mockImplementation(() => {
+    ReloadGroupsEvent.subscribe.mockImplementation(() => {
       subscribe();
       return { unsubscribe };
     });
 
-    wrapper = shallowMount(UserGroupsPage);
+    wrapper = shallowMount(GroupsPage);
   });
 
   it('should mount the component', () => {
     expect(wrapper).not.toBeNull();
   });
 
-  describe('Test function: goToUserGroup', () => {
-    it('should redirect to userGroup page', () => {
-      wrapper.vm.goToUserGroup('1');
+  describe('Test function: goToGroup', () => {
+    it('should redirect to group page', () => {
+      wrapper.vm.goToGroup('1');
 
-      expect(push).toBeCalledWith('/user-groups/1');
+      expect(push).toBeCalledWith('/groups/1');
     });
   });
 
-  describe('Test function: openRemoveUserGroupDialog', () => {
+  describe('Test function: openRemoveGroupDialog', () => {
     it('should open dialog', () => {
       DialogEvent.next.mockImplementation();
-      wrapper.vm.openRemoveUserGroupDialog('test');
+      wrapper.vm.openRemoveGroupDialog('test');
 
       expect(DialogEvent.next).toBeCalledWith({
-        key: 'remove-userGroup',
+        key: 'remove-group',
         type: 'open',
-        userGroup: 'test',
+        group: 'test',
       });
     });
   });
 
   describe('Test function: search', () => {
-    it('should set userGroups', async () => {
-      wrapper.vm.userGroups = [];
+    it('should set groups', async () => {
+      wrapper.vm.groups = [];
 
       await wrapper.vm.search();
 
-      expect(wrapper.vm.userGroups).toEqual(['group']);
+      expect(wrapper.vm.groups).toEqual(['group']);
     });
   });
 

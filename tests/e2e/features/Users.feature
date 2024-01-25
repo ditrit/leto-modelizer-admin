@@ -44,8 +44,8 @@ Feature: Test roundtrip of the application: Users
     And  I expect '[data-cy="page_user_loading"]' not exists
     And  I expect '[data-cy="page_user_title"]' is 'Firstname'
     And  I expect '[data-cy="page_user_subtitle"]' exists
-    And  I expect '[data-cy="userGroups_table"]' exists
-    And  I expect '[data-cy="userGroups_table"] tbody tr:nth-child(1) td.user-group-name' is 'group1'
+    And  I expect '[data-cy="groups_table"]' exists
+    And  I expect '[data-cy="groups_table"] tbody tr:nth-child(1) td.group-name' is 'group1'
 
     When I click on '[data-cy="page_user_go_back"]'
     Then I expect current url is '/users'
@@ -64,15 +64,15 @@ Feature: Test roundtrip of the application: Users
     Then I expect current url is '/users/id_1'
 
     When I click on '[data-cy="page_user_button_attach_group"]'
-    Then I expect '[data-cy="userGroups_table"]' exists
-    And  I expect '[data-cy="userGroups_table"] tbody tr:nth-child(1) td.user-group-name' is 'group1'
-    And  I expect '[data-cy="userGroups_table"] tbody tr:nth-child(1) td [role="checkbox"]' exists
+    Then I expect '[data-cy="groups_table"]' exists
+    And  I expect '[data-cy="groups_table"] tbody tr:nth-child(1) td.group-name' is 'group1'
+    And  I expect '[data-cy="groups_table"] tbody tr:nth-child(1) td [role="checkbox"]' exists
     And  I expect '[data-cy="button_confirm"]' to be disabled
 
     ## 302 Should select and successfully attach a group
-    When I click on '[data-cy="userGroups_table"] tbody tr:nth-child(1) td [role="checkbox"]'
+    When I click on '[data-cy="groups_table"] tbody tr:nth-child(1) td [role="checkbox"]'
     Then I expect '[data-cy="button_confirm"]' to be enabled
-    And  I expect '[data-cy="userGroups_table"] tbody tr.selected td.user-group-name' is 'group1'
+    And  I expect '[data-cy="groups_table"] tbody tr.selected td.group-name' is 'group1'
 
     When I click on '[data-cy="button_confirm"]'
     Then I expect 'positive' toast to appear with text 'Group(s) successfully attached to the user.'

@@ -6,8 +6,8 @@
     row-key="objectId"
     :pagination="pagination"
     :columns="columns"
-    :rows="userGroups"
-    data-cy="userGroups_table"
+    :rows="groups"
+    data-cy="groups_table"
   >
     <template #body-cell-actions="cell">
       <q-td
@@ -21,7 +21,7 @@
           rounded
           color="primary"
           icon="fa-solid fa-pen-to-square"
-          :data-cy="`userGroup_${cell.row.objectId}_button_show`"
+          :data-cy="`group_${cell.row.objectId}_button_show`"
           @click="$emit('show', cell.row.objectId)"
         />
         <q-btn
@@ -31,7 +31,7 @@
           rounded
           color="negative"
           icon="fa-solid fa-trash"
-          :data-cy="`userGroup_${cell.row.objectId}_button_remove`"
+          :data-cy="`group_${cell.row.objectId}_button_remove`"
           @click="$emit('remove', cell.row)"
         />
       </q-td>
@@ -45,7 +45,7 @@ import { useI18n } from 'vue-i18n';
 
 defineEmits(['remove', 'show']);
 const props = defineProps({
-  userGroups: {
+  groups: {
     type: Array,
     required: true,
   },
@@ -68,20 +68,20 @@ const columns = computed(() => {
   const arrayOfColumns = [{
     name: 'name',
     required: true,
-    label: t('UserGroupsTable.text.nameColumn'),
+    label: t('GroupsTable.text.nameColumn'),
     align: 'left',
     field: 'name',
-    classes: 'user-group-name',
+    classes: 'group-name',
   }];
 
   if (displayActionsColumn.value) {
     arrayOfColumns.push({
       name: 'actions',
       required: true,
-      label: t('UserGroupsTable.text.actionsColumn'),
+      label: t('GroupsTable.text.actionsColumn'),
       align: 'left',
       field: 'objectId',
-      classes: 'user-group-actions',
+      classes: 'group-actions',
     });
   }
   return arrayOfColumns;

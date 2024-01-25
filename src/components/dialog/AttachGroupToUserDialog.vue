@@ -8,9 +8,9 @@
       </q-card-section>
       <q-form @submit="onSubmit">
         <q-card-section>
-          <user-groups-table
+          <groups-table
             v-model:selected="selected"
-            :user-groups="userGroups"
+            :groups="groups"
             :show-action="false"
             :remove-action="false"
             selection="multiple"
@@ -44,9 +44,9 @@
 <script setup>
 import { useDialog } from 'src/composables/Dialog';
 import { ref } from 'vue';
-import UserGroupsTable from 'src/components/tables/UserGroupsTable.vue';
-import ReloadUserAttachedGroupsEvent from 'src/composables/events/ReloadUserAttachedGroupsEvent';
-import * as UserGroupService from 'src/services/UserGroupService';
+import GroupsTable from 'src/components/tables/GroupsTable.vue';
+import ReloadUserGroupsEvent from 'src/composables/events/ReloadUserGroupsEvent';
+import * as GroupService from 'src/services/GroupService';
 import * as UserService from 'src/services/UserService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
@@ -56,15 +56,15 @@ const submitting = ref(false);
 const groupName = ref('');
 const userId = ref('');
 const selected = ref([]);
-const userGroups = ref([]);
+const groups = ref([]);
 
 /**
- * Get user groups.
+ * Get groups.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function search() {
-  return UserGroupService.find().then((data) => {
-    userGroups.value = data;
+  return GroupService.find().then((data) => {
+    groups.value = data;
   });
 }
 
@@ -101,7 +101,7 @@ async function onSubmit() {
       });
     });
 
-  ReloadUserAttachedGroupsEvent.next();
+  ReloadUserGroupsEvent.next();
 
   selected.value = [];
   submitting.value = false;

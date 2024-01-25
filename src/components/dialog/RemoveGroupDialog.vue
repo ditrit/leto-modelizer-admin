@@ -3,21 +3,21 @@
     <q-card>
       <q-card-section class="flex row justify-center">
         <span class="text-h6">
-          {{ $t('RemoveUserGroupDialog.text.title', { name: userGroup.name }) }}
+          {{ $t('RemoveGroupDialog.text.title', { name: group.name }) }}
         </span>
       </q-card-section>
       <q-form @submit="onSubmit">
         <q-card-section class="column flex-center">
-          {{ $t('RemoveUserGroupDialog.text.content') }}
+          {{ $t('RemoveGroupDialog.text.content') }}
         </q-card-section>
         <q-card-actions align="center">
           <q-btn
             v-close-popup
-            :label="$t('RemoveUserGroupDialog.text.cancel')"
+            :label="$t('RemoveGroupDialog.text.cancel')"
             color="negative"
           />
           <q-btn
-            :label="$t('RemoveUserGroupDialog.text.confirm')"
+            :label="$t('RemoveGroupDialog.text.confirm')"
             :loading="submitting"
             type="submit"
             color="positive"
@@ -36,35 +36,35 @@
 <script setup>
 import { useDialog } from 'src/composables/Dialog';
 import { ref } from 'vue';
-import ReloadUserGroupsEvent from 'src/composables/events/ReloadUserGroupsEvent';
-import * as UserGroupService from 'src/services/UserGroupService';
+import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
+import * as GroupService from 'src/services/GroupService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const submitting = ref(false);
-const userGroup = ref(null);
-const { show } = useDialog('remove-userGroup', (event) => {
+const group = ref(null);
+const { show } = useDialog('remove-group', (event) => {
   submitting.value = false;
-  userGroup.value = event.userGroup;
+  group.value = event.group;
 });
 
 /**
- * Remove userGroup, send event to reload all userGroups and close dialog.
+ * Remove group, send event to reload all groups and close dialog.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function onSubmit() {
   submitting.value = true;
 
-  await UserGroupService.remove(userGroup.value.objectId);
+  await GroupService.remove(group.value.objectId);
 
   Notify.create({
     type: 'positive',
-    message: t('RemoveUserGroupDialog.text.notifySuccess'),
+    message: t('RemoveGroupDialog.text.notifySuccess'),
     html: true,
   });
 
-  ReloadUserGroupsEvent.next();
+  ReloadGroupsEvent.next();
 
   submitting.value = false;
   show.value = false;
