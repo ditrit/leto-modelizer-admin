@@ -31,7 +31,18 @@
     <q-card-section>
       <h6
         class="q-ma-none q-mb-sm"
-        data-cy="page_user_subtitle"
+        data-cy="page_user_roles_title"
+      >
+        {{ $t('UserPage.text.roleList', { user: user.firstname }) }}
+      </h6>
+      <roles-table
+        :roles="roles"
+      />
+    </q-card-section>
+    <q-card-section>
+      <h6
+        class="q-ma-none q-mb-sm"
+        data-cy="page_user_groups_title"
       >
         {{ $t('UserPage.text.groupList', { user: user.firstname }) }}
       </h6>
@@ -62,6 +73,8 @@ import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import GroupsTable from 'src/components/tables/GroupsTable.vue';
 import * as GroupService from 'src/services/GroupService';
+import RolesTable from 'src/components/tables/RolesTable.vue';
+import * as RoleService from 'src/services/RoleService';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import ReloadUserGroupsEvent from 'src/composables/events/ReloadUserGroupsEvent';
 
@@ -71,6 +84,7 @@ const route = useRoute();
 const router = useRouter();
 const user = ref({});
 const groups = ref([]);
+const roles = ref([]);
 
 let reloadUserGroupsEventRef;
 
@@ -104,12 +118,26 @@ async function loadGroups() {
 }
 
 /**
+ * Get roles using user Id.
+ * @returns {Promise<void>} Promise with nothing on success.
+ */
+async function loadRoles() {
+  return RoleService.findByUserId(route.params.id).then((data) => {
+    roles.value = data;
+  });
+}
+
+/**
  * Search user and associated groups.
  */
 async function search() {
   loading.value = true;
 
-  Promise.allSettled([loadUser(), loadGroups()])
+  Promise.allSettled([
+    loadUser(),
+    loadGroups(),
+    loadRoles(),
+  ])
     .finally(() => {
       loading.value = false;
     });

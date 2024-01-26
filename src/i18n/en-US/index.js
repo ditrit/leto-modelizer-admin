@@ -54,6 +54,7 @@ export default {
     text: {
       goBack: 'Return to previous page',
       notFound: 'User not found.',
+      roleList: 'List of role attributed to {user}',
       groupList: 'Group of {user}',
       attach: 'Attach group',
     },
