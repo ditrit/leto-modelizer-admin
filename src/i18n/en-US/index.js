@@ -121,9 +121,14 @@ export default {
     text: {
       nameColumn: 'Role Name',
       typeColumn: 'Role Type',
-      typeColumnLibrary: 'Library',
-      typeColumnSystem: 'System',
-      typeColumnFunctional: 'Functional',
+      roleTypeLibrary: 'Library',
+      roleTypeSystem: 'System',
+      roleTypeFunctional: 'Functional',
+    },
+    color: {
+      roleTypeLibrary: 'blue',
+      roleTypeSystem: 'orange',
+      roleTypeFunctional: 'teal',
     },
   },
   RemoveLibraryDialog: {
