@@ -90,7 +90,7 @@ describe('Test component: UserPage', () => {
 
       await wrapper.vm.loadRoles();
 
-      expect(wrapper.vm.roles).toEqual(['roles']);
+      expect(wrapper.vm.roles).toEqual([{ name: 'role', type: 'type' }]);
     });
   });
 
