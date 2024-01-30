@@ -97,4 +97,27 @@ describe('Test: UserService', () => {
       expect(api.put).toBeCalledWith('/api/classes/Group/groupId', userObject, { headers: undefined });
     });
   });
+
+  describe('Test function: removeUserFromGroup', () => {
+    it('should call api.put with endpoint using "groupId"', async () => {
+      api.put.mockImplementation(() => Promise.resolve());
+
+      const userObject = {
+        users: {
+          __op: 'RemoveRelation',
+          objects: [
+            {
+              __type: 'Pointer',
+              className: '_User',
+              objectId: 'userId',
+            },
+          ],
+        },
+      };
+
+      await UserService.removeUserFromGroup('userId', 'groupId');
+
+      expect(api.put).toBeCalledWith('/api/classes/Group/groupId', userObject, { headers: undefined });
+    });
+  });
 });
