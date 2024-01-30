@@ -120,8 +120,8 @@ export default {
   },
   RolesTable: {
     text: {
-      nameColumn: 'Role Name',
-      typeColumn: 'Role Type',
+      nameColumn: 'Name',
+      typeColumn: 'Type',
       roleTypeLibrary: 'Library',
       roleTypeSystem: 'System',
       roleTypeFunctional: 'Functional',
