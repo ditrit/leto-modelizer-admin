@@ -9,6 +9,7 @@
     <remove-library-dialog />
     <remove-user-dialog />
     <remove-group-dialog />
+    <detach-group-from-user-dialog />
     <attach-group-to-user-dialog />
   </q-layout>
 </template>
@@ -19,5 +20,6 @@ import ApplicationDrawer from 'components/drawer/ApplicationDrawer.vue';
 import RemoveLibraryDialog from 'components/dialog/RemoveLibraryDialog.vue';
 import RemoveUserDialog from 'components/dialog/RemoveUserDialog.vue';
 import RemoveGroupDialog from 'components/dialog/RemoveGroupDialog.vue';
+import DetachGroupFromUserDialog from 'components/dialog/DetachGroupFromUserDialog.vue';
 import AttachGroupToUserDialog from 'components/dialog/AttachGroupToUserDialog.vue';
 </script>
