@@ -54,6 +54,7 @@ export default {
     text: {
       goBack: 'Return to previous page',
       notFound: 'User not found.',
+      roleList: 'List of role attributed to {user}',
       groupList: 'Group of {user}',
       attach: 'Attach group',
     },
@@ -119,11 +120,16 @@ export default {
   },
   RolesTable: {
     text: {
-      nameColumn: 'Role Name',
-      typeColumn: 'Role Type',
-      typeColumnLibrary: 'Library',
-      typeColumnSystem: 'System',
-      typeColumnFunctional: 'Functional',
+      nameColumn: 'Name',
+      typeColumn: 'Type',
+      roleTypeLibrary: 'Library',
+      roleTypeSystem: 'System',
+      roleTypeFunctional: 'Functional',
+    },
+    color: {
+      roleTypeLibrary: 'blue',
+      roleTypeSystem: 'orange',
+      roleTypeFunctional: 'teal',
     },
   },
   RemoveLibraryDialog: {

@@ -15,20 +15,26 @@
         class="flex items-center"
       >
         <q-badge
-          :color="cell.row.color"
+          :color="$t(`RolesTable.color.roleType${cell.row.type}`)"
           rounded
           class="q-mr-sm"
         />
-        {{ cell.row.type }}
+        {{ $t(`RolesTable.text.roleType${cell.row.type}`) }}
       </q-td>
     </template>
   </q-table>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
-import * as RoleService from 'src/services/RoleService';
+import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+
+defineProps({
+  roles: {
+    type: Array,
+    required: true,
+  },
+});
 
 const { t } = useI18n();
 const pagination = ref({
@@ -49,31 +55,6 @@ const columns = ref([{
   field: 'type',
   classes: 'role-type',
 }]);
-const roles = ref([]);
 const rowKey = ref('objectId');
 
-/**
- * Get roles from api and add corresponding type.
- * @returns {Promise<Array>} Promise with roles on success otherwise an error.
- */
-async function getRolesWithType() {
-  return RoleService.find().then((data) => data.map((role) => {
-    if (role.name.startsWith('lib_')) {
-      role.type = t('RolesTable.text.typeColumnLibrary');
-      role.color = 'blue';
-    } else if (role.name.startsWith('CF_') || role.name === 'admin') {
-      role.type = t('RolesTable.text.typeColumnSystem');
-      role.color = 'orange';
-    } else {
-      role.type = t('RolesTable.text.typeColumnFunctional');
-      role.color = 'teal';
-    }
-
-    return role;
-  }));
-}
-
-onMounted(async () => {
-  roles.value = await getRolesWithType();
-});
 </script>

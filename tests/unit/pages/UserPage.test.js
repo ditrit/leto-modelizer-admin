@@ -5,6 +5,7 @@ import { Notify } from 'quasar';
 import { vi } from 'vitest';
 import * as UserService from 'src/services/UserService';
 import * as GroupService from 'src/services/GroupService';
+import * as RoleService from 'src/services/RoleService';
 import { useRoute, useRouter } from 'vue-router';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import ReloadUserGroupsEvent from 'src/composables/events/ReloadUserGroupsEvent';
@@ -13,9 +14,10 @@ installQuasarPlugin({
   plugins: [Notify],
 });
 
-vi.mock('src/services/UserService');
 vi.mock('vue-router');
+vi.mock('src/services/UserService');
 vi.mock('src/services/GroupService');
+vi.mock('src/services/RoleService');
 vi.mock('src/composables/events/ReloadUserGroupsEvent');
 vi.mock('src/composables/events/DialogEvent');
 
@@ -38,6 +40,7 @@ describe('Test component: UserPage', () => {
 
     UserService.findById.mockImplementation(() => Promise.resolve(user));
     GroupService.findByUserId.mockImplementation(() => Promise.resolve(['group']));
+    RoleService.findByUserId.mockImplementation(() => Promise.resolve([{ name: 'role', type: 'type' }]));
 
     ReloadUserGroupsEvent.subscribe.mockImplementation(() => {
       subscribe();
@@ -78,6 +81,16 @@ describe('Test component: UserPage', () => {
       await wrapper.vm.loadGroups();
 
       expect(wrapper.vm.groups).toEqual(['group']);
+    });
+  });
+
+  describe('Test function: loadRoles', () => {
+    it('should set roles', async () => {
+      wrapper.vm.roles = [];
+
+      await wrapper.vm.loadRoles();
+
+      expect(wrapper.vm.roles).toEqual([{ name: 'role', type: 'type' }]);
     });
   });
 

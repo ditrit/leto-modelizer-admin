@@ -4,7 +4,7 @@ Feature: Test roundtrip of the application: Users
   ## 101 Should display all users
 
   ################## Select user ##################
-  ## 201 Should display all users information and related groups
+  ## 201 Should display all users information
   ## 202 Should redirect to users if user is not found
 
   ################## Attach group ##################
@@ -38,12 +38,18 @@ Feature: Test roundtrip of the application: Users
     ################## Select users ###############
     ####################################################
 
-    ## 201 Should display all users information and related groups
+    ## 201 Should display all users information
     When I click on '[data-cy="users_table"] [data-cy="user_id_1_button_show"]'
     Then I expect current url is '/users/id_1'
     And  I expect '[data-cy="page_user_loading"]' not exists
     And  I expect '[data-cy="page_user_title"]' is 'Firstname'
-    And  I expect '[data-cy="page_user_subtitle"]' exists
+    # Display related roles
+    And  I expect '[data-cy="page_user_roles_title"]' exists
+    And  I expect '[data-cy="roles_table"]' exists
+    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'admin'
+    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-type' is 'System'
+    # Display related groups
+    And  I expect '[data-cy="page_user_groups_title"]' exists
     And  I expect '[data-cy="groups_table"]' exists
     And  I expect '[data-cy="groups_table"] tbody tr:nth-child(1) td.group-name' is 'group1'
 
