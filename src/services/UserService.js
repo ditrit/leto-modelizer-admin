@@ -86,3 +86,28 @@ export async function attachGroups(userId, groupIds) {
       });
     });
 }
+
+/**
+ * Remove user from the "users" field of the group.
+ * @param {string} userId - User id.
+ * @param {string} groupId - Group id.
+ * @returns {Promise<object>} Promise with nothing on success otherwise an error.
+ */
+export async function removeUserFromGroup(userId, groupId) {
+  return api.put(
+    `/api/classes/Group/${groupId}`,
+    {
+      users: {
+        __op: 'RemoveRelation',
+        objects: [
+          {
+            __type: 'Pointer',
+            className: '_User',
+            objectId: userId,
+          },
+        ],
+      },
+    },
+    { headers: getDefaultHeaders() },
+  ).catch(manageError);
+}

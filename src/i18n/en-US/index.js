@@ -160,6 +160,15 @@ export default {
       notifySuccess: 'Group is removed.',
     },
   },
+  DetachGroupDialog: {
+    text: {
+      title: 'Do you want to remove the group "{group}" from the user "{user}" ?',
+      content: 'You can always reassign the group to the user.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifySuccess: 'Group is removed from user.',
+    },
+  },
   AttachGroupToUserDialog: {
     text: {
       title: 'Attach one or more groups to user',
