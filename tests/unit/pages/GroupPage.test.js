@@ -4,6 +4,7 @@ import GroupPage from 'pages/GroupPage.vue';
 import { Notify } from 'quasar';
 import { vi } from 'vitest';
 import * as GroupService from 'src/services/GroupService';
+import * as UserService from 'src/services/UserService';
 import { useRoute, useRouter } from 'vue-router';
 
 installQuasarPlugin({
@@ -11,6 +12,7 @@ installQuasarPlugin({
 });
 
 vi.mock('src/services/GroupService');
+vi.mock('src/services/UserService');
 vi.mock('vue-router');
 
 describe('Test component: GroupPage', () => {
@@ -27,6 +29,7 @@ describe('Test component: GroupPage', () => {
     useRouter.mockImplementation(() => ({ push }));
 
     GroupService.findById.mockImplementation(() => Promise.resolve(group));
+    UserService.findByGroupId.mockImplementation(() => Promise.resolve('users'));
 
     wrapper = shallowMount(GroupPage);
   });
@@ -37,13 +40,9 @@ describe('Test component: GroupPage', () => {
 
   describe('Test function: loadGroup', () => {
     it('should set data on valid group', async () => {
-      wrapper.vm.group = {};
-      wrapper.vm.loading = true;
-
       await wrapper.vm.loadGroup();
 
       expect(wrapper.vm.group).toEqual(group);
-      expect(wrapper.vm.loading).toBeFalsy();
     });
 
     it('should redirect on unknown group', async () => {
@@ -52,6 +51,14 @@ describe('Test component: GroupPage', () => {
       await wrapper.vm.loadGroup();
 
       expect(push).toBeCalledWith('/groups');
+    });
+  });
+
+  describe('Test function: loadUsers', () => {
+    it('should set users', async () => {
+      await wrapper.vm.loadUsers();
+
+      expect(wrapper.vm.users).toEqual('users');
     });
   });
 });

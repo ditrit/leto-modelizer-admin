@@ -45,6 +45,7 @@ export default {
     text: {
       goBack: 'Return to previous page',
       notFound: 'Group not found.',
+      roleList: 'List of users attributed to {group}',
     },
     icon: {
       goBack: 'fa-solid fa-chevron-left',
@@ -54,7 +55,7 @@ export default {
     text: {
       goBack: 'Return to previous page',
       notFound: 'User not found.',
-      roleList: 'List of role attributed to {user}',
+      roleList: 'List of roles attributed to {user}',
       groupList: 'Group of {user}',
       attach: 'Attach group',
     },
