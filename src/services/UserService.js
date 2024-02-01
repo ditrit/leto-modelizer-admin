@@ -111,3 +111,22 @@ export async function removeUserFromGroup(userId, groupId) {
     { headers: getDefaultHeaders() },
   ).catch(manageError);
 }
+
+/**
+ * Get all users of a group.
+ * @param {string} groupId - Group id.
+ * @returns {Promise<object[]>} Return an array of users.
+ */
+export async function findByGroupId(groupId) {
+  return api.get(
+    '/api/classes/_User',
+    {
+      headers: getDefaultHeaders(),
+      params: {
+        where: JSON.stringify({ $relatedTo: { object: { __type: 'Pointer', className: 'Group', objectId: groupId }, key: 'users' } }),
+      },
+    },
+  )
+    .then(({ data }) => data.results)
+    .catch(manageError);
+}
