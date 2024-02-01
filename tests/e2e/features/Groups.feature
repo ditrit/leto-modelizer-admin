@@ -32,6 +32,11 @@ Feature: Test roundtrip of the application: Groups
     Then I expect current url is '/groups/id_1'
     And  I expect '[data-cy="page_group_loading"]' not exists
     And  I expect '[data-cy="page_group_title"]' is 'group1'
+    # Display related users
+    And  I expect '[data-cy="page_group_users_title"]' exists
+    And  I expect '[data-cy="users_table"]' exists
+    And  I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-firstname' is 'Firstname'
+    And  I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-username' is 'Username'
 
     When I click on '[data-cy="page_group_go_back"]'
     Then I expect current url is '/groups'
