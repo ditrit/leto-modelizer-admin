@@ -85,6 +85,13 @@ Before(() => {
     request.reply({ statusCode: 204 });
   });
 
+  cy.intercept('GET', '/backend/api/classes/_User?*', {
+    statusCode: 200,
+    body: {
+      results: [user1],
+    },
+  });
+
   cy.intercept('GET', '/backend/api/roles*', {
     statusCode: 200,
     body: {

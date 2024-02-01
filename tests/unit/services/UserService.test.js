@@ -120,4 +120,42 @@ describe('Test: UserService', () => {
       expect(api.put).toBeCalledWith('/api/classes/Group/groupId', userObject, { headers: undefined });
     });
   });
+
+  describe('Test function: findByGroupId', () => {
+    it('should return all users of a group', async () => {
+      const data = {
+        objectId: 'duBFL0HNy',
+        createdAt: '2024-02-01T08:50:21.106Z',
+        updatedAt: '2024-02-01T08:50:21.106Z',
+        username: 'MySuperUsername',
+        authData: {
+          github: {
+            id: 99999,
+            access_token: 'gho_MySuperAccessToken',
+          },
+        },
+        firstname: 'Pradeep',
+        ACL: {
+          duBFL0HNy: {
+            read: true,
+            write: true,
+          },
+        },
+      };
+
+      api.get.mockImplementation(() => Promise.resolve({ data }));
+
+      await UserService.findByGroupId('groupId');
+
+      expect(api.get).toBeCalledWith(
+        '/api/classes/_User',
+        {
+          headers: undefined,
+          params: {
+            where: JSON.stringify({ $relatedTo: { object: { __type: 'Pointer', className: 'Group', objectId: 'groupId' }, key: 'users' } }),
+          },
+        },
+      );
+    });
+  });
 });

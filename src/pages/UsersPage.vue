@@ -7,6 +7,7 @@
       {{ $t('IndexPage.text.title') }}
     </h4>
     <users-table
+      :users="users"
       @show="goToUser"
       @remove="openRemoveUserDialog"
     />
@@ -16,9 +17,14 @@
 <script setup>
 import UsersTable from 'src/components/tables/UsersTable.vue';
 import { useRouter } from 'vue-router';
+import { ref, onMounted, onUnmounted } from 'vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
+import * as UsersService from 'src/services/UserService';
+import ReloadUsersEvent from 'src/composables/events/ReloadUsersEvent';
 
 const router = useRouter();
+const users = ref([]);
+let reloadUsersEventRef;
 
 /**
  * Go to user page.
@@ -39,4 +45,23 @@ function openRemoveUserDialog(user) {
     user,
   });
 }
+
+/**
+ * Search and display users.
+ * @returns {Promise<void>} Promise with nothing on success.
+ */
+async function search() {
+  return UsersService.find().then((data) => {
+    users.value = data;
+  });
+}
+
+onMounted(async () => {
+  reloadUsersEventRef = ReloadUsersEvent.subscribe(search);
+  await search();
+});
+
+onUnmounted(() => {
+  reloadUsersEventRef.unsubscribe();
+});
 </script>
