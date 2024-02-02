@@ -34,9 +34,14 @@ describe('Test component: AttachGroupToUserDialog', () => {
   });
 
   describe('Test function: onSubmit', () => {
+    beforeEach(() => {
+      wrapper.vm.selected = [{ objectId: '1' }, { objectId: '2' }];
+      wrapper.vm.userId = 'userId';
+    });
+
     it('should send positive notification after attaching groups to user', async () => {
       Notify.create = vi.fn();
-      UserService.attachGroups.mockImplementation(() => Promise.resolve());
+      UserService.addUserToGroup.mockImplementation(() => Promise.resolve());
 
       await wrapper.vm.onSubmit();
 
@@ -45,7 +50,7 @@ describe('Test component: AttachGroupToUserDialog', () => {
 
     it('should send negative notification after failing to attach groups to user', async () => {
       Notify.create = vi.fn();
-      UserService.attachGroups.mockImplementation(() => Promise.reject());
+      UserService.addUserToGroup.mockImplementation(() => Promise.reject());
 
       await wrapper.vm.onSubmit();
 
