@@ -179,6 +179,15 @@ export default {
       notifySuccess: 'Group(s) successfully attached to the user.',
     },
   },
+  AttachUserToGroupDialog: {
+    text: {
+      title: 'Attach one or more users to group',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifyError: 'Error during attachment of a user to the group.',
+      notifySuccess: 'User(s) successfully attached to the group.',
+    },
+  },
   AddLibraryPage: {
     text: {
       title: 'Add library',
