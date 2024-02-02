@@ -45,7 +45,7 @@
 import { useDialog } from 'src/composables/Dialog';
 import { ref } from 'vue';
 import GroupsTable from 'src/components/tables/GroupsTable.vue';
-import ReloadUserGroupsEvent from 'src/composables/events/ReloadUserGroupsEvent';
+import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 import * as GroupService from 'src/services/GroupService';
 import * as UserService from 'src/services/UserService';
 import { Notify } from 'quasar';
@@ -102,7 +102,7 @@ async function onSubmit() {
         });
       })));
 
-  ReloadUserGroupsEvent.next();
+  ReloadGroupsEvent.next();
 
   selected.value = [];
   submitting.value = false;

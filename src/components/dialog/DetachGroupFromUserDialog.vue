@@ -36,7 +36,7 @@
 <script setup>
 import { useDialog } from 'src/composables/Dialog';
 import { ref } from 'vue';
-import ReloadUserGroupsEvent from 'src/composables/events/ReloadUserGroupsEvent';
+import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 import * as UserService from 'src/services/UserService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
@@ -66,7 +66,7 @@ async function onSubmit() {
     html: true,
   });
 
-  ReloadUserGroupsEvent.next();
+  ReloadGroupsEvent.next();
 
   submitting.value = false;
   show.value = false;

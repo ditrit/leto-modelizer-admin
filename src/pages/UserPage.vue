@@ -76,7 +76,7 @@ import * as GroupService from 'src/services/GroupService';
 import RolesTable from 'src/components/tables/RolesTable.vue';
 import * as RoleService from 'src/services/RoleService';
 import DialogEvent from 'src/composables/events/DialogEvent';
-import ReloadUserGroupsEvent from 'src/composables/events/ReloadUserGroupsEvent';
+import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 
 const loading = ref(false);
 const { t } = useI18n();
@@ -86,7 +86,7 @@ const user = ref({});
 const groups = ref([]);
 const roles = ref([]);
 
-let reloadUserGroupsEventRef;
+let reloadGroupsEventRef;
 
 /**
  * Load user from id in url. If the user does not exist, redirect to the users page.
@@ -168,11 +168,11 @@ function openDetachGroupDialog(group) {
 }
 
 onMounted(async () => {
-  reloadUserGroupsEventRef = ReloadUserGroupsEvent.subscribe(loadGroups);
+  reloadGroupsEventRef = ReloadGroupsEvent.subscribe(loadGroups);
   await search();
 });
 
 onUnmounted(() => {
-  reloadUserGroupsEventRef.unsubscribe();
+  reloadGroupsEventRef.unsubscribe();
 });
 </script>
