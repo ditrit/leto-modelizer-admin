@@ -53,7 +53,6 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const submitting = ref(false);
-const groupName = ref('');
 const userId = ref('');
 const selected = ref([]);
 const groups = ref([]);
@@ -70,7 +69,6 @@ async function search() {
 
 const { show } = useDialog('attach-group-to-user', (event) => {
   submitting.value = false;
-  groupName.value = '';
   userId.value = event.userId;
   return search();
 });
