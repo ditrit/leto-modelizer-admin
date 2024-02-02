@@ -50,7 +50,7 @@ export async function remove(id) {
  * @param {string} groupId - Group id.
  * @returns {Promise<object>} Promise with nothing on success otherwise an error.
  */
-async function addUserToGroup(userId, groupId) {
+export async function addUserToGroup(userId, groupId) {
   return api.put(
     `/api/classes/Group/${groupId}`,
     {
@@ -66,25 +66,7 @@ async function addUserToGroup(userId, groupId) {
       },
     },
     { headers: getDefaultHeaders() },
-  );
-}
-
-/**
- * Attach groups to user.
- * @param {string} userId - User id.
- * @param {string[]} groupIds - Array of group id.
- * @returns {Promise<object>} Promise with nothing on success otherwise an error.
- */
-export async function attachGroups(userId, groupIds) {
-  return Promise.allSettled(groupIds.map((groupId) => addUserToGroup(userId, groupId)))
-    .then((results) => {
-      results.forEach((result) => {
-        if (result.status === 'rejected') {
-          return manageError(result.reason);
-        }
-        return result;
-      });
-    });
+  ).catch(manageError);
 }
 
 /**
