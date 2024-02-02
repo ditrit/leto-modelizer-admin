@@ -84,26 +84,37 @@ async function onSubmit() {
 
   await Promise.allSettled(groupIdList
     .map((groupId) => UserService.addUserToGroup(userId.value, groupId)
-      .then(() => {
-        Notify.create({
-          type: 'positive',
-          message: t('AttachGroupToUserDialog.text.notifySuccess'),
-          html: true,
-        });
-        show.value = false;
-      })
       .catch(() => {
         Notify.create({
           type: 'negative',
           message: t('AttachGroupToUserDialog.text.notifyError'),
           html: true,
         });
-      })));
 
-  ReloadGroupsEvent.next();
+        throw new Error(groupId);
+      })))
+    .then((results) => {
+      results.forEach(({ status, reason }) => {
+        if (status === 'rejected' && reason.message) {
+          selected.value = selected.value
+            .filter(({ objectId }) => objectId === reason.message);
+        }
+      });
 
-  selected.value = [];
-  submitting.value = false;
+      if (results.every(({ status }) => status === 'fulfilled')) {
+        Notify.create({
+          type: 'positive',
+          message: t('AttachGroupToUserDialog.text.notifySuccess'),
+          html: true,
+        });
+
+        show.value = false;
+        selected.value = [];
+      }
+    }).finally(() => {
+      ReloadGroupsEvent.next();
+      submitting.value = false;
+    });
 }
 </script>
 
