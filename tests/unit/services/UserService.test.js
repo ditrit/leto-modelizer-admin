@@ -75,7 +75,7 @@ describe('Test: UserService', () => {
     });
   });
 
-  describe('Test function: attachGroups', () => {
+  describe('Test function: addUserToGroup', () => {
     it('should call api.put with endpoint using "groupId"', async () => {
       api.put.mockImplementation(() => Promise.resolve());
 
@@ -92,7 +92,7 @@ describe('Test: UserService', () => {
         },
       };
 
-      await UserService.attachGroups('userId', ['groupId']);
+      await UserService.addUserToGroup('userId', 'groupId');
 
       expect(api.put).toBeCalledWith('/api/classes/Group/groupId', userObject, { headers: undefined });
     });

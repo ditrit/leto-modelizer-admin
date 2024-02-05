@@ -1,9 +1,8 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest';
 import { mount } from '@vue/test-utils';
 import { vi } from 'vitest';
-import AttachGroupToUserDialog from 'src/components/dialog/AttachGroupToUserDialog.vue';
+import AttachUserToGroupDialog from 'src/components/dialog/AttachUserToGroupDialog.vue';
 import * as UserService from 'src/services/UserService';
-import * as GroupService from 'src/services/GroupService';
 import { Notify } from 'quasar';
 
 installQuasarPlugin({
@@ -11,35 +10,34 @@ installQuasarPlugin({
 });
 
 vi.mock('src/services/UserService');
-vi.mock('src/services/GroupService');
 vi.stubGlobal('$sanitize', true);
 
-describe('Test component: AttachGroupToUserDialog', () => {
+describe('Test component: AttachUserToGroupDialog', () => {
   let wrapper;
 
   beforeEach(() => {
-    GroupService.find.mockImplementation(() => Promise.resolve(['group']));
+    UserService.find.mockImplementation(() => Promise.resolve(['users']));
 
-    wrapper = mount(AttachGroupToUserDialog);
+    wrapper = mount(AttachUserToGroupDialog);
   });
 
   describe('Test function: search', () => {
-    it('should set groups', async () => {
-      wrapper.vm.groups = [];
+    it('should set users', async () => {
+      wrapper.vm.users = [];
 
       await wrapper.vm.search();
 
-      expect(wrapper.vm.groups).toEqual(['group']);
+      expect(wrapper.vm.users).toEqual(['users']);
     });
   });
 
   describe('Test function: onSubmit', () => {
     beforeEach(() => {
       wrapper.vm.selected = [{ objectId: '1' }, { objectId: '2' }];
-      wrapper.vm.userId = 'userId';
+      wrapper.vm.groupId = 'groupId';
     });
 
-    it('should send positive notification after attaching groups to user', async () => {
+    it('should send positive notification after attaching users to group', async () => {
       Notify.create = vi.fn();
       UserService.addUserToGroup.mockImplementation(() => Promise.resolve());
 
@@ -48,7 +46,7 @@ describe('Test component: AttachGroupToUserDialog', () => {
       expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'positive' }));
     });
 
-    it('should send negative notification after failing to attach groups to user', async () => {
+    it('should send negative notification after failing to attach users to group', async () => {
       Notify.create = vi.fn();
       UserService.addUserToGroup.mockImplementation(() => Promise.reject());
 

@@ -35,6 +35,16 @@
       >
         {{ $t('GroupPage.text.roleList', { group: group.name }) }}
       </h6>
+      <q-btn
+        outline
+        no-caps
+        color="primary"
+        class="bg-white q-mb-md"
+        data-cy="page_group_button_attach_user"
+        :label="$t('GroupPage.text.attachUser')"
+        :icon="$t('GroupPage.icon.attachUser')"
+        @click="openAttachUserToGroupDialog"
+      />
       <users-table
         :users="users"
         :show-action="false"
@@ -45,13 +55,15 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import * as GroupService from 'src/services/GroupService';
 import * as UserService from 'src/services/UserService';
 import UsersTable from 'src/components/tables/UsersTable.vue';
+import DialogEvent from 'src/composables/events/DialogEvent';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
+import ReloadUsersEvent from 'src/composables/events/ReloadUsersEvent';
 
 const loading = ref(false);
 const { t } = useI18n();
@@ -59,6 +71,7 @@ const route = useRoute();
 const router = useRouter();
 const group = ref({});
 const users = ref([]);
+let reloadUsersEventRef;
 
 /**
  * Load group from id in url. If the group does not exist, redirect to the libraries page.
@@ -104,7 +117,23 @@ async function search() {
     });
 }
 
+/**
+ * Open dialog to attach a user to a group.
+ */
+function openAttachUserToGroupDialog() {
+  DialogEvent.next({
+    key: 'attach-user-to-group',
+    type: 'open',
+    groupId: route.params.id,
+  });
+}
+
 onMounted(async () => {
+  reloadUsersEventRef = ReloadUsersEvent.subscribe(loadUsers);
   await search();
+});
+
+onUnmounted(() => {
+  reloadUsersEventRef.unsubscribe();
 });
 </script>

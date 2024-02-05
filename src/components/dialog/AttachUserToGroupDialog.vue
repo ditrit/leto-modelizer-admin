@@ -1,16 +1,16 @@
 <template>
   <q-dialog v-model="show">
-    <q-card class="attach-group-to-user-form">
+    <q-card class="attach-user-to-group-form">
       <q-card-section class="flex row justify-center">
         <span class="text-h6">
-          {{ $t('AttachGroupToUserDialog.text.title') }}
+          {{ $t('AttachUserToGroupDialog.text.title') }}
         </span>
       </q-card-section>
       <q-form @submit="onSubmit">
         <q-card-section>
-          <groups-table
+          <users-table
             v-model:selected="selected"
-            :groups="groups"
+            :users="users"
             :show-action="false"
             :remove-action="false"
             selection="multiple"
@@ -20,11 +20,11 @@
         <q-card-actions align="center">
           <q-btn
             v-close-popup
-            :label="$t('AttachGroupToUserDialog.text.cancel')"
+            :label="$t('AttachUserToGroupDialog.text.cancel')"
             color="negative"
           />
           <q-btn
-            :label="$t('AttachGroupToUserDialog.text.confirm')"
+            :label="$t('AttachUserToGroupDialog.text.confirm')"
             :loading="submitting"
             :disable="!selected.length"
             type="submit"
@@ -44,54 +44,53 @@
 <script setup>
 import { useDialog } from 'src/composables/Dialog';
 import { ref } from 'vue';
-import GroupsTable from 'src/components/tables/GroupsTable.vue';
-import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
-import * as GroupService from 'src/services/GroupService';
+import UsersTable from 'src/components/tables/UsersTable.vue';
+import ReloadUsersEvent from 'src/composables/events/ReloadUsersEvent';
 import * as UserService from 'src/services/UserService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const submitting = ref(false);
-const userId = ref('');
+const groupId = ref('');
 const selected = ref([]);
-const groups = ref([]);
+const users = ref([]);
 
 /**
- * Get groups.
+ * Get users.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function search() {
-  return GroupService.find().then((data) => {
-    groups.value = data;
+  return UserService.find().then((data) => {
+    users.value = data;
   });
 }
 
-const { show } = useDialog('attach-group-to-user', (event) => {
+const { show } = useDialog('attach-user-to-group', (event) => {
   submitting.value = false;
-  userId.value = event.userId;
+  groupId.value = event.groupId;
   return search();
 });
 
 /**
- * Attach one or more groups to a user.
+ * Attach one or more users to a group.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function onSubmit() {
   submitting.value = true;
 
-  const groupIdList = selected.value.map(({ objectId }) => objectId);
+  const userIdList = selected.value.map(({ objectId }) => objectId);
 
-  await Promise.allSettled(groupIdList
-    .map((groupId) => UserService.addUserToGroup(userId.value, groupId)
+  await Promise.allSettled(userIdList
+    .map((userId) => UserService.addUserToGroup(userId, groupId.value)
       .catch(() => {
         Notify.create({
           type: 'negative',
-          message: t('AttachGroupToUserDialog.text.notifyError'),
+          message: t('AttachUserToGroupDialog.text.notifyError'),
           html: true,
         });
 
-        throw new Error(groupId);
+        throw new Error(userId);
       })))
     .then((results) => {
       results.forEach(({ status, reason }) => {
@@ -104,7 +103,7 @@ async function onSubmit() {
       if (results.every(({ status }) => status === 'fulfilled')) {
         Notify.create({
           type: 'positive',
-          message: t('AttachGroupToUserDialog.text.notifySuccess'),
+          message: t('AttachUserToGroupDialog.text.notifySuccess'),
           html: true,
         });
 
@@ -112,14 +111,14 @@ async function onSubmit() {
         selected.value = [];
       }
     }).finally(() => {
-      ReloadGroupsEvent.next();
+      ReloadUsersEvent.next();
       submitting.value = false;
     });
 }
 </script>
 
 <style scoped>
-.attach-group-to-user-form {
+.attach-user-to-group-form {
   min-width: 50vw;
 }
 </style>

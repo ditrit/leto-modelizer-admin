@@ -8,7 +8,7 @@ import * as GroupService from 'src/services/GroupService';
 import * as RoleService from 'src/services/RoleService';
 import { useRoute, useRouter } from 'vue-router';
 import DialogEvent from 'src/composables/events/DialogEvent';
-import ReloadUserGroupsEvent from 'src/composables/events/ReloadUserGroupsEvent';
+import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 
 installQuasarPlugin({
   plugins: [Notify],
@@ -18,7 +18,7 @@ vi.mock('vue-router');
 vi.mock('src/services/UserService');
 vi.mock('src/services/GroupService');
 vi.mock('src/services/RoleService');
-vi.mock('src/composables/events/ReloadUserGroupsEvent');
+vi.mock('src/composables/events/ReloadGroupsEvent');
 vi.mock('src/composables/events/DialogEvent');
 
 describe('Test component: UserPage', () => {
@@ -42,7 +42,7 @@ describe('Test component: UserPage', () => {
     GroupService.findByUserId.mockImplementation(() => Promise.resolve(['group']));
     RoleService.findByUserId.mockImplementation(() => Promise.resolve([{ name: 'role', type: 'type' }]));
 
-    ReloadUserGroupsEvent.subscribe.mockImplementation(() => {
+    ReloadGroupsEvent.subscribe.mockImplementation(() => {
       subscribe();
       return { unsubscribe };
     });
@@ -124,13 +124,13 @@ describe('Test component: UserPage', () => {
   });
 
   describe('Test hook function: onMounted', () => {
-    it('should subscribe ReloadUserGroupsEvent', () => {
+    it('should subscribe ReloadGroupsEvent', () => {
       expect(subscribe).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('Test hook function: onUnmounted', () => {
-    it('should unsubscribe ReloadUserGroupsEvent', () => {
+    it('should unsubscribe ReloadGroupsEvent', () => {
       expect(unsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();
       expect(unsubscribe).toHaveBeenCalledTimes(1);

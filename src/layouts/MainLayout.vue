@@ -11,6 +11,7 @@
     <remove-group-dialog />
     <detach-group-from-user-dialog />
     <attach-group-to-user-dialog />
+    <attach-user-to-group-dialog />
   </q-layout>
 </template>
 <script setup>
@@ -22,4 +23,5 @@ import RemoveUserDialog from 'components/dialog/RemoveUserDialog.vue';
 import RemoveGroupDialog from 'components/dialog/RemoveGroupDialog.vue';
 import DetachGroupFromUserDialog from 'components/dialog/DetachGroupFromUserDialog.vue';
 import AttachGroupToUserDialog from 'components/dialog/AttachGroupToUserDialog.vue';
+import AttachUserToGroupDialog from 'components/dialog/AttachUserToGroupDialog.vue';
 </script>
