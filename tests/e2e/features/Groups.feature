@@ -11,8 +11,11 @@ Feature: Test roundtrip of the application: Groups
   ## 301 Should disabled confirm button if no user is selected
   ## 302 Should select and successfully attach a user
 
+  ################## Detach user ##################
+  ## 401 Should successfully detach a user
+
   ################## Delete group ##################
-  ## 401 Should delete selected group
+  ## 501 Should delete selected group
 
   Scenario: Roundtrip about Groups
     Given I visit the '/'
@@ -74,6 +77,15 @@ Feature: Test roundtrip of the application: Groups
     When I click on '[data-cy="button_confirm"]'
     Then I expect 'positive' toast to appear with text 'User(s) successfully attached to the group.'
 
+    ####################################################
+    ################## Detach user ##################
+    ####################################################
+
+    ## 401 Should successfully detach a user
+    When I click on '[data-cy="user_admin_button_remove"]'
+    And  I click on '[data-cy="button_confirm"]'
+    Then I expect 'positive' toast to appear with text 'User is removed from group.'
+
     When I click on '[data-cy="page_group_go_back"]'
     Then I expect current url is '/groups'
 
@@ -81,7 +93,7 @@ Feature: Test roundtrip of the application: Groups
     ################## Delete group ################
     ####################################################
 
-    ## 401 Should delete selected group
+    ## 501 Should delete selected group
     When I click on '[data-cy="group_1_button_remove"]'
     Then I expect '[data-cy="button_confirm"]' exists
 

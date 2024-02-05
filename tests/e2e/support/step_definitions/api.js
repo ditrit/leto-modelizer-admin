@@ -135,7 +135,7 @@ function setGroupIntercepts() {
   cy.intercept('GET', '/api/groups/2/users', {
     statusCode: 200,
     body: {
-      content: [],
+      content: [adminUser],
     },
   });
 
@@ -150,6 +150,10 @@ function setGroupIntercepts() {
   });
 
   cy.intercept('DELETE', '/api/groups/1/users/admin', (request) => {
+    request.reply({ statusCode: 204 });
+  });
+
+  cy.intercept('DELETE', '/api/groups/2/users/admin', (request) => {
     request.reply({ statusCode: 204 });
   });
 }
