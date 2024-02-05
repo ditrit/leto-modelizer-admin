@@ -42,3 +42,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Display all information of a group.
   * Display all users related to a group.
   * Add action to attach one or multiple existing users to the selected group.
+  * Add action to detach a user to the selected group.
