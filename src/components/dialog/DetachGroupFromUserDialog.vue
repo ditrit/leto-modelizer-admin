@@ -3,21 +3,22 @@
     <q-card>
       <q-card-section class="flex row justify-center">
         <span class="text-h6 text-center">
-          {{ $t('DetachGroupDialog.text.title', { group: group.name, user: user.name }) }}
+          {{ $t('DetachGroupFromUserDialog.text.title',
+                { group: group.name, user: user.name }) }}
         </span>
       </q-card-section>
       <q-form @submit="onSubmit">
         <q-card-section class="column flex-center">
-          {{ $t('DetachGroupDialog.text.content') }}
+          {{ $t('DetachGroupFromUserDialog.text.content') }}
         </q-card-section>
         <q-card-actions align="center">
           <q-btn
             v-close-popup
-            :label="$t('DetachGroupDialog.text.cancel')"
+            :label="$t('DetachGroupFromUserDialog.text.cancel')"
             color="negative"
           />
           <q-btn
-            :label="$t('DetachGroupDialog.text.confirm')"
+            :label="$t('DetachGroupFromUserDialog.text.confirm')"
             :loading="submitting"
             type="submit"
             color="positive"
@@ -45,7 +46,7 @@ const { t } = useI18n();
 const submitting = ref(false);
 const group = ref(null);
 const user = ref();
-const { show } = useDialog('detach-group', (event) => {
+const { show } = useDialog('detach-group-from-user', (event) => {
   submitting.value = false;
   group.value = event.group;
   user.value = event.user;
@@ -62,7 +63,7 @@ async function onSubmit() {
 
   Notify.create({
     type: 'positive',
-    message: t('DetachGroupDialog.text.notifySuccess'),
+    message: t('DetachGroupFromUserDialog.text.notifySuccess'),
     html: true,
   });
 

@@ -107,13 +107,13 @@ describe('Test component: UserPage', () => {
     });
   });
 
-  describe('Test function: openDetachGroupDialog', () => {
+  describe('Test function: openDetachGroupFromUserDialog', () => {
     it('should open dialog', () => {
       DialogEvent.next.mockImplementation();
-      wrapper.vm.openDetachGroupDialog('group');
+      wrapper.vm.openDetachGroupFromUserDialog('group');
 
       expect(DialogEvent.next).toBeCalledWith({
-        key: 'detach-group',
+        key: 'detach-group-from-user',
         type: 'open',
         group: 'group',
         user: {
