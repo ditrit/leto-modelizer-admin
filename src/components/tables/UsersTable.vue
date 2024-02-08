@@ -9,6 +9,19 @@
     :rows="users"
     data-cy="users_table"
   >
+    <template #body-cell-name="cell">
+      <q-td
+        :props="cell"
+      >
+        <user-avatar
+          :login="cell.row.login"
+          small
+        />
+        <span class="q-pl-md">
+          {{ cell.row.name }}
+        </span>
+      </q-td>
+    </template>
     <template #body-cell-actions="cell">
       <q-td
         key="actions"
@@ -42,6 +55,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import UserAvatar from 'src/components/avatar/UserAvatar.vue';
 
 defineEmits(['remove', 'show']);
 const props = defineProps({

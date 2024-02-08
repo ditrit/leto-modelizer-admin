@@ -1,5 +1,5 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest';
-import { mount } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import {
   describe,
   expect,
@@ -19,7 +19,7 @@ describe('Test component: UserButton', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
     store = useUserStore();
-    wrapper = mount(UserButton, {});
+    wrapper = shallowMount(UserButton, {});
   });
 
   describe('Test computed: login', () => {

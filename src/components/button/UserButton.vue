@@ -8,15 +8,7 @@
     data-cy="user-button"
   >
     <template #label>
-      <q-avatar
-        color="primary"
-        text-color="white"
-        size="md"
-        font-size="12px"
-        :title="login"
-      >
-        {{ login }}
-      </q-avatar>
+      <user-avatar :login="login" />
     </template>
     <q-list>
       <q-item
@@ -42,6 +34,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useUserStore } from 'src/stores/UserStore';
+import UserAvatar from 'src/components/avatar/UserAvatar.vue';
 
 const userStore = useUserStore();
 const login = computed(() => userStore.login);
