@@ -9,53 +9,55 @@ describe('Test: RoleService', () => {
     it('should return the roles and corresponding types', async () => {
       const roles = [
         {
-          name: 'lib_',
+          name: 'Super Administator',
         },
         {
-          name: 'CF_',
+          name: 'Administator',
         },
         {
-          name: 'admin',
-        },
-        {
-          name: '',
+          name: 'Developer',
         },
       ];
 
-      api.get.mockImplementation(() => Promise.resolve({ data: { results: roles } }));
+      api.get.mockImplementation(() => Promise.resolve({ data: roles }));
 
       const data = await RoleService.find();
-      expect(data).toEqual([
-        {
-          name: 'lib_',
-          type: 'Library',
-        },
-        {
-          name: 'CF_',
-          type: 'System',
-        },
-        {
-          name: 'admin',
-          type: 'System',
-        },
-        {
-          name: '',
-          type: 'Functional',
-        },
-      ]);
+      expect(data).toEqual(roles);
     });
   });
 
-  describe('Test function: findByUserId', () => {
-    it('should return the current user roles', async () => {
+  describe('Test function: findByLogin', () => {
+    it('should roles of a user', async () => {
       const roles = [{
         name: 'admin',
       }];
 
-      api.get.mockImplementation(() => Promise.resolve({ data: { results: roles } }));
+      api.get.mockImplementation(() => Promise.resolve({ data: roles }));
 
-      const data = await RoleService.findByUserId('r:dead779dcda4970cc7f96c09a328d771');
-      expect(data).toEqual([{ name: 'admin', type: 'System' }]);
+      const data = await RoleService.findByLogin('userLogin');
+      expect(data).toEqual([{ name: 'admin' }]);
+    });
+  });
+
+  describe('Test function: create', () => {
+    it('should call api.post with the role name to create', async () => {
+      const newRole = {
+        name: 'newRole',
+      };
+
+      api.post.mockImplementation(() => Promise.resolve());
+
+      await RoleService.create('newRole');
+      expect(api.post).toBeCalledWith('/roles', newRole);
+    });
+  });
+
+  describe('Test function: remove', () => {
+    it('should remove the role corresponding to the given id', async () => {
+      api.delete.mockImplementation(() => Promise.resolve());
+
+      await RoleService.remove('test');
+      expect(api.delete).toBeCalledWith('/roles/test');
     });
   });
 });
