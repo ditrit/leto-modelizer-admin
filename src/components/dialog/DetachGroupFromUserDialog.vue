@@ -3,7 +3,7 @@
     <q-card>
       <q-card-section class="flex row justify-center">
         <span class="text-h6 text-center">
-          {{ $t('DetachGroupDialog.text.title', { group: group.name, user: user.firstname }) }}
+          {{ $t('DetachGroupDialog.text.title', { group: group.name, user: user.name }) }}
         </span>
       </q-card-section>
       <q-form @submit="onSubmit">
@@ -37,7 +37,7 @@
 import { useDialog } from 'src/composables/Dialog';
 import { ref } from 'vue';
 import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
-import * as UserService from 'src/services/UserService';
+import * as GroupService from 'src/services/GroupService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 
@@ -58,7 +58,7 @@ const { show } = useDialog('detach-group', (event) => {
 async function onSubmit() {
   submitting.value = true;
 
-  await UserService.removeUserFromGroup(user.value.objectId, group.value.objectId);
+  await GroupService.dissociateGroupAndUser(user.value.login, group.value.id);
 
   Notify.create({
     type: 'positive',
