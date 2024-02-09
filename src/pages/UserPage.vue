@@ -18,7 +18,7 @@
           class="q-ma-none q-mb-sm"
           data-cy="page_user_title"
         >
-          {{ user.firstname }}
+          {{ user.name }}
         </h4>
       </q-card-section>
       <q-linear-progress
@@ -33,7 +33,7 @@
         class="q-ma-none q-mb-sm"
         data-cy="page_user_roles_title"
       >
-        {{ $t('UserPage.text.roleList', { user: user.firstname }) }}
+        {{ $t('UserPage.text.roleList', { user: user.name }) }}
       </h6>
       <roles-table
         :roles="roles"
@@ -44,7 +44,7 @@
         class="q-ma-none q-mb-sm"
         data-cy="page_user_groups_title"
       >
-        {{ $t('UserPage.text.groupList', { user: user.firstname }) }}
+        {{ $t('UserPage.text.groupList', { user: user.name }) }}
       </h6>
       <q-btn
         outline
@@ -89,11 +89,11 @@ const roles = ref([]);
 let reloadGroupsEventRef;
 
 /**
- * Load user from id in url. If the user does not exist, redirect to the users page.
+ * Load user from login in url. If the user does not exist, redirect to the users page.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function loadUser() {
-  return UserService.findById(route.params.id)
+  return UserService.findByLogin(route.params.login)
     .then((data) => {
       user.value = data;
     })
@@ -108,22 +108,22 @@ async function loadUser() {
 }
 
 /**
- * Get groups using user Id.
+ * Get groups using user login.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function loadGroups() {
-  return GroupService.findByUserId(route.params.id).then((data) => {
-    groups.value = data;
+  return GroupService.findByLogin(route.params.login).then((data) => {
+    groups.value = data.content;
   });
 }
 
 /**
- * Get roles using user Id.
+ * Get roles using user login.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function loadRoles() {
-  return RoleService.findByUserId(route.params.id).then((data) => {
-    roles.value = data;
+  return RoleService.findByLogin(route.params.login).then((data) => {
+    roles.value = data.content;
   });
 }
 
@@ -150,7 +150,7 @@ function openAttachGroupToUserDialog() {
   DialogEvent.next({
     key: 'attach-group-to-user',
     type: 'open',
-    userId: route.params.id,
+    userLogin: route.params.login,
   });
 }
 

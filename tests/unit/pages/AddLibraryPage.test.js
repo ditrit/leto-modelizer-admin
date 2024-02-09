@@ -43,37 +43,37 @@ describe('Test component: AddLibraryPage', () => {
     });
   });
 
-  describe('Test function: clearRoleNameError', () => {
+  describe('Test function: clearRoleError', () => {
     it('should clear role name error', () => {
-      wrapper.vm.roleNameError = true;
-      wrapper.vm.roleNameMessage = 'test';
+      wrapper.vm.roleError = true;
+      wrapper.vm.roleMessage = 'test';
 
-      wrapper.vm.clearRoleNameError();
+      wrapper.vm.clearRoleError();
 
-      expect(wrapper.vm.roleNameError).toEqual(false);
-      expect(wrapper.vm.roleNameErrorMessage).toEqual('');
+      expect(wrapper.vm.roleError).toEqual(false);
+      expect(wrapper.vm.roleErrorMessage).toEqual('');
     });
   });
 
   describe('Test function: onSubmit', () => {
     it('should clear error', async () => {
-      wrapper.vm.roleNameError = true;
-      wrapper.vm.roleNameMessage = 'test';
+      wrapper.vm.roleError = true;
+      wrapper.vm.roleMessage = 'test';
       wrapper.vm.urlError = true;
       wrapper.vm.urlErrorMessage = 'test';
 
-      LibraryService.create.mockImplementation(() => Promise.resolve({ objectId: 'test' }));
+      LibraryService.create.mockImplementation(() => Promise.resolve({ id: 'test' }));
 
       await wrapper.vm.onSubmit();
 
       expect(wrapper.vm.urlError).toEqual(false);
       expect(wrapper.vm.urlErrorMessage).toEqual('');
-      expect(wrapper.vm.roleNameError).toEqual(false);
-      expect(wrapper.vm.roleNameErrorMessage).toEqual('');
+      expect(wrapper.vm.roleError).toEqual(false);
+      expect(wrapper.vm.roleErrorMessage).toEqual('');
     });
 
     it('should create the library and go to its page', async () => {
-      LibraryService.create.mockImplementation(() => Promise.resolve({ objectId: 'test' }));
+      LibraryService.create.mockImplementation(() => Promise.resolve({ id: 'test' }));
 
       await wrapper.vm.onSubmit();
 
@@ -90,13 +90,13 @@ describe('Test component: AddLibraryPage', () => {
       expect(push).not.toBeCalled();
       expect(wrapper.vm.urlError).toEqual(true);
       expect(wrapper.vm.urlErrorMessage).toEqual('AddLibraryPage.text.urlAlreadyExists');
-      expect(wrapper.vm.roleNameError).toEqual(false);
-      expect(wrapper.vm.roleNameErrorMessage).toEqual('');
+      expect(wrapper.vm.roleError).toEqual(false);
+      expect(wrapper.vm.roleErrorMessage).toEqual('');
     });
 
     it('should set the "role name already exists" error when this error is thrown', async () => {
       LibraryService.create.mockImplementation(() => Promise.reject(
-        new Error('Library with this roleName already exists'),
+        new Error('Library with this role already exists'),
       ));
 
       await wrapper.vm.onSubmit();
@@ -104,8 +104,8 @@ describe('Test component: AddLibraryPage', () => {
       expect(push).not.toBeCalled();
       expect(wrapper.vm.urlError).toEqual(false);
       expect(wrapper.vm.urlErrorMessage).toEqual('');
-      expect(wrapper.vm.roleNameError).toEqual(true);
-      expect(wrapper.vm.roleNameErrorMessage).toEqual('AddLibraryPage.text.roleNameAlreadyExists');
+      expect(wrapper.vm.roleError).toEqual(true);
+      expect(wrapper.vm.roleErrorMessage).toEqual('AddLibraryPage.text.roleAlreadyExists');
     });
 
     it('should set the "url not found" error for all other errors thrown', async () => {
@@ -118,8 +118,8 @@ describe('Test component: AddLibraryPage', () => {
       expect(push).not.toBeCalled();
       expect(wrapper.vm.urlError).toEqual(true);
       expect(wrapper.vm.urlErrorMessage).toEqual('AddLibraryPage.text.urlNotFound');
-      expect(wrapper.vm.roleNameError).toEqual(false);
-      expect(wrapper.vm.roleNameErrorMessage).toEqual('');
+      expect(wrapper.vm.roleError).toEqual(false);
+      expect(wrapper.vm.roleErrorMessage).toEqual('');
     });
   });
 });

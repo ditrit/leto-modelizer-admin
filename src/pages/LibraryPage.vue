@@ -28,8 +28,8 @@
             <span data-cy="page_library_version">{{ library.version }}</span>
           </div>
           <div>
-            <span class="q-mr-sm text-bold">{{ $t('LibraryPage.text.author') }}</span>
-            <span data-cy="page_library_author">{{ library.author }}</span>
+            <span class="q-mr-sm text-bold">{{ $t('LibraryPage.text.maintainer') }}</span>
+            <span data-cy="page_library_maintainer">{{ library.maintainer }}</span>
           </div>
         </div>
         <div>

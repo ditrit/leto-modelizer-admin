@@ -21,7 +21,7 @@ const roles = ref([]);
 
 onMounted(async () => {
   await RoleService.find().then((data) => {
-    roles.value = data;
+    roles.value = data.content;
   });
 });
 </script>

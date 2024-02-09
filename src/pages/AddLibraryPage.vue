@@ -12,23 +12,23 @@
       @reset="$router.push('/libraries')"
     >
       <q-input
-        v-model="roleName"
+        v-model="role"
         outlined
         bg-color="white"
-        class="library-field-roleName"
-        data-cy="library-field-roleName"
-        :label="$t('AddLibraryPage.text.roleName')"
+        class="library-field-role"
+        data-cy="library_field_role"
+        :label="$t('AddLibraryPage.text.role')"
         :rules="[notEmpty]"
-        :error="roleNameError"
-        :error-message="roleNameErrorMessage"
-        @update:model-value="clearRoleNameError"
+        :error="roleError"
+        :error-message="roleErrorMessage"
+        @update:model-value="clearRoleError"
       />
       <q-input
         v-model="url"
         outlined
         bg-color="white"
         class="library-field-url"
-        data-cy="library-field-url"
+        data-cy="library_field_url"
         :label="$t('AddLibraryPage.text.url')"
         :rules="[notEmpty]"
         :error="urlError"
@@ -42,13 +42,13 @@
           color="negative"
           class="q-mr-xl"
           type="reset"
-          data-cy="library-button-cancel"
+          data-cy="library_button_cancel"
         />
         <q-btn
           label="Add"
           color="positive"
           type="submit"
-          data-cy="library-button-add"
+          data-cy="library_button_add"
         />
       </div>
     </q-form>
@@ -68,12 +68,12 @@ const router = useRouter();
 const url = ref('');
 const urlError = ref(false);
 const urlErrorMessage = ref('');
-const roleName = ref('');
-const roleNameError = ref(false);
-const roleNameErrorMessage = ref('');
+const role = ref('');
+const roleError = ref(false);
+const roleErrorMessage = ref('');
 const { notEmpty } = useFieldRules('AddLibraryPage');
 const ERROR_LIBRARY_URL_ALREADY_EXIST = 'Library with this url already exists';
-const ERROR_LIBRARY_ROLE_ALREADY_EXIST = 'Library with this roleName already exists';
+const ERROR_LIBRARY_ROLE_ALREADY_EXIST = 'Library with this role already exists';
 
 /**
  * Clear url field error.
@@ -84,11 +84,11 @@ function clearUrlError() {
 }
 
 /**
- * clear role name field error.
+ * clear role field error.
  */
-function clearRoleNameError() {
-  roleNameError.value = false;
-  roleNameErrorMessage.value = '';
+function clearRoleError() {
+  roleError.value = false;
+  roleErrorMessage.value = '';
 }
 
 /**
@@ -96,26 +96,26 @@ function clearRoleNameError() {
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function onSubmit() {
-  clearRoleNameError();
+  clearRoleError();
   clearUrlError();
 
   return LibraryService
-    .create(url.value, roleName.value)
-    .then(({ objectId }) => {
+    .create(url.value, role.value)
+    .then(({ id }) => {
       Notify.create({
         type: 'positive',
         message: t('AddLibraryPage.text.notifySuccess'),
         html: true,
       });
-      router.push(`/libraries/${objectId}`);
+      router.push(`/libraries/${id}`);
     })
     .catch(({ message }) => {
       if (message === ERROR_LIBRARY_URL_ALREADY_EXIST) {
         urlError.value = true;
         urlErrorMessage.value = t('AddLibraryPage.text.urlAlreadyExists');
       } else if (message === ERROR_LIBRARY_ROLE_ALREADY_EXIST) {
-        roleNameError.value = true;
-        roleNameErrorMessage.value = t('AddLibraryPage.text.roleNameAlreadyExists');
+        roleError.value = true;
+        roleErrorMessage.value = t('AddLibraryPage.text.roleAlreadyExists');
       } else {
         urlError.value = true;
         urlErrorMessage.value = t('AddLibraryPage.text.urlNotFound');

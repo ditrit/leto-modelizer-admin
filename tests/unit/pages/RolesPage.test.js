@@ -12,12 +12,16 @@ describe('Test component: RolesPage', () => {
   let wrapper;
 
   beforeEach(() => {
-    RoleService.find.mockImplementation(() => Promise.resolve());
+    RoleService.find.mockImplementation(() => Promise.resolve({ content: 'roles' }));
 
     wrapper = shallowMount(RolesPage);
   });
 
   it('should mount the component', () => {
     expect(wrapper).not.toBeNull();
+  });
+
+  it('should set roles value', () => {
+    expect(wrapper.vm.roles).toEqual('roles');
   });
 });
