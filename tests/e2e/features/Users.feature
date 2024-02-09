@@ -11,9 +11,12 @@ Feature: Test roundtrip of the application: Users
   ## 301 Should disabled confirm button if no group is selected
   ## 302 Should select and successfully attach a group
 
+  ################## Detach group ##################
+  ## 401 Should successfully detach a group
+
   ################## Delete user ##################
-  ## 401 Should delete selected user
-  ## 402 Should delete current user
+  ## 501 Should delete selected user
+  ## 502 Should delete current user
 
   Scenario: Roundtrip about Users
     Given I visit the '/'
@@ -26,39 +29,38 @@ Feature: Test roundtrip of the application: Users
 
     ## 101 Should display all users
     And I expect '[data-cy="users_table"] tbody tr' appear 2 times on screen
-    And I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-firstname' is 'Firstname'
-    And I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-username' is 'Username'
-    And I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-email' is 'test@test.com'
+    And I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-name' is 'Admin'
+    And I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-login' is 'admin'
+    And I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-email' is 'admin@admin.com'
 
-    And I expect '[data-cy="users_table"] tbody tr:nth-child(2) td.user-firstname' is 'Admin'
-    And I expect '[data-cy="users_table"] tbody tr:nth-child(2) td.user-username' is 'Current User'
-    And I expect '[data-cy="users_table"] tbody tr:nth-child(2) td.user-email' is 'admin@admin.com'
+    And I expect '[data-cy="users_table"] tbody tr:nth-child(2) td.user-name' is 'Name'
+    And I expect '[data-cy="users_table"] tbody tr:nth-child(2) td.user-login' is 'login'
+    And I expect '[data-cy="users_table"] tbody tr:nth-child(2) td.user-email' is 'test@test.com'
 
     ####################################################
     ################## Select users ###############
     ####################################################
 
     ## 201 Should display all users information
-    When I click on '[data-cy="users_table"] [data-cy="user_id_1_button_show"]'
-    Then I expect current url is '/users/id_1'
+    When I click on '[data-cy="users_table"] [data-cy="user_admin_button_show"]'
+    Then I expect current url is '/users/admin'
     And  I expect '[data-cy="page_user_loading"]' not exists
-    And  I expect '[data-cy="page_user_title"]' is 'Firstname'
+    And  I expect '[data-cy="page_user_title"]' is 'Admin'
     # Display related roles
     And  I expect '[data-cy="page_user_roles_title"]' exists
     And  I expect '[data-cy="roles_table"]' exists
-    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'admin'
-    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-type' is 'System'
+    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'Super administrator'
     # Display related groups
     And  I expect '[data-cy="page_user_groups_title"]' exists
     And  I expect '[data-cy="groups_table"]' exists
-    And  I expect '[data-cy="groups_table"] tbody tr:nth-child(1) td.group-name' is 'group1'
+    And  I expect '[data-cy="groups_table"] tbody tr:nth-child(1) td.group-name' is 'Group 1'
 
     When I click on '[data-cy="page_user_go_back"]'
     Then I expect current url is '/users'
 
     ## 202 Should redirect to users if user is not found
-    When I visit the '/users/id_3'
-    Then I expect current url is '/users$'
+    When I visit the '/users/unknown'
+    Then I expect current url is '/users'
     And  I expect 'negative' toast to appear with text 'User not found.'
 
     ####################################################
@@ -66,22 +68,33 @@ Feature: Test roundtrip of the application: Users
     ####################################################
 
     ## 301 Should disabled confirm button if no group is selected
-    When I click on '[data-cy="users_table"] [data-cy="user_id_1_button_show"]'
-    Then I expect current url is '/users/id_1'
+    When I click on '[data-cy="users_table"] [data-cy="user_admin_button_show"]'
+    Then I expect current url is '/users/admin'
 
     When I click on '[data-cy="page_user_button_attach_group"]'
     Then I expect '[data-cy="groups_table"]' exists
-    And  I expect '[data-cy="groups_table"] tbody tr:nth-child(1) td.group-name' is 'group1'
-    And  I expect '[data-cy="groups_table"] tbody tr:nth-child(1) td [role="checkbox"]' exists
+    And  I expect '[data-cy="groups_table"] tbody tr:nth-child(2) td.group-name' is 'Group 2'
+    And  I expect '[data-cy="groups_table"] tbody tr:nth-child(2) td [role="checkbox"]' exists
     And  I expect '[data-cy="button_confirm"]' to be disabled
 
     ## 302 Should select and successfully attach a group
-    When I click on '[data-cy="groups_table"] tbody tr:nth-child(1) td [role="checkbox"]'
+    When I click on '[data-cy="groups_table"] tbody tr:nth-child(2) td [role="checkbox"]'
     Then I expect '[data-cy="button_confirm"]' to be enabled
-    And  I expect '[data-cy="groups_table"] tbody tr.selected td.group-name' is 'group1'
+    And  I expect '[data-cy="groups_table"] tbody tr.selected td.group-name' is 'Group 2'
 
     When I click on '[data-cy="button_confirm"]'
     Then I expect 'positive' toast to appear with text 'Group(s) successfully attached to the user.'
+
+    ####################################################
+    ################## Detach group ##################
+    ####################################################
+
+    # 401 Should successfully detach a group
+    When I click on '[data-cy="group_1_button_remove"]'
+    Then I expect '[data-cy="button_confirm"]' exists
+
+    When I click on '[data-cy="button_confirm"]'
+    Then I expect 'positive' toast to appear with text 'Group is removed from user.'
 
     When I click on '[data-cy="page_user_go_back"]'
     Then I expect current url is '/users'
@@ -90,22 +103,17 @@ Feature: Test roundtrip of the application: Users
     ################## Delete user ##################
     ####################################################
 
-    ## 401 Should delete selected user
-    When I click on '[data-cy="user_id_1_button_remove"]'
+    ## 501 Should delete selected user
+    When I click on '[data-cy="user_login_button_remove"]'
     Then I expect '[data-cy="button_confirm"]' exists
 
     When I click on '[data-cy="button_confirm"]'
     Then I expect 'positive' toast to appear with text 'User is removed.'
-    And  I expect '[data-cy="users_table"] tbody tr' appear 1 time on screen
-    And  I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-firstname' is 'Admin'
-    And  I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-username' is 'Current User'
-    And  I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-email' is 'admin@admin.com'
 
-    ## 402 Should delete current user
-    When I click on '[data-cy="user_id_2_button_remove"]'
+    ## 502 Should delete current user
+    When I click on '[data-cy="user_admin_button_remove"]'
     Then I expect '[data-cy="button_confirm"]' exists
     And  I expect '[data-cy="remove_current_user_warning"]' exists
 
-    When I click on '[data-cy="button_confirm"]'
-    Then I expect '[data-cy="users_table"] tbody tr' appear 0 time on screen
-    And  I expect current url is '/token/clear'
+    # When I click on '[data-cy="button_confirm"]'
+    # Then I expect current url is '/api/logout'

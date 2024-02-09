@@ -1,244 +1,283 @@
 import { Before } from '@badeball/cypress-cucumber-preprocessor';
 
-Before(() => {
-  let isUserDeleted = false;
-  let isCurrentUserDeleted = false;
-  let isLibraryDeleted = false;
-  let isGroupDeleted = false;
-  const user1 = {
-    objectId: 'id_1',
-    username: 'Username',
-    firstname: 'Firstname',
-    email: 'test@test.com',
-  };
-  const currentUser = {
-    objectId: 'id_2',
-    username: 'Current User',
-    firstname: 'Admin',
-    email: 'admin@admin.com',
-  };
-  const library1 = {
-    objectId: 'id_1',
-    name: 'lib1',
-    version: '1.0.0',
-    author: 'Author_1',
-    description: 'description_1',
-    url: 'url_1',
-  };
-  const library2 = {
-    objectId: 'id_2',
-    name: 'lib2',
-    version: '2.0.0',
-    author: 'Author_2',
-    description: 'description_2',
-  };
-  const group1 = {
-    objectId: 'id_1',
-    name: 'group1',
-  };
+const adminUser = {
+  name: 'Admin',
+  login: 'admin',
+  email: 'admin@admin.com',
+};
+const user = {
+  name: 'Name',
+  login: 'login',
+  email: 'test@test.com',
+};
+const group1 = {
+  id: '1',
+  name: 'Group 1',
+};
+const group2 = {
+  id: '2',
+  name: 'Group 2',
+};
+const library1 = {
+  id: '1',
+  name: 'lib1',
+  version: '1.0.0',
+  maintainer: 'Maintainer_1',
+  description: 'description_1',
+  url: 'url_1',
+};
+const library2 = {
+  id: '2',
+  name: 'lib2',
+  version: '2.0.0',
+  maintainer: 'Maintainer_2',
+  description: 'description_2',
+};
 
-  cy.intercept('GET', '/backend/api/users/me', {
+/**
+ * User-specific intercepts
+ */
+function setUserIntercepts() {
+  cy.intercept('GET', '/api/users/me', {
+    statusCode: 200,
+    body: adminUser,
+  });
+
+  cy.intercept('GET', '/api/users/me/permissions', {
+    statusCode: 200,
+    body: [{
+      entity: 'ADMIN',
+      action: 'ACCESS',
+    }],
+  });
+
+  cy.intercept('GET', /\/api\/users\/[A-Za-z0-9_]+\/picture/, {
+    statusCode: 200,
+    body: 'picture',
+  });
+
+  cy.intercept('GET', '/api/users', {
     statusCode: 200,
     body: {
-      objectId: 'id_2',
-      username: 'User',
-      firstname: 'First',
+      content: [adminUser, user],
     },
   });
 
-  cy.intercept('GET', '/backend/api/Users', (request) => {
-    let results = [user1, currentUser];
-
-    if (isUserDeleted) {
-      results = [currentUser];
-
-      if (isCurrentUserDeleted) {
-        results = [];
-      }
-    }
-
-    request.reply({
-      statusCode: 200,
-      body: {
-        results,
-      },
-    });
-  });
-
-  cy.intercept('GET', '/backend/api/Users/id_1', {
+  cy.intercept('GET', '/api/users/admin', {
     statusCode: 200,
-    body: user1,
+    body: adminUser,
   });
 
-  cy.intercept('GET', '/backend/api/Users/id_3', {
+  cy.intercept('GET', '/api/users/unknown', {
     statusCode: 404,
     body: 'Not Found',
   });
 
-  cy.intercept('DELETE', '/backend/api/Users/id_1', (request) => {
-    isUserDeleted = true;
-    request.reply({ statusCode: 204 });
-  });
-
-  cy.intercept('DELETE', '/backend/api/Users/id_2', (request) => {
-    isCurrentUserDeleted = true;
-    request.reply({ statusCode: 204 });
-  });
-
-  cy.intercept('GET', '/backend/api/classes/_User?*', {
+  cy.intercept('GET', '/api/users/admin/roles', {
     statusCode: 200,
     body: {
-      results: [user1],
+      content: [{
+        id: 1,
+        name: 'Super administrator',
+      }],
     },
   });
 
-  cy.intercept('GET', '/backend/api/roles*', {
+  cy.intercept('GET', '/api/users/admin/groups', {
     statusCode: 200,
     body: {
-      results: [{ name: 'admin' }],
+      content: [group1],
     },
   });
 
-  cy.intercept('GET', '/backend/api/classes/_Role', {
+  cy.intercept('DELETE', '/api/users/admin', (request) => {
+    request.reply({ statusCode: 204 });
+  });
+
+  cy.intercept('DELETE', '/api/users/login', (request) => {
+    request.reply({ statusCode: 204 });
+  });
+}
+
+/**
+ * Group-specific intercepts
+ */
+function setGroupIntercepts() {
+  cy.intercept('GET', '/api/groups', {
     statusCode: 200,
     body: {
-      results: [
-        { name: 'CF_createProject' },
-        { name: 'admin' },
-        { name: 'lib_test' },
-        { name: 'other' },
+      content: [group1, group2],
+    },
+  });
+
+  cy.intercept('GET', '/api/groups/1', {
+    statusCode: 200,
+    body: group1,
+  });
+
+  cy.intercept('GET', '/api/groups/2', {
+    statusCode: 200,
+    body: group2,
+  });
+
+  cy.intercept('GET', '/api/groups/unknown', {
+    statusCode: 404,
+    body: 'Not Found',
+  });
+
+  cy.intercept('GET', '/api/groups/1/users', {
+    statusCode: 200,
+    body: {
+      content: [adminUser],
+    },
+  });
+
+  cy.intercept('GET', '/api/groups/2/users', {
+    statusCode: 200,
+    body: {
+      content: [],
+    },
+  });
+
+  cy.intercept('POST', '/api/groups/2/users', (request) => {
+    request.reply({
+      statusCode: 200,
+    });
+  });
+
+  cy.intercept('DELETE', '/api/groups/1', (request) => {
+    request.reply({ statusCode: 204 });
+  });
+
+  cy.intercept('DELETE', '/api/groups/1/users/admin', (request) => {
+    request.reply({ statusCode: 204 });
+  });
+}
+
+/**
+ * Role-specific intercepts
+ */
+function setRoleIntercepts() {
+  cy.intercept('GET', '/api/roles', {
+    statusCode: 200,
+    body: {
+      content: [
+        {
+          id: 1,
+          name: 'Super administrator',
+        },
+        {
+          id: 2,
+          name: 'Administrator',
+        },
+        {
+          id: 3,
+          name: 'Developer',
+        },
       ],
     },
   });
+}
 
-  cy.intercept('GET', '/backend/api/classes/Library', (request) => {
+/**
+ * Library-specific intercepts
+ */
+function setLibraryIntercepts() {
+  cy.intercept('GET', '/api/libraries', (request) => {
     request.reply({
       statusCode: 200,
       body: {
-        results: isLibraryDeleted ? [library1] : [library1, library2],
+        content: [library1, library2],
       },
     });
   });
 
-  cy.intercept('GET', '/backend/api/classes/Library/id_1', {
+  cy.intercept('GET', '/api/libraries/1', {
     statusCode: 200,
     body: library1,
   });
 
-  cy.intercept('GET', '/backend/api/classes/Library/id_2', {
+  cy.intercept('GET', '/api/libraries/2', {
     statusCode: 200,
     body: library2,
   });
 
-  cy.intercept('DELETE', '/backend/api/classes/Library/id_2', (request) => {
-    isLibraryDeleted = true;
+  cy.intercept('DELETE', '/api/libraries/2', (request) => {
     request.reply({ statusCode: 204 });
   });
 
-  cy.intercept('GET', '/backend/api/classes/Library/id_3', {
+  cy.intercept('GET', '/api/libraries/3', {
     statusCode: 404,
     body: 'Not Found',
   });
 
-  cy.intercept('POST', '/backend/api/classes/Library', (request) => {
-    const { url, roleName } = request.body;
+  cy.intercept('POST', '/api/libraries', (request) => {
+    const { url, role } = request.body;
 
     if (url === 'alreadyExist') {
       request.reply({
         statusCode: 400,
         body: {
-          error: 'Library with this url already exists',
+          message: 'Library with this url already exists',
         },
       });
     } else if (url === 'notFound') {
       request.reply({
         statusCode: 400,
         body: {
-          error: 'Other error',
+          message: 'Other error',
         },
       });
-    } else if (roleName === 'alreadyExist') {
+    } else if (role === 'alreadyExist') {
       request.reply({
         statusCode: 400,
         body: {
-          error: 'Library with this roleName already exists',
+          message: 'Library with this role already exists',
         },
       });
     } else {
       request.reply({
         statusCode: 200,
         body: {
-          objectId: 'id_1',
+          id: '1',
         },
       });
     }
   });
 
-  cy.intercept('PUT', '/backend/api/classes/Library/id_1', (request) => {
+  cy.intercept('PUT', '/api/libraries/1', (request) => {
     const { url } = request.body;
 
     if (url === 'notFound') {
       request.reply({
         statusCode: 400,
         body: {
-          error: 'Other error',
+          message: 'Other error',
         },
       });
     } else if (url === 'alreadyExist') {
       request.reply({
         statusCode: 400,
         body: {
-          error: 'Library with this url already exists',
+          message: 'Library with this url already exists',
         },
       });
     } else {
       request.reply({
         statusCode: 200,
         body: {
-          objectId: 'id_1',
+          id: '1',
         },
       });
     }
   });
+}
 
-  cy.intercept('GET', '/backend/api/classes/Group', (request) => {
-    request.reply({
-      statusCode: 200,
-      body: {
-        results: isGroupDeleted ? [] : [group1],
-      },
-    });
-  });
+Before(() => {
+  setUserIntercepts();
+  setGroupIntercepts();
+  setRoleIntercepts();
+  setLibraryIntercepts();
 
-  cy.intercept('GET', '/backend/api/classes/Group/id_1', {
-    statusCode: 200,
-    body: group1,
-  });
-
-  cy.intercept('DELETE', '/backend/api/classes/Group/id_1', (request) => {
-    isGroupDeleted = true;
-    request.reply({ statusCode: 204 });
-  });
-
-  cy.intercept('GET', '/backend/api/classes/Group/id_3', {
-    statusCode: 404,
-    body: 'Not Found',
-  });
-
-  cy.intercept('GET', '/backend/api/classes/Group?*', (request) => {
-    request.reply({
-      statusCode: 200,
-      body: {
-        results: [group1],
-      },
-    });
-  });
-
-  cy.intercept('PUT', '/backend/api/classes/Group/id_1', (request) => {
-    request.reply({
-      statusCode: 200,
-    });
-  });
-
-  cy.intercept('http://localhost:8080/token/clear', 'ok');
+  cy.intercept('https://localhost:8443/api/logout', 'ok');
 });
