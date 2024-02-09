@@ -1,9 +1,5 @@
-import {
-  getDefaultHeaders,
-  manageError,
-} from 'src/boot/axios';
+import { manageError } from 'src/boot/axios';
 import { expect, it } from 'vitest';
-import { getUserSessionToken } from 'src/composables/UserAuthentication';
 
 describe('Test: axios', () => {
   describe('Test function: manageError', () => {
@@ -25,24 +21,6 @@ describe('Test: axios', () => {
         error = e;
       }
       expect(error).toBeNull();
-    });
-  });
-
-  describe('Test function: getDefaultHeaders', () => {
-    it('should return default headers with session token', () => {
-      let sessionToken = getUserSessionToken();
-      expect(getDefaultHeaders()).toEqual({
-        Accept: 'application/json',
-        'X-Parse-Application-Id': process.env.BACKEND_APP_ID,
-        'X-Parse-Session-Token': sessionToken,
-      });
-
-      sessionToken = 'test';
-      expect(getDefaultHeaders(sessionToken)).toEqual({
-        Accept: 'application/json',
-        'X-Parse-Application-Id': process.env.BACKEND_APP_ID,
-        'X-Parse-Session-Token': sessionToken,
-      });
     });
   });
 });
