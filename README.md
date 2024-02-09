@@ -62,7 +62,7 @@ All the fields are mandatory.
 
 ```json
 {
-  "backendUrl": "http://localhost:1337/",
+  "backendUrl": "https://localhost:8443",
   "backendAppId": "leto-modelizer-api-dev",
   "letoModelizerUrl": "http://localhost:8080"
 }
