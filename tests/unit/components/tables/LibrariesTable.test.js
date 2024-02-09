@@ -19,7 +19,7 @@ describe('Test component: LibrariesTable', async () => {
     subscribe = vi.fn();
     unsubscribe = vi.fn();
 
-    LibraryService.find.mockImplementation(() => Promise.resolve([]));
+    LibraryService.find.mockImplementation(() => Promise.resolve({ content: ['libraries'] }));
 
     ReloadLibrariesEvent.subscribe.mockImplementation(() => {
       subscribe();

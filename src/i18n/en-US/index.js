@@ -116,7 +116,7 @@ export default {
   UsersTable: {
     text: {
       nameColumn: 'Name',
-      userNameColumn: 'UserName',
+      loginColumn: 'Login',
       emailColumn: 'Email',
       actionsColumn: 'Actions',
     },
@@ -151,7 +151,7 @@ export default {
       cancel: 'Cancel',
       confirm: 'Confirm',
       notifySuccess: 'User is removed.',
-      warning: 'You will delete yourself. If you confirm, you will be redirected to leto modelizer.',
+      warning: 'You will delete yourself and any associated groups, permissions, and roles. If you confirm, you will be automatically disconnected.',
     },
   },
   RemoveGroupDialog: {

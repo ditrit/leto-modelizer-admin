@@ -6,23 +6,9 @@
     :pagination="pagination"
     :columns="columns"
     :rows="roles"
-    :row-key="rowKey"
+    row-key="id"
     data-cy="roles_table"
-  >
-    <template #body-cell-type="cell">
-      <q-td
-        :props="cell"
-        class="flex items-center"
-      >
-        <q-badge
-          :color="$t(`RolesTable.color.roleType${cell.row.type}`)"
-          rounded
-          class="q-mr-sm"
-        />
-        {{ $t(`RolesTable.text.roleType${cell.row.type}`) }}
-      </q-td>
-    </template>
-  </q-table>
+  />
 </template>
 
 <script setup>
@@ -47,14 +33,5 @@ const columns = ref([{
   align: 'left',
   field: 'name',
   classes: 'role-name',
-}, {
-  name: 'type',
-  required: true,
-  label: t('RolesTable.text.typeColumn'),
-  align: 'left',
-  field: 'type',
-  classes: 'role-type',
 }]);
-const rowKey = ref('objectId');
-
 </script>

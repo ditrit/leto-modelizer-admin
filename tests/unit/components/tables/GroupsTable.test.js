@@ -58,7 +58,7 @@ describe('Test component: GroupsTable', () => {
           required: true,
           label: 'Actions',
           align: 'left',
-          field: 'objectId',
+          field: 'id',
           classes: 'group-actions',
         },
       ]);

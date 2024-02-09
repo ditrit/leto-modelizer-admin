@@ -6,7 +6,7 @@
     :pagination="pagination"
     :columns="columns"
     :rows="libraries"
-    row-key="objectId"
+    row-key="id"
     data-cy="libraries_table"
   >
     <template #body-cell-actions="props">
@@ -20,8 +20,8 @@
           rounded
           color="primary"
           icon="fa-solid fa-pen-to-square"
-          :data-cy="`library_${props.row.objectId}_button_show`"
-          @click="$emit('show', props.row.objectId)"
+          :data-cy="`library_${props.row.id}_button_show`"
+          @click="$emit('show', props.row.id)"
         />
         <q-btn
           dense
@@ -29,7 +29,7 @@
           rounded
           color="negative"
           icon="fa-solid fa-trash"
-          :data-cy="`library_${props.row.objectId}_button_remove`"
+          :data-cy="`library_${props.row.id}_button_remove`"
           @click="$emit('remove', props.row)"
         />
       </q-td>
@@ -61,7 +61,7 @@ const columns = ref([{
   required: true,
   label: t('LibrariesTable.text.actionsColumn'),
   align: 'left',
-  field: 'objectId',
+  field: 'id',
   classes: 'library-actions',
 }]);
 const libraries = ref([]);
@@ -74,7 +74,7 @@ let reloadLibrariesEventRef;
  */
 async function search() {
   return LibraryService.find().then((data) => {
-    libraries.value = data;
+    libraries.value = data.content;
   });
 }
 

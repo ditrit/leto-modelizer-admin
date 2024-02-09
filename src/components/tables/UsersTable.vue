@@ -3,7 +3,7 @@
     class="shadow-5"
     table-header-class="bg-grey-3"
     hide-bottom
-    row-key="objectId"
+    row-key="login"
     :pagination="pagination"
     :columns="columns"
     :rows="users"
@@ -21,8 +21,8 @@
           rounded
           color="primary"
           icon="fa-solid fa-pen-to-square"
-          :data-cy="`user_${cell.row.objectId}_button_show`"
-          @click="$emit('show', cell.row.objectId)"
+          :data-cy="`user_${cell.row.login}_button_show`"
+          @click="$emit('show', cell.row.login)"
         />
         <q-btn
           v-if="removeAction"
@@ -31,7 +31,7 @@
           rounded
           color="negative"
           icon="fa-solid fa-trash"
-          :data-cy="`user_${cell.row.objectId}_button_remove`"
+          :data-cy="`user_${cell.row.login}_button_remove`"
           @click="$emit('remove', cell.row)"
         />
       </q-td>
@@ -70,15 +70,15 @@ const columns = computed(() => {
     required: true,
     label: t('UsersTable.text.nameColumn'),
     align: 'left',
-    field: 'firstname',
-    classes: 'user-firstname',
+    field: 'name',
+    classes: 'user-name',
   }, {
-    name: 'userName',
+    name: 'login',
     required: true,
-    label: t('UsersTable.text.userNameColumn'),
+    label: t('UsersTable.text.loginColumn'),
     align: 'left',
-    field: 'username',
-    classes: 'user-username',
+    field: 'login',
+    classes: 'user-login',
   }, {
     name: 'email',
     required: true,
@@ -94,7 +94,7 @@ const columns = computed(() => {
       required: true,
       label: t('GroupsTable.text.actionsColumn'),
       align: 'left',
-      field: 'objectId',
+      field: 'login',
       classes: 'group-actions',
     });
   }
