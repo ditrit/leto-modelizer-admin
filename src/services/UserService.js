@@ -1,13 +1,42 @@
-import { api, getDefaultHeaders, manageError } from 'boot/axios';
+import { api, manageError } from 'boot/axios';
 
 /**
  * Get information about the current user.
- * @param {string} sessionToken - The current user's session token.
  * @returns {Promise<object>} Promise with the logged-in user information on success
  * otherwise an error.
  */
-export async function findCurrent(sessionToken) {
-  return api.get('/api/users/me', { headers: getDefaultHeaders(sessionToken) })
+export async function getCurrent() {
+  return api.get('/users/me')
+    .then(({ data }) => data)
+    .catch(manageError);
+}
+
+/**
+ * Get picture of the current user.
+ * @returns {Promise<object>} Promise with the logged-in user picture on success
+ * otherwise an error.
+ */
+export async function getMyPicture() {
+  return api.get('/users/me/picture', {
+    responseType: 'arraybuffer',
+  })
+    .then((response) => {
+      const imageBase64 = btoa(
+        new Uint8Array(response.data)
+          .reduce((data, byte) => data + String.fromCharCode(byte), ''),
+      );
+      return `data:${response.headers['content-type']};base64,${imageBase64}`;
+    })
+    .catch(manageError);
+}
+
+/**
+ * Get permissions of the current user.
+ * @returns {Promise<object>} Promise with the permissions of logged-in user on success
+ * otherwise an error.
+ */
+export async function getMyPermissions() {
+  return api.get('/users/me/permissions')
     .then(({ data }) => data)
     .catch(manageError);
 }
@@ -18,20 +47,44 @@ export async function findCurrent(sessionToken) {
  * otherwise an error.
  */
 export async function find() {
-  return api.get('/api/Users', { headers: getDefaultHeaders() })
-    .then(({ data }) => data.results)
+  return api.get('/users')
+    .then(({ data }) => data)
     .catch(manageError);
 }
 
 /**
- * Get user by id.
- * @param {string} id - User id.
+ * Get user by login.
+ * @param {string} login - User login.
  * @returns {Promise<object>} Return a user.
  */
-export async function findById(id) {
-  return api.get(`/api/Users/${id}`, { headers: getDefaultHeaders() })
+export async function findByLogin(login) {
+  return api.get(`/users/${login}`)
     .then(({ data }) => data)
     .catch(manageError);
+}
+
+/**
+ * Get user picture by login.
+ * @param {string} login - User login.
+ * @returns {Promise<string>} Return a user picture on success, otherwise an error.
+ */
+export async function getPictureByLogin(login) {
+  return api.get(`/users/${login}/picture`, {
+    responseType: 'arraybuffer',
+  })
+    .then((response) => {
+      const imageBase64 = btoa(
+        new Uint8Array(response.data)
+          .reduce((data, byte) => data + String.fromCharCode(byte), ''),
+      );
+      return `data:${response.headers['content-type']};base64,${imageBase64}`;
+    })
+    .catch((error) => {
+      if (error.response.status === 404) {
+        return '';
+      }
+      return manageError(error);
+    });
 }
 
 /**
@@ -40,58 +93,8 @@ export async function findById(id) {
  * @returns {Promise<void>} Promise with nothing on success.
  */
 export async function remove(id) {
-  return api.delete(`/api/Users/${id}`, { headers: getDefaultHeaders() })
+  return api.delete(`/users/${id}`)
     .catch(manageError);
-}
-
-/**
- * Add user to the "users" field of the group.
- * @param {string} userId - User id.
- * @param {string} groupId - Group id.
- * @returns {Promise<object>} Promise with nothing on success otherwise an error.
- */
-export async function addUserToGroup(userId, groupId) {
-  return api.put(
-    `/api/classes/Group/${groupId}`,
-    {
-      users: {
-        __op: 'AddRelation',
-        objects: [
-          {
-            __type: 'Pointer',
-            className: '_User',
-            objectId: userId,
-          },
-        ],
-      },
-    },
-    { headers: getDefaultHeaders() },
-  ).catch(manageError);
-}
-
-/**
- * Remove user from the "users" field of the group.
- * @param {string} userId - User id.
- * @param {string} groupId - Group id.
- * @returns {Promise<object>} Promise with nothing on success otherwise an error.
- */
-export async function removeUserFromGroup(userId, groupId) {
-  return api.put(
-    `/api/classes/Group/${groupId}`,
-    {
-      users: {
-        __op: 'RemoveRelation',
-        objects: [
-          {
-            __type: 'Pointer',
-            className: '_User',
-            objectId: userId,
-          },
-        ],
-      },
-    },
-    { headers: getDefaultHeaders() },
-  ).catch(manageError);
 }
 
 /**
@@ -100,15 +103,7 @@ export async function removeUserFromGroup(userId, groupId) {
  * @returns {Promise<object[]>} Return an array of users.
  */
 export async function findByGroupId(groupId) {
-  return api.get(
-    '/api/classes/_User',
-    {
-      headers: getDefaultHeaders(),
-      params: {
-        where: JSON.stringify({ $relatedTo: { object: { __type: 'Pointer', className: 'Group', objectId: groupId }, key: 'users' } }),
-      },
-    },
-  )
-    .then(({ data }) => data.results)
+  return api.get(`groups/${groupId}/users`)
+    .then(({ data }) => data)
     .catch(manageError);
 }

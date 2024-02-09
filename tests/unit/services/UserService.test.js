@@ -5,35 +5,41 @@ import { api } from 'boot/axios';
 vi.mock('boot/axios');
 
 describe('Test: UserService', () => {
-  describe('Test function: findCurrent', () => {
+  describe('Test function: getCurrent', () => {
     it('should return the current user information', async () => {
       const data = {
-        objectId: 'Ylof2OIHfi',
-        createdAt: '2023-10-25T12:19:09.068Z',
-        updatedAt: '2023-10-25T12:19:09.068Z',
-        username: 'MySuperUsername',
-        authData: {
-          github: {
-            id: 99999,
-            access_token: 'gho_MySuperAccessToken',
-          },
-        },
-        firstname: 'Pradeep',
-        ACL: {
-          Ylof2OIHfi: {
-            read: true,
-            write: true,
-          },
-        },
-        sessionToken: 'r:dead779dcda4970cc7f96c09a328d771',
+        login: 'Login',
+        name: 'name',
+        email: 'Email',
       };
 
       api.get.mockImplementation(() => Promise.resolve({ data }));
 
-      const user = await UserService.findCurrent('r:dead779dcda4970cc7f96c09a328d771');
-      expect(user.sessionToken).toEqual('r:dead779dcda4970cc7f96c09a328d771');
-      expect(user.username).toEqual('MySuperUsername');
-      expect(user.firstname).toEqual('Pradeep');
+      const user = await UserService.getCurrent();
+      expect(user.login).toEqual('Login');
+      expect(user.name).toEqual('name');
+      expect(user.email).toEqual('Email');
+    });
+  });
+
+  describe('Test function: getMyPicture', () => {
+    it('should return the current user picture', async () => {
+      const mockUserPicture = 'data:image/png;base64,';
+
+      api.get.mockImplementation(() => Promise.resolve({ data: 'picture', headers: { 'content-type': 'image/png' } }));
+
+      const userPicture = await UserService.getMyPicture();
+      expect(userPicture).toEqual(mockUserPicture);
+    });
+  });
+
+  describe('Test function: getMyPermissions', () => {
+    it('should call api.get', async () => {
+      api.get.mockImplementation(() => Promise.resolve());
+
+      await UserService.getMyPermissions();
+
+      expect(api.get).toBeCalledWith('/users/me/permissions');
     });
   });
 
@@ -45,24 +51,47 @@ describe('Test: UserService', () => {
         email: 'email',
       }];
 
-      api.get.mockImplementation(() => Promise.resolve({ data: { results: users } }));
+      api.get.mockImplementation(() => Promise.resolve({ data: users }));
 
       const data = await UserService.find();
       expect(data).toEqual(users);
     });
   });
 
-  describe('Test function: findById', () => {
+  describe('Test function: findByLogin', () => {
     it('should return the user', async () => {
       const user = {
         name: 'user',
-        objectId: 'w2U52H05zx',
+        login: 'login',
       };
 
       api.get.mockImplementation(() => Promise.resolve({ data: user }));
 
-      const res = await UserService.findById(user.objectId);
+      const res = await UserService.findByLogin(user.login);
       expect(res).toEqual(user);
+    });
+  });
+
+  describe('Test function: getPictureByLogin', () => {
+    it('should return a user picture using its login', async () => {
+      const mockUserPicture = 'data:image/png;base64,';
+
+      api.get.mockImplementation(() => Promise.resolve({ data: 'picture', headers: { 'content-type': 'image/png' } }));
+
+      const userPicture = await UserService.getPictureByLogin('userLogin');
+      expect(userPicture).toEqual(mockUserPicture);
+    });
+
+    it('should return empty string when the user does not have a picture', async () => {
+      const noPictureError = {
+        response: {
+          status: 404,
+        },
+      };
+      api.get.mockImplementation(() => Promise.reject(noPictureError));
+
+      const userPicture = await UserService.getPictureByLogin('userLogin');
+      expect(userPicture).toEqual('');
     });
   });
 
@@ -71,91 +100,16 @@ describe('Test: UserService', () => {
       api.delete.mockImplementation(() => Promise.resolve());
 
       await UserService.remove('test');
-      expect(api.delete).toBeCalledWith('/api/Users/test', { headers: undefined });
-    });
-  });
-
-  describe('Test function: addUserToGroup', () => {
-    it('should call api.put with endpoint using "groupId"', async () => {
-      api.put.mockImplementation(() => Promise.resolve());
-
-      const userObject = {
-        users: {
-          __op: 'AddRelation',
-          objects: [
-            {
-              __type: 'Pointer',
-              className: '_User',
-              objectId: 'userId',
-            },
-          ],
-        },
-      };
-
-      await UserService.addUserToGroup('userId', 'groupId');
-
-      expect(api.put).toBeCalledWith('/api/classes/Group/groupId', userObject, { headers: undefined });
-    });
-  });
-
-  describe('Test function: removeUserFromGroup', () => {
-    it('should call api.put with endpoint using "groupId"', async () => {
-      api.put.mockImplementation(() => Promise.resolve());
-
-      const userObject = {
-        users: {
-          __op: 'RemoveRelation',
-          objects: [
-            {
-              __type: 'Pointer',
-              className: '_User',
-              objectId: 'userId',
-            },
-          ],
-        },
-      };
-
-      await UserService.removeUserFromGroup('userId', 'groupId');
-
-      expect(api.put).toBeCalledWith('/api/classes/Group/groupId', userObject, { headers: undefined });
+      expect(api.delete).toBeCalledWith('/users/test');
     });
   });
 
   describe('Test function: findByGroupId', () => {
     it('should return all users of a group', async () => {
-      const data = {
-        objectId: 'duBFL0HNy',
-        createdAt: '2024-02-01T08:50:21.106Z',
-        updatedAt: '2024-02-01T08:50:21.106Z',
-        username: 'MySuperUsername',
-        authData: {
-          github: {
-            id: 99999,
-            access_token: 'gho_MySuperAccessToken',
-          },
-        },
-        firstname: 'Pradeep',
-        ACL: {
-          duBFL0HNy: {
-            read: true,
-            write: true,
-          },
-        },
-      };
+      api.get.mockImplementation(() => Promise.resolve({ data: 'users' }));
 
-      api.get.mockImplementation(() => Promise.resolve({ data }));
-
-      await UserService.findByGroupId('groupId');
-
-      expect(api.get).toBeCalledWith(
-        '/api/classes/_User',
-        {
-          headers: undefined,
-          params: {
-            where: JSON.stringify({ $relatedTo: { object: { __type: 'Pointer', className: 'Group', objectId: 'groupId' }, key: 'users' } }),
-          },
-        },
-      );
+      const data = await UserService.findByGroupId();
+      expect(data).toEqual('users');
     });
   });
 });
