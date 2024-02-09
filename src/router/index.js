@@ -6,7 +6,8 @@ import {
   createWebHashHistory,
 } from 'vue-router';
 import routes from 'src/router/routes';
-import { getUserSessionToken, initUser } from 'src/composables/UserAuthentication';
+import { initUser } from 'src/composables/UserAuthentication';
+import { useUserStore } from 'src/stores/UserStore';
 
 /*
  * If not building with SSR mode, you can
@@ -19,6 +20,7 @@ import { getUserSessionToken, initUser } from 'src/composables/UserAuthenticatio
 
 export default route(async () => {
   let createHistory;
+  const userStore = useUserStore();
 
   if (process.env.SERVER) {
     createHistory = createMemoryHistory;
@@ -39,19 +41,10 @@ export default route(async () => {
   });
 
   Router.beforeEach((to, from, next) => {
-    const matches = /.+[?&]token=([^&]+)/.exec(window.location.href);
-
-    if (matches) {
-      localStorage.setItem('sessionToken', matches[1]);
-      // Redirect to admin without token in url.
-      window.location.href = window.location.href.replaceAll(/\?.+$/g, '');
-    } else if (getUserSessionToken()) {
-      initUser(getUserSessionToken());
-      next();
-    } else {
-      // Redirect to leto-modelizer in case of not connected user.
-      window.location.href = `${process.env.LETO_MODELIZER_URL}/admin`;
+    if (userStore.login === '') {
+      initUser();
     }
+    next();
   });
 
   return Router;
