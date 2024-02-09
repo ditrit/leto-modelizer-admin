@@ -13,9 +13,9 @@
         text-color="white"
         size="md"
         font-size="12px"
-        :title="`${firstname} ${username}`"
+        :title="login"
       >
-        {{ userInitials }}
+        {{ login }}
       </q-avatar>
     </template>
     <q-list>
@@ -44,11 +44,7 @@ import { computed } from 'vue';
 import { useUserStore } from 'src/stores/UserStore';
 
 const userStore = useUserStore();
-const firstname = computed(() => userStore.firstname);
-const username = computed(() => userStore.username);
-const userInitials = computed(
-  () => `${userStore.firstname?.at(0) || ''}${userStore.username?.at(0) || ''}`.toUpperCase(),
-);
+const login = computed(() => userStore.login);
 
 /**
  * Go back to leto-modelizer.

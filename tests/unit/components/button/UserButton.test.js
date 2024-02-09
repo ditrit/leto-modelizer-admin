@@ -22,37 +22,14 @@ describe('Test component: UserButton', () => {
     wrapper = mount(UserButton, {});
   });
 
-  describe('Test computed: firstname', () => {
+  describe('Test computed: login', () => {
     it('Should be empty when not defined', () => {
-      expect(wrapper.vm.firstname).toEqual('');
+      expect(wrapper.vm.login).toEqual('');
     });
 
     it('Should not be empty once defined', () => {
-      store.firstname = 'firstname';
-      expect(wrapper.vm.firstname).toEqual('firstname');
-    });
-  });
-
-  describe('Test computed: username', () => {
-    it('Should be empty when not defined', () => {
-      expect(wrapper.vm.username).toEqual('');
-    });
-
-    it('Should not be empty once defined', () => {
-      store.username = 'username';
-      expect(wrapper.vm.username).toEqual('username');
-    });
-  });
-
-  describe('Test computed: userInitials', () => {
-    it('Should be empty when not defined', () => {
-      expect(wrapper.vm.userInitials).toEqual('');
-    });
-
-    it('Should not be empty once defined', () => {
-      store.firstname = 'abcd';
-      store.username = 'bcde';
-      expect(wrapper.vm.userInitials).toEqual('AB');
+      store.login = 'login';
+      expect(wrapper.vm.login).toEqual('login');
     });
   });
 
