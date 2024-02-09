@@ -1,11 +1,5 @@
-import {
-  setUserSessionToken,
-  getUserSessionToken,
-  removeUserSessionToken,
-  initUser,
-} from 'src/composables/UserAuthentication';
+import { initUser } from 'src/composables/UserAuthentication';
 import * as UserService from 'src/services/UserService';
-import * as RoleService from 'src/services/RoleService';
 import { setActivePinia, createPinia } from 'pinia';
 import { useUserStore } from 'src/stores/UserStore';
 import { vi } from 'vitest';
@@ -14,36 +8,6 @@ vi.mock('src/services/UserService');
 vi.mock('src/services/RoleService');
 
 describe('Test: User Authentication', () => {
-  describe('Test function: setUserSessionToken', () => {
-    it('should set the session token in the local storage', () => {
-      const setItem = vi.spyOn(Storage.prototype, 'setItem');
-
-      setUserSessionToken('MySessionToken');
-
-      expect(setItem).toHaveBeenCalledWith('sessionToken', 'MySessionToken');
-    });
-  });
-
-  describe('Test function: getUserSessionToken', () => {
-    it('should get the session token from the local storage', () => {
-      const getItem = vi.spyOn(Storage.prototype, 'getItem');
-
-      getUserSessionToken();
-
-      expect(getItem).toHaveBeenCalledWith('sessionToken');
-    });
-  });
-
-  describe('Test function: removeUserSessionToken', () => {
-    it('should remove the session token from the local storage', () => {
-      const removeItem = vi.spyOn(Storage.prototype, 'removeItem');
-
-      removeUserSessionToken();
-
-      expect(removeItem).toHaveBeenCalledWith('sessionToken');
-    });
-  });
-
   describe('Test function: initUser', () => {
     it('should do nothing if user is already initialized', async () => {
       setActivePinia(createPinia());
@@ -51,48 +15,44 @@ describe('Test: User Authentication', () => {
       const store = useUserStore();
 
       store.ready = true;
-      UserService.findCurrent.mockImplementation(() => Promise.resolve());
+      UserService.getCurrent.mockImplementation(() => Promise.resolve());
 
-      await initUser('userId', 'tempCode');
+      await initUser();
 
-      expect(UserService.findCurrent).not.toBeCalled();
+      expect(UserService.getCurrent).not.toBeCalled();
     });
 
-    it('should initialize user information and role if user has admin role but has not been initialized yet', async () => {
+    it('should initialize user if user has "admin" related permissions but has not been initialized yet', async () => {
       setActivePinia(createPinia());
 
       const store = useUserStore();
 
-      UserService.findCurrent.mockImplementation(() => Promise.resolve({
-        objectId: 'a',
-        username: 'b',
-        firstname: 'c',
+      UserService.getCurrent.mockImplementation(() => Promise.resolve({
+        login: 'Login',
+        name: 'Name',
+        email: 'Email',
       }));
 
-      RoleService.findByUserId.mockImplementation(() => Promise.resolve([{ name: 'admin' }]));
+      UserService.getMyPermissions.mockImplementation(() => Promise.resolve([{ action: 'ACCESS', entity: 'ADMIN' }]));
 
-      await initUser('userId', 'tempCode');
+      await initUser();
 
-      expect(store.id).toEqual('a');
-      expect(store.username).toEqual('b');
-      expect(store.firstname).toEqual('c');
-      expect(store.roles).toEqual(['admin']);
+      expect(store.login).toEqual('Login');
+      expect(store.name).toEqual('Name');
+      expect(store.email).toEqual('Email');
+      expect(store.permissions).toEqual([{ action: 'ACCESS', entity: 'ADMIN' }]);
     });
 
-    it('should throw an error if user does not have admin role', async () => {
+    it('should throw an error if user does not have the "admin" related permissions', async () => {
       setActivePinia(createPinia());
 
-      UserService.findCurrent.mockImplementation(() => Promise.resolve({
-        objectId: 'a',
-        username: 'b',
-        firstname: 'c',
-      }));
+      UserService.getCurrent.mockImplementation(() => Promise.resolve());
+      UserService.getMyPermissions.mockImplementation(() => Promise.resolve([{ action: 'ACTION', entity: 'DEV' }, { action: 'ACCESS', entity: 'DEV' }]));
 
-      RoleService.findByUserId.mockImplementation(() => Promise.resolve([{ name: 'other' }]));
       let error = null;
 
       try {
-        await initUser('userId', 'tempCode');
+        await initUser();
       } catch (e) {
         error = e;
       }
