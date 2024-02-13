@@ -1,4 +1,4 @@
-import { api, manageError } from 'boot/axios';
+import { api } from 'boot/axios';
 
 /**
  * Get all libraries.
@@ -6,9 +6,7 @@ import { api, manageError } from 'boot/axios';
  * otherwise an error.
  */
 export async function find() {
-  return api.get('/libraries')
-    .then(({ data }) => data)
-    .catch(manageError);
+  return api.get('/libraries').then(({ data }) => data);
 }
 
 /**
@@ -17,9 +15,7 @@ export async function find() {
  * @returns {Promise<object>} Return a library.
  */
 export async function findById(id) {
-  return api.get(`/libraries/${id}`)
-    .then(({ data }) => data)
-    .catch(manageError);
+  return api.get(`/libraries/${id}`).then(({ data }) => data);
 }
 
 /**
@@ -28,8 +24,7 @@ export async function findById(id) {
  * @returns {Promise<void>} Promise with nothing on success.
  */
 export async function remove(id) {
-  return api.delete(`/libraries/${id}`)
-    .catch(manageError);
+  return api.delete(`/libraries/${id}`);
 }
 
 /**
@@ -39,9 +34,7 @@ export async function remove(id) {
  * @returns {Promise<object>} Promise with library object on success otherwise an error.
  */
 export async function create(url, role) {
-  return api.post('/libraries', { url, role })
-    .then(({ data }) => data)
-    .catch(manageError);
+  return api.post('/libraries', { url, role }).then(({ data }) => data);
 }
 
 /**
@@ -51,7 +44,5 @@ export async function create(url, role) {
  * @returns {Promise<object>} Promise with library object on success otherwise an error.
  */
 export async function synchronize(id, url) {
-  return api.put(`/libraries/${id}`, { url })
-    .then(({ data }) => data)
-    .catch(manageError);
+  return api.put(`/libraries/${id}`, { url }).then(({ data }) => data);
 }
