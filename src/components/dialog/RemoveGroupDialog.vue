@@ -56,7 +56,7 @@ const { show } = useDialog('remove-group', (event) => {
 async function onSubmit() {
   submitting.value = true;
 
-  await GroupService.remove(group.value.objectId);
+  await GroupService.remove(group.value.id);
 
   Notify.create({
     type: 'positive',

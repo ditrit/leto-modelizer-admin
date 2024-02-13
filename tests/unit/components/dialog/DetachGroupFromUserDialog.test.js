@@ -2,14 +2,14 @@ import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-v
 import { mount } from '@vue/test-utils';
 import { vi } from 'vitest';
 import DetachGroupFromUserDialog from 'src/components/dialog/DetachGroupFromUserDialog.vue';
-import * as UserService from 'src/services/UserService';
+import * as GroupService from 'src/services/GroupService';
 import { Notify } from 'quasar';
 
 installQuasarPlugin({
   plugins: [Notify],
 });
 
-vi.mock('src/services/UserService');
+vi.mock('src/services/GroupService');
 vi.stubGlobal('$sanitize', true);
 
 describe('Test component: DetachGroupFromUserDialog', () => {
@@ -23,12 +23,12 @@ describe('Test component: DetachGroupFromUserDialog', () => {
     it('should send positive notification after detaching group from user', async () => {
       Notify.create = vi.fn();
       wrapper.vm.user = {
-        objectId: 'id',
+        id: 'id',
       };
       wrapper.vm.group = {
-        objectId: 'id',
+        id: 'id',
       };
-      UserService.removeUserFromGroup.mockImplementation(() => Promise.resolve());
+      GroupService.dissociateGroupAndUser.mockImplementation(() => Promise.resolve());
 
       await wrapper.vm.onSubmit();
 

@@ -19,7 +19,7 @@ import UsersTable from 'src/components/tables/UsersTable.vue';
 import { useRouter } from 'vue-router';
 import { ref, onMounted, onUnmounted } from 'vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
-import * as UsersService from 'src/services/UserService';
+import * as UserService from 'src/services/UserService';
 import ReloadUsersEvent from 'src/composables/events/ReloadUsersEvent';
 
 const router = useRouter();
@@ -28,10 +28,10 @@ let reloadUsersEventRef;
 
 /**
  * Go to user page.
- * @param {string} id - User id.
+ * @param {string} login - User login.
  */
-function goToUser(id) {
-  router.push(`/users/${id}`);
+function goToUser(login) {
+  router.push(`/users/${login}`);
 }
 
 /**
@@ -51,8 +51,8 @@ function openRemoveUserDialog(user) {
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function search() {
-  return UsersService.find().then((data) => {
-    users.value = data;
+  return UserService.find().then((data) => {
+    users.value = data.content;
   });
 }
 

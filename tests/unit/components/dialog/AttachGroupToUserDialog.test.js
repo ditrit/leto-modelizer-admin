@@ -2,7 +2,6 @@ import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-v
 import { mount } from '@vue/test-utils';
 import { vi } from 'vitest';
 import AttachGroupToUserDialog from 'src/components/dialog/AttachGroupToUserDialog.vue';
-import * as UserService from 'src/services/UserService';
 import * as GroupService from 'src/services/GroupService';
 import { Notify } from 'quasar';
 
@@ -10,7 +9,6 @@ installQuasarPlugin({
   plugins: [Notify],
 });
 
-vi.mock('src/services/UserService');
 vi.mock('src/services/GroupService');
 vi.stubGlobal('$sanitize', true);
 
@@ -18,7 +16,7 @@ describe('Test component: AttachGroupToUserDialog', () => {
   let wrapper;
 
   beforeEach(() => {
-    GroupService.find.mockImplementation(() => Promise.resolve(['group']));
+    GroupService.find.mockImplementation(() => Promise.resolve({ content: ['group'] }));
 
     wrapper = mount(AttachGroupToUserDialog);
   });
@@ -35,13 +33,13 @@ describe('Test component: AttachGroupToUserDialog', () => {
 
   describe('Test function: onSubmit', () => {
     beforeEach(() => {
-      wrapper.vm.selected = [{ objectId: '1' }, { objectId: '2' }];
-      wrapper.vm.userId = 'userId';
+      wrapper.vm.selected = [{ id: '1' }, { id: '2' }];
+      wrapper.vm.userLogin = 'userLogin';
     });
 
     it('should send positive notification after attaching groups to user', async () => {
       Notify.create = vi.fn();
-      UserService.addUserToGroup.mockImplementation(() => Promise.resolve());
+      GroupService.associateGroupAndUser.mockImplementation(() => Promise.resolve());
 
       await wrapper.vm.onSubmit();
 
@@ -50,7 +48,7 @@ describe('Test component: AttachGroupToUserDialog', () => {
 
     it('should send negative notification after failing to attach groups to user', async () => {
       Notify.create = vi.fn();
-      UserService.addUserToGroup.mockImplementation(() => Promise.reject());
+      GroupService.associateGroupAndUser.mockImplementation(() => Promise.reject());
 
       await wrapper.vm.onSubmit();
 

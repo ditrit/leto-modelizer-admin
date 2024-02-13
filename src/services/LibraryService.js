@@ -1,4 +1,4 @@
-import { api, getDefaultHeaders, manageError } from 'boot/axios';
+import { api, manageError } from 'boot/axios';
 
 /**
  * Get all libraries.
@@ -6,8 +6,8 @@ import { api, getDefaultHeaders, manageError } from 'boot/axios';
  * otherwise an error.
  */
 export async function find() {
-  return api.get('/api/classes/Library', { headers: getDefaultHeaders() })
-    .then(({ data }) => data.results)
+  return api.get('/libraries')
+    .then(({ data }) => data)
     .catch(manageError);
 }
 
@@ -17,7 +17,7 @@ export async function find() {
  * @returns {Promise<object>} Return a library.
  */
 export async function findById(id) {
-  return api.get(`/api/classes/Library/${id}`, { headers: getDefaultHeaders() })
+  return api.get(`/libraries/${id}`)
     .then(({ data }) => data)
     .catch(manageError);
 }
@@ -28,18 +28,18 @@ export async function findById(id) {
  * @returns {Promise<void>} Promise with nothing on success.
  */
 export async function remove(id) {
-  return api.delete(`/api/classes/Library/${id}`, { headers: getDefaultHeaders() })
+  return api.delete(`/libraries/${id}`)
     .catch(manageError);
 }
 
 /**
  * Create library.
  * @param {string} url - Url of the library.
- * @param {string} roleName - Name of the library role.
+ * @param {string} role - Name of the library role.
  * @returns {Promise<object>} Promise with library object on success otherwise an error.
  */
-export async function create(url, roleName) {
-  return api.post('/api/classes/Library', { url, roleName }, { headers: getDefaultHeaders() })
+export async function create(url, role) {
+  return api.post('/libraries', { url, role })
     .then(({ data }) => data)
     .catch(manageError);
 }
@@ -51,7 +51,7 @@ export async function create(url, roleName) {
  * @returns {Promise<object>} Promise with library object on success otherwise an error.
  */
 export async function synchronize(id, url) {
-  return api.put(`/api/classes/Library/${id}`, { url }, { headers: getDefaultHeaders() })
+  return api.put(`/libraries/${id}`, { url })
     .then(({ data }) => data)
     .catch(manageError);
 }

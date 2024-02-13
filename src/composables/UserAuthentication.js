@@ -1,55 +1,27 @@
 import { useUserStore } from 'stores/UserStore';
 import * as UserService from 'src/services/UserService';
-import * as RoleService from 'src/services/RoleService';
 
 /**
- * Set the current user's session token in the local storage.
- * @param {string} sessionToken - The session token to store.
- */
-export function setUserSessionToken(sessionToken) {
-  localStorage.setItem('sessionToken', sessionToken);
-}
-
-/**
- * Get the current user's session token from the local storage.
- * @returns {string|null} The user's session token from the local storage.
- */
-export function getUserSessionToken() {
-  return localStorage.getItem('sessionToken');
-}
-
-/**
- * Remove the current user's session token from the local storage.
- */
-export function removeUserSessionToken() {
-  localStorage.removeItem('sessionToken');
-}
-
-/**
- * Init user information and roles.
- * @param {string} sessionToken - The current user's session token.
+ * Init user information and permissions.
  * @returns {Promise<void>} Promise with nothing on success otherwise an error. Error is thrown if
- * user doesn't have the 'admin' role.
+ * user doesn't have the 'admin' related permissions.
  */
-export async function initUser(sessionToken) {
+export async function initUser() {
   const userStore = useUserStore();
 
   if (userStore.ready) {
     return;
   }
 
-  const user = await UserService.findCurrent(sessionToken);
+  const user = await UserService.getCurrent();
 
-  userStore.id = user.objectId;
-  userStore.username = user.username;
-  userStore.firstname = user.firstname;
-
-  const roles = await RoleService.findByUserId(user.objectId, sessionToken);
-
-  userStore.roles = roles.map(({ name }) => name);
+  userStore.name = user.name;
+  userStore.login = user.login;
+  userStore.email = user.email;
+  userStore.permissions = await UserService.getMyPermissions();
   userStore.ready = true;
 
-  if (!userStore.roles.includes('admin')) {
+  if (!userStore.permissions.some(({ action, entity }) => action === 'ACCESS' && entity === 'ADMIN')) {
     throw new Error();
   }
 }

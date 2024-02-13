@@ -57,7 +57,7 @@ function openRemoveGroupDialog(group) {
  */
 async function search() {
   return GroupService.find().then((data) => {
-    groups.value = data;
+    groups.value = data.content;
   });
 }
 

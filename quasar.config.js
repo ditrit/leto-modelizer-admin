@@ -118,11 +118,10 @@ module.exports = configure((/* ctx */) => ({
     open: false, // opens browser window automatically configuration.backendUrl
     cors: false,
     proxy: {
-      '/backend': {
+      '/api': {
         target: configuration.backendUrl,
         changeOrigin: true,
         secure: false,
-        rewrite: (p) => p.replace(/^\/backend/, ''),
       },
     },
   },

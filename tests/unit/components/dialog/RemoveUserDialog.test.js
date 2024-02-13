@@ -4,7 +4,8 @@ import { vi } from 'vitest';
 import RemoveUserDialog from 'src/components/dialog/RemoveUserDialog.vue';
 import * as UserService from 'src/services/UserService';
 import { Notify } from 'quasar';
-import * as UserAuthentication from 'src/composables/UserAuthentication';
+import { createPinia, setActivePinia } from 'pinia';
+import { useUserStore } from 'stores/UserStore';
 
 installQuasarPlugin({
   plugins: [Notify],
@@ -16,40 +17,33 @@ vi.stubGlobal('$sanitize', true);
 
 describe('Test component: RemoveUserDialog', () => {
   let wrapper;
+  let store;
 
   beforeEach(() => {
+    setActivePinia(createPinia());
+    store = useUserStore();
+    store.login = 'login';
+
     Notify.create = vi.fn();
     wrapper = mount(RemoveUserDialog);
   });
 
   describe('Test function: onSubmit', () => {
     it('should remove user', async () => {
-      wrapper.vm.user = { objectId: 'test' };
-      wrapper.vm.currentUser = { objectId: 'current' };
+      wrapper.vm.user = { login: 'user1' };
       UserService.remove.mockImplementation(() => Promise.resolve());
 
       await wrapper.vm.onSubmit();
 
-      expect(UserService.remove).toBeCalledWith('test');
+      expect(UserService.remove).toBeCalledWith('user1');
     });
 
-    it('should call removeUserSessionToken if removing current user', async () => {
-      UserAuthentication.removeUserSessionToken.mockImplementation(() => 'removeUserSessionToken');
-
-      wrapper.vm.user = { objectId: 'test' };
-      wrapper.vm.currentUser = { objectId: 'test' };
+    it('should change location if removing current user', async () => {
+      wrapper.vm.user = { login: 'login' };
 
       await wrapper.vm.onSubmit();
 
-      expect(UserAuthentication.removeUserSessionToken).toBeCalled();
-    });
-  });
-
-  describe('Test hook function: onMounted', () => {
-    it('should call getUserSessionToken', () => {
-      UserAuthentication.getUserSessionToken.mockImplementation(() => 'sessionToken');
-
-      expect(UserAuthentication.getUserSessionToken).toBeCalled();
+      expect(window.location.href).toEqual('http://localhost:3000/api/logout');
     });
   });
 });

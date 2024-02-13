@@ -3,7 +3,7 @@
     class="shadow-5"
     table-header-class="bg-grey-3"
     hide-bottom
-    row-key="objectId"
+    row-key="id"
     :pagination="pagination"
     :columns="columns"
     :rows="groups"
@@ -21,8 +21,8 @@
           rounded
           color="primary"
           icon="fa-solid fa-pen-to-square"
-          :data-cy="`group_${cell.row.objectId}_button_show`"
-          @click="$emit('show', cell.row.objectId)"
+          :data-cy="`group_${cell.row.id}_button_show`"
+          @click="$emit('show', cell.row.id)"
         />
         <q-btn
           v-if="removeAction"
@@ -31,7 +31,7 @@
           rounded
           color="negative"
           icon="fa-solid fa-trash"
-          :data-cy="`group_${cell.row.objectId}_button_remove`"
+          :data-cy="`group_${cell.row.id}_button_remove`"
           @click="$emit('remove', cell.row)"
         />
       </q-td>
@@ -80,7 +80,7 @@ const columns = computed(() => {
       required: true,
       label: t('GroupsTable.text.actionsColumn'),
       align: 'left',
-      field: 'objectId',
+      field: 'id',
       classes: 'group-actions',
     });
   }

@@ -37,7 +37,7 @@ describe('Test component: GroupPage', () => {
     useRouter.mockImplementation(() => ({ push }));
 
     GroupService.findById.mockImplementation(() => Promise.resolve(group));
-    UserService.findByGroupId.mockImplementation(() => Promise.resolve('users'));
+    UserService.findByGroupId.mockImplementation(() => Promise.resolve({ content: 'users' }));
 
     ReloadUsersEvent.subscribe.mockImplementation(() => {
       subscribe();

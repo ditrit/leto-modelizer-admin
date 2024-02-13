@@ -1,4 +1,4 @@
-import { api, getDefaultHeaders, manageError } from 'boot/axios';
+import { api, manageError } from 'boot/axios';
 
 /**
  * Get all groups.
@@ -6,8 +6,8 @@ import { api, getDefaultHeaders, manageError } from 'boot/axios';
  * otherwise an error.
  */
 export async function find() {
-  return api.get('/api/classes/Group', { headers: getDefaultHeaders() })
-    .then(({ data }) => data.results)
+  return api.get('/groups')
+    .then(({ data }) => data)
     .catch(manageError);
 }
 
@@ -17,7 +17,18 @@ export async function find() {
  * @returns {Promise<object>} Return a group.
  */
 export async function findById(id) {
-  return api.get(`/api/classes/Group/${id}`, { headers: getDefaultHeaders() })
+  return api.get(`/groups/${id}`)
+    .then(({ data }) => data)
+    .catch(manageError);
+}
+
+/**
+ * Create group.
+ * @param {string} name - Group name.
+ * @returns {Promise<object>} Promise with group object on success otherwise an error.
+ */
+export async function create(name) {
+  return api.post('/groups', { name })
     .then(({ data }) => data)
     .catch(manageError);
 }
@@ -28,19 +39,41 @@ export async function findById(id) {
  * @returns {Promise<void>} Promise with nothing on success.
  */
 export async function remove(id) {
-  return api.delete(`/api/classes/Group/${id}`, { headers: getDefaultHeaders() })
+  return api.delete(`/groups/${id}`)
     .catch(manageError);
 }
 
 /**
- * Get all groups of a user.
- * @param {string} userId - User id.
+ * Get all groups of a user by its login.
+ * @param {string} login - User login.
  * @returns {Promise<object[]>} Return an array of groups.
  */
-export async function findByUserId(userId) {
-  const queryParameters = `where={"users":{"__type":"Pointer","className":"_User","objectId":"${userId}"}}`;
-
-  return api.get(`/api/classes/Group?${queryParameters}`, { headers: getDefaultHeaders() })
-    .then(({ data }) => data.results)
+export async function findByLogin(login) {
+  return api.get(`users/${login}/groups`)
+    .then(({ data }) => data)
     .catch(manageError);
+}
+
+/**
+ * Associate group and user.
+ * @param {string} userLogin - User login.
+ * @param {string} groupId - Group id.
+ * @returns {Promise<object>} Promise with nothing on success otherwise an error.
+ */
+export async function associateGroupAndUser(userLogin, groupId) {
+  return api.post(`/groups/${groupId}/users`, userLogin, {
+    headers: {
+      'Content-Type': 'text/plain',
+    },
+  }).catch(manageError);
+}
+
+/**
+ * Dissociate group and user.
+ * @param {string} userLogin - User login.
+ * @param {string} groupId - Group id.
+ * @returns {Promise<object>} Promise with nothing on success otherwise an error.
+ */
+export async function dissociateGroupAndUser(userLogin, groupId) {
+  return api.delete(`/groups/${groupId}/users/${userLogin}`).catch(manageError);
 }

@@ -8,15 +8,7 @@
     data-cy="user-button"
   >
     <template #label>
-      <q-avatar
-        color="primary"
-        text-color="white"
-        size="md"
-        font-size="12px"
-        :title="`${firstname} ${username}`"
-      >
-        {{ userInitials }}
-      </q-avatar>
+      <user-avatar :login="login" />
     </template>
     <q-list>
       <q-item
@@ -42,13 +34,10 @@
 <script setup>
 import { computed } from 'vue';
 import { useUserStore } from 'src/stores/UserStore';
+import UserAvatar from 'src/components/avatar/UserAvatar.vue';
 
 const userStore = useUserStore();
-const firstname = computed(() => userStore.firstname);
-const username = computed(() => userStore.username);
-const userInitials = computed(
-  () => `${userStore.firstname?.at(0) || ''}${userStore.username?.at(0) || ''}`.toUpperCase(),
-);
+const login = computed(() => userStore.login);
 
 /**
  * Go back to leto-modelizer.

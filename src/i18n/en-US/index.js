@@ -82,7 +82,7 @@ export default {
   },
   LibraryPage: {
     text: {
-      author: 'Author:',
+      maintainer: 'Maintainer:',
       description: 'Description:',
       version: 'Version:',
       goBack: 'Return to previous page',
@@ -116,7 +116,7 @@ export default {
   UsersTable: {
     text: {
       nameColumn: 'Name',
-      userNameColumn: 'UserName',
+      loginColumn: 'Login',
       emailColumn: 'Email',
       actionsColumn: 'Actions',
     },
@@ -151,7 +151,7 @@ export default {
       cancel: 'Cancel',
       confirm: 'Confirm',
       notifySuccess: 'User is removed.',
-      warning: 'You will delete yourself. If you confirm, you will be redirected to leto modelizer.',
+      warning: 'You will delete yourself and any associated groups, permissions, and roles. If you confirm, you will be automatically disconnected.',
     },
   },
   RemoveGroupDialog: {
@@ -194,13 +194,13 @@ export default {
     text: {
       title: 'Add library',
       url: 'Url of library',
-      roleName: 'Name of library role',
+      role: 'Name of library role',
       notEmpty: 'Field is required.',
       notifyError: 'Error during library creation.',
       notifySuccess: 'Library is created.',
       urlAlreadyExists: 'Library with this url already exists.',
       urlNotFound: 'Library with this url can not be downloaded.',
-      roleNameAlreadyExists: 'Library with this roleName already exists.',
+      roleAlreadyExists: 'Library with this role already exists.',
     },
   },
   InformationLibraryTabPanel: {

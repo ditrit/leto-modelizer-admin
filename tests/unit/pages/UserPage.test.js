@@ -35,12 +35,12 @@ describe('Test component: UserPage', () => {
     unsubscribe = vi.fn();
     Notify.create = vi.fn();
     push = vi.fn();
-    useRoute.mockImplementation(() => ({ params: { id: 'id1' } }));
+    useRoute.mockImplementation(() => ({ params: { login: 'id1' } }));
     useRouter.mockImplementation(() => ({ push }));
 
-    UserService.findById.mockImplementation(() => Promise.resolve(user));
-    GroupService.findByUserId.mockImplementation(() => Promise.resolve(['group']));
-    RoleService.findByUserId.mockImplementation(() => Promise.resolve([{ name: 'role', type: 'type' }]));
+    UserService.findByLogin.mockImplementation(() => Promise.resolve(user));
+    GroupService.findByLogin.mockImplementation(() => Promise.resolve({ content: ['group'] }));
+    RoleService.findByLogin.mockImplementation(() => Promise.resolve({ content: [{ name: 'role', type: 'type' }] }));
 
     ReloadGroupsEvent.subscribe.mockImplementation(() => {
       subscribe();
@@ -66,7 +66,7 @@ describe('Test component: UserPage', () => {
     });
 
     it('should redirect on unknown user', async () => {
-      UserService.findById.mockImplementation(() => Promise.reject());
+      UserService.findByLogin.mockImplementation(() => Promise.reject());
 
       await wrapper.vm.loadUser();
 
@@ -102,7 +102,7 @@ describe('Test component: UserPage', () => {
       expect(DialogEvent.next).toBeCalledWith({
         key: 'attach-group-to-user',
         type: 'open',
-        userId: 'id1',
+        userLogin: 'id1',
       });
     });
   });

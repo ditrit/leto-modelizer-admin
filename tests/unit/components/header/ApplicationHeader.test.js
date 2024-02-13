@@ -1,5 +1,5 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest';
-import { mount } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import ApplicationHeader from 'src/components/header/ApplicationHeader.vue';
 import { createPinia, setActivePinia } from 'pinia';
 
@@ -10,7 +10,7 @@ describe('Test component: ApplicationHeader', () => {
 
   beforeEach(() => {
     setActivePinia(createPinia());
-    wrapper = mount(ApplicationHeader, {});
+    wrapper = shallowMount(ApplicationHeader, {});
   });
 
   it('should mount the component', () => {

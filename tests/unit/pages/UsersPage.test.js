@@ -27,7 +27,7 @@ describe('Test component: UsersPage', () => {
 
     useRouter.mockImplementation(() => ({ push }));
 
-    UserService.find.mockImplementation(() => Promise.resolve('users'));
+    UserService.find.mockImplementation(() => Promise.resolve({ content: 'users' }));
 
     ReloadUsersEvent.subscribe.mockImplementation(() => {
       subscribe();

@@ -47,13 +47,12 @@ import { ref } from 'vue';
 import GroupsTable from 'src/components/tables/GroupsTable.vue';
 import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 import * as GroupService from 'src/services/GroupService';
-import * as UserService from 'src/services/UserService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const submitting = ref(false);
-const userId = ref('');
+const userLogin = ref('');
 const selected = ref([]);
 const groups = ref([]);
 
@@ -63,13 +62,13 @@ const groups = ref([]);
  */
 async function search() {
   return GroupService.find().then((data) => {
-    groups.value = data;
+    groups.value = data.content;
   });
 }
 
 const { show } = useDialog('attach-group-to-user', (event) => {
   submitting.value = false;
-  userId.value = event.userId;
+  userLogin.value = event.userLogin;
   return search();
 });
 
@@ -80,10 +79,10 @@ const { show } = useDialog('attach-group-to-user', (event) => {
 async function onSubmit() {
   submitting.value = true;
 
-  const groupIdList = selected.value.map(({ objectId }) => objectId);
+  const groupIdList = selected.value.map(({ id }) => id);
 
   await Promise.allSettled(groupIdList
-    .map((groupId) => UserService.addUserToGroup(userId.value, groupId)
+    .map((groupId) => GroupService.associateGroupAndUser(userLogin.value, groupId)
       .catch(() => {
         Notify.create({
           type: 'negative',
@@ -97,7 +96,7 @@ async function onSubmit() {
       results.forEach(({ status, reason }) => {
         if (status === 'rejected' && reason.message) {
           selected.value = selected.value
-            .filter(({ objectId }) => objectId === reason.message);
+            .filter(({ id }) => id === reason.message);
         }
       });
 

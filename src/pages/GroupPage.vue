@@ -98,7 +98,7 @@ async function loadGroup() {
  */
 async function loadUsers() {
   return UserService.findByGroupId(route.params.id).then((data) => {
-    users.value = data;
+    users.value = data.content;
   });
 }
 

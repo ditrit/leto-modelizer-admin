@@ -22,7 +22,7 @@ describe('Test component: RemoveGroupDialog', () => {
 
   describe('Test function: onSubmit', () => {
     it('should remove group', async () => {
-      wrapper.vm.group = { objectId: 'test' };
+      wrapper.vm.group = { id: 'test' };
       GroupService.remove.mockImplementation(() => Promise.resolve());
 
       await wrapper.vm.onSubmit();
