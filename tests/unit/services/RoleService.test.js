@@ -45,7 +45,7 @@ describe('Test: RoleService', () => {
         name: 'newRole',
       };
 
-      api.post.mockImplementation(() => Promise.resolve());
+      api.post.mockImplementation(() => Promise.resolve({ data: newRole }));
 
       await RoleService.create('newRole');
       expect(api.post).toBeCalledWith('/roles', newRole);
