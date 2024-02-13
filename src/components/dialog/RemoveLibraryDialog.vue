@@ -56,7 +56,7 @@ const { show } = useDialog('remove-library', (event) => {
 async function onSubmit() {
   submitting.value = true;
 
-  await LibraryService.remove(library.value.objectId);
+  await LibraryService.remove(library.value.id);
 
   Notify.create({
     type: 'positive',

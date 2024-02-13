@@ -22,7 +22,7 @@ describe('Test component: RemoveLibraryDialog', () => {
 
   describe('Test function: onSubmit', () => {
     it('should remove library', async () => {
-      wrapper.vm.library = { objectId: 'test' };
+      wrapper.vm.library = { id: 'test' };
       LibraryService.remove.mockImplementation(() => Promise.resolve());
 
       await wrapper.vm.onSubmit();

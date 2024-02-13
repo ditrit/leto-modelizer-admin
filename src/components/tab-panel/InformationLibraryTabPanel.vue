@@ -9,7 +9,7 @@
         outlined
         bg-color="white"
         class="library-field-url q-mb-md"
-        data-cy="library-field-url"
+        data-cy="library_field_url"
         :rules="[notEmpty]"
         :error="urlError"
         :error-message="urlErrorMessage"
@@ -19,7 +19,7 @@
         no-caps
         type="submit"
         color="positive"
-        data-cy="library-button-synchronize"
+        data-cy="library_button_synchronize"
         :loading="loading"
         :icon="$t('InformationLibraryTabPanel.icon.synchronize')"
         :label="$t('InformationLibraryTabPanel.text.synchronize')"
@@ -70,7 +70,7 @@ async function synchronize() {
   loading.value = true;
   clearUrlError();
 
-  return LibraryService.synchronize(props.library.objectId, url.value)
+  return LibraryService.synchronize(props.library.id, url.value)
     .then(() => {
       emits('synchronize');
 
