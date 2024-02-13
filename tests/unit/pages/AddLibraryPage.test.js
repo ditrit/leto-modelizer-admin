@@ -81,9 +81,14 @@ describe('Test component: AddLibraryPage', () => {
     });
 
     it('should set the "url already exists" error when this error is thrown', async () => {
-      LibraryService.create.mockImplementation(() => Promise.reject(
-        new Error('Library with this url already exists'),
-      ));
+      const error = {
+        response: {
+          data: {
+            message: 'Library with this url already exists',
+          },
+        },
+      };
+      LibraryService.create.mockImplementation(() => Promise.reject(error));
 
       await wrapper.vm.onSubmit();
 
@@ -95,9 +100,14 @@ describe('Test component: AddLibraryPage', () => {
     });
 
     it('should set the "role name already exists" error when this error is thrown', async () => {
-      LibraryService.create.mockImplementation(() => Promise.reject(
-        new Error('Library with this role already exists'),
-      ));
+      const error = {
+        response: {
+          data: {
+            message: 'Library with this role already exists',
+          },
+        },
+      };
+      LibraryService.create.mockImplementation(() => Promise.reject(error));
 
       await wrapper.vm.onSubmit();
 
@@ -109,9 +119,14 @@ describe('Test component: AddLibraryPage', () => {
     });
 
     it('should set the "url not found" error for all other errors thrown', async () => {
-      LibraryService.create.mockImplementation(() => Promise.reject(
-        new Error('error'),
-      ));
+      const error = {
+        response: {
+          data: {
+            message: 'error',
+          },
+        },
+      };
+      LibraryService.create.mockImplementation(() => Promise.reject(error));
 
       await wrapper.vm.onSubmit();
 

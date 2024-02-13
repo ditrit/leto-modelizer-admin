@@ -64,7 +64,14 @@ describe('Test component: InformationLibraryTabPanel', async () => {
     });
 
     it('should create error toast when url is not found', async () => {
-      LibraryService.synchronize.mockImplementation(() => Promise.reject({ message: 'other' }));
+      const error = {
+        response: {
+          data: {
+            message: 'other',
+          },
+        },
+      };
+      LibraryService.synchronize.mockImplementation(() => Promise.reject(error));
       Notify.create = vi.fn();
 
       await wrapper.vm.synchronize();
@@ -76,9 +83,14 @@ describe('Test component: InformationLibraryTabPanel', async () => {
     });
 
     it('should create error toast on error when url already exists', async () => {
-      LibraryService.synchronize.mockImplementation(() => Promise.reject({
-        message: 'Library with this url already exists',
-      }));
+      const error = {
+        response: {
+          data: {
+            message: 'Library with this url already exists',
+          },
+        },
+      };
+      LibraryService.synchronize.mockImplementation(() => Promise.reject(error));
       Notify.create = vi.fn();
 
       await wrapper.vm.synchronize();
