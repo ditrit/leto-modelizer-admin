@@ -1,18 +1,18 @@
 # leto-modelizer-admin (leto-modelizer-admin)
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ditrit_leto-modelizer-admin&metric=alert_status)](https://sonarcloud.io/summary/overall?id=ditrit_leto-modelizer-admin)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=ditrit_leto-modelizer-api&metric=reliability_rating)](https://sonarcloud.io/summary/overall?id=ditrit_leto-modelizer-api)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ditrit_leto-modelizer-api&metric=sqale_rating)](https://sonarcloud.io/summary/overall?id=ditrit_leto-modelizer-api)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ditrit_leto-modelizer-api&metric=security_rating)](https://sonarcloud.io/summary/overall?id=ditrit_leto-modelizer-api)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=ditrit_leto-modelizer-admin&metric=reliability_rating)](https://sonarcloud.io/summary/overall?id=ditrit_leto-modelizer-admin)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ditrit_leto-modelizer-admin&metric=sqale_rating)](https://sonarcloud.io/summary/overall?id=ditrit_leto-modelizer-admin)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ditrit_leto-modelizer-admin&metric=security_rating)](https://sonarcloud.io/summary/overall?id=ditrit_leto-modelizer-admin)
 
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=ditrit_leto-modelizer-api&metric=code_smells)](https://sonarcloud.io/summary/overall?id=ditrit_leto-modelizer-api)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ditrit_leto-modelizer-api&metric=bugs)](https://sonarcloud.io/summary/overall?id=ditrit_leto-modelizer-api)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=ditrit_leto-modelizer-api&metric=vulnerabilities)](https://sonarcloud.io/summary/overall?id=ditrit_leto-modelizer-api)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=ditrit_leto-modelizer-api&metric=sqale_index)](https://sonarcloud.io/summary/overall?id=ditrit_leto-modelizer-api)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=ditrit_leto-modelizer-admin&metric=code_smells)](https://sonarcloud.io/summary/overall?id=ditrit_leto-modelizer-admin)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ditrit_leto-modelizer-admin&metric=bugs)](https://sonarcloud.io/summary/overall?id=ditrit_leto-modelizer-admin)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=ditrit_leto-modelizer-admin&metric=vulnerabilities)](https://sonarcloud.io/summary/overall?id=ditrit_leto-modelizer-admin)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=ditrit_leto-modelizer-admin&metric=sqale_index)](https://sonarcloud.io/summary/overall?id=ditrit_leto-modelizer-admin)
 
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=ditrit_leto-modelizer-api&metric=ncloc)](https://sonarcloud.io/summary/overall?id=ditrit_leto-modelizer-api)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ditrit_leto-modelizer-api&metric=coverage)](https://sonarcloud.io/summary/overall?id=ditrit_leto-modelizer-api)
-[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=ditrit_leto-modelizer-api&metric=duplicated_lines_density)](https://sonarcloud.io/summary/overall?id=ditrit_leto-modelizer-api)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=ditrit_leto-modelizer-admin&metric=ncloc)](https://sonarcloud.io/summary/overall?id=ditrit_leto-modelizer-admin)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ditrit_leto-modelizer-admin&metric=coverage)](https://sonarcloud.io/summary/overall?id=ditrit_leto-modelizer-admin)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=ditrit_leto-modelizer-admin&metric=duplicated_lines_density)](https://sonarcloud.io/summary/overall?id=ditrit_leto-modelizer-admin)
 
 [![](https://dcbadge.vercel.app/api/server/zkKfj9gj2C?style=flat&theme=default-inverted)](https://discord.gg/zkKfj9gj2C)
 
