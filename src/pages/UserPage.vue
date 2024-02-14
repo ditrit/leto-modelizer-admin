@@ -59,7 +59,8 @@
       <groups-table
         :groups="groups"
         :show-action="false"
-        @remove="openDetachGroupFromUserDialog"
+        :remove-action="false"
+        @detach="openDetachGroupFromUserDialog"
       />
     </q-card-section>
   </q-page>

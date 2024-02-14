@@ -12,6 +12,7 @@
             v-model:selected="selected"
             :groups="groups"
             :show-action="false"
+            :detach-action="false"
             :remove-action="false"
             selection="multiple"
             class="full-width"

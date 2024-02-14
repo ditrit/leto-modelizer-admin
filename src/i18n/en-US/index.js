@@ -105,12 +105,26 @@ export default {
     text: {
       nameColumn: 'Name',
       actionsColumn: 'Actions',
+      showAction: 'Show library',
+      removeAction: 'Remove library',
+    },
+    icon: {
+      showAction: 'fa-solid fa-pen-to-square',
+      removeAction: 'fa-solid fa-trash',
     },
   },
   GroupsTable: {
     text: {
       nameColumn: 'Name',
       actionsColumn: 'Actions',
+      showAction: 'Show group',
+      removeAction: 'Remove group',
+      detachAction: 'Detach group',
+    },
+    icon: {
+      showAction: 'fa-solid fa-pen-to-square',
+      removeAction: 'fa-solid fa-trash',
+      detachAction: 'fa-solid fa-link-slash',
     },
   },
   UsersTable: {
@@ -119,20 +133,19 @@ export default {
       loginColumn: 'Login',
       emailColumn: 'Email',
       actionsColumn: 'Actions',
+      showAction: 'Show user',
+      removeAction: 'Remove user',
+      detachAction: 'Detach user',
+    },
+    icon: {
+      showAction: 'fa-solid fa-pen-to-square',
+      removeAction: 'fa-solid fa-trash',
+      detachAction: 'fa-solid fa-link-slash',
     },
   },
   RolesTable: {
     text: {
       nameColumn: 'Name',
-      typeColumn: 'Type',
-      roleTypeLibrary: 'Library',
-      roleTypeSystem: 'System',
-      roleTypeFunctional: 'Functional',
-    },
-    color: {
-      roleTypeLibrary: 'blue',
-      roleTypeSystem: 'orange',
-      roleTypeFunctional: 'teal',
     },
   },
   RemoveLibraryDialog: {
@@ -165,20 +178,20 @@ export default {
   },
   DetachGroupFromUserDialog: {
     text: {
-      title: 'Do you want to remove the group "{group}" from the user "{user}" ?',
+      title: 'Do you want to detach the group "{group}" from the user "{user}" ?',
       content: 'You can always reassign the group to the user.',
       cancel: 'Cancel',
       confirm: 'Confirm',
-      notifySuccess: 'Group is removed from user.',
+      notifySuccess: 'Group is detached from user.',
     },
   },
   DetachUserFromGroupDialog: {
     text: {
-      title: 'Do you want to remove the user "{user}" from the group "{group}" ?',
+      title: 'Do you want to detach the user "{user}" from the group "{group}" ?',
       content: 'You can always reassign the user to the group.',
       cancel: 'Cancel',
       confirm: 'Confirm',
-      notifySuccess: 'User is removed from group.',
+      notifySuccess: 'User is detached from group.',
     },
   },
   AttachGroupToUserDialog: {

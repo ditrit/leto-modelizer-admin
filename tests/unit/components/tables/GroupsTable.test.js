@@ -13,6 +13,7 @@ describe('Test component: GroupsTable', () => {
         groups: [],
         showAction: true,
         removeAction: false,
+        detachAction: false,
       },
     });
     await wrapper.vm.$nextTick();
@@ -27,15 +28,27 @@ describe('Test component: GroupsTable', () => {
       await wrapper.setProps({
         showAction: false,
         removeAction: true,
+        detachAction: false,
       });
 
       expect(wrapper.vm.displayActionsColumn).toBeTruthy();
     });
 
-    it('should be false if removeAction and showAction are false', async () => {
+    it('should be true if detachAction is true', async () => {
       await wrapper.setProps({
         showAction: false,
         removeAction: false,
+        detachAction: true,
+      });
+
+      expect(wrapper.vm.displayActionsColumn).toBeTruthy();
+    });
+
+    it('should be false if remove, show and detach actions are false', async () => {
+      await wrapper.setProps({
+        showAction: false,
+        removeAction: false,
+        detachAction: false,
       });
 
       expect(wrapper.vm.displayActionsColumn).toBeFalsy();
@@ -68,6 +81,7 @@ describe('Test component: GroupsTable', () => {
       await wrapper.setProps({
         showAction: false,
         removeAction: false,
+        detachAction: false,
       });
 
       expect(wrapper.vm.columns).toStrictEqual([
