@@ -8,6 +8,7 @@
     </h4>
     <users-table
       :users="users"
+      :detach-action="false"
       @show="goToUser"
       @remove="openRemoveUserDialog"
     />

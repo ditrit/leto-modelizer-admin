@@ -48,7 +48,8 @@
       <users-table
         :users="users"
         :show-action="false"
-        @remove="openDetachUserFromGroupDialog"
+        :remove-action="false"
+        @detach="openDetachUserFromGroupDialog"
       />
     </q-card-section>
   </q-page>
