@@ -90,9 +90,9 @@ Feature: Test roundtrip of the application: Users
     ####################################################
 
     ## 401 Should successfully detach a group
-    When I click on '[data-cy="group_1_button_remove"]'
+    When I click on '[data-cy="group_1_button_detach"]'
     And  I click on '[data-cy="button_confirm"]'
-    Then I expect 'positive' toast to appear with text 'Group is removed from user.'
+    Then I expect 'positive' toast to appear with text 'Group is detached from user.'
 
     When I click on '[data-cy="page_user_go_back"]'
     Then I expect current url is '/users'
