@@ -19,7 +19,8 @@
           flat
           rounded
           color="primary"
-          icon="fa-solid fa-pen-to-square"
+          :icon="t('LibrariesTable.icon.showAction')"
+          :title="t('LibrariesTable.text.showAction')"
           :data-cy="`library_${props.row.id}_button_show`"
           @click="$emit('show', props.row.id)"
         />
@@ -28,7 +29,8 @@
           flat
           rounded
           color="negative"
-          icon="fa-solid fa-trash"
+          :icon="t('LibrariesTable.icon.removeAction')"
+          :title="t('LibrariesTable.text.removeAction')"
           :data-cy="`library_${props.row.id}_button_remove`"
           @click="$emit('remove', props.row)"
         />

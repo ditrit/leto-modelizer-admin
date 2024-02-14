@@ -20,7 +20,8 @@
           flat
           rounded
           color="primary"
-          icon="fa-solid fa-pen-to-square"
+          :icon="t('GroupsTable.icon.showAction')"
+          :title="t('GroupsTable.text.showAction')"
           :data-cy="`group_${cell.row.id}_button_show`"
           @click="$emit('show', cell.row.id)"
         />
@@ -30,7 +31,8 @@
           flat
           rounded
           color="negative"
-          icon="fa-solid fa-link-slash"
+          :icon="t('GroupsTable.icon.detachAction')"
+          :title="t('GroupsTable.text.detachAction')"
           :data-cy="`group_${cell.row.id}_button_detach`"
           @click="$emit('detach', cell.row)"
         />
@@ -40,7 +42,8 @@
           flat
           rounded
           color="negative"
-          icon="fa-solid fa-trash"
+          :icon="t('GroupsTable.icon.removeAction')"
+          :title="t('GroupsTable.text.removeAction')"
           :data-cy="`group_${cell.row.id}_button_remove`"
           @click="$emit('remove', cell.row)"
         />

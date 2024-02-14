@@ -33,7 +33,8 @@
           flat
           rounded
           color="primary"
-          icon="fa-solid fa-pen-to-square"
+          :icon="t('UsersTable.icon.showAction')"
+          :title="t('UsersTable.text.showAction')"
           :data-cy="`user_${cell.row.login}_button_show`"
           @click="$emit('show', cell.row.login)"
         />
@@ -43,7 +44,8 @@
           flat
           rounded
           color="negative"
-          icon="fa-solid fa-link-slash"
+          :icon="t('UsersTable.icon.detachAction')"
+          :title="t('UsersTable.text.detachAction')"
           :data-cy="`user_${cell.row.login}_button_detach`"
           @click="$emit('detach', cell.row)"
         />
@@ -53,7 +55,8 @@
           flat
           rounded
           color="negative"
-          icon="fa-solid fa-trash"
+          :icon="t('UsersTable.icon.removeAction')"
+          :title="t('UsersTable.text.removeAction')"
           :data-cy="`user_${cell.row.login}_button_remove`"
           @click="$emit('remove', cell.row)"
         />
@@ -122,7 +125,7 @@ const columns = computed(() => {
     arrayOfColumns.push({
       name: 'actions',
       required: true,
-      label: t('GroupsTable.text.actionsColumn'),
+      label: t('UsersTable.text.actionsColumn'),
       align: 'left',
       field: 'login',
       classes: 'group-actions',
