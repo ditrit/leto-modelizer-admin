@@ -89,11 +89,9 @@ Feature: Test roundtrip of the application: Users
     ################## Detach group ##################
     ####################################################
 
-    # 401 Should successfully detach a group
+    ## 401 Should successfully detach a group
     When I click on '[data-cy="group_1_button_remove"]'
-    Then I expect '[data-cy="button_confirm"]' exists
-
-    When I click on '[data-cy="button_confirm"]'
+    And  I click on '[data-cy="button_confirm"]'
     Then I expect 'positive' toast to appear with text 'Group is removed from user.'
 
     When I click on '[data-cy="page_user_go_back"]'

@@ -48,7 +48,7 @@
       <users-table
         :users="users"
         :show-action="false"
-        :remove-action="false"
+        @remove="openDetachUserFromGroupDialog"
       />
     </q-card-section>
   </q-page>
@@ -125,6 +125,19 @@ function openAttachUserToGroupDialog() {
     key: 'attach-user-to-group',
     type: 'open',
     groupId: route.params.id,
+  });
+}
+
+/**
+ * Open dialog to detach a user from a group.
+ * @param {object} user - User object to remove for the dialog.
+ */
+function openDetachUserFromGroupDialog(user) {
+  DialogEvent.next({
+    key: 'detach-user-from-group',
+    type: 'open',
+    group: group.value,
+    user,
   });
 }
 

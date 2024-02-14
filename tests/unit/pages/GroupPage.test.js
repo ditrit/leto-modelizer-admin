@@ -88,6 +88,20 @@ describe('Test component: GroupPage', () => {
     });
   });
 
+  describe('Test function: openDetachUserFromGroupDialog', () => {
+    it('should open dialog', () => {
+      DialogEvent.next.mockImplementation();
+      wrapper.vm.openDetachUserFromGroupDialog('user');
+
+      expect(DialogEvent.next).toBeCalledWith({
+        key: 'detach-user-from-group',
+        type: 'open',
+        group: { id: 1 },
+        user: 'user',
+      });
+    });
+  });
+
   describe('Test hook function: onMounted', () => {
     it('should subscribe ReloadUsersEvent', () => {
       expect(subscribe).toHaveBeenCalledTimes(1);

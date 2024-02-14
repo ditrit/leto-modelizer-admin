@@ -59,7 +59,7 @@
       <groups-table
         :groups="groups"
         :show-action="false"
-        @remove="openDetachGroupDialog"
+        @remove="openDetachGroupFromUserDialog"
       />
     </q-card-section>
   </q-page>
@@ -158,9 +158,9 @@ function openAttachGroupToUserDialog() {
  * Open dialog to remove user group.
  * @param {object} group - User group object to remove for the dialog.
  */
-function openDetachGroupDialog(group) {
+function openDetachGroupFromUserDialog(group) {
   DialogEvent.next({
-    key: 'detach-group',
+    key: 'detach-group-from-user',
     type: 'open',
     group,
     user: user.value,
