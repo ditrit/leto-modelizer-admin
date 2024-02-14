@@ -25,6 +25,16 @@
           @click="$emit('show', cell.row.id)"
         />
         <q-btn
+          v-if="detachAction"
+          dense
+          flat
+          rounded
+          color="negative"
+          icon="fa-solid fa-link-slash"
+          :data-cy="`group_${cell.row.id}_button_detach`"
+          @click="$emit('detach', cell.row)"
+        />
+        <q-btn
           v-if="removeAction"
           dense
           flat
@@ -43,7 +53,7 @@
 import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-defineEmits(['remove', 'show']);
+defineEmits(['remove', 'show', 'detach']);
 const props = defineProps({
   groups: {
     type: Array,
@@ -57,13 +67,19 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  detachAction: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const { t } = useI18n();
 const pagination = ref({
   rowsPerPage: 0, // infinite
 });
-const displayActionsColumn = computed(() => props.showAction || props.removeAction);
+const displayActionsColumn = computed(
+  () => props.showAction || props.removeAction || props.detachAction,
+);
 const columns = computed(() => {
   const arrayOfColumns = [{
     name: 'name',

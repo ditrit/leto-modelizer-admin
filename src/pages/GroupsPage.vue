@@ -8,6 +8,7 @@
     </h4>
     <groups-table
       :groups="groups"
+      :detach-action="false"
       @show="goToGroup"
       @remove="openRemoveGroupDialog"
     />
