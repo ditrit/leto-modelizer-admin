@@ -212,6 +212,15 @@ export default {
       notifySuccess: 'User(s) successfully attached to the group.',
     },
   },
+  AttachRoleToUserDialog: {
+    text: {
+      title: 'Attach one or more roles to user',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifyError: 'Error during attachment of a role to the user.',
+      notifySuccess: 'Role(s) successfully attached to the user.',
+    },
+  },
   AddLibraryPage: {
     text: {
       title: 'Add library',
