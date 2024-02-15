@@ -35,3 +35,17 @@ export async function create(name) {
 export async function remove(id) {
   return api.delete(`/roles/${id}`);
 }
+
+/**
+ * Associate role and user.
+ * @param {string} userLogin - User login.
+ * @param {string} roleId - Role id.
+ * @returns {Promise<object>} Promise with nothing on success otherwise an error.
+ */
+export async function associateRoleAndUser(userLogin, roleId) {
+  return api.post(`/roles/${roleId}/users`, userLogin, {
+    headers: {
+      'Content-Type': 'text/plain',
+    },
+  }).then(({ data }) => data);
+}

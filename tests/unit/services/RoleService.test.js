@@ -60,4 +60,22 @@ describe('Test: RoleService', () => {
       expect(api.delete).toBeCalledWith('/roles/test');
     });
   });
+
+  describe('Test function: associateRoleAndUser', () => {
+    it('should call api.post with endpoint using "roleId"', async () => {
+      api.post.mockImplementation(() => Promise.resolve({ data: 'data' }));
+
+      await RoleService.associateRoleAndUser('userLogin', 'roleId');
+
+      expect(api.post).toBeCalledWith(
+        '/roles/roleId/users',
+        'userLogin',
+        {
+          headers: {
+            'Content-Type': 'text/plain',
+          },
+        },
+      );
+    });
+  });
 });
