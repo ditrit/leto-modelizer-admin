@@ -1,19 +1,19 @@
 <template>
   <q-dialog v-model="show">
-    <q-card class="attach-user-to-group-form">
+    <q-card class="attach-role-to-user-form">
       <q-card-section class="flex row justify-center">
         <span class="text-h6">
-          {{ $t('AttachUserToGroupDialog.text.title') }}
+          {{ $t('AttachRoleToUserDialog.text.title') }}
         </span>
       </q-card-section>
       <q-form @submit="onSubmit">
         <q-card-section>
-          <users-table
+          <roles-table
             v-model:selected="selected"
-            :users="users"
+            :roles="roles"
             :show-action="false"
-            :detach-action="false"
             :remove-action="false"
+            :detach-action="false"
             selection="multiple"
             class="full-width"
           />
@@ -21,11 +21,11 @@
         <q-card-actions align="center">
           <q-btn
             v-close-popup
-            :label="$t('AttachUserToGroupDialog.text.cancel')"
+            :label="$t('AttachRoleToUserDialog.text.cancel')"
             color="negative"
           />
           <q-btn
-            :label="$t('AttachUserToGroupDialog.text.confirm')"
+            :label="$t('AttachRoleToUserDialog.text.confirm')"
             :loading="submitting"
             :disable="!selected.length"
             type="submit"
@@ -45,55 +45,54 @@
 <script setup>
 import { useDialog } from 'src/composables/Dialog';
 import { ref } from 'vue';
-import UsersTable from 'src/components/tables/UsersTable.vue';
-import ReloadUsersEvent from 'src/composables/events/ReloadUsersEvent';
-import * as UserService from 'src/services/UserService';
-import * as GroupService from 'src/services/GroupService';
+import RolesTable from 'src/components/tables/RolesTable.vue';
+import ReloadRolesEvent from 'src/composables/events/ReloadRolesEvent';
+import * as RoleService from 'src/services/RoleService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const submitting = ref(false);
-const groupId = ref('');
+const userLogin = ref('');
 const selected = ref([]);
-const users = ref([]);
+const roles = ref([]);
 
 /**
- * Get users.
+ * Get roles.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function search() {
-  return UserService.find().then((data) => {
-    users.value = data.content;
+  return RoleService.find().then((data) => {
+    roles.value = data.content;
   });
 }
 
-const { show } = useDialog('attach-user-to-group', (event) => {
+const { show } = useDialog('attach-role-to-user', (event) => {
   submitting.value = false;
-  groupId.value = event.groupId;
+  userLogin.value = event.userLogin;
   selected.value = [];
   return search();
 });
 
 /**
- * Attach one or more users to a group.
+ * Attach one or more roles to a user.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function onSubmit() {
   submitting.value = true;
 
-  const userLoginList = selected.value.map(({ login }) => login);
+  const roleIdList = selected.value.map(({ id }) => id);
 
-  await Promise.allSettled(userLoginList
-    .map((userLogin) => GroupService.associateGroupAndUser(userLogin, groupId.value)
+  await Promise.allSettled(roleIdList
+    .map((roleId) => RoleService.associateRoleAndUser(userLogin.value, roleId)
       .catch(() => {
         Notify.create({
           type: 'negative',
-          message: t('AttachUserToGroupDialog.text.notifyError'),
+          message: t('AttachRoleToUserDialog.text.notifyError'),
           html: true,
         });
 
-        throw new Error(userLogin);
+        throw new Error(roleId);
       })))
     .then((results) => {
       results.forEach(({ status, reason }) => {
@@ -101,14 +100,14 @@ async function onSubmit() {
           // new Error() send message of type String
           // use `+reason.message` to transform into Number
           selected.value = selected.value
-            .filter(({ login }) => login === +reason.message);
+            .filter(({ id }) => id === +reason.message);
         }
       });
 
       if (results.every(({ status }) => status === 'fulfilled')) {
         Notify.create({
           type: 'positive',
-          message: t('AttachUserToGroupDialog.text.notifySuccess'),
+          message: t('AttachRoleToUserDialog.text.notifySuccess'),
           html: true,
         });
 
@@ -116,14 +115,14 @@ async function onSubmit() {
         selected.value = [];
       }
     }).finally(() => {
-      ReloadUsersEvent.next();
+      ReloadRolesEvent.next();
       submitting.value = false;
     });
 }
 </script>
 
 <style scoped>
-.attach-user-to-group-form {
+.attach-role-to-user-form {
   min-width: 50vw;
 }
 </style>

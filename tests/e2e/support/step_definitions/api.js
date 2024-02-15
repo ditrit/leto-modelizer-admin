@@ -18,6 +18,18 @@ const group2 = {
   id: '2',
   name: 'Group 2',
 };
+const superAdmin = {
+  id: 1,
+  name: 'Super administrator',
+};
+const admin = {
+  id: 2,
+  name: 'Administrator',
+};
+const dev = {
+  id: 3,
+  name: 'Developer',
+};
 const library1 = {
   id: '1',
   name: 'lib1',
@@ -76,10 +88,7 @@ function setUserIntercepts() {
   cy.intercept('GET', '/api/users/admin/roles', {
     statusCode: 200,
     body: {
-      content: [{
-        id: 1,
-        name: 'Super administrator',
-      }],
+      content: [superAdmin],
     },
   });
 
@@ -166,20 +175,17 @@ function setRoleIntercepts() {
     statusCode: 200,
     body: {
       content: [
-        {
-          id: 1,
-          name: 'Super administrator',
-        },
-        {
-          id: 2,
-          name: 'Administrator',
-        },
-        {
-          id: 3,
-          name: 'Developer',
-        },
+        superAdmin,
+        admin,
+        dev,
       ],
     },
+  });
+
+  cy.intercept('POST', '/api/roles/2/users', (request) => {
+    request.reply({
+      statusCode: 200,
+    });
   });
 }
 

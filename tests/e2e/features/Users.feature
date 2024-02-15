@@ -14,9 +14,13 @@ Feature: Test roundtrip of the application: Users
   ################## Detach group ##################
   ## 401 Should successfully detach a group
 
+  ################## Attach role ##################
+  ## 501 Should disabled confirm button if no role is selected
+  ## 502 Should select and successfully attach a role
+
   ################## Delete user ##################
-  ## 501 Should delete selected user
-  ## 502 Should delete current user
+  ## 601 Should delete selected user
+  ## 602 Should delete current user
 
   Scenario: Roundtrip about Users
     Given I visit the '/'
@@ -94,6 +98,25 @@ Feature: Test roundtrip of the application: Users
     And  I click on '[data-cy="button_confirm"]'
     Then I expect 'positive' toast to appear with text 'Group is detached from user.'
 
+    ####################################################
+    ################## Attach role ##################
+    ####################################################
+
+    ## 501 Should disabled confirm button if no role is selected
+    When I click on '[data-cy="page_user_button_attach_role"]'
+    Then I expect '[data-cy="roles_table"]' exists
+    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(2) td.role-name' is 'Administrator'
+    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(2) td [role="checkbox"]' exists
+    And  I expect '[data-cy="button_confirm"]' to be disabled
+
+    ## 502 Should select and successfully attach a role
+    When I click on '[data-cy="roles_table"] tbody tr:nth-child(2) td [role="checkbox"]'
+    Then I expect '[data-cy="button_confirm"]' to be enabled
+    And  I expect '[data-cy="roles_table"] tbody tr.selected td.role-name' is 'Administrator'
+
+    When I click on '[data-cy="button_confirm"]'
+    Then I expect 'positive' toast to appear with text 'Role(s) successfully attached to the user.'
+
     When I click on '[data-cy="page_user_go_back"]'
     Then I expect current url is '/users'
 
@@ -101,14 +124,14 @@ Feature: Test roundtrip of the application: Users
     ################## Delete user ##################
     ####################################################
 
-    ## 501 Should delete selected user
+    ## 601 Should delete selected user
     When I click on '[data-cy="user_login_button_remove"]'
     Then I expect '[data-cy="button_confirm"]' exists
 
     When I click on '[data-cy="button_confirm"]'
     Then I expect 'positive' toast to appear with text 'User is removed.'
 
-    ## 502 Should delete current user
+    ## 602 Should delete current user
     When I click on '[data-cy="user_admin_button_remove"]'
     Then I expect '[data-cy="button_confirm"]' exists
     And  I expect '[data-cy="remove_current_user_warning"]' exists

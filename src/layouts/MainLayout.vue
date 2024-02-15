@@ -13,6 +13,7 @@
     <detach-user-from-group-dialog />
     <attach-group-to-user-dialog />
     <attach-user-to-group-dialog />
+    <attach-role-to-user-dialog />
   </q-layout>
 </template>
 <script setup>
@@ -26,4 +27,5 @@ import DetachGroupFromUserDialog from 'components/dialog/DetachGroupFromUserDial
 import DetachUserFromGroupDialog from 'components/dialog/DetachUserFromGroupDialog.vue';
 import AttachGroupToUserDialog from 'components/dialog/AttachGroupToUserDialog.vue';
 import AttachUserToGroupDialog from 'components/dialog/AttachUserToGroupDialog.vue';
+import AttachRoleToUserDialog from 'components/dialog/AttachRoleToUserDialog.vue';
 </script>

@@ -35,6 +35,16 @@
       >
         {{ $t('UserPage.text.roleList', { user: user.name }) }}
       </h6>
+      <q-btn
+        outline
+        no-caps
+        color="primary"
+        class="bg-white q-mb-md"
+        data-cy="page_user_button_attach_role"
+        :label="$t('UserPage.text.attachRole')"
+        :icon="$t('UserPage.icon.attach')"
+        @click="openAttachRoleToUserDialog"
+      />
       <roles-table
         :roles="roles"
       />
@@ -52,7 +62,7 @@
         color="primary"
         class="bg-white q-mb-md"
         data-cy="page_user_button_attach_group"
-        :label="$t('UserPage.text.attach')"
+        :label="$t('UserPage.text.attachGroup')"
         :icon="$t('UserPage.icon.attach')"
         @click="openAttachGroupToUserDialog"
       />
@@ -78,6 +88,7 @@ import RolesTable from 'src/components/tables/RolesTable.vue';
 import * as RoleService from 'src/services/RoleService';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
+import ReloadRolesEvent from 'src/composables/events/ReloadRolesEvent';
 
 const loading = ref(false);
 const { t } = useI18n();
@@ -88,6 +99,7 @@ const groups = ref([]);
 const roles = ref([]);
 
 let reloadGroupsEventRef;
+let reloadRolesEventRef;
 
 /**
  * Load user from login in url. If the user does not exist, redirect to the users page.
@@ -156,6 +168,17 @@ function openAttachGroupToUserDialog() {
 }
 
 /**
+ * Open dialog to attach a role to user.
+ */
+function openAttachRoleToUserDialog() {
+  DialogEvent.next({
+    key: 'attach-role-to-user',
+    type: 'open',
+    userLogin: route.params.login,
+  });
+}
+
+/**
  * Open dialog to remove user group.
  * @param {object} group - User group object to remove for the dialog.
  */
@@ -170,10 +193,12 @@ function openDetachGroupFromUserDialog(group) {
 
 onMounted(async () => {
   reloadGroupsEventRef = ReloadGroupsEvent.subscribe(loadGroups);
+  reloadRolesEventRef = ReloadRolesEvent.subscribe(loadRoles);
   await search();
 });
 
 onUnmounted(() => {
   reloadGroupsEventRef.unsubscribe();
+  reloadRolesEventRef.unsubscribe();
 });
 </script>

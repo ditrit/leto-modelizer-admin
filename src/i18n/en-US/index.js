@@ -59,7 +59,8 @@ export default {
       notFound: 'User not found.',
       roleList: 'List of roles attributed to {user}',
       groupList: 'Group of {user}',
-      attach: 'Attach group',
+      attachGroup: 'Attach group',
+      attachRole: 'Attach role',
     },
     icon: {
       goBack: 'fa-solid fa-chevron-left',
@@ -210,6 +211,15 @@ export default {
       confirm: 'Confirm',
       notifyError: 'Error during attachment of a user to the group.',
       notifySuccess: 'User(s) successfully attached to the group.',
+    },
+  },
+  AttachRoleToUserDialog: {
+    text: {
+      title: 'Attach one or more roles to user',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifyError: 'Error during attachment of a role to the user.',
+      notifySuccess: 'Role(s) successfully attached to the user.',
     },
   },
   AddLibraryPage: {
