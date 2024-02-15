@@ -195,6 +195,19 @@ export default {
       notifySuccess: 'User is detached from group.',
     },
   },
+  DetachRoleFromUserDialog: {
+    text: {
+      title: 'Do you want to detach the role "{role}" from the user "{user}" ?',
+      content: 'You can always reassign the role to the user.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifySuccess: 'Role is detached from user.',
+      warning: 'Losing your role means losing permission, and if you no longer have admin access, you will be redirected to Leto-Modelizer.',
+    },
+    icon: {
+      warning: 'fa-solid fa-triangle-exclamation',
+    },
+  },
   RedirectDialog: {
     text: {
       title: 'Redirect to Leto-Modelizer',
