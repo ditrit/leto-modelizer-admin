@@ -136,6 +136,22 @@ describe('Test component: UserPage', () => {
     });
   });
 
+  describe('Test function: openDetachRoleFromUserDialog', () => {
+    it('should open dialog', () => {
+      DialogEvent.next.mockImplementation();
+      wrapper.vm.openDetachRoleFromUserDialog('role');
+
+      expect(DialogEvent.next).toBeCalledWith({
+        key: 'detach-role-from-user',
+        type: 'open',
+        role: 'role',
+        user: {
+          id: 1,
+        },
+      });
+    });
+  });
+
   describe('Test hook function: onMounted', () => {
     it('should subscribe ReloadGroupsEvent', () => {
       expect(subscribe).toHaveBeenCalledTimes(1);

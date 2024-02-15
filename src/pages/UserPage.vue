@@ -47,6 +47,9 @@
       />
       <roles-table
         :roles="roles"
+        :show-action="false"
+        :remove-action="false"
+        @detach="openDetachRoleFromUserDialog"
       />
     </q-card-section>
     <q-card-section>
@@ -187,6 +190,19 @@ function openDetachGroupFromUserDialog(group) {
     key: 'detach-group-from-user',
     type: 'open',
     group,
+    user: user.value,
+  });
+}
+
+/**
+ * Open dialog to remove user role.
+ * @param {object} role - User role object to remove for the dialog.
+ */
+function openDetachRoleFromUserDialog(role) {
+  DialogEvent.next({
+    key: 'detach-role-from-user',
+    type: 'open',
+    role,
     user: user.value,
   });
 }
