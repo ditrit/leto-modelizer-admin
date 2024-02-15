@@ -147,6 +147,15 @@ export default {
   RolesTable: {
     text: {
       nameColumn: 'Name',
+      actionsColumn: 'Actions',
+      showAction: 'Show user',
+      removeAction: 'Remove user',
+      detachAction: 'Detach user',
+    },
+    icon: {
+      showAction: 'fa-solid fa-pen-to-square',
+      removeAction: 'fa-solid fa-trash',
+      detachAction: 'fa-solid fa-link-slash',
     },
   },
   RemoveLibraryDialog: {
