@@ -49,3 +49,13 @@ export async function associateRoleAndUser(userLogin, roleId) {
     },
   }).then(({ data }) => data);
 }
+
+/**
+ * Dissociate role and user.
+ * @param {string} userLogin - User login.
+ * @param {string} roleId - Role id.
+ * @returns {Promise<object>} Promise with nothing on success otherwise an error.
+ */
+export async function dissociateRoleAndUser(userLogin, roleId) {
+  return api.delete(`/roles/${roleId}/users/${userLogin}`);
+}

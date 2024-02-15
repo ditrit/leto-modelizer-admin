@@ -78,4 +78,14 @@ describe('Test: RoleService', () => {
       );
     });
   });
+
+  describe('Test function: dissociateRoleAndUser', () => {
+    it('should call api.delete with endpoint using "roleId" and "userLogin"', async () => {
+      api.delete.mockImplementation(() => Promise.resolve());
+
+      await RoleService.dissociateRoleAndUser('userLogin', 'roleId');
+
+      expect(api.delete).toBeCalledWith('/roles/roleId/users/userLogin');
+    });
+  });
 });
