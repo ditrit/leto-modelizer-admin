@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Add action to attach one or multiple existing groups to the selected user.
   * Add action to detach a group to the selected user.
   * Add action to attach one or multiple existing roles to the selected user.
+  * Add action to detach a role to the selected user.
 * Setup Roles page with:
   * Table to display all roles.
 * Setup Libraries page with:
