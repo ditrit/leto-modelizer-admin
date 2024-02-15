@@ -71,6 +71,7 @@ async function search() {
 const { show } = useDialog('attach-user-to-group', (event) => {
   submitting.value = false;
   groupId.value = event.groupId;
+  selected.value = [];
   return search();
 });
 
@@ -97,8 +98,10 @@ async function onSubmit() {
     .then((results) => {
       results.forEach(({ status, reason }) => {
         if (status === 'rejected' && reason.message) {
+          // new Error() send message of type String
+          // use `+reason.message` to transform into Number
           selected.value = selected.value
-            .filter(({ login }) => login === reason.message);
+            .filter(({ login }) => login === +reason.message);
         }
       });
 
