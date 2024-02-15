@@ -9,17 +9,15 @@ import axios from 'axios';
 // for each client)
 const api = axios.create({ baseURL: '/api' });
 
-/**
- * Redirect on Leto-modelizer on status 503, otherwise throw error.
- * @param {Error} error - Error from axios.
- */
-function manageError(error) {
-  if (error.response.status !== 503) {
-    throw error.response.data;
-  }
-  window.location.href = process.env.LETO_MODELIZER_URL;
-}
-
+api.interceptors.response.use(
+  (response) => Promise.resolve(response),
+  (error) => {
+    if (error.response.status === 503) {
+      window.location.href = process.env.LETO_MODELIZER_URL;
+    }
+    return Promise.reject(error);
+  },
+);
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
 
@@ -32,4 +30,4 @@ export default boot(({ app }) => {
   //       so you can easily perform requests against your app's API
 });
 
-export { api, manageError };
+export { api };

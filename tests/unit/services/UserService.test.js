@@ -35,7 +35,7 @@ describe('Test: UserService', () => {
 
   describe('Test function: getMyPermissions', () => {
     it('should call api.get', async () => {
-      api.get.mockImplementation(() => Promise.resolve());
+      api.get.mockImplementation(() => Promise.resolve({ data: 'permissions' }));
 
       await UserService.getMyPermissions();
 
@@ -92,6 +92,18 @@ describe('Test: UserService', () => {
 
       const userPicture = await UserService.getPictureByLogin('userLogin');
       expect(userPicture).toEqual('');
+    });
+
+    it('should return error when request fails', async () => {
+      const error = {
+        response: {
+          status: 500,
+        },
+      };
+      api.get.mockImplementation(() => Promise.reject(error));
+
+      const userPicture = await UserService.getPictureByLogin('userLogin');
+      expect(userPicture).toEqual(error);
     });
   });
 

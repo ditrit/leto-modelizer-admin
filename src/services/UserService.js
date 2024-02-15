@@ -1,4 +1,4 @@
-import { api, manageError } from 'boot/axios';
+import { api } from 'boot/axios';
 
 /**
  * Get information about the current user.
@@ -6,9 +6,7 @@ import { api, manageError } from 'boot/axios';
  * otherwise an error.
  */
 export async function getCurrent() {
-  return api.get('/users/me')
-    .then(({ data }) => data)
-    .catch(manageError);
+  return api.get('/users/me').then(({ data }) => data);
 }
 
 /**
@@ -26,8 +24,7 @@ export async function getMyPicture() {
           .reduce((data, byte) => data + String.fromCharCode(byte), ''),
       );
       return `data:${response.headers['content-type']};base64,${imageBase64}`;
-    })
-    .catch(manageError);
+    });
 }
 
 /**
@@ -36,9 +33,7 @@ export async function getMyPicture() {
  * otherwise an error.
  */
 export async function getMyPermissions() {
-  return api.get('/users/me/permissions')
-    .then(({ data }) => data)
-    .catch(manageError);
+  return api.get('/users/me/permissions').then(({ data }) => data);
 }
 
 /**
@@ -47,9 +42,7 @@ export async function getMyPermissions() {
  * otherwise an error.
  */
 export async function find() {
-  return api.get('/users')
-    .then(({ data }) => data)
-    .catch(manageError);
+  return api.get('/users').then(({ data }) => data);
 }
 
 /**
@@ -58,9 +51,7 @@ export async function find() {
  * @returns {Promise<object>} Return a user.
  */
 export async function findByLogin(login) {
-  return api.get(`/users/${login}`)
-    .then(({ data }) => data)
-    .catch(manageError);
+  return api.get(`/users/${login}`).then(({ data }) => data);
 }
 
 /**
@@ -83,7 +74,7 @@ export async function getPictureByLogin(login) {
       if (error.response.status === 404) {
         return '';
       }
-      return manageError(error);
+      return error;
     });
 }
 
@@ -93,8 +84,7 @@ export async function getPictureByLogin(login) {
  * @returns {Promise<void>} Promise with nothing on success.
  */
 export async function remove(id) {
-  return api.delete(`/users/${id}`)
-    .catch(manageError);
+  return api.delete(`/users/${id}`);
 }
 
 /**
@@ -104,6 +94,5 @@ export async function remove(id) {
  */
 export async function findByGroupId(groupId) {
   return api.get(`groups/${groupId}/users`)
-    .then(({ data }) => data)
-    .catch(manageError);
+    .then(({ data }) => data);
 }

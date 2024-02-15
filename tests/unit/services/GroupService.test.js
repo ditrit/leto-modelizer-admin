@@ -38,7 +38,7 @@ describe('Test: GroupService', () => {
         name: 'newGroup',
       };
 
-      api.post.mockImplementation(() => Promise.resolve());
+      api.post.mockImplementation(() => Promise.resolve({ data: newGroup }));
 
       await GroupService.create('newGroup');
       expect(api.post).toBeCalledWith('/groups', newGroup);

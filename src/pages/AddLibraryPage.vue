@@ -109,7 +109,9 @@ async function onSubmit() {
       });
       router.push(`/libraries/${id}`);
     })
-    .catch(({ message }) => {
+    .catch((error) => {
+      const { message } = error.response.data;
+
       if (message === ERROR_LIBRARY_URL_ALREADY_EXIST) {
         urlError.value = true;
         urlErrorMessage.value = t('AddLibraryPage.text.urlAlreadyExists');
