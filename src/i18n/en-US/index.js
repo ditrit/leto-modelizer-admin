@@ -59,7 +59,8 @@ export default {
       notFound: 'User not found.',
       roleList: 'List of roles attributed to {user}',
       groupList: 'Group of {user}',
-      attach: 'Attach group',
+      attachGroup: 'Attach group',
+      attachRole: 'Attach role',
     },
     icon: {
       goBack: 'fa-solid fa-chevron-left',

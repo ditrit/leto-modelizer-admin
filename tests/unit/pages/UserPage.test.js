@@ -107,6 +107,19 @@ describe('Test component: UserPage', () => {
     });
   });
 
+  describe('Test function: openAttachRoleToUserDialog', () => {
+    it('should open dialog', () => {
+      DialogEvent.next.mockImplementation();
+      wrapper.vm.openAttachRoleToUserDialog();
+
+      expect(DialogEvent.next).toBeCalledWith({
+        key: 'attach-role-to-user',
+        type: 'open',
+        userLogin: 'id1',
+      });
+    });
+  });
+
   describe('Test function: openDetachGroupFromUserDialog', () => {
     it('should open dialog', () => {
       DialogEvent.next.mockImplementation();
