@@ -8,4 +8,7 @@ export const useUserStore = defineStore('user', {
     permissions: [],
     ready: false,
   }),
+  getters: {
+    isAdmin: (state) => state.permissions.some(({ action, entity }) => action === 'ACCESS' && entity === 'ADMIN'),
+  },
 });
