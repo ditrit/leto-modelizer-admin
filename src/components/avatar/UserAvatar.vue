@@ -31,9 +31,23 @@ const props = defineProps({
     default: false,
   },
 });
-const userPicture = ref('');
+const userPicture = ref(null);
+
+/**
+ * Load user picture by its login.
+ * @returns {Promise<void>} Promise with nothing on success.
+ */
+async function loadUserPicture() {
+  return UserService.getPictureByLogin(props.login)
+    .then((picture) => {
+      userPicture.value = picture;
+    })
+    .catch(() => {
+      userPicture.value = null;
+    });
+}
 
 onMounted(async () => {
-  userPicture.value = await UserService.getPictureByLogin(props.login);
+  loadUserPicture();
 });
 </script>

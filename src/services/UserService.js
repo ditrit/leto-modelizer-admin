@@ -69,12 +69,6 @@ export async function getPictureByLogin(login) {
           .reduce((data, byte) => data + String.fromCharCode(byte), ''),
       );
       return `data:${response.headers['content-type']};base64,${imageBase64}`;
-    })
-    .catch((error) => {
-      if (error.response.status === 404) {
-        return '';
-      }
-      return error;
     });
 }
 

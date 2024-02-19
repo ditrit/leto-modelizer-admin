@@ -4,7 +4,6 @@ import {
   describe,
   expect,
   it,
-  beforeEach,
   vi,
 } from 'vitest';
 import UserAvatar from 'src/components/avatar/UserAvatar.vue';
@@ -28,9 +27,19 @@ describe('Test component: UserAvatar', () => {
     });
   });
 
-  describe('Test hook function: onMounted', () => {
-    it('Should set userPicture', () => {
+  describe('Test function: loadUserPicture', () => {
+    it('Should set userPicture', async () => {
+      await wrapper.vm.loadUserPicture();
+
       expect(wrapper.vm.userPicture).toEqual('picture');
+    });
+
+    it('Should set userPicture to null if request fails', async () => {
+      UserService.getPictureByLogin.mockImplementation(() => Promise.reject());
+
+      await wrapper.vm.loadUserPicture();
+
+      expect(wrapper.vm.userPicture).toEqual(null);
     });
   });
 });
