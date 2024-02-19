@@ -195,6 +195,13 @@ export default {
       notifySuccess: 'User is detached from group.',
     },
   },
+  RedirectDialog: {
+    text: {
+      title: 'Redirect to Leto-Modelizer',
+      content: 'You don\'t have permission to access this application. Please contact an administrator to access this application.',
+      redirect: 'Go to Leto-Modelizer',
+    },
+  },
   AttachGroupToUserDialog: {
     text: {
       title: 'Attach one or more groups to user',
