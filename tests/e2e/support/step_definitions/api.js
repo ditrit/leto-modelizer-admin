@@ -80,6 +80,11 @@ function setUserIntercepts() {
     body: adminUser,
   });
 
+  cy.intercept('GET', '/api/users/login', {
+    statusCode: 200,
+    body: user,
+  });
+
   cy.intercept('GET', '/api/users/unknown', {
     statusCode: 404,
     body: 'Not Found',
@@ -89,6 +94,13 @@ function setUserIntercepts() {
     statusCode: 200,
     body: {
       content: [superAdmin],
+    },
+  });
+
+  cy.intercept('GET', '/api/users/login/roles', {
+    statusCode: 200,
+    body: {
+      content: [dev],
     },
   });
 
@@ -183,6 +195,18 @@ function setRoleIntercepts() {
   });
 
   cy.intercept('POST', '/api/roles/2/users', (request) => {
+    request.reply({
+      statusCode: 200,
+    });
+  });
+
+  cy.intercept('DELETE', '/api/roles/1/users/admin', (request) => {
+    request.reply({
+      statusCode: 200,
+    });
+  });
+
+  cy.intercept('DELETE', '/api/roles/3/users/login', (request) => {
     request.reply({
       statusCode: 200,
     });

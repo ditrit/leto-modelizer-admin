@@ -18,9 +18,14 @@ Feature: Test roundtrip of the application: Users
   ## 501 Should disabled confirm button if no role is selected
   ## 502 Should select and successfully attach a role
 
+  ################## Detach role ##################
+  ## 601 Should successfully detach a role for a user
+  ## 602 Should show warning when deleting admin access to the current user
+  ## 603 Should detach admin role for the current user
+
   ################## Delete user ##################
-  ## 601 Should delete selected user
-  ## 602 Should delete current user
+  ## 701 Should delete selected user
+  ## 702 Should delete current user
 
   Scenario: Roundtrip about Users
     Given I visit the '/'
@@ -121,17 +126,46 @@ Feature: Test roundtrip of the application: Users
     Then I expect current url is '/users'
 
     ####################################################
+    ################## Detach role ##################
+    ####################################################
+
+    ## 601 Should successfully detach a role for a user
+    When I click on '[data-cy="users_table"] [data-cy="user_login_button_show"]'
+    Then I expect current url is '/users/login'
+
+    When I click on '[data-cy="role_3_button_detach"]'
+    And  I click on '[data-cy="button_confirm"]'
+    Then I expect 'positive' toast to appear with text 'Role is detached from user.'
+
+    When I click on '[data-cy="page_user_go_back"]'
+    Then I expect current url is '/users'
+
+    ## 602 Should show warning when deleting admin access to the current user
+    When I click on '[data-cy="users_table"] [data-cy="user_admin_button_show"]'
+    Then I expect current url is '/users/admin'
+
+    When I click on '[data-cy="role_1_button_detach"]'
+    Then I expect '[data-cy="remove_current_user_warning"]' exists
+
+    ## 603 Should detach admin role for the current user
+    When I click on '[data-cy="button_confirm"]'
+    Then I expect 'positive' toast to appear with text 'Role is detached from user.'
+
+    When I click on '[data-cy="page_user_go_back"]'
+    Then I expect current url is '/users'
+
+    ####################################################
     ################## Delete user ##################
     ####################################################
 
-    ## 601 Should delete selected user
+    ## 701 Should delete selected user
     When I click on '[data-cy="user_login_button_remove"]'
     Then I expect '[data-cy="button_confirm"]' exists
 
     When I click on '[data-cy="button_confirm"]'
     Then I expect 'positive' toast to appear with text 'User is removed.'
 
-    ## 602 Should delete current user
+    ## 702 Should delete current user
     When I click on '[data-cy="user_admin_button_remove"]'
     Then I expect '[data-cy="button_confirm"]' exists
     And  I expect '[data-cy="remove_current_user_warning"]' exists
