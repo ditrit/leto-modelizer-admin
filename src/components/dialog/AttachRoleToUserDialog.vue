@@ -7,6 +7,16 @@
         </span>
       </q-card-section>
       <q-form @submit="onSubmit">
+        <q-card-section class="row items-center">
+          <q-icon
+            left
+            color="info"
+            :name="$t('AttachRoleToUserDialog.icon.info')"
+          />
+          <span>
+            {{ $t('AttachRoleToUserDialog.text.content') }}
+          </span>
+        </q-card-section>
         <q-card-section>
           <roles-table
             v-model:selected="selected"

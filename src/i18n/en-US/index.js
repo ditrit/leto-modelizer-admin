@@ -230,28 +230,40 @@ export default {
   AttachGroupToUserDialog: {
     text: {
       title: 'Attach one or more groups to user',
+      content: 'By associating a group to a user, it will inherit all the group\'s permissions.',
       cancel: 'Cancel',
       confirm: 'Confirm',
       notifyError: 'Error during attachment of a group to the user.',
       notifySuccess: 'Group(s) successfully attached to the user.',
     },
+    icon: {
+      info: 'fa-solid fa-circle-info',
+    },
   },
   AttachUserToGroupDialog: {
     text: {
       title: 'Attach one or more users to group',
+      content: 'By associating a user to a group, it will inherit all the group\'s permissions.',
       cancel: 'Cancel',
       confirm: 'Confirm',
       notifyError: 'Error during attachment of a user to the group.',
       notifySuccess: 'User(s) successfully attached to the group.',
     },
+    icon: {
+      info: 'fa-solid fa-circle-info',
+    },
   },
   AttachRoleToUserDialog: {
     text: {
       title: 'Attach one or more roles to user',
+      content: 'By associating a role to a user, it will inherit all the role\'s permissions.',
       cancel: 'Cancel',
       confirm: 'Confirm',
       notifyError: 'Error during attachment of a role to the user.',
       notifySuccess: 'Role(s) successfully attached to the user.',
+    },
+    icon: {
+      info: 'fa-solid fa-circle-info',
     },
   },
   AddLibraryPage: {
