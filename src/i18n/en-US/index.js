@@ -147,6 +147,15 @@ export default {
   RolesTable: {
     text: {
       nameColumn: 'Name',
+      actionsColumn: 'Actions',
+      showAction: 'Show user',
+      removeAction: 'Remove user',
+      detachAction: 'Detach user',
+    },
+    icon: {
+      showAction: 'fa-solid fa-pen-to-square',
+      removeAction: 'fa-solid fa-trash',
+      detachAction: 'fa-solid fa-link-slash',
     },
   },
   RemoveLibraryDialog: {
@@ -166,6 +175,9 @@ export default {
       confirm: 'Confirm',
       notifySuccess: 'User is removed.',
       warning: 'You will delete yourself and any associated groups, permissions, and roles. If you confirm, you will be automatically disconnected.',
+    },
+    icon: {
+      warning: 'fa-solid fa-triangle-exclamation',
     },
   },
   RemoveGroupDialog: {
@@ -195,31 +207,63 @@ export default {
       notifySuccess: 'User is detached from group.',
     },
   },
+  DetachRoleFromUserDialog: {
+    text: {
+      title: 'Do you want to detach the role "{role}" from the user "{user}" ?',
+      content: 'You can always reassign the role to the user.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifySuccess: 'Role is detached from user.',
+      warning: 'Losing your role means losing permission, and if you no longer have admin access, you will be redirected to Leto-Modelizer.',
+    },
+    icon: {
+      warning: 'fa-solid fa-triangle-exclamation',
+    },
+  },
+  RedirectDialog: {
+    text: {
+      title: 'Redirect to Leto-Modelizer',
+      content: 'You don\'t have permission to access this application. Please contact an administrator to access this application.',
+      redirect: 'Go to Leto-Modelizer',
+    },
+  },
   AttachGroupToUserDialog: {
     text: {
       title: 'Attach one or more groups to user',
+      content: 'By associating a group to a user, it will inherit all the group\'s permissions.',
       cancel: 'Cancel',
       confirm: 'Confirm',
       notifyError: 'Error during attachment of a group to the user.',
       notifySuccess: 'Group(s) successfully attached to the user.',
     },
+    icon: {
+      info: 'fa-solid fa-circle-info',
+    },
   },
   AttachUserToGroupDialog: {
     text: {
       title: 'Attach one or more users to group',
+      content: 'By associating a user to a group, it will inherit all the group\'s permissions.',
       cancel: 'Cancel',
       confirm: 'Confirm',
       notifyError: 'Error during attachment of a user to the group.',
       notifySuccess: 'User(s) successfully attached to the group.',
     },
+    icon: {
+      info: 'fa-solid fa-circle-info',
+    },
   },
   AttachRoleToUserDialog: {
     text: {
       title: 'Attach one or more roles to user',
+      content: 'By associating a role to a user, it will inherit all the role\'s permissions.',
       cancel: 'Cancel',
       confirm: 'Confirm',
       notifyError: 'Error during attachment of a role to the user.',
       notifySuccess: 'Role(s) successfully attached to the user.',
+    },
+    icon: {
+      info: 'fa-solid fa-circle-info',
     },
   },
   AddLibraryPage: {

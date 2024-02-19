@@ -7,6 +7,16 @@
         </span>
       </q-card-section>
       <q-form @submit="onSubmit">
+        <q-card-section class="row items-center">
+          <q-icon
+            left
+            color="info"
+            :name="$t('AttachGroupToUserDialog.icon.info')"
+          />
+          <span>
+            {{ $t('AttachGroupToUserDialog.text.content') }}
+          </span>
+        </q-card-section>
         <q-card-section>
           <groups-table
             v-model:selected="selected"

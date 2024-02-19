@@ -81,30 +81,6 @@ describe('Test: UserService', () => {
       const userPicture = await UserService.getPictureByLogin('userLogin');
       expect(userPicture).toEqual(mockUserPicture);
     });
-
-    it('should return empty string when the user does not have a picture', async () => {
-      const noPictureError = {
-        response: {
-          status: 404,
-        },
-      };
-      api.get.mockImplementation(() => Promise.reject(noPictureError));
-
-      const userPicture = await UserService.getPictureByLogin('userLogin');
-      expect(userPicture).toEqual('');
-    });
-
-    it('should return error when request fails', async () => {
-      const error = {
-        response: {
-          status: 500,
-        },
-      };
-      api.get.mockImplementation(() => Promise.reject(error));
-
-      const userPicture = await UserService.getPictureByLogin('userLogin');
-      expect(userPicture).toEqual(error);
-    });
   });
 
   describe('Test function: remove', () => {

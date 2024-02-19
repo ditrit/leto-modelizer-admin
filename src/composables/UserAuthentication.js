@@ -21,7 +21,7 @@ export async function initUser() {
   userStore.permissions = await UserService.getMyPermissions();
   userStore.ready = true;
 
-  if (!userStore.permissions.some(({ action, entity }) => action === 'ACCESS' && entity === 'ADMIN')) {
+  if (!userStore.isAdmin) {
     throw new Error();
   }
 }

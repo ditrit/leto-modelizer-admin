@@ -58,4 +58,21 @@ describe('User Store', () => {
       expect(store.permissions).toEqual(['admin']);
     });
   });
+
+  describe('Test store actions: isAdmin', () => {
+    it('should return true if permissions contain "ACCESS_action" and "ADMIN_entity"', () => {
+      store.permissions = [{ action: 'ACCESS', entity: 'ADMIN' }];
+      expect(store.isAdmin).toBeTruthy();
+    });
+
+    it('should return false if permissions don/t contain "ACCESS_action"', () => {
+      store.permissions = [{ action: 'ACTION', entity: 'ADMIN' }];
+      expect(store.isAdmin).toBeFalsy();
+    });
+
+    it('should return false if permissions don/t contain "ADMIN_entity"', () => {
+      store.permissions = [{ action: 'ACCESS', entity: 'ENTITY' }];
+      expect(store.isAdmin).toBeFalsy();
+    });
+  });
 });
