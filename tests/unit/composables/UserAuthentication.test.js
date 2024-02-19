@@ -46,7 +46,11 @@ describe('Test: User Authentication', () => {
     it('should throw an error if user does not have the "admin" related permissions', async () => {
       setActivePinia(createPinia());
 
-      UserService.getCurrent.mockImplementation(() => Promise.resolve());
+      UserService.getCurrent.mockImplementation(() => Promise.resolve({
+        login: 'Login',
+        name: 'Name',
+        email: 'Email',
+      }));
       UserService.getMyPermissions.mockImplementation(() => Promise.resolve([{ action: 'ACTION', entity: 'DEV' }, { action: 'ACCESS', entity: 'DEV' }]));
 
       let error = null;
