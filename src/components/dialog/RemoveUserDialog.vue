@@ -17,7 +17,7 @@
           >
             <template #avatar>
               <q-icon
-                name="fa-solid fa-triangle-exclamation"
+                :name="$t('RemoveUserDialog.icon.warning')"
                 color="white"
               />
             </template>

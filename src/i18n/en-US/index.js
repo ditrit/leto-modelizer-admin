@@ -176,6 +176,9 @@ export default {
       notifySuccess: 'User is removed.',
       warning: 'You will delete yourself and any associated groups, permissions, and roles. If you confirm, you will be automatically disconnected.',
     },
+    icon: {
+      warning: 'fa-solid fa-triangle-exclamation',
+    },
   },
   RemoveGroupDialog: {
     text: {
