@@ -61,7 +61,9 @@ import * as UserService from 'src/services/UserService';
 import * as GroupService from 'src/services/GroupService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
+import { useUserStore } from 'src/stores/UserStore';
 
+const userStore = useUserStore();
 const { t } = useI18n();
 const submitting = ref(false);
 const groupId = ref('');
@@ -125,9 +127,13 @@ async function onSubmit() {
         show.value = false;
         selected.value = [];
       }
-    }).finally(() => {
+    }).finally(async () => {
       ReloadUsersEvent.next();
       submitting.value = false;
+
+      if (userLoginList.includes(userStore.login)) {
+        userStore.permissions = await UserService.getMyPermissions();
+      }
     });
 }
 </script>
