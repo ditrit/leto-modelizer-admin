@@ -63,7 +63,7 @@ describe('Test: RoleService', () => {
 
   describe('Test function: associateRoleAndUser', () => {
     it('should call api.post with endpoint using "roleId"', async () => {
-      api.post.mockImplementation(() => Promise.resolve({ data: 'data' }));
+      api.post.mockImplementation(() => Promise.resolve());
 
       await RoleService.associateRoleAndUser('userLogin', 'roleId');
 

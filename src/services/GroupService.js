@@ -56,7 +56,7 @@ export async function associateGroupAndUser(userLogin, groupId) {
     headers: {
       'Content-Type': 'text/plain',
     },
-  }).then(({ data }) => data);
+  });
 }
 
 /**
