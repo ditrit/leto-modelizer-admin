@@ -59,3 +59,37 @@ export async function associateRoleAndUser(userLogin, roleId) {
 export async function dissociateRoleAndUser(userLogin, roleId) {
   return api.delete(`/roles/${roleId}/users/${userLogin}`);
 }
+
+/**
+ * Get all roles of a group.
+ * @param {string} groupId - Group id.
+ * @returns {Promise<object[]>} Return an array of roles.
+ */
+export async function findByGroupId(groupId) {
+  return api.get(`groups/${groupId}/roles`)
+    .then(({ data }) => data);
+}
+
+/**
+ * Associate role and group.
+ * @param {string} groupId - Group id.
+ * @param {string} roleId - Role id.
+ * @returns {Promise<object>} Promise with nothing on success otherwise an error.
+ */
+export async function associateRoleAndGroup(groupId, roleId) {
+  return api.post(`/roles/${roleId}/groups`, groupId, {
+    headers: {
+      'Content-Type': 'text/plain',
+    },
+  });
+}
+
+/**
+ * Dissociate role and group.
+ * @param {string} groupId - Group id.
+ * @param {string} roleId - Role id.
+ * @returns {Promise<object>} Promise with nothing on success otherwise an error.
+ */
+export async function dissociateRoleAndGroup(groupId, roleId) {
+  return api.delete(`/roles/${roleId}/groups/${groupId}`);
+}
