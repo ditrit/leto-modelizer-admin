@@ -47,7 +47,7 @@ export async function associateRoleAndUser(userLogin, roleId) {
     headers: {
       'Content-Type': 'text/plain',
     },
-  }).then(({ data }) => data);
+  });
 }
 
 /**

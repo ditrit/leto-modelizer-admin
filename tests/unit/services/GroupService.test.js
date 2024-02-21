@@ -69,7 +69,7 @@ describe('Test: GroupService', () => {
 
   describe('Test function: associateGroupAndUser', () => {
     it('should call api.post with endpoint using "groupId"', async () => {
-      api.post.mockImplementation(() => Promise.resolve({ data: 'data' }));
+      api.post.mockImplementation(() => Promise.resolve());
 
       await GroupService.associateGroupAndUser('userLogin', 'groupId');
 

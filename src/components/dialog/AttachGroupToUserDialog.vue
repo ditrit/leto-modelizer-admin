@@ -54,18 +54,22 @@
 
 <script setup>
 import { useDialog } from 'src/composables/Dialog';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import GroupsTable from 'src/components/tables/GroupsTable.vue';
 import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 import * as GroupService from 'src/services/GroupService';
+import * as UserService from 'src/services/UserService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
+import { useUserStore } from 'src/stores/UserStore';
 
+const userStore = useUserStore();
 const { t } = useI18n();
 const submitting = ref(false);
 const userLogin = ref('');
 const selected = ref([]);
 const groups = ref([]);
+const isCurrentUser = computed(() => userLogin.value === userStore.login);
 
 /**
  * Get groups.
@@ -124,9 +128,13 @@ async function onSubmit() {
         show.value = false;
         selected.value = [];
       }
-    }).finally(() => {
+    }).finally(async () => {
       ReloadGroupsEvent.next();
       submitting.value = false;
+
+      if (isCurrentUser.value) {
+        userStore.permissions = await UserService.getMyPermissions();
+      }
     });
 }
 </script>

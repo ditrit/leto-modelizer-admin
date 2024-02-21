@@ -8,6 +8,9 @@
     </h4>
     <roles-table
       :roles="roles"
+      :show-action="false"
+      :remove-action="false"
+      :detach-action="false"
     />
   </q-page>
 </template>

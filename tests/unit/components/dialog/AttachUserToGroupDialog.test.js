@@ -5,6 +5,8 @@ import AttachUserToGroupDialog from 'src/components/dialog/AttachUserToGroupDial
 import * as UserService from 'src/services/UserService';
 import * as GroupService from 'src/services/GroupService';
 import { Notify } from 'quasar';
+import { createPinia, setActivePinia } from 'pinia';
+import { useUserStore } from 'stores/UserStore';
 
 installQuasarPlugin({
   plugins: [Notify],
@@ -16,8 +18,13 @@ vi.stubGlobal('$sanitize', true);
 
 describe('Test component: AttachUserToGroupDialog', () => {
   let wrapper;
+  let store;
 
   beforeEach(() => {
+    setActivePinia(createPinia());
+    store = useUserStore();
+    store.login = 'login';
+
     UserService.find.mockImplementation(() => Promise.resolve({ content: ['users'] }));
 
     wrapper = mount(AttachUserToGroupDialog);
@@ -35,7 +42,7 @@ describe('Test component: AttachUserToGroupDialog', () => {
 
   describe('Test function: onSubmit', () => {
     beforeEach(() => {
-      wrapper.vm.selected = [{ id: '1' }, { id: '2' }];
+      wrapper.vm.selected = [{ login: '1' }, { login: '2' }];
       wrapper.vm.groupId = 'groupId';
     });
 
@@ -55,6 +62,19 @@ describe('Test component: AttachUserToGroupDialog', () => {
       await wrapper.vm.onSubmit();
 
       expect(Notify.create).toHaveBeenCalledWith(expect.objectContaining({ type: 'negative' }));
+    });
+
+    it('should update permissions for current user', async () => {
+      wrapper.vm.selected = [{ login: 'userLogin' }];
+      store.login = 'userLogin';
+      store.permissions = null;
+
+      GroupService.associateGroupAndUser.mockImplementation(() => Promise.resolve());
+      UserService.getMyPermissions.mockImplementation(() => Promise.resolve({ action: 'ACTION', entity: 'ENTITY' }));
+
+      await wrapper.vm.onSubmit();
+
+      expect(store.permissions).toEqual({ action: 'ACTION', entity: 'ENTITY' });
     });
   });
 });
