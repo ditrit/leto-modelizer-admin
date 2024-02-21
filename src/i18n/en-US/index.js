@@ -45,12 +45,15 @@ export default {
     text: {
       goBack: 'Return to previous page',
       notFound: 'Group not found.',
-      roleList: 'List of users attributed to {group}',
+      userList: 'List of users attributed to {group}',
+      roleList: 'Role of {group}',
       attachUser: 'Attach user',
+      attachRole: 'Attach role',
     },
     icon: {
       goBack: 'fa-solid fa-chevron-left',
       attachUser: 'fa-solid fa-link',
+      attachRole: 'fa-solid fa-link',
     },
   },
   UserPage: {
