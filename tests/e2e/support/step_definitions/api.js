@@ -160,6 +160,20 @@ function setGroupIntercepts() {
     },
   });
 
+  cy.intercept('GET', '/api/groups/1/roles', {
+    statusCode: 200,
+    body: {
+      content: [superAdmin],
+    },
+  });
+
+  cy.intercept('GET', '/api/groups/2/roles', {
+    statusCode: 200,
+    body: {
+      content: [dev],
+    },
+  });
+
   cy.intercept('POST', '/api/groups/2/users', (request) => {
     request.reply({
       statusCode: 200,
@@ -195,6 +209,18 @@ function setRoleIntercepts() {
   });
 
   cy.intercept('POST', '/api/roles/2/users', (request) => {
+    request.reply({
+      statusCode: 200,
+    });
+  });
+
+  cy.intercept('POST', '/api/roles/1/groups', (request) => {
+    request.reply({
+      statusCode: 200,
+    });
+  });
+
+  cy.intercept('DELETE', '/api/roles/3/groups/2', (request) => {
     request.reply({
       statusCode: 200,
     });
