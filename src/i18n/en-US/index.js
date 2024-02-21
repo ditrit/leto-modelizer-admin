@@ -151,9 +151,9 @@ export default {
     text: {
       nameColumn: 'Name',
       actionsColumn: 'Actions',
-      showAction: 'Show user',
-      removeAction: 'Remove user',
-      detachAction: 'Detach user',
+      showAction: 'Show role',
+      removeAction: 'Remove role',
+      detachAction: 'Detach role',
     },
     icon: {
       showAction: 'fa-solid fa-pen-to-square',
