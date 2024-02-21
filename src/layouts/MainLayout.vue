@@ -12,9 +12,11 @@
     <detach-group-from-user-dialog />
     <detach-user-from-group-dialog />
     <detach-role-from-user-dialog />
+    <detach-role-from-group-dialog />
     <attach-group-to-user-dialog />
     <attach-user-to-group-dialog />
     <attach-role-to-user-dialog />
+    <attach-role-to-group-dialog />
     <redirect-dialog />
   </q-layout>
 </template>
@@ -28,8 +30,10 @@ import RemoveGroupDialog from 'components/dialog/RemoveGroupDialog.vue';
 import DetachGroupFromUserDialog from 'components/dialog/DetachGroupFromUserDialog.vue';
 import DetachUserFromGroupDialog from 'components/dialog/DetachUserFromGroupDialog.vue';
 import DetachRoleFromUserDialog from 'components/dialog/DetachRoleFromUserDialog.vue';
+import DetachRoleFromGroupDialog from 'components/dialog/DetachRoleFromGroupDialog.vue';
 import AttachGroupToUserDialog from 'components/dialog/AttachGroupToUserDialog.vue';
 import AttachUserToGroupDialog from 'components/dialog/AttachUserToGroupDialog.vue';
 import AttachRoleToUserDialog from 'components/dialog/AttachRoleToUserDialog.vue';
+import AttachRoleToGroupDialog from 'components/dialog/AttachRoleToGroupDialog.vue';
 import RedirectDialog from 'components/dialog/RedirectDialog.vue';
 </script>
