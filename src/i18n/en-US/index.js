@@ -266,6 +266,19 @@ export default {
       info: 'fa-solid fa-circle-info',
     },
   },
+  AttachRoleToGroupDialog: {
+    text: {
+      title: 'Attach one or more roles to group',
+      content: 'By associating a role to a group, it will inherit all the role\'s permissions.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifyError: 'Error during attachment of a role to the group.',
+      notifySuccess: 'Role(s) successfully attached to the group.',
+    },
+    icon: {
+      info: 'fa-solid fa-circle-info',
+    },
+  },
   AddLibraryPage: {
     text: {
       title: 'Add library',
