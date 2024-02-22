@@ -88,4 +88,41 @@ describe('Test: RoleService', () => {
       expect(api.delete).toBeCalledWith('/roles/roleId/users/userLogin');
     });
   });
+
+  describe('Test function: findByGroupId', () => {
+    it('should return all roles of a group', async () => {
+      api.get.mockImplementation(() => Promise.resolve({ data: 'roles' }));
+
+      const data = await RoleService.findByGroupId();
+      expect(data).toEqual('roles');
+    });
+  });
+
+  describe('Test function: associateRoleAndGroup', () => {
+    it('should call api.post with endpoint using "roleId"', async () => {
+      api.post.mockImplementation(() => Promise.resolve());
+
+      await RoleService.associateRoleAndGroup('groupId', 'roleId');
+
+      expect(api.post).toBeCalledWith(
+        '/roles/roleId/groups',
+        'groupId',
+        {
+          headers: {
+            'Content-Type': 'text/plain',
+          },
+        },
+      );
+    });
+  });
+
+  describe('Test function: dissociateRoleAndGroup', () => {
+    it('should call api.delete with endpoint using "groupId" and "roleId"', async () => {
+      api.delete.mockImplementation(() => Promise.resolve());
+
+      await RoleService.dissociateRoleAndGroup('groupId', 'roleId');
+
+      expect(api.delete).toBeCalledWith('/roles/roleId/groups/groupId');
+    });
+  });
 });

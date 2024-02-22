@@ -45,12 +45,15 @@ export default {
     text: {
       goBack: 'Return to previous page',
       notFound: 'Group not found.',
-      roleList: 'List of users attributed to {group}',
+      userList: 'List of users attributed to {group}',
+      roleList: 'Role of {group}',
       attachUser: 'Attach user',
+      attachRole: 'Attach role',
     },
     icon: {
       goBack: 'fa-solid fa-chevron-left',
       attachUser: 'fa-solid fa-link',
+      attachRole: 'fa-solid fa-link',
     },
   },
   UserPage: {
@@ -148,9 +151,9 @@ export default {
     text: {
       nameColumn: 'Name',
       actionsColumn: 'Actions',
-      showAction: 'Show user',
-      removeAction: 'Remove user',
-      detachAction: 'Detach user',
+      showAction: 'Show role',
+      removeAction: 'Remove role',
+      detachAction: 'Detach role',
     },
     icon: {
       showAction: 'fa-solid fa-pen-to-square',
@@ -207,6 +210,15 @@ export default {
       notifySuccess: 'User is detached from group.',
     },
   },
+  DetachRoleFromGroupDialog: {
+    text: {
+      title: 'Do you want to detach the role "{role}" from the group "{group}" ?',
+      content: 'You can always reassign the role to the group.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifySuccess: 'Role is detached from group.',
+    },
+  },
   DetachRoleFromUserDialog: {
     text: {
       title: 'Do you want to detach the role "{role}" from the user "{user}" ?',
@@ -261,6 +273,19 @@ export default {
       confirm: 'Confirm',
       notifyError: 'Error during attachment of a role to the user.',
       notifySuccess: 'Role(s) successfully attached to the user.',
+    },
+    icon: {
+      info: 'fa-solid fa-circle-info',
+    },
+  },
+  AttachRoleToGroupDialog: {
+    text: {
+      title: 'Attach one or more roles to group',
+      content: 'By associating a role to a group, it will inherit all the role\'s permissions.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifyError: 'Error during attachment of a role to the group.',
+      notifySuccess: 'Role(s) successfully attached to the group.',
     },
     icon: {
       info: 'fa-solid fa-circle-info',

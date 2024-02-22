@@ -14,8 +14,15 @@ Feature: Test roundtrip of the application: Groups
   ################## Detach user ##################
   ## 401 Should successfully detach a user
 
+  ################## Attach role ##################
+  ## 501 Should disabled confirm button if no role is selected
+  ## 502 Should select and successfully attach a role
+
+  ################## Detach role ##################
+  ## 601 Should successfully detach a role
+
   ################## Delete group ##################
-  ## 501 Should delete selected group
+  ## 701 Should delete selected group
 
   Scenario: Roundtrip about Groups
     Given I visit the '/'
@@ -45,6 +52,10 @@ Feature: Test roundtrip of the application: Groups
     And  I expect '[data-cy="users_table"]' exists
     And  I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-name' is 'Admin'
     And  I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-login' is 'admin'
+    # Display related roles
+    And  I expect '[data-cy="page_group_roles_title"]' exists
+    And  I expect '[data-cy="roles_table"]' exists
+    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'Super administrator'
 
     When I click on '[data-cy="page_group_go_back"]'
     Then I expect current url is '/groups'
@@ -86,6 +97,38 @@ Feature: Test roundtrip of the application: Groups
     And  I click on '[data-cy="button_confirm"]'
     Then I expect 'positive' toast to appear with text 'User is detached from group.'
 
+    ####################################################
+    ################## Attach role ##################
+    ####################################################
+
+    ## 501 Should disabled confirm button if no role is selected
+    When I click on '[data-cy="page_group_button_attach_role"]'
+    Then I expect '[data-cy="roles_table"]' exists
+    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'Super administrator'
+    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td [role="checkbox"]' exists
+    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(2) td.role-name' is 'Administrator'
+    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(2) td [role="checkbox"]' exists
+    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(3) td.role-name' is 'Developer'
+    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(3) td [role="checkbox"]' exists
+    And  I expect '[data-cy="button_confirm"]' to be disabled
+
+    ## 502 Should select and successfully attach a role
+    When I click on '[data-cy="roles_table"] tbody tr:nth-child(1) td [role="checkbox"]'
+    Then I expect '[data-cy="button_confirm"]' to be enabled
+    And  I expect '[data-cy="roles_table"] tbody tr.selected td.role-name' is 'Super administrator'
+
+    When I click on '[data-cy="button_confirm"]'
+    Then I expect 'positive' toast to appear with text 'Role(s) successfully attached to the group.'
+
+    ####################################################
+    ################## Detach role ##################
+    ####################################################
+
+    ## 601 Should successfully detach a role
+    When I click on '[data-cy="role_3_button_detach"]'
+    And  I click on '[data-cy="button_confirm"]'
+    Then I expect 'positive' toast to appear with text 'Role is detached from group.'
+
     When I click on '[data-cy="page_group_go_back"]'
     Then I expect current url is '/groups'
 
@@ -93,7 +136,7 @@ Feature: Test roundtrip of the application: Groups
     ################## Delete group ################
     ####################################################
 
-    ## 501 Should delete selected group
+    ## 701 Should delete selected group
     When I click on '[data-cy="group_1_button_remove"]'
     Then I expect '[data-cy="button_confirm"]' exists
 

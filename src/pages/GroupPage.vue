@@ -13,7 +13,7 @@
           @click="$router.push('/groups')"
         />
       </q-card-section>
-      <q-card-section class=" q-py-none">
+      <q-card-section class="q-py-none">
         <h4
           class="q-ma-none q-mb-sm"
           data-cy="page_group_title"
@@ -33,7 +33,7 @@
         class="q-ma-none q-mb-sm"
         data-cy="page_group_users_title"
       >
-        {{ $t('GroupPage.text.roleList', { group: group.name }) }}
+        {{ $t('GroupPage.text.userList', { group: group.name }) }}
       </h6>
       <q-btn
         outline
@@ -52,6 +52,30 @@
         @detach="openDetachUserFromGroupDialog"
       />
     </q-card-section>
+    <q-card-section>
+      <h6
+        class="q-ma-none q-mb-sm"
+        data-cy="page_group_roles_title"
+      >
+        {{ $t('GroupPage.text.roleList', { group: group.name }) }}
+      </h6>
+      <q-btn
+        outline
+        no-caps
+        color="primary"
+        class="bg-white q-mb-md"
+        data-cy="page_group_button_attach_role"
+        :label="$t('GroupPage.text.attachRole')"
+        :icon="$t('GroupPage.icon.attachRole')"
+        @click="openAttachRoleToGroupDialog"
+      />
+      <roles-table
+        :roles="roles"
+        :show-action="false"
+        :remove-action="false"
+        @detach="openDetachRoleFromGroupDialog"
+      />
+    </q-card-section>
   </q-page>
 </template>
 
@@ -60,11 +84,14 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import * as GroupService from 'src/services/GroupService';
 import * as UserService from 'src/services/UserService';
+import * as RoleService from 'src/services/RoleService';
 import UsersTable from 'src/components/tables/UsersTable.vue';
+import RolesTable from 'src/components/tables/RolesTable.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import ReloadUsersEvent from 'src/composables/events/ReloadUsersEvent';
+import ReloadRolesEvent from 'src/composables/events/ReloadRolesEvent';
 
 const loading = ref(false);
 const { t } = useI18n();
@@ -72,7 +99,9 @@ const route = useRoute();
 const router = useRouter();
 const group = ref({});
 const users = ref([]);
+const roles = ref([]);
 let reloadUsersEventRef;
+let reloadRolesEventRef;
 
 /**
  * Load group from id in url. If the group does not exist, redirect to the libraries page.
@@ -104,6 +133,16 @@ async function loadUsers() {
 }
 
 /**
+ * Get roles using group Id.
+ * @returns {Promise<void>} Promise with nothing on success.
+ */
+async function loadRoles() {
+  return RoleService.findByGroupId(route.params.id).then((data) => {
+    roles.value = data.content;
+  });
+}
+
+/**
  * Search user and associated groups.
  */
 async function search() {
@@ -112,6 +151,7 @@ async function search() {
   Promise.allSettled([
     loadGroup(),
     loadUsers(),
+    loadRoles(),
   ])
     .finally(() => {
       loading.value = false;
@@ -130,6 +170,17 @@ function openAttachUserToGroupDialog() {
 }
 
 /**
+ * Open dialog to attach a role to a group.
+ */
+function openAttachRoleToGroupDialog() {
+  DialogEvent.next({
+    key: 'attach-role-to-group',
+    type: 'open',
+    groupId: route.params.id,
+  });
+}
+
+/**
  * Open dialog to detach a user from a group.
  * @param {object} user - User object to remove for the dialog.
  */
@@ -142,12 +193,27 @@ function openDetachUserFromGroupDialog(user) {
   });
 }
 
+/**
+ * Open dialog to detach a role from a group.
+ * @param {object} role - Role object to remove for the dialog.
+ */
+function openDetachRoleFromGroupDialog(role) {
+  DialogEvent.next({
+    key: 'detach-role-from-group',
+    type: 'open',
+    group: group.value,
+    role,
+  });
+}
+
 onMounted(async () => {
   reloadUsersEventRef = ReloadUsersEvent.subscribe(loadUsers);
+  reloadRolesEventRef = ReloadRolesEvent.subscribe(loadRoles);
   await search();
 });
 
 onUnmounted(() => {
   reloadUsersEventRef.unsubscribe();
+  reloadRolesEventRef.unsubscribe();
 });
 </script>
