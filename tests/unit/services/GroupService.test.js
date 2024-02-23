@@ -1,6 +1,6 @@
 import * as GroupService from 'src/services/GroupService';
 import { vi } from 'vitest';
-import { api } from 'boot/axios';
+import { prepareRequest as api } from 'boot/axios';
 
 vi.mock('boot/axios');
 
@@ -11,7 +11,9 @@ describe('Test: GroupService', () => {
         name: 'groups',
       }];
 
-      api.get.mockImplementation(() => Promise.resolve({ data: groups }));
+      api.mockImplementation(() => ({
+        get: () => Promise.resolve({ data: groups }),
+      }));
 
       const data = await GroupService.find();
       expect(data).toEqual(groups);
@@ -25,7 +27,9 @@ describe('Test: GroupService', () => {
         id: 'w2U52H05zx',
       };
 
-      api.get.mockImplementation(() => Promise.resolve({ data: group }));
+      api.mockImplementation(() => ({
+        get: () => Promise.resolve({ data: group }),
+      }));
 
       const res = await GroupService.findById(group.id);
       expect(res).toEqual(group);
@@ -38,19 +42,27 @@ describe('Test: GroupService', () => {
         name: 'newGroup',
       };
 
-      api.post.mockImplementation(() => Promise.resolve({ data: newGroup }));
+      const mockPostRequest = vi.fn(() => Promise.resolve({ data: newGroup }));
+
+      api.mockImplementation(() => ({
+        post: mockPostRequest,
+      }));
 
       await GroupService.create('newGroup');
-      expect(api.post).toBeCalledWith('/groups', newGroup);
+      expect(mockPostRequest).toBeCalledWith('/groups', newGroup);
     });
   });
 
   describe('Test function: remove', () => {
     it('should remove the group corresponding to the given id', async () => {
-      api.delete.mockImplementation(() => Promise.resolve());
+      const mockDeleteRequest = vi.fn(() => Promise.resolve());
+
+      api.mockImplementation(() => ({
+        delete: mockDeleteRequest,
+      }));
 
       await GroupService.remove('test');
-      expect(api.delete).toBeCalledWith('/groups/test');
+      expect(mockDeleteRequest).toBeCalledWith('/groups/test');
     });
   });
 
@@ -60,7 +72,9 @@ describe('Test: GroupService', () => {
         name: 'group',
       }];
 
-      api.get.mockImplementation(() => Promise.resolve({ data: groups }));
+      api.mockImplementation(() => ({
+        get: () => Promise.resolve({ data: groups }),
+      }));
 
       const data = await GroupService.findByLogin('login');
       expect(data).toEqual([{ name: 'group' }]);
@@ -69,11 +83,15 @@ describe('Test: GroupService', () => {
 
   describe('Test function: associateGroupAndUser', () => {
     it('should call api.post with endpoint using "groupId"', async () => {
-      api.post.mockImplementation(() => Promise.resolve());
+      const mockPostRequest = vi.fn(() => Promise.resolve());
+
+      api.mockImplementation(() => ({
+        post: mockPostRequest,
+      }));
 
       await GroupService.associateGroupAndUser('userLogin', 'groupId');
 
-      expect(api.post).toBeCalledWith(
+      expect(mockPostRequest).toBeCalledWith(
         '/groups/groupId/users',
         'userLogin',
         {
@@ -87,11 +105,15 @@ describe('Test: GroupService', () => {
 
   describe('Test function: dissociateGroupAndUser', () => {
     it('should call api.delete with endpoint using "groupId" and "userLogin"', async () => {
-      api.delete.mockImplementation(() => Promise.resolve());
+      const mockDeleteRequest = vi.fn(() => Promise.resolve());
+
+      api.mockImplementation(() => ({
+        delete: mockDeleteRequest,
+      }));
 
       await GroupService.dissociateGroupAndUser('userLogin', 'groupId');
 
-      expect(api.delete).toBeCalledWith('/groups/groupId/users/userLogin');
+      expect(mockDeleteRequest).toBeCalledWith('/groups/groupId/users/userLogin');
     });
   });
 });
