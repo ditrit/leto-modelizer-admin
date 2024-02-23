@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Setup project.
 * Setup global application design.
 * Setup authentication from `leto-modelizer`.
+* Setup CSRF token management.
 * Setup Users page with:
   * Table to display all users.
   * Add action to redirect on user page.
