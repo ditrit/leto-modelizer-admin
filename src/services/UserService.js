@@ -1,4 +1,4 @@
-import { api } from 'boot/axios';
+import { prepareRequest } from 'boot/axios';
 
 /**
  * Get information about the current user.
@@ -6,6 +6,8 @@ import { api } from 'boot/axios';
  * otherwise an error.
  */
 export async function getCurrent() {
+  const api = await prepareRequest();
+
   return api.get('/users/me').then(({ data }) => data);
 }
 
@@ -15,6 +17,8 @@ export async function getCurrent() {
  * otherwise an error.
  */
 export async function getMyPicture() {
+  const api = await prepareRequest();
+
   return api.get('/users/me/picture', {
     responseType: 'arraybuffer',
   })
@@ -33,6 +37,8 @@ export async function getMyPicture() {
  * otherwise an error.
  */
 export async function getMyPermissions() {
+  const api = await prepareRequest();
+
   return api.get('/users/me/permissions').then(({ data }) => data);
 }
 
@@ -42,6 +48,8 @@ export async function getMyPermissions() {
  * otherwise an error.
  */
 export async function find() {
+  const api = await prepareRequest();
+
   return api.get('/users').then(({ data }) => data);
 }
 
@@ -51,6 +59,8 @@ export async function find() {
  * @returns {Promise<object>} Return a user.
  */
 export async function findByLogin(login) {
+  const api = await prepareRequest();
+
   return api.get(`/users/${login}`).then(({ data }) => data);
 }
 
@@ -60,6 +70,8 @@ export async function findByLogin(login) {
  * @returns {Promise<string>} Return a user picture on success, otherwise an error.
  */
 export async function getPictureByLogin(login) {
+  const api = await prepareRequest();
+
   return api.get(`/users/${login}/picture`, {
     responseType: 'arraybuffer',
   })
@@ -78,6 +90,8 @@ export async function getPictureByLogin(login) {
  * @returns {Promise<void>} Promise with nothing on success.
  */
 export async function remove(id) {
+  const api = await prepareRequest();
+
   return api.delete(`/users/${id}`);
 }
 
@@ -87,6 +101,8 @@ export async function remove(id) {
  * @returns {Promise<object[]>} Return an array of users.
  */
 export async function findByGroupId(groupId) {
+  const api = await prepareRequest();
+
   return api.get(`groups/${groupId}/users`)
     .then(({ data }) => data);
 }
