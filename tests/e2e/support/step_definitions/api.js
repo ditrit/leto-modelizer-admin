@@ -339,5 +339,9 @@ Before(() => {
   setRoleIntercepts();
   setLibraryIntercepts();
 
+  cy.intercept('GET', '/api/csrf', (request) => {
+    request.reply({ statusCode: 200 });
+  });
+
   cy.intercept('https://localhost:8443/api/logout', 'ok');
 });

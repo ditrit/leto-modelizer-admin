@@ -1,6 +1,6 @@
 import * as RoleService from 'src/services/RoleService';
 import { vi } from 'vitest';
-import { api } from 'boot/axios';
+import { prepareRequest as api } from 'boot/axios';
 
 vi.mock('boot/axios');
 
@@ -19,7 +19,9 @@ describe('Test: RoleService', () => {
         },
       ];
 
-      api.get.mockImplementation(() => Promise.resolve({ data: roles }));
+      api.mockImplementation(() => ({
+        get: () => Promise.resolve({ data: roles }),
+      }));
 
       const data = await RoleService.find();
       expect(data).toEqual(roles);
@@ -32,7 +34,9 @@ describe('Test: RoleService', () => {
         name: 'admin',
       }];
 
-      api.get.mockImplementation(() => Promise.resolve({ data: roles }));
+      api.mockImplementation(() => ({
+        get: () => Promise.resolve({ data: roles }),
+      }));
 
       const data = await RoleService.findByLogin('userLogin');
       expect(data).toEqual([{ name: 'admin' }]);
@@ -45,29 +49,41 @@ describe('Test: RoleService', () => {
         name: 'newRole',
       };
 
-      api.post.mockImplementation(() => Promise.resolve({ data: newRole }));
+      const mockPostRequest = vi.fn(() => Promise.resolve({ data: newRole }));
+
+      api.mockImplementation(() => ({
+        post: mockPostRequest,
+      }));
 
       await RoleService.create('newRole');
-      expect(api.post).toBeCalledWith('/roles', newRole);
+      expect(mockPostRequest).toBeCalledWith('/roles', newRole);
     });
   });
 
   describe('Test function: remove', () => {
     it('should remove the role corresponding to the given id', async () => {
-      api.delete.mockImplementation(() => Promise.resolve());
+      const mockDeleteRequest = vi.fn(() => Promise.resolve());
+
+      api.mockImplementation(() => ({
+        delete: mockDeleteRequest,
+      }));
 
       await RoleService.remove('test');
-      expect(api.delete).toBeCalledWith('/roles/test');
+      expect(mockDeleteRequest).toBeCalledWith('/roles/test');
     });
   });
 
   describe('Test function: associateRoleAndUser', () => {
     it('should call api.post with endpoint using "roleId"', async () => {
-      api.post.mockImplementation(() => Promise.resolve());
+      const mockPostRequest = vi.fn(() => Promise.resolve());
+
+      api.mockImplementation(() => ({
+        post: mockPostRequest,
+      }));
 
       await RoleService.associateRoleAndUser('userLogin', 'roleId');
 
-      expect(api.post).toBeCalledWith(
+      expect(mockPostRequest).toBeCalledWith(
         '/roles/roleId/users',
         'userLogin',
         {
@@ -81,17 +97,23 @@ describe('Test: RoleService', () => {
 
   describe('Test function: dissociateRoleAndUser', () => {
     it('should call api.delete with endpoint using "roleId" and "userLogin"', async () => {
-      api.delete.mockImplementation(() => Promise.resolve());
+      const mockDeleteRequest = vi.fn(() => Promise.resolve());
+
+      api.mockImplementation(() => ({
+        delete: mockDeleteRequest,
+      }));
 
       await RoleService.dissociateRoleAndUser('userLogin', 'roleId');
 
-      expect(api.delete).toBeCalledWith('/roles/roleId/users/userLogin');
+      expect(mockDeleteRequest).toBeCalledWith('/roles/roleId/users/userLogin');
     });
   });
 
   describe('Test function: findByGroupId', () => {
     it('should return all roles of a group', async () => {
-      api.get.mockImplementation(() => Promise.resolve({ data: 'roles' }));
+      api.mockImplementation(() => ({
+        get: () => Promise.resolve({ data: 'roles' }),
+      }));
 
       const data = await RoleService.findByGroupId();
       expect(data).toEqual('roles');
@@ -100,11 +122,15 @@ describe('Test: RoleService', () => {
 
   describe('Test function: associateRoleAndGroup', () => {
     it('should call api.post with endpoint using "roleId"', async () => {
-      api.post.mockImplementation(() => Promise.resolve());
+      const mockPostRequest = vi.fn(() => Promise.resolve());
+
+      api.mockImplementation(() => ({
+        post: mockPostRequest,
+      }));
 
       await RoleService.associateRoleAndGroup('groupId', 'roleId');
 
-      expect(api.post).toBeCalledWith(
+      expect(mockPostRequest).toBeCalledWith(
         '/roles/roleId/groups',
         'groupId',
         {
@@ -118,11 +144,15 @@ describe('Test: RoleService', () => {
 
   describe('Test function: dissociateRoleAndGroup', () => {
     it('should call api.delete with endpoint using "groupId" and "roleId"', async () => {
-      api.delete.mockImplementation(() => Promise.resolve());
+      const mockDeleteRequest = vi.fn(() => Promise.resolve());
+
+      api.mockImplementation(() => ({
+        delete: mockDeleteRequest,
+      }));
 
       await RoleService.dissociateRoleAndGroup('groupId', 'roleId');
 
-      expect(api.delete).toBeCalledWith('/roles/roleId/groups/groupId');
+      expect(mockDeleteRequest).toBeCalledWith('/roles/roleId/groups/groupId');
     });
   });
 });

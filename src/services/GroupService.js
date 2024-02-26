@@ -1,4 +1,4 @@
-import { api } from 'boot/axios';
+import { prepareRequest } from 'boot/axios';
 
 /**
  * Get all groups.
@@ -6,6 +6,8 @@ import { api } from 'boot/axios';
  * otherwise an error.
  */
 export async function find() {
+  const api = await prepareRequest();
+
   return api.get('/groups').then(({ data }) => data);
 }
 
@@ -15,6 +17,8 @@ export async function find() {
  * @returns {Promise<object>} Return a group.
  */
 export async function findById(id) {
+  const api = await prepareRequest();
+
   return api.get(`/groups/${id}`).then(({ data }) => data);
 }
 
@@ -24,6 +28,8 @@ export async function findById(id) {
  * @returns {Promise<object>} Promise with group object on success otherwise an error.
  */
 export async function create(name) {
+  const api = await prepareRequest();
+
   return api.post('/groups', { name }).then(({ data }) => data);
 }
 
@@ -33,6 +39,8 @@ export async function create(name) {
  * @returns {Promise<void>} Promise with nothing on success.
  */
 export async function remove(id) {
+  const api = await prepareRequest();
+
   return api.delete(`/groups/${id}`);
 }
 
@@ -42,6 +50,8 @@ export async function remove(id) {
  * @returns {Promise<object[]>} Return an array of groups.
  */
 export async function findByLogin(login) {
+  const api = await prepareRequest();
+
   return api.get(`users/${login}/groups`).then(({ data }) => data);
 }
 
@@ -52,6 +62,8 @@ export async function findByLogin(login) {
  * @returns {Promise<object>} Promise with nothing on success otherwise an error.
  */
 export async function associateGroupAndUser(userLogin, groupId) {
+  const api = await prepareRequest();
+
   return api.post(`/groups/${groupId}/users`, userLogin, {
     headers: {
       'Content-Type': 'text/plain',
@@ -66,5 +78,7 @@ export async function associateGroupAndUser(userLogin, groupId) {
  * @returns {Promise<object>} Promise with nothing on success otherwise an error.
  */
 export async function dissociateGroupAndUser(userLogin, groupId) {
+  const api = await prepareRequest();
+
   return api.delete(`/groups/${groupId}/users/${userLogin}`);
 }

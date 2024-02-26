@@ -1,6 +1,6 @@
 import * as LibraryService from 'src/services/LibraryService';
 import { vi } from 'vitest';
-import { api } from 'boot/axios';
+import { prepareRequest as api } from 'boot/axios';
 
 vi.mock('boot/axios');
 
@@ -19,7 +19,9 @@ describe('Test: LibraryService', () => {
         description: 'Library with all templates types.',
       };
 
-      api.get.mockImplementation(() => Promise.resolve({ data: library }));
+      api.mockImplementation(() => ({
+        get: () => Promise.resolve({ data: library }),
+      }));
 
       const res = await LibraryService.findById(library.id);
       expect(res).toEqual(library);
@@ -40,7 +42,9 @@ describe('Test: LibraryService', () => {
         description: 'Library with all templates types.',
       }];
 
-      api.get.mockImplementation(() => Promise.resolve({ data: libraries }));
+      api.mockImplementation(() => ({
+        get: () => Promise.resolve({ data: libraries }),
+      }));
 
       const data = await LibraryService.find();
       expect(data).toEqual(libraries);
@@ -49,35 +53,43 @@ describe('Test: LibraryService', () => {
 
   describe('Test function: remove', () => {
     it('should remove the library corresponding to the given id', async () => {
-      api.delete.mockImplementation(() => Promise.resolve());
+      const mockDeleteRequest = vi.fn(() => Promise.resolve());
+
+      api.mockImplementation(() => ({
+        delete: mockDeleteRequest,
+      }));
 
       await LibraryService.remove('test');
-      expect(api.delete).toBeCalledWith('/libraries/test');
+      expect(mockDeleteRequest).toBeCalledWith('/libraries/test');
     });
   });
 
   describe('Test function: create', () => {
     it('should create the corresponding library', async () => {
-      api.post.mockImplementation(() => Promise.resolve({
-        data: { id: 1 },
+      const mockPostRequest = vi.fn(() => Promise.resolve({ data: { id: 1 } }));
+
+      api.mockImplementation(() => ({
+        post: mockPostRequest,
       }));
 
       const result = await LibraryService.create('url', 'role');
 
-      expect(api.post).toBeCalledWith('/libraries', { url: 'url', role: 'role' });
+      expect(mockPostRequest).toBeCalledWith('/libraries', { url: 'url', role: 'role' });
       expect(result).toEqual({ id: 1 });
     });
   });
 
   describe('Test function: synchronize', () => {
     it('should synchronize the corresponding library', async () => {
-      api.put.mockImplementation(() => Promise.resolve({
-        data: { id: 1 },
+      const mockPutRequest = vi.fn(() => Promise.resolve({ data: { id: 1 } }));
+
+      api.mockImplementation(() => ({
+        put: mockPutRequest,
       }));
 
       const result = await LibraryService.synchronize('id', 'url');
 
-      expect(api.put).toBeCalledWith('/libraries/id', { url: 'url' });
+      expect(mockPutRequest).toBeCalledWith('/libraries/id', { url: 'url' });
       expect(result).toEqual({ id: 1 });
     });
   });

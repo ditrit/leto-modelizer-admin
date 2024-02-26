@@ -1,4 +1,4 @@
-import { api } from 'boot/axios';
+import { prepareRequest } from 'boot/axios';
 
 /**
  * Get all roles.
@@ -6,6 +6,8 @@ import { api } from 'boot/axios';
  * otherwise an error.
  */
 export async function find() {
+  const api = await prepareRequest();
+
   return api.get('/roles').then(({ data }) => data);
 }
 
@@ -15,6 +17,8 @@ export async function find() {
  * @returns {Promise<object[]>} Return an array of roles.
  */
 export async function findByLogin(userLogin) {
+  const api = await prepareRequest();
+
   return api.get(`/users/${userLogin}/roles`).then(({ data }) => data);
 }
 
@@ -24,6 +28,8 @@ export async function findByLogin(userLogin) {
  * @returns {Promise<object>} Promise with role object on success otherwise an error.
  */
 export async function create(name) {
+  const api = await prepareRequest();
+
   return api.post('/roles', { name }).then(({ data }) => data);
 }
 
@@ -33,6 +39,8 @@ export async function create(name) {
  * @returns {Promise<void>} Promise with nothing on success.
  */
 export async function remove(id) {
+  const api = await prepareRequest();
+
   return api.delete(`/roles/${id}`);
 }
 
@@ -43,6 +51,8 @@ export async function remove(id) {
  * @returns {Promise<object>} Promise with nothing on success otherwise an error.
  */
 export async function associateRoleAndUser(userLogin, roleId) {
+  const api = await prepareRequest();
+
   return api.post(`/roles/${roleId}/users`, userLogin, {
     headers: {
       'Content-Type': 'text/plain',
@@ -57,6 +67,8 @@ export async function associateRoleAndUser(userLogin, roleId) {
  * @returns {Promise<object>} Promise with nothing on success otherwise an error.
  */
 export async function dissociateRoleAndUser(userLogin, roleId) {
+  const api = await prepareRequest();
+
   return api.delete(`/roles/${roleId}/users/${userLogin}`);
 }
 
@@ -66,6 +78,8 @@ export async function dissociateRoleAndUser(userLogin, roleId) {
  * @returns {Promise<object[]>} Return an array of roles.
  */
 export async function findByGroupId(groupId) {
+  const api = await prepareRequest();
+
   return api.get(`groups/${groupId}/roles`)
     .then(({ data }) => data);
 }
@@ -77,6 +91,8 @@ export async function findByGroupId(groupId) {
  * @returns {Promise<object>} Promise with nothing on success otherwise an error.
  */
 export async function associateRoleAndGroup(groupId, roleId) {
+  const api = await prepareRequest();
+
   return api.post(`/roles/${roleId}/groups`, groupId, {
     headers: {
       'Content-Type': 'text/plain',
@@ -91,5 +107,7 @@ export async function associateRoleAndGroup(groupId, roleId) {
  * @returns {Promise<object>} Promise with nothing on success otherwise an error.
  */
 export async function dissociateRoleAndGroup(groupId, roleId) {
+  const api = await prepareRequest();
+
   return api.delete(`/roles/${roleId}/groups/${groupId}`);
 }
