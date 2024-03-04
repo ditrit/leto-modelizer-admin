@@ -29,7 +29,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => Promise.resolve(response),
   (error) => {
-    if (error.response.status === 503) {
+    if ([403, 401].includes(error.response.status)) {
       window.location.href = process.env.LETO_MODELIZER_URL;
     }
     return Promise.reject(error);
