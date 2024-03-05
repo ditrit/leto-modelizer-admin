@@ -297,6 +297,7 @@ export default {
       url: 'Url of library',
       role: 'Name of library role',
       notEmpty: 'Field is required.',
+      validRoleName: 'Must start and end with a capital letter/number, use uppercase letters, numbers, _, or -.',
       notifyError: 'Error during library creation.',
       notifySuccess: 'Library is created.',
       urlAlreadyExists: 'Library with this url already exists.',

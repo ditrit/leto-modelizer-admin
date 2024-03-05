@@ -13,11 +13,12 @@ Feature: Test roundtrip of the application: Libraries
   ################## Add library ##################
   ## 401 Should redirect to AddLibrary page
   ## 402 Should redirect to libraries page on cancel
-  ## 403 Should display an error on empty library role name and url
-  ## 404 Should display an error on duplicate library url
-  ## 405 Should display an error on duplicate library role name
-  ## 406 Should display an error on not found library url
-  ## 407 Should create library and go to its page
+  ## 403 Should display an error on empty library url
+  ## 404 Should display an error on wrong library role name format
+  ## 405 Should display an error on duplicate library url
+  ## 406 Should display an error on duplicate library role name
+  ## 407 Should display an error on not found library url
+  ## 408 Should create library and go to its page
 
   ################## Synchronize library ##################
   ## 501 Should display an error on empty library url
@@ -95,25 +96,25 @@ Feature: Test roundtrip of the application: Libraries
     When I force click on '[data-cy="library_button_cancel"]'
     Then I expect current url is '/libraries'
 
-    ## 403 Should display an error on empty library role name and url
+    ## 403 Should display an error on empty library url
     When I click on '[data-cy="libraries_button_add"]'
-    And  I click on '[data-cy="library_button_add"]'
-    Then I expect '.library-field-role div[role="alert"]' is 'Field is required'
-
-    When I set on '[data-cy="library_field_role"]' text 'role'
     And  I click on '[data-cy="library_button_add"]'
     Then I expect '.library-field-role div[role="alert"]' not exists
     And  I expect '.library-field-url div[role="alert"]' is 'Field is required'
 
-    ## 404 Should display an error on duplicate library url
+    ## 404 Should display an error on wrong library role name format
+    When I set on '[data-cy="library_field_role"]' text 'r'
+    Then I expect '.library-field-role div[role="alert"]' is 'Must start and end with a capital letter/number, use uppercase letters, numbers, _, or -'
+
+    ## 405 Should display an error on duplicate library url
     When I set on '[data-cy="library_field_url"]' text 'alreadyExist'
-    And  I set on '[data-cy="library_field_role"]' text 'role'
+    And  I set on '[data-cy="library_field_role"]' text ''
     And  I click on '[data-cy="library_button_add"]'
 
     Then I expect 'negative' toast to appear with text 'Error during library creation.'
     And  I expect '.library-field-url div[role="alert"]' is 'Library with this url already exists.'
 
-    ## 405 Should display an error on not found library url
+    ## 406 Should display an error on not found library url
     When I set on '[data-cy="library_field_url"]' text 'notFound'
     And  I click on '[data-cy="library_button_add"]'
 
@@ -121,18 +122,18 @@ Feature: Test roundtrip of the application: Libraries
     And  I expect '.library-field-role div[role="alert"]' not exists
     And  I expect '.library-field-url div[role="alert"]' is 'Library with this url can not be downloaded.'
 
-    ## 406 Should display an error on duplicate library role name
+    ## 407 Should display an error on duplicate library role name
     When I set on '[data-cy="library_field_url"]' text 'valid'
-    And  I set on '[data-cy="library_field_role"]' text 'alreadyExist'
+    And  I set on '[data-cy="library_field_role"]' text 'ROLE-1'
     And  I click on '[data-cy="library_button_add"]'
 
     Then I expect 'negative' toast to appear with text 'Error during library creation.'
     And  I expect '.library-field-url div[role="alert"]' not exists
     And  I expect '.library-field-role div[role="alert"]' is 'Library with this role already exists.'
 
-    ## 407 Should create library and go to its page
+    ## 408 Should create library and go to its page
     When I set on '[data-cy="library_field_url"]' text 'valid'
-    And  I set on '[data-cy="library_field_role"]' text 'valid'
+    And  I set on '[data-cy="library_field_role"]' text ''
     And  I click on '[data-cy="library_button_add"]'
 
     Then I expect current url is '/libraries/1'
