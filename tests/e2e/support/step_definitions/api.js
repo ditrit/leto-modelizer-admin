@@ -288,7 +288,7 @@ function setLibraryIntercepts() {
           message: 'Other error',
         },
       });
-    } else if (role === 'alreadyExist') {
+    } else if (role === 'ROLE-1') {
       request.reply({
         statusCode: 400,
         body: {
