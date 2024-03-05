@@ -38,4 +38,18 @@ describe('Test: FieldRules', () => {
       expect(wrapper.vm.notEmpty('a')).toEqual(true);
     });
   });
+
+  describe('Test function: isValidRoleName', () => {
+    it('should return error text when the value is not valid', () => {
+      expect(wrapper.vm.isValidRoleName('role')).toEqual('test.text.validRoleName');
+    });
+
+    it('should return true when the value is empty', () => {
+      expect(wrapper.vm.isValidRoleName('')).toEqual(true);
+    });
+
+    it('should return true when the value is valid', () => {
+      expect(wrapper.vm.isValidRoleName('ROLE-1')).toEqual(true);
+    });
+  });
 });
