@@ -47,6 +47,8 @@ export default {
       notFound: 'Group not found.',
       userList: 'List of users attributed to {group}',
       roleList: 'Role of {group}',
+      rolesTab: 'Roles',
+      usersTab: 'Users',
       attachUser: 'Attach user',
       attachRole: 'Attach role',
     },
