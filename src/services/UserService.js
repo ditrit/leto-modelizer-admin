@@ -12,26 +12,6 @@ export async function getCurrent() {
 }
 
 /**
- * Get picture of the current user.
- * @returns {Promise<object>} Promise with the logged-in user picture on success
- * otherwise an error.
- */
-export async function getMyPicture() {
-  const api = await prepareRequest();
-
-  return api.get('/users/me/picture', {
-    responseType: 'arraybuffer',
-  })
-    .then((response) => {
-      const imageBase64 = btoa(
-        new Uint8Array(response.data)
-          .reduce((data, byte) => data + String.fromCharCode(byte), ''),
-      );
-      return `data:${response.headers['content-type']};base64,${imageBase64}`;
-    });
-}
-
-/**
  * Get permissions of the current user.
  * @returns {Promise<object>} Promise with the permissions of logged-in user on success
  * otherwise an error.
@@ -62,26 +42,6 @@ export async function findByLogin(login) {
   const api = await prepareRequest();
 
   return api.get(`/users/${login}`).then(({ data }) => data);
-}
-
-/**
- * Get user picture by login.
- * @param {string} login - User login.
- * @returns {Promise<string>} Return a user picture on success, otherwise an error.
- */
-export async function getPictureByLogin(login) {
-  const api = await prepareRequest();
-
-  return api.get(`/users/${login}/picture`, {
-    responseType: 'arraybuffer',
-  })
-    .then((response) => {
-      const imageBase64 = btoa(
-        new Uint8Array(response.data)
-          .reduce((data, byte) => data + String.fromCharCode(byte), ''),
-      );
-      return `data:${response.headers['content-type']};base64,${imageBase64}`;
-    });
 }
 
 /**

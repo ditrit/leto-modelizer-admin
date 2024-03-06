@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import * as UserService from 'src/services/UserService';
+import * as ImageDownloadService from 'src/services/ImageDownloadService';
 import { ref, onMounted } from 'vue';
 
 const props = defineProps({
@@ -38,7 +38,7 @@ const userPicture = ref(null);
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function loadUserPicture() {
-  return UserService.getPictureByLogin(props.login)
+  return ImageDownloadService.getUserPicture(props.login)
     .then((picture) => {
       userPicture.value = picture;
     })
