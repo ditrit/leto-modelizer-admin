@@ -47,12 +47,18 @@ Feature: Test roundtrip of the application: Groups
     Then I expect current url is '/groups/1'
     And  I expect '[data-cy="page_group_loading"]' not exists
     And  I expect '[data-cy="page_group_title"]' is 'Group 1'
+
     # Display related users
+    And  I expect '[data-cy="page_group_users_tab"]' exists
+    And  I expect '[data-cy="page_group_users_tab_panel"]' exists
     And  I expect '[data-cy="page_group_users_title"]' exists
     And  I expect '[data-cy="users_table"]' exists
     And  I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-name' is 'Admin'
     And  I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-login' is 'admin'
+
     # Display related roles
+    When I click on '[data-cy="page_group_roles_tab"]'
+    Then I expect '[data-cy="page_group_roles_tab_panel"]' exists
     And  I expect '[data-cy="page_group_roles_title"]' exists
     And  I expect '[data-cy="roles_table"]' exists
     And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'Super administrator'
@@ -102,6 +108,9 @@ Feature: Test roundtrip of the application: Groups
     ####################################################
 
     ## 501 Should disabled confirm button if no role is selected
+    When I click on '[data-cy="page_group_roles_tab"]'
+    Then I expect '[data-cy="page_group_roles_tab_panel"]' exists
+
     When I click on '[data-cy="page_group_button_attach_role"]'
     Then I expect '[data-cy="roles_table"]' exists
     And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'Super administrator'
