@@ -103,6 +103,6 @@ async function synchronize() {
 }
 
 watch(() => props.library, () => {
-  url.value = props.library.url;
+  url.value = `${props.library.url}index.json`;
 });
 </script>

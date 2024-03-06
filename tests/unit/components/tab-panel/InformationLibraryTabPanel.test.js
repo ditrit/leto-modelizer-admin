@@ -42,11 +42,11 @@ describe('Test component: InformationLibraryTabPanel', async () => {
     it('should update value', async () => {
       await wrapper.setProps({
         library: {
-          url: 'test',
+          url: 'test/',
         },
       });
 
-      expect(wrapper.vm.url).toEqual('test');
+      expect(wrapper.vm.url).toEqual('test/index.json');
     });
   });
 

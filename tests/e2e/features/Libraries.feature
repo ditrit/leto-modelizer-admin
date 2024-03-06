@@ -138,7 +138,7 @@ Feature: Test roundtrip of the application: Libraries
 
     Then I expect current url is '/libraries/1'
     And  I expect 'positive' toast to appear with text 'Library is created.'
-    And  I expect field '[data-cy="library_field_url"]' is 'url_1'
+    And  I expect field '[data-cy="library_field_url"]' is 'url_1index.json'
 
     ####################################################
     ################## Synchronize library  ############
