@@ -13,13 +13,32 @@
           @click="$router.push('/users')"
         />
       </q-card-section>
-      <q-card-section class=" q-py-none">
+      <q-card-section class="q-py-none">
         <h4
           class="q-ma-none q-mb-sm"
           data-cy="page_user_title"
         >
           {{ user.name }}
         </h4>
+      </q-card-section>
+      <q-card-section class="q-pa-none">
+        <q-tabs
+          v-model="currentTab"
+          no-caps
+          active-color="primary"
+          align="left"
+        >
+          <q-tab
+            name="groups"
+            :label="$t('UserPage.text.groupsTab')"
+            data-cy="page_user_groups_tab"
+          />
+          <q-tab
+            name="roles"
+            :label="$t('UserPage.text.rolesTab')"
+            data-cy="page_user_roles_tab"
+          />
+        </q-tabs>
       </q-card-section>
       <q-linear-progress
         v-if="loading"
@@ -28,54 +47,68 @@
         data-cy="page_user_loading"
       />
     </q-card>
-    <q-card-section>
-      <h6
-        class="q-ma-none q-mb-sm"
-        data-cy="page_user_roles_title"
+    <q-tab-panels
+      v-model="currentTab"
+      animated
+      transition-prev="jump-up"
+      transition-next="jump-down"
+      class="bg-grey-1"
+    >
+      <q-tab-panel
+        name="groups"
+        data-cy="page_user_groups_tab_panel"
       >
-        {{ $t('UserPage.text.roleList', { user: user.name }) }}
-      </h6>
-      <q-btn
-        outline
-        no-caps
-        color="primary"
-        class="bg-white q-mb-md"
-        data-cy="page_user_button_attach_role"
-        :label="$t('UserPage.text.attachRole')"
-        :icon="$t('UserPage.icon.attach')"
-        @click="openAttachRoleToUserDialog"
-      />
-      <roles-table
-        :roles="roles"
-        :show-action="false"
-        :remove-action="false"
-        @detach="openDetachRoleFromUserDialog"
-      />
-    </q-card-section>
-    <q-card-section>
-      <h6
-        class="q-ma-none q-mb-sm"
-        data-cy="page_user_groups_title"
+        <h6
+          class="q-ma-none q-mb-sm"
+          data-cy="page_user_groups_title"
+        >
+          {{ $t('UserPage.text.groupList', { user: user.name }) }}
+        </h6>
+        <q-btn
+          outline
+          no-caps
+          color="primary"
+          class="bg-white q-mb-md"
+          data-cy="page_user_button_attach_group"
+          :label="$t('UserPage.text.attachGroup')"
+          :icon="$t('UserPage.icon.attach')"
+          @click="openAttachGroupToUserDialog"
+        />
+        <groups-table
+          :groups="groups"
+          :show-action="false"
+          :remove-action="false"
+          @detach="openDetachGroupFromUserDialog"
+        />
+      </q-tab-panel>
+      <q-tab-panel
+        name="roles"
+        data-cy="page_user_roles_tab_panel"
       >
-        {{ $t('UserPage.text.groupList', { user: user.name }) }}
-      </h6>
-      <q-btn
-        outline
-        no-caps
-        color="primary"
-        class="bg-white q-mb-md"
-        data-cy="page_user_button_attach_group"
-        :label="$t('UserPage.text.attachGroup')"
-        :icon="$t('UserPage.icon.attach')"
-        @click="openAttachGroupToUserDialog"
-      />
-      <groups-table
-        :groups="groups"
-        :show-action="false"
-        :remove-action="false"
-        @detach="openDetachGroupFromUserDialog"
-      />
-    </q-card-section>
+        <h6
+          class="q-ma-none q-mb-sm"
+          data-cy="page_user_roles_title"
+        >
+          {{ $t('UserPage.text.roleList', { user: user.name }) }}
+        </h6>
+        <q-btn
+          outline
+          no-caps
+          color="primary"
+          class="bg-white q-mb-md"
+          data-cy="page_user_button_attach_role"
+          :label="$t('UserPage.text.attachRole')"
+          :icon="$t('UserPage.icon.attach')"
+          @click="openAttachRoleToUserDialog"
+        />
+        <roles-table
+          :roles="roles"
+          :show-action="false"
+          :remove-action="false"
+          @detach="openDetachRoleFromUserDialog"
+        />
+      </q-tab-panel>
+    </q-tab-panels>
   </q-page>
 </template>
 
@@ -100,6 +133,7 @@ const router = useRouter();
 const user = ref({});
 const groups = ref([]);
 const roles = ref([]);
+const currentTab = ref('groups');
 
 let reloadGroupsEventRef;
 let reloadRolesEventRef;
