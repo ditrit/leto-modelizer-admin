@@ -90,6 +90,16 @@ function setUserIntercepts() {
     body: 'Not Found',
   });
 
+  cy.intercept('GET', '/api/users/unknown/roles', {
+    statusCode: 404,
+    body: 'Not Found',
+  });
+
+  cy.intercept('GET', '/api/users/unknown/groups', {
+    statusCode: 404,
+    body: 'Not Found',
+  });
+
   cy.intercept('GET', '/api/users/admin/roles', {
     statusCode: 200,
     body: {
@@ -101,6 +111,13 @@ function setUserIntercepts() {
     statusCode: 200,
     body: {
       content: [dev],
+    },
+  });
+
+  cy.intercept('GET', '/api/users/login/groups', {
+    statusCode: 200,
+    body: {
+      content: [group2],
     },
   });
 
@@ -142,6 +159,16 @@ function setGroupIntercepts() {
   });
 
   cy.intercept('GET', '/api/groups/unknown', {
+    statusCode: 404,
+    body: 'Not Found',
+  });
+
+  cy.intercept('GET', '/api/groups/unknown/roles', {
+    statusCode: 404,
+    body: 'Not Found',
+  });
+
+  cy.intercept('GET', '/api/groups/unknown/users', {
     statusCode: 404,
     body: 'Not Found',
   });

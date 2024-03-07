@@ -21,6 +21,25 @@
           {{ group.name }}
         </h4>
       </q-card-section>
+      <q-card-section class="q-pa-none">
+        <q-tabs
+          v-model="currentTab"
+          no-caps
+          active-color="primary"
+          align="left"
+        >
+          <q-tab
+            name="users"
+            :label="$t('GroupPage.text.usersTab')"
+            data-cy="page_group_users_tab"
+          />
+          <q-tab
+            name="roles"
+            :label="$t('GroupPage.text.rolesTab')"
+            data-cy="page_group_roles_tab"
+          />
+        </q-tabs>
+      </q-card-section>
       <q-linear-progress
         v-if="loading"
         indeterminate
@@ -28,54 +47,68 @@
         data-cy="page_group_loading"
       />
     </q-card>
-    <q-card-section>
-      <h6
-        class="q-ma-none q-mb-sm"
-        data-cy="page_group_users_title"
+    <q-tab-panels
+      v-model="currentTab"
+      animated
+      transition-prev="jump-up"
+      transition-next="jump-down"
+      class="bg-grey-1"
+    >
+      <q-tab-panel
+        name="users"
+        data-cy="page_group_users_tab_panel"
       >
-        {{ $t('GroupPage.text.userList', { group: group.name }) }}
-      </h6>
-      <q-btn
-        outline
-        no-caps
-        color="primary"
-        class="bg-white q-mb-md"
-        data-cy="page_group_button_attach_user"
-        :label="$t('GroupPage.text.attachUser')"
-        :icon="$t('GroupPage.icon.attachUser')"
-        @click="openAttachUserToGroupDialog"
-      />
-      <users-table
-        :users="users"
-        :show-action="false"
-        :remove-action="false"
-        @detach="openDetachUserFromGroupDialog"
-      />
-    </q-card-section>
-    <q-card-section>
-      <h6
-        class="q-ma-none q-mb-sm"
-        data-cy="page_group_roles_title"
+        <h6
+          class="q-ma-none q-mb-sm"
+          data-cy="page_group_users_title"
+        >
+          {{ $t('GroupPage.text.userList', { group: group.name }) }}
+        </h6>
+        <q-btn
+          outline
+          no-caps
+          color="primary"
+          class="bg-white q-mb-md"
+          data-cy="page_group_button_attach_user"
+          :label="$t('GroupPage.text.attachUser')"
+          :icon="$t('GroupPage.icon.attachUser')"
+          @click="openAttachUserToGroupDialog"
+        />
+        <users-table
+          :users="users"
+          :show-action="false"
+          :remove-action="false"
+          @detach="openDetachUserFromGroupDialog"
+        />
+      </q-tab-panel>
+      <q-tab-panel
+        name="roles"
+        data-cy="page_group_roles_tab_panel"
       >
-        {{ $t('GroupPage.text.roleList', { group: group.name }) }}
-      </h6>
-      <q-btn
-        outline
-        no-caps
-        color="primary"
-        class="bg-white q-mb-md"
-        data-cy="page_group_button_attach_role"
-        :label="$t('GroupPage.text.attachRole')"
-        :icon="$t('GroupPage.icon.attachRole')"
-        @click="openAttachRoleToGroupDialog"
-      />
-      <roles-table
-        :roles="roles"
-        :show-action="false"
-        :remove-action="false"
-        @detach="openDetachRoleFromGroupDialog"
-      />
-    </q-card-section>
+        <h6
+          class="q-ma-none q-mb-sm"
+          data-cy="page_group_roles_title"
+        >
+          {{ $t('GroupPage.text.roleList', { group: group.name }) }}
+        </h6>
+        <q-btn
+          outline
+          no-caps
+          color="primary"
+          class="bg-white q-mb-md"
+          data-cy="page_group_button_attach_role"
+          :label="$t('GroupPage.text.attachRole')"
+          :icon="$t('GroupPage.icon.attachRole')"
+          @click="openAttachRoleToGroupDialog"
+        />
+        <roles-table
+          :roles="roles"
+          :show-action="false"
+          :remove-action="false"
+          @detach="openDetachRoleFromGroupDialog"
+        />
+      </q-tab-panel>
+    </q-tab-panels>
   </q-page>
 </template>
 
@@ -100,6 +133,8 @@ const router = useRouter();
 const group = ref({});
 const users = ref([]);
 const roles = ref([]);
+const currentTab = ref('users');
+
 let reloadUsersEventRef;
 let reloadRolesEventRef;
 

@@ -47,6 +47,8 @@ export default {
       notFound: 'Group not found.',
       userList: 'List of users attributed to {group}',
       roleList: 'Role of {group}',
+      rolesTab: 'Roles',
+      usersTab: 'Users',
       attachUser: 'Attach user',
       attachRole: 'Attach role',
     },
@@ -60,6 +62,8 @@ export default {
     text: {
       goBack: 'Return to previous page',
       notFound: 'User not found.',
+      rolesTab: 'Roles',
+      groupsTab: 'Groups',
       roleList: 'List of roles attributed to {user}',
       groupList: 'Group of {user}',
       attachGroup: 'Attach group',
