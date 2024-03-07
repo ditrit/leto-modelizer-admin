@@ -1,7 +1,7 @@
 <template>
   <q-page class="column bg-grey-1">
     <q-card class="no-border-radius">
-      <q-card-section class="q-my-none">
+      <q-item class="q-my-none">
         <q-btn
           flat
           dense
@@ -12,29 +12,59 @@
           :icon="$t('LibraryPage.icon.goBack')"
           @click="$router.push('/libraries')"
         />
-      </q-card-section>
-      <q-card-section class=" q-py-none">
-        <h4
-          class="q-ma-none"
-          data-cy="page_library_title"
-        >
-          {{ library.name }}
-        </h4>
-      </q-card-section>
-      <q-card-section>
-        <div class="row">
-          <div class="q-mr-md">
-            <span class="q-mr-sm text-bold">{{ $t('LibraryPage.text.version') }}</span>
-            <span data-cy="page_library_version">{{ library.version }}</span>
+      </q-item>
+      <q-card-section class="row">
+        <library-avatar
+          v-if="library.icon"
+          :id="library.id"
+          color="white"
+          size="100px"
+          square
+        />
+        <div class="q-ml-md">
+          <div
+            class="text-h4"
+            data-cy="page_library_title"
+          >
+            {{ library.name }}
           </div>
           <div>
-            <span class="q-mr-sm text-bold">{{ $t('LibraryPage.text.maintainer') }}</span>
-            <span data-cy="page_library_maintainer">{{ library.maintainer }}</span>
+            <div class="row">
+              <div class="q-mr-md">
+                <span class="q-mr-sm text-bold">{{ $t('LibraryPage.text.version') }}</span>
+                <span data-cy="page_library_version">{{ library.version }}</span>
+              </div>
+              <div class="flex items-baseline">
+                <span class="q-mr-sm text-bold">{{ $t('LibraryPage.text.maintainer') }}</span>
+                <q-spinner
+                  v-if="loadingUser"
+                  size="10px"
+                  class="q-mr-xs"
+                />
+                <span
+                  v-if="loadingUser || !user"
+                  data-cy="page_library_maintainer"
+                >
+                  {{ library.maintainer }}
+                </span>
+                <a
+                  v-else
+                  :href="`/users/${library.maintainer}`"
+                  data-cy="page_library_maintainer"
+                >
+                  {{ library.maintainer }}
+                  <user-tooltip
+                    v-if="library.maintainer"
+                    :user="user"
+                  />
+                </a>
+              </div>
+            </div>
+            <div>
+              <span class="q-mr-sm text-bold">{{ $t('LibraryPage.text.description') }}</span>
+              <span data-cy="page_library_description">{{ library.description }}</span>
+            </div>
           </div>
-        </div>
-        <div>
-          <span class="q-mr-sm text-bold">{{ $t('LibraryPage.text.description') }}</span>
-          <span data-cy="page_library_description">{{ library.description }}</span>
         </div>
       </q-card-section>
       <q-card-section class="q-pa-none">
@@ -77,14 +107,39 @@ import { useRoute, useRouter } from 'vue-router';
 import * as LibraryService from 'src/services/LibraryService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
+import LibraryAvatar from 'components/avatar/LibraryAvatar.vue';
 import InformationLibraryTabPanel from 'components/tab-panel/InformationLibraryTabPanel.vue';
+import UserTooltip from 'components/tooltip/UserTooltip.vue';
+import * as UserService from 'src/services/UserService';
 
 const loading = ref(false);
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const library = ref({});
+const user = ref(null);
+const loadingUser = ref(true);
 const currentTab = ref('information');
+
+/**
+ * Load user by its login.
+ * @param {string} login - User login.
+ * @returns {Promise<void>} Promise with nothing on success.
+ */
+async function loadUser(login) {
+  loadingUser.value = true;
+
+  return UserService.findByLogin(login)
+    .then((data) => {
+      user.value = data;
+    })
+    .catch(() => {
+      user.value = null;
+    })
+    .finally(() => {
+      loadingUser.value = false;
+    });
+}
 
 /**
  * Load library from id in url. If the library does not exist, redirect to the libraries page.
@@ -96,6 +151,8 @@ async function loadLibrary() {
   return LibraryService.findById(route.params.id)
     .then((data) => {
       library.value = data;
+
+      return loadUser(data.maintainer);
     })
     .catch(() => {
       Notify.create({

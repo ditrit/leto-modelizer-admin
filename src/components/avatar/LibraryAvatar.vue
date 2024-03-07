@@ -4,16 +4,14 @@
     text-color="white"
     :size="small ? 'sm' : 'md'"
     :font-size="small ? '10px' : '12px'"
-    :title="login"
+    :title="id"
   >
     <q-img
-      v-if="userPicture"
-      :src="userPicture"
-      :alt="login"
+      v-if="libraryIcon"
+      :src="libraryIcon"
+      :alt="id"
+      width="85%"
     />
-    <template v-else>
-      {{ login.at(0) }}
-    </template>
   </q-avatar>
 </template>
 
@@ -22,7 +20,7 @@ import * as ImageDownloadService from 'src/services/ImageDownloadService';
 import { ref, onMounted } from 'vue';
 
 const props = defineProps({
-  login: {
+  id: {
     type: String,
     required: true,
   },
@@ -31,23 +29,23 @@ const props = defineProps({
     default: false,
   },
 });
-const userPicture = ref(null);
+const libraryIcon = ref(null);
 
 /**
- * Load user picture by its login.
+ * Load library icon by its id.
  * @returns {Promise<void>} Promise with nothing on success.
  */
-async function loadUserPicture() {
-  return ImageDownloadService.getUserPicture(props.login)
-    .then((picture) => {
-      userPicture.value = picture;
+async function loadLibraryIcon() {
+  return ImageDownloadService.getLibraryIcon(props.id)
+    .then((icon) => {
+      libraryIcon.value = icon;
     })
     .catch(() => {
-      userPicture.value = null;
+      libraryIcon.value = null;
     });
 }
 
 onMounted(async () => {
-  loadUserPicture();
+  await loadLibraryIcon();
 });
 </script>

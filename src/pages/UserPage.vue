@@ -1,7 +1,7 @@
 <template>
   <q-page class="column bg-grey-1">
     <q-card class="no-border-radius">
-      <q-card-section class="q-my-none">
+      <q-item class="q-my-none">
         <q-btn
           flat
           dense
@@ -12,15 +12,35 @@
           :icon="$t('UserPage.icon.goBack')"
           @click="$router.push('/users')"
         />
-      </q-card-section>
-      <q-card-section class="q-py-none">
-        <h4
-          class="q-ma-none q-mb-sm"
-          data-cy="page_user_title"
+      </q-item>
+      <q-item>
+        <q-item-section
+          v-if="user.login"
+          avatar
         >
-          {{ user.name }}
-        </h4>
-      </q-card-section>
+          <user-avatar
+            :login="user.login"
+            color="white"
+            size="100px"
+            square
+          />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label
+            class="text-h4"
+            data-cy="page_user_title"
+          >
+            {{ user.name }}
+          </q-item-label>
+          <q-item-label
+            v-if="user.email"
+            class="text-h5"
+            caption
+          >
+            {{ user.email }}
+          </q-item-label>
+        </q-item-section>
+      </q-item>
       <q-card-section class="q-pa-none">
         <q-tabs
           v-model="currentTab"
@@ -125,6 +145,7 @@ import * as RoleService from 'src/services/RoleService';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 import ReloadRolesEvent from 'src/composables/events/ReloadRolesEvent';
+import UserAvatar from 'components/avatar/UserAvatar.vue';
 
 const loading = ref(false);
 const { t } = useI18n();

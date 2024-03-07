@@ -8,7 +8,10 @@
     data-cy="user-button"
   >
     <template #label>
-      <user-avatar :login="login" />
+      <user-avatar
+        v-if="login"
+        :login="login"
+      />
     </template>
     <q-list>
       <q-item

@@ -24,19 +24,6 @@ describe('Test: UserService', () => {
     });
   });
 
-  describe('Test function: getMyPicture', () => {
-    it('should return the current user picture', async () => {
-      const mockUserPicture = 'data:image/png;base64,';
-
-      api.mockImplementation(() => ({
-        get: () => Promise.resolve({ data: 'picture', headers: { 'content-type': 'image/png' } }),
-      }));
-
-      const userPicture = await UserService.getMyPicture();
-      expect(userPicture).toEqual(mockUserPicture);
-    });
-  });
-
   describe('Test function: getMyPermissions', () => {
     it('should call api.get', async () => {
       const mockGetRequest = vi.fn(() => Promise.resolve({ data: 'permissions' }));
@@ -81,19 +68,6 @@ describe('Test: UserService', () => {
 
       const res = await UserService.findByLogin(user.login);
       expect(res).toEqual(user);
-    });
-  });
-
-  describe('Test function: getPictureByLogin', () => {
-    it('should return a user picture using its login', async () => {
-      const mockUserPicture = 'data:image/png;base64,';
-
-      api.mockImplementation(() => ({
-        get: () => Promise.resolve({ data: 'picture', headers: { 'content-type': 'image/png' } }),
-      }));
-
-      const userPicture = await UserService.getPictureByLogin('userLogin');
-      expect(userPicture).toEqual(mockUserPicture);
     });
   });
 
