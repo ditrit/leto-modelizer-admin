@@ -235,6 +235,15 @@ export default {
       notifySuccess: 'Role is detached from group.',
     },
   },
+  DetachGroupFromRoleDialog: {
+    text: {
+      title: 'Do you want to detach the group "{group}" from the role "{role}" ?',
+      content: 'You can always reassign the group to the role.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifySuccess: 'Group is detached from role.',
+    },
+  },
   DetachRoleFromUserDialog: {
     text: {
       title: 'Do you want to detach the role "{role}" from the user "{user}" ?',
@@ -328,6 +337,19 @@ export default {
       confirm: 'Confirm',
       notifyError: 'Error during attachment of a role to the group.',
       notifySuccess: 'Role(s) successfully attached to the group.',
+    },
+    icon: {
+      info: 'fa-solid fa-circle-info',
+    },
+  },
+  AttachGroupToRoleDialog: {
+    text: {
+      title: 'Attach one or more groups to role',
+      content: 'By associating a role to a group, it will inherit all the role\'s permissions.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifyError: 'Error during attachment of a group to the role.',
+      notifySuccess: 'Group(s) successfully attached to the role.',
     },
     icon: {
       info: 'fa-solid fa-circle-info',
