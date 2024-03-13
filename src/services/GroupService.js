@@ -56,6 +56,18 @@ export async function findByLogin(login) {
 }
 
 /**
+ * Get all groups of a role.
+ * @param {string} roleId - Role id.
+ * @returns {Promise<object[]>} Return an array of groups.
+ */
+export async function findByRoleId(roleId) {
+  const api = await prepareRequest();
+
+  return api.get(`roles/${roleId}/groups`)
+    .then(({ data }) => data);
+}
+
+/**
  * Associate group and user.
  * @param {string} userLogin - User login.
  * @param {string} groupId - Group id.
