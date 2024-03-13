@@ -108,14 +108,16 @@ async function onSubmit() {
         throw new Error(roleId);
       })))
     .then((results) => {
+      const failedRequestObjects = [];
+
       results.forEach(({ status, reason }) => {
         if (status === 'rejected' && reason.message) {
-          // new Error() send message of type String
-          // use `+reason.message` to transform into Number
-          selected.value = selected.value
-            .filter(({ id }) => id === +reason.message);
+          failedRequestObjects.push(...selected.value
+            .filter(({ id }) => id === reason.message));
         }
       });
+
+      selected.value = failedRequestObjects;
 
       if (results.every(({ status }) => status === 'fulfilled')) {
         Notify.create({
@@ -125,7 +127,6 @@ async function onSubmit() {
         });
 
         show.value = false;
-        selected.value = [];
       }
     }).finally(async () => {
       ReloadRolesEvent.next();
