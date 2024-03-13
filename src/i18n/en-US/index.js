@@ -199,6 +199,16 @@ export default {
       warning: 'fa-solid fa-triangle-exclamation',
     },
   },
+  RemoveRoleDialog: {
+    text: {
+      title: 'Do you want to delete the role {name} ?',
+      content: 'Please note, this action is irreversible.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifySuccess: 'Role is removed.',
+      notifyError: 'Error during role deletion.',
+    },
+  },
   RemoveGroupDialog: {
     text: {
       title: 'Do you want to delete the group "{name}" ?',
