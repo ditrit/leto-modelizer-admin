@@ -128,7 +128,7 @@ const columns = computed(() => {
       label: t('UsersTable.text.actionsColumn'),
       align: 'left',
       field: 'login',
-      classes: 'group-actions',
+      classes: 'user-actions',
     });
   }
 
