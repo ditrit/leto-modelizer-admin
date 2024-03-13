@@ -87,6 +87,16 @@ function setUserIntercepts() {
     },
   });
 
+  cy.intercept('GET', '/api/users/Maintainer_1', {
+    statusCode: 404,
+    body: 'Not Found',
+  });
+
+  cy.intercept('GET', '/api/users/Maintainer_2', {
+    statusCode: 404,
+    body: 'Not Found',
+  });
+
   cy.intercept('GET', '/api/users/admin', {
     statusCode: 200,
     body: adminUser,
