@@ -248,6 +248,19 @@ export default {
       warning: 'fa-solid fa-triangle-exclamation',
     },
   },
+  DetachUserFromRoleDialog: {
+    text: {
+      title: 'Do you want to detach the user "{user}" from the role "{role}" ?',
+      content: 'You can always reassign the user to the role.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifySuccess: 'User is detached from role.',
+      warning: 'Losing your role means losing permission, and if you no longer have admin access, you will be redirected to Leto-Modelizer.',
+    },
+    icon: {
+      warning: 'fa-solid fa-triangle-exclamation',
+    },
+  },
   RedirectDialog: {
     text: {
       title: 'Redirect to Leto-Modelizer',
@@ -289,6 +302,19 @@ export default {
       confirm: 'Confirm',
       notifyError: 'Error during attachment of a role to the user.',
       notifySuccess: 'Role(s) successfully attached to the user.',
+    },
+    icon: {
+      info: 'fa-solid fa-circle-info',
+    },
+  },
+  AttachUserToRoleDialog: {
+    text: {
+      title: 'Attach one or more users to role',
+      content: 'By associating a role to a user, it will inherit all the role\'s permissions.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifyError: 'Error during attachment of a user to the role.',
+      notifySuccess: 'User(s) successfully attached to the role.',
     },
     icon: {
       info: 'fa-solid fa-circle-info',
