@@ -66,3 +66,15 @@ export async function findByGroupId(groupId) {
   return api.get(`groups/${groupId}/users`)
     .then(({ data }) => data);
 }
+
+/**
+ * Get all users of a role.
+ * @param {string} roleId - Role id.
+ * @returns {Promise<object[]>} Return an array of users.
+ */
+export async function findByRoleId(roleId) {
+  const api = await prepareRequest();
+
+  return api.get(`roles/${roleId}/users`)
+    .then(({ data }) => data);
+}
