@@ -270,6 +270,19 @@ export default {
       warning: 'fa-solid fa-triangle-exclamation',
     },
   },
+  DetachPermissionFromRoleDialog: {
+    text: {
+      title: 'Do you want to detach the permission "{permission}" from the role "{role}" ?',
+      content: 'You can always reassign the permission to the role.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifySuccess: 'Permission is detached from role.',
+      warning: 'Losing your role means losing permission, and if you no longer have admin access, you will be redirected to Leto-Modelizer.',
+    },
+    icon: {
+      warning: 'fa-solid fa-triangle-exclamation',
+    },
+  },
   RedirectDialog: {
     text: {
       title: 'Redirect to Leto-Modelizer',
@@ -350,6 +363,18 @@ export default {
       confirm: 'Confirm',
       notifyError: 'Error during attachment of a group to the role.',
       notifySuccess: 'Group(s) successfully attached to the role.',
+    },
+    icon: {
+      info: 'fa-solid fa-circle-info',
+    },
+  },
+  AttachPermissionToRoleDialog: {
+    text: {
+      title: 'Attach one or more permissions to role',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifyError: 'Error during attachment of a permission to the role.',
+      notifySuccess: 'Permission(s) successfully attached to the role.',
     },
     icon: {
       info: 'fa-solid fa-circle-info',
