@@ -28,6 +28,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Add action to detach a role to the selected user.
 * Setup Roles page with:
   * Table to display all roles.
+  * Add action to redirect on role page.
+  * Add action to delete a role.
+* Setup Role page with:
+  * Display all information of a role.
+  * Display all users related to a role.
+  * Display all groups related to a role.
+  * Display all sub roles related to a role.
+  * Display all permissions related to a role.
+  * Add action to attach one or multiple existing users to the selected role.
+  * Add action to detach a user to the selected role.
+  * Add action to attach one or multiple existing groups to the selected role.
+  * Add action to detach a group to the selected user.
+  * Add action to attach one or multiple existing permissions to the selected role.
+  * Add action to detach a permission to the selected user.
 * Setup Libraries page with:
   * Table to display all libraries.
   * Add action to redirect on library page.
