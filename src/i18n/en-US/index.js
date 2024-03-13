@@ -79,6 +79,27 @@ export default {
       title: 'Roles',
     },
   },
+  RolePage: {
+    text: {
+      goBack: 'Return to previous page',
+      notFound: 'Role not found.',
+      usersTab: 'Users',
+      groupsTab: 'Groups',
+      rolesTab: 'Sub roles',
+      permissionsTab: 'Permissions',
+      userList: 'List of users attributed to {role}',
+      groupList: 'Group of {role}',
+      roleList: 'Sub role of {role}',
+      permissionList: 'Permissions of {role}',
+      attachUser: 'Attach user',
+      attachGroup: 'Attach group',
+      attachPermission: 'Attach permission',
+    },
+    icon: {
+      goBack: 'fa-solid fa-chevron-left',
+      attach: 'fa-solid fa-link',
+    },
+  },
   LibrariesPage: {
     text: {
       title: 'Libraries',
