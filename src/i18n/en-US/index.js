@@ -438,6 +438,15 @@ export default {
       info: 'fa-solid fa-circle-info',
     },
   },
+  AttachGroupToGroupDialog: {
+    text: {
+      title: 'Attach one or more groups to group',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifyError: 'Error during attachment of a group to the group.',
+      notifySuccess: 'Group(s) successfully attached to the group.',
+    },
+  },
   AddLibraryPage: {
     text: {
       title: 'Add library',
