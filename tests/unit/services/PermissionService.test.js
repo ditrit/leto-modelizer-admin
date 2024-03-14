@@ -67,4 +67,19 @@ describe('Test: PermissionService', () => {
       expect(result.content).toEqual(expectedKeys);
     });
   });
+
+  describe('Test function: findByGroupId', () => {
+    it('should return the group permissions', async () => {
+      const mockGetRequest = vi.fn(() => Promise.resolve({ data: { content: expectedKeys } }));
+
+      api.mockImplementation(() => ({
+        get: mockGetRequest,
+      }));
+
+      const result = await PermissionService.findByGroupId('groupId');
+
+      expect(mockGetRequest).toBeCalledWith('groups/groupId/permissions');
+      expect(result.content).toEqual(expectedKeys);
+    });
+  });
 });
