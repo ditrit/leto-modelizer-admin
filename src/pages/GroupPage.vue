@@ -34,9 +34,19 @@
             data-cy="page_group_users_tab"
           />
           <q-tab
+            name="groups"
+            :label="$t('GroupPage.text.groupsTab')"
+            data-cy="page_group_groups_tab"
+          />
+          <q-tab
             name="roles"
             :label="$t('GroupPage.text.rolesTab')"
             data-cy="page_group_roles_tab"
+          />
+          <q-tab
+            name="permissions"
+            :label="$t('GroupPage.text.permissionsTab')"
+            data-cy="page_group_permissions_tab"
           />
         </q-tabs>
       </q-card-section>
@@ -71,7 +81,7 @@
           class="bg-white q-mb-md"
           data-cy="page_group_button_attach_user"
           :label="$t('GroupPage.text.attachUser')"
-          :icon="$t('GroupPage.icon.attachUser')"
+          :icon="$t('GroupPage.icon.attach')"
           @click="openAttachUserToGroupDialog"
         />
         <users-table
@@ -79,6 +89,33 @@
           :show-action="false"
           :remove-action="false"
           @detach="openDetachUserFromGroupDialog"
+        />
+      </q-tab-panel>
+      <q-tab-panel
+        name="groups"
+        data-cy="page_group_groups_tab_panel"
+      >
+        <h6
+          class="q-ma-none q-mb-sm"
+          data-cy="page_group_groups_title"
+        >
+          {{ $t('GroupPage.text.groupList', { group: group.name }) }}
+        </h6>
+        <q-btn
+          outline
+          no-caps
+          color="primary"
+          class="bg-white q-mb-md"
+          data-cy="page_group_button_attach_group"
+          :label="$t('GroupPage.text.attachGroup')"
+          :icon="$t('GroupPage.icon.attach')"
+          @click="openAttachGroupToGroupDialog"
+        />
+        <groups-table
+          :groups="groups"
+          :show-action="false"
+          :remove-action="false"
+          @detach="openDetachGroupFromGroupDialog"
         />
       </q-tab-panel>
       <q-tab-panel
@@ -98,7 +135,7 @@
           class="bg-white q-mb-md"
           data-cy="page_group_button_attach_role"
           :label="$t('GroupPage.text.attachRole')"
-          :icon="$t('GroupPage.icon.attachRole')"
+          :icon="$t('GroupPage.icon.attach')"
           @click="openAttachRoleToGroupDialog"
         />
         <roles-table
@@ -106,6 +143,23 @@
           :show-action="false"
           :remove-action="false"
           @detach="openDetachRoleFromGroupDialog"
+        />
+      </q-tab-panel>
+      <q-tab-panel
+        name="permissions"
+        data-cy="page_group_permissions_tab_panel"
+      >
+        <h6
+          class="q-ma-none q-mb-sm"
+          data-cy="page_group_permissions_title"
+        >
+          {{ $t('GroupPage.text.permissionList', { group: group.name }) }}
+        </h6>
+        <permissions-table
+          :permissions="permissions"
+          :show-action="false"
+          :remove-action="false"
+          :detach-action="false"
         />
       </q-tab-panel>
     </q-tab-panels>
@@ -118,13 +172,18 @@ import { useRoute, useRouter } from 'vue-router';
 import * as GroupService from 'src/services/GroupService';
 import * as UserService from 'src/services/UserService';
 import * as RoleService from 'src/services/RoleService';
+import * as PermissionService from 'src/services/PermissionService';
 import UsersTable from 'src/components/tables/UsersTable.vue';
+import GroupsTable from 'src/components/tables/GroupsTable.vue';
 import RolesTable from 'src/components/tables/RolesTable.vue';
+import PermissionsTable from 'src/components/tables/PermissionsTable.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import ReloadUsersEvent from 'src/composables/events/ReloadUsersEvent';
+import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 import ReloadRolesEvent from 'src/composables/events/ReloadRolesEvent';
+import ReloadPermissionsEvent from 'src/composables/events/ReloadPermissionsEvent';
 
 const loading = ref(false);
 const { t } = useI18n();
@@ -132,11 +191,15 @@ const route = useRoute();
 const router = useRouter();
 const group = ref({});
 const users = ref([]);
+const groups = ref([]);
 const roles = ref([]);
+const permissions = ref([]);
 const currentTab = ref('users');
 
 let reloadUsersEventRef;
+let reloadGroupsEventRef;
 let reloadRolesEventRef;
+let reloadPermissionsEventRef;
 
 /**
  * Load group from id in url. If the group does not exist, redirect to the libraries page.
@@ -168,12 +231,32 @@ async function loadUsers() {
 }
 
 /**
+ * Get groups using group Id.
+ * @returns {Promise<void>} Promise with nothing on success.
+ */
+async function loadGroups() {
+  return GroupService.findSubGroups(route.params.id).then((data) => {
+    groups.value = data.content;
+  });
+}
+
+/**
  * Get roles using group Id.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function loadRoles() {
   return RoleService.findByGroupId(route.params.id).then((data) => {
     roles.value = data.content;
+  });
+}
+
+/**
+ * Get permissions using group Id.
+ * @returns {Promise<void>} Promise with nothing on success.
+ */
+async function loadPermissions() {
+  return PermissionService.findByGroupId(route.params.id).then((data) => {
+    permissions.value = data.content;
   });
 }
 
@@ -186,7 +269,9 @@ async function search() {
   Promise.allSettled([
     loadGroup(),
     loadUsers(),
+    loadGroups(),
     loadRoles(),
+    loadPermissions(),
   ])
     .finally(() => {
       loading.value = false;
@@ -199,6 +284,17 @@ async function search() {
 function openAttachUserToGroupDialog() {
   DialogEvent.next({
     key: 'attach-user-to-group',
+    type: 'open',
+    groupId: route.params.id,
+  });
+}
+
+/**
+ * Open dialog to attach a group to a group.
+ */
+function openAttachGroupToGroupDialog() {
+  DialogEvent.next({
+    key: 'attach-group-to-group',
     type: 'open',
     groupId: route.params.id,
   });
@@ -229,6 +325,19 @@ function openDetachUserFromGroupDialog(user) {
 }
 
 /**
+ * Open dialog to detach a group from a group.
+ * @param {object} grouptoDetach - Group object to remove for the dialog.
+ */
+function openDetachGroupFromGroupDialog(grouptoDetach) {
+  DialogEvent.next({
+    key: 'detach-group-from-group',
+    type: 'open',
+    group: group.value,
+    grouptoDetach,
+  });
+}
+
+/**
  * Open dialog to detach a role from a group.
  * @param {object} role - Role object to remove for the dialog.
  */
@@ -243,12 +352,16 @@ function openDetachRoleFromGroupDialog(role) {
 
 onMounted(async () => {
   reloadUsersEventRef = ReloadUsersEvent.subscribe(loadUsers);
+  reloadGroupsEventRef = ReloadGroupsEvent.subscribe(loadGroups);
   reloadRolesEventRef = ReloadRolesEvent.subscribe(loadRoles);
+  reloadPermissionsEventRef = ReloadPermissionsEvent.subscribe(loadPermissions);
   await search();
 });
 
 onUnmounted(() => {
   reloadUsersEventRef.unsubscribe();
+  reloadGroupsEventRef.unsubscribe();
   reloadRolesEventRef.unsubscribe();
+  reloadPermissionsEventRef.unsubscribe();
 });
 </script>
