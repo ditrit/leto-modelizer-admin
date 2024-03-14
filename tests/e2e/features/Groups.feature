@@ -14,15 +14,22 @@ Feature: Test roundtrip of the application: Groups
   ################## Detach user ##################
   ## 401 Should successfully detach a user
 
+  ################## Attach group ##################
+  ## 501 Should disabled confirm button if no group is selected
+  ## 502 Should select and successfully attach a group
+
+  ################## Detach group ##################
+  ## 601 Should successfully detach a group
+
   ################## Attach role ##################
-  ## 501 Should disabled confirm button if no role is selected
-  ## 502 Should select and successfully attach a role
+  ## 701 Should disabled confirm button if no role is selected
+  ## 702 Should select and successfully attach a role
 
   ################## Detach role ##################
-  ## 601 Should successfully detach a role
+  ## 801 Should successfully detach a role
 
   ################## Delete group ##################
-  ## 701 Should delete selected group
+  ## 901 Should delete selected group
 
   Scenario: Roundtrip about Groups
     Given I visit the '/'
@@ -56,12 +63,25 @@ Feature: Test roundtrip of the application: Groups
     And  I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-name' is 'Admin'
     And  I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-login' is 'admin'
 
+    # Display related groups
+    When I click on '[data-cy="page_group_groups_tab"]'
+    Then I expect '[data-cy="page_group_groups_tab_panel"]' exists
+    And  I expect '[data-cy="page_group_groups_title"]' exists
+    And  I expect '[data-cy="groups_table"]' exists
+    And  I expect '[data-cy="groups_table"] tbody tr:nth-child(1) td.group-name' is 'Group 1'
+
     # Display related roles
     When I click on '[data-cy="page_group_roles_tab"]'
     Then I expect '[data-cy="page_group_roles_tab_panel"]' exists
     And  I expect '[data-cy="page_group_roles_title"]' exists
     And  I expect '[data-cy="roles_table"]' exists
     And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'Super administrator'
+
+    # Display related permissions
+    When I click on '[data-cy="page_group_permissions_tab"]'
+    Then I expect '[data-cy="page_group_permissions_tab_panel"]' exists
+    And  I expect '[data-cy="page_group_permissions_title"]' exists
+    And  I expect '[data-cy="permissions_table"]' exists
 
     When I click on '[data-cy="page_group_go_back"]'
     Then I expect current url is '/groups'
@@ -104,27 +124,56 @@ Feature: Test roundtrip of the application: Groups
     Then I expect 'positive' toast to appear with text 'User is detached from group.'
 
     ####################################################
+    ################## Attach group #################
+    ####################################################
+
+    ## 501 Should disabled confirm button if no group is selected
+    When I click on '[data-cy="page_group_groups_tab"]'
+    Then I expect '[data-cy="page_group_groups_tab_panel"]' exists
+
+    When I click on '[data-cy="page_group_button_attach_group"]'
+    Then I expect '[data-cy="groups_table"]' exists
+    And  I expect '[data-cy="groups_table"] tbody tr:nth-child(1) td.group-name' is 'Group 1'
+    And  I expect '[data-cy="groups_table"] tbody tr:nth-child(1) td [role="checkbox"]' exists
+    And  I expect '[data-cy="button_confirm"]' to be disabled
+
+    ## 502 Should select and successfully attach a group
+    When I click on '[data-cy="groups_table"] tbody tr:nth-child(1) td [role="checkbox"]'
+    Then I expect '[data-cy="button_confirm"]' to be enabled
+    And  I expect '[data-cy="groups_table"] tbody tr.selected td.group-name' is 'Group 1'
+
+    When I click on '[data-cy="button_confirm"]'
+    Then I expect 'positive' toast to appear with text 'Group(s) successfully attached to the group.'
+
+    ####################################################
+    ################## Detach group #################
+    ####################################################
+
+    ## 601 Should successfully detach a group
+    When I click on '[data-cy="group_1_button_detach"]'
+    And  I click on '[data-cy="button_confirm"]'
+    Then I expect 'positive' toast to appear with text 'Group is detached from group.'
+
+    ####################################################
     ################## Attach role ##################
     ####################################################
 
-    ## 501 Should disabled confirm button if no role is selected
+    ## 701 Should disabled confirm button if no role is selected
     When I click on '[data-cy="page_group_roles_tab"]'
     Then I expect '[data-cy="page_group_roles_tab_panel"]' exists
 
     When I click on '[data-cy="page_group_button_attach_role"]'
     Then I expect '[data-cy="roles_table"]' exists
-    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'Super administrator'
+    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'Administrator'
     And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td [role="checkbox"]' exists
-    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(2) td.role-name' is 'Administrator'
+    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(2) td.role-name' is 'Developer'
     And  I expect '[data-cy="roles_table"] tbody tr:nth-child(2) td [role="checkbox"]' exists
-    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(3) td.role-name' is 'Developer'
-    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(3) td [role="checkbox"]' exists
     And  I expect '[data-cy="button_confirm"]' to be disabled
 
-    ## 502 Should select and successfully attach a role
+    ## 702 Should select and successfully attach a role
     When I click on '[data-cy="roles_table"] tbody tr:nth-child(1) td [role="checkbox"]'
     Then I expect '[data-cy="button_confirm"]' to be enabled
-    And  I expect '[data-cy="roles_table"] tbody tr.selected td.role-name' is 'Super administrator'
+    And  I expect '[data-cy="roles_table"] tbody tr.selected td.role-name' is 'Administrator'
 
     When I click on '[data-cy="button_confirm"]'
     Then I expect 'positive' toast to appear with text 'Role(s) successfully attached to the group.'
@@ -133,7 +182,7 @@ Feature: Test roundtrip of the application: Groups
     ################## Detach role ##################
     ####################################################
 
-    ## 601 Should successfully detach a role
+    ## 801 Should successfully detach a role
     When I click on '[data-cy="role_3_button_detach"]'
     And  I click on '[data-cy="button_confirm"]'
     Then I expect 'positive' toast to appear with text 'Role is detached from group.'
@@ -145,7 +194,7 @@ Feature: Test roundtrip of the application: Groups
     ################## Delete group ################
     ####################################################
 
-    ## 701 Should delete selected group
+    ## 901 Should delete selected group
     When I click on '[data-cy="group_1_button_remove"]'
     Then I expect '[data-cy="button_confirm"]' exists
 

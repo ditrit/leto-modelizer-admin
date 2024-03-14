@@ -21,16 +21,23 @@ Feature: Test roundtrip of the application: Roles
   ################## Detach group ################
   ## 601 Should successfully detach a group
 
+  ################## Attach role ################
+  ## 701 Should disabled confirm button if no role is selected
+  ## 702 Should select and successfully attach a role
+
+  ################## Detach role ################
+  ## 801 Should successfully detach a role
+
   ################## Attach permission ###########
-  ## 501 Should disabled confirm button if no permission is selected
-  ## 502 Should select and successfully attach a permission
+  ## 901 Should disabled confirm button if no permission is selected
+  ## 902 Should select and successfully attach a permission
 
   ################## Detach permission ###########
-  ## 601 Should successfully detach a permission
+  ## 1001 Should successfully detach a permission
 
   ################## Delete role #################
-  ## 701 Should delete selected role
-  ## 702 Should not be able to delete super admin role
+  ## 1101 Should delete selected role
+  ## 1102 Should not be able to delete super admin role
 
   ################## Filter role #################
   ## 801 Should change url on filter name
@@ -161,13 +168,44 @@ Feature: Test roundtrip of the application: Roles
     ## 601 Should successfully detach a group
     When I click on '[data-cy="group_1_button_detach"]'
     And  I click on '[data-cy="button_confirm"]'
-    Then I expect 'positive' toast to appear with text 'Group is detached from role.'
+    Then I expect 'positive' toast to appear with text 'Role is detached from role.'
+
+    ####################################################
+    ################## Attach role ###############
+    ####################################################
+
+    ## 701 Should disabled confirm button if no role is selected
+    When I click on '[data-cy="page_role_roles_tab"]'
+    Then I expect '[data-cy="page_role_roles_tab_panel"]' exists
+
+    When I click on '[data-cy="page_role_button_attach_role"]'
+    Then I expect '[data-cy="roles_table"]' exists
+    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'Administrator'
+    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td [role="checkbox"]' exists
+    And  I expect '[data-cy="button_confirm"]' to be disabled
+
+    ## 702 Should select and successfully attach a role
+    When I click on '[data-cy="roles_table"] tbody tr:nth-child(1) td [role="checkbox"]'
+    Then I expect '[data-cy="button_confirm"]' to be enabled
+    And  I expect '[data-cy="roles_table"] tbody tr.selected td.role-name' is 'Administrator'
+
+    When I click on '[data-cy="button_confirm"]'
+    Then I expect 'positive' toast to appear with text 'Role(s) successfully attached to the role.'
+
+    ####################################################
+    ################## Detach role ###############
+    ####################################################
+
+    ## 801 Should successfully detach a role
+    When I click on '[data-cy="role_3_button_detach"]'
+    And  I click on '[data-cy="button_confirm"]'
+    Then I expect 'positive' toast to appear with text 'Role is detached from role.'
 
     ####################################################
     ################## Attach permission ##########
     ####################################################
 
-    ## 501 Should disabled confirm button if no permission is selected
+    ## 901 Should disabled confirm button if no permission is selected
     When I click on '[data-cy="page_role_permissions_tab"]'
     Then I expect '[data-cy="page_role_permissions_tab_panel"]' exists
 
@@ -177,7 +215,7 @@ Feature: Test roundtrip of the application: Roles
     And  I expect '[data-cy="permissions_table"] tbody tr:nth-child(1) td [role="checkbox"]' exists
     And  I expect '[data-cy="button_confirm"]' to be disabled
 
-    ## 502 Should select and successfully attach a permission
+    ## 902 Should select and successfully attach a permission
     When I click on '[data-cy="permissions_table"] tbody tr:nth-child(1) td [role="checkbox"]'
     Then I expect '[data-cy="button_confirm"]' to be enabled
     And  I expect '[data-cy="permissions_table"] tbody tr.selected td.permission-entity' is 'Project'
@@ -189,7 +227,7 @@ Feature: Test roundtrip of the application: Roles
     ################## Detach permission ##########
     ####################################################
 
-    ## 601 Should successfully detach a permission
+    ## 1001 Should successfully detach a permission
     When I click on '[data-cy="permission_1_button_detach"]'
     And  I click on '[data-cy="button_confirm"]'
     Then I expect 'positive' toast to appear with text 'Permission is detached from role.'
@@ -201,14 +239,14 @@ Feature: Test roundtrip of the application: Roles
     ################## Delete role ################
     ####################################################
 
-    ## 701 Should delete selected role
+    ## 1101 Should delete selected role
     When I click on '[data-cy="role_2_button_remove"]'
     Then I expect '[data-cy="button_confirm"]' exists
 
     When I click on '[data-cy="button_confirm"]'
     Then I expect 'positive' toast to appear with text 'Permission is removed.'
 
-    ## 702 Should not be able to delete super admin role
+    ## 1102 Should not be able to delete super admin role
     When I click on '[data-cy="role_1_button_remove"]'
     Then I expect '[data-cy="button_confirm"]' exists
 
