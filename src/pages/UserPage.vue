@@ -58,6 +58,11 @@
             :label="$t('UserPage.text.rolesTab')"
             data-cy="page_user_roles_tab"
           />
+          <q-tab
+            name="permissions"
+            :label="$t('UserPage.text.permissionsTab')"
+            data-cy="page_user_permissions_tab"
+          />
         </q-tabs>
       </q-card-section>
       <q-linear-progress
@@ -130,6 +135,23 @@
           @detach="openDetachRoleFromUserDialog"
         />
       </q-tab-panel>
+      <q-tab-panel
+        name="permissions"
+        data-cy="page_user_permissions_tab_panel"
+      >
+        <h6
+          class="q-ma-none q-mb-sm"
+          data-cy="page_user_permissions_title"
+        >
+          {{ $t('UserPage.text.permissionList', { user: user.name }) }}
+        </h6>
+        <permissions-table
+          :permissions="permissions"
+          :show-action="false"
+          :remove-action="false"
+          :detach-action="false"
+        />
+      </q-tab-panel>
     </q-tab-panels>
   </q-page>
 </template>
@@ -142,8 +164,10 @@ import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import GroupsTable from 'src/components/tables/GroupsTable.vue';
 import * as GroupService from 'src/services/GroupService';
-import RolesTable from 'src/components/tables/RolesTable.vue';
 import * as RoleService from 'src/services/RoleService';
+import * as PermissionService from 'src/services/PermissionService';
+import RolesTable from 'src/components/tables/RolesTable.vue';
+import PermissionsTable from 'src/components/tables/PermissionsTable.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 import ReloadRolesEvent from 'src/composables/events/ReloadRolesEvent';
@@ -156,6 +180,7 @@ const router = useRouter();
 const user = ref({});
 const groups = ref([]);
 const roles = ref([]);
+const permissions = ref([]);
 const currentTab = ref('groups');
 
 let reloadGroupsEventRef;
@@ -201,6 +226,16 @@ async function loadRoles() {
 }
 
 /**
+ * Get roles using user login.
+ * @returns {Promise<void>} Promise with nothing on success.
+ */
+async function loadPermissions() {
+  return PermissionService.findByLogin(route.params.login).then((data) => {
+    permissions.value = data.content;
+  });
+}
+
+/**
  * Search user and associated groups.
  */
 async function search() {
@@ -210,6 +245,7 @@ async function search() {
     loadUser(),
     loadGroups(),
     loadRoles(),
+    loadPermissions(),
   ])
     .finally(() => {
       loading.value = false;
