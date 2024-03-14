@@ -302,6 +302,15 @@ export default {
       notifySuccess: 'Group is detached from role.',
     },
   },
+  DetachGroupFromGroupDialog: {
+    text: {
+      title: 'Do you want to detach the group "{groupToDetach}" from the group "{group}" ?',
+      content: 'You can always reassign the group to the group.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifySuccess: 'Group is detached from group.',
+    },
+  },
   DetachRoleFromUserDialog: {
     text: {
       title: 'Do you want to detach the role "{role}" from the user "{user}" ?',
