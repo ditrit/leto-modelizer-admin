@@ -30,6 +30,24 @@ export async function find() {
 }
 
 /**
+ * Get permissions of a user by its login.
+ * @param {string} login - User login.
+ * @returns {Promise<object>} Promise with the permissions of a user on success
+ * otherwise an error.
+ */
+export async function findByLogin(login) {
+  const api = await prepareRequest();
+
+  return api.get(`/users/${login}/permissions`).then(({ data }) => ({
+    ...data,
+    content: data.content.map((permission) => ({
+      ...permission,
+      key: generatePermissionKey(permission),
+    })),
+  }));
+}
+
+/**
  * Get all permissions of a role.
  * @param {string} roleId - Role id.
  * @returns {Promise<object[]>} Return an array of permissions.

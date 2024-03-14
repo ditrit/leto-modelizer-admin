@@ -53,6 +53,21 @@ describe('Test: PermissionService', () => {
     });
   });
 
+  describe('Test function: findByLogin', () => {
+    it('should call api.get', async () => {
+      const mockGetRequest = vi.fn(() => Promise.resolve({ data: { content: expectedKeys } }));
+
+      api.mockImplementation(() => ({
+        get: mockGetRequest,
+      }));
+
+      const result = await PermissionService.findByLogin('userLogin');
+
+      expect(mockGetRequest).toBeCalledWith('/users/userLogin/permissions');
+      expect(result.content).toEqual(expectedKeys);
+    });
+  });
+
   describe('Test function: findByRoleId', () => {
     it('should call api.get with endpoint using "roleId" and return permissions with generated key', async () => {
       const mockGetRequest = vi.fn(() => Promise.resolve({ data: { content: expectedKeys } }));
