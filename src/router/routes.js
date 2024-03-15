@@ -23,6 +23,7 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/GroupsPage.vue') },
       { path: '/groups/:id', component: () => import('pages/GroupPage.vue') },
+      { path: '/add-group', component: () => import('pages/AddGroupPage.vue') },
     ],
   },
   {

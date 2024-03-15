@@ -39,6 +39,10 @@ export default {
   GroupsPage: {
     text: {
       title: 'User Groups',
+      add: 'Add',
+    },
+    icon: {
+      add: 'fa-solid fa-plus',
     },
   },
   GroupPage: {
