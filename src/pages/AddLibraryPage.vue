@@ -18,7 +18,7 @@
         class="library-field-role"
         data-cy="library_field_role"
         :label="$t('AddLibraryPage.text.role')"
-        :rules="[isValidRoleName]"
+        :rules="[isValidName]"
         :error="roleError"
         :error-message="roleErrorMessage"
         @update:model-value="clearRoleError"
@@ -71,7 +71,7 @@ const urlErrorMessage = ref('');
 const role = ref('');
 const roleError = ref(false);
 const roleErrorMessage = ref('');
-const { notEmpty, isValidRoleName } = useFieldRules('AddLibraryPage');
+const { notEmpty, isValidName } = useFieldRules('AddLibraryPage');
 const ERROR_LIBRARY_URL_ALREADY_EXIST = 'Library with this url already exists';
 const ERROR_LIBRARY_ROLE_ALREADY_EXIST = 'Library with this role already exists';
 
