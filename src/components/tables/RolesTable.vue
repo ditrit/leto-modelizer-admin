@@ -70,7 +70,10 @@
         </q-td>
       </template>
       <template #no-data>
-        <div class="full-width row flex-center q-gutter-sm">
+        <div
+          class="full-width row flex-center q-gutter-sm"
+          data-cy="roles_table_no_data"
+        >
           <q-icon
             size="2em"
             :name="noDataIcon"
