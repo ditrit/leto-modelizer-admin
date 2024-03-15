@@ -498,6 +498,29 @@ export default {
       roleAlreadyExists: 'Library with this role already exists.',
     },
   },
+  AddGroupPage: {
+    text: {
+      title: 'Create a user group',
+      add: 'Add',
+      cancel: 'Cancel',
+      subtitle: 'You must attach at least one user and one role to the new group.',
+      name: 'Group name',
+      users: 'Group member(s)',
+      roles: 'Group role(s)',
+      notEmpty: 'Field is required.',
+      validName: 'Must start and end with a capital letter/number, use uppercase letters, numbers, _, or -.',
+      notifyError: 'Error during group creation.',
+      notifySuccess: 'Group is created.',
+      groupAlreadyExists: 'Group with this name already exists.',
+      attachUser: 'Add a member',
+      attachRole: 'Add a role',
+      addUsertoGroupMessage: 'Please add at least one member to create a group',
+      addRoletoGroupMessage: 'Please add at least one role to create a group',
+    },
+    icon: {
+      attach: 'fa-solid fa-link',
+    },
+  },
   InformationLibraryTabPanel: {
     text: {
       notEmpty: 'Field is required.',
