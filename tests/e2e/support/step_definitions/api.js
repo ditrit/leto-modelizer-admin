@@ -45,6 +45,18 @@ const library2 = {
   maintainer: 'Maintainer_2',
   description: 'description_2',
 };
+const permission1 = {
+  id: '1',
+  entity: 'PROJECT',
+  action: 'CREATE',
+  key: 'description_2',
+};
+const permission2 = {
+  id: '2',
+  entity: 'DIAGRAM',
+  action: 'CREATE',
+  key: 'description_2',
+};
 
 /**
  * User-specific intercepts
@@ -73,6 +85,16 @@ function setUserIntercepts() {
     body: {
       content: [adminUser, user],
     },
+  });
+
+  cy.intercept('GET', '/api/users/Maintainer_1', {
+    statusCode: 404,
+    body: 'Not Found',
+  });
+
+  cy.intercept('GET', '/api/users/Maintainer_2', {
+    statusCode: 404,
+    body: 'Not Found',
   });
 
   cy.intercept('GET', '/api/users/admin', {
@@ -235,6 +257,84 @@ function setRoleIntercepts() {
     },
   });
 
+  cy.intercept('GET', '/api/roles/unknown', {
+    statusCode: 404,
+    body: 'Not Found',
+  });
+
+  cy.intercept('GET', '/api/roles/unknown/users', {
+    statusCode: 404,
+    body: 'Not Found',
+  });
+
+  cy.intercept('GET', '/api/roles/unknown/groups', {
+    statusCode: 404,
+    body: 'Not Found',
+  });
+
+  cy.intercept('GET', '/api/roles/unknown/roles', {
+    statusCode: 404,
+    body: 'Not Found',
+  });
+
+  cy.intercept('GET', '/api/roles/unknown/permissions', {
+    statusCode: 404,
+    body: 'Not Found',
+  });
+
+  cy.intercept('GET', '/api/roles/1', {
+    statusCode: 200,
+    body: superAdmin,
+  });
+
+  cy.intercept('GET', '/api/roles/1/users', {
+    statusCode: 200,
+    body: {
+      content: [
+        adminUser,
+      ],
+    },
+  });
+
+  cy.intercept('GET', '/api/roles/1/groups', {
+    statusCode: 200,
+    body: {
+      content: [
+        group1,
+      ],
+    },
+  });
+
+  cy.intercept('GET', '/api/roles/1/roles', {
+    statusCode: 200,
+    body: {
+      content: [
+        dev,
+      ],
+    },
+  });
+
+  cy.intercept('GET', '/api/roles/1/permissions', {
+    statusCode: 200,
+    body: {
+      content: [
+        permission1,
+      ],
+    },
+  });
+
+  cy.intercept('POST', '/api/roles/1/users', (request) => {
+    request.reply({
+      statusCode: 200,
+    });
+  });
+
+  cy.intercept('POST', '/api/roles/1/permissions', (request) => {
+    request.reply({
+      statusCode: 200,
+    });
+  });
+
   cy.intercept('POST', '/api/roles/2/users', (request) => {
     request.reply({
       statusCode: 200,
@@ -248,6 +348,30 @@ function setRoleIntercepts() {
   });
 
   cy.intercept('DELETE', '/api/roles/3/groups/2', (request) => {
+    request.reply({
+      statusCode: 200,
+    });
+  });
+
+  cy.intercept('DELETE', '/api/roles/1', (request) => {
+    request.reply({
+      statusCode: 400,
+    });
+  });
+
+  cy.intercept('DELETE', '/api/roles/2', (request) => {
+    request.reply({
+      statusCode: 200,
+    });
+  });
+
+  cy.intercept('DELETE', '/api/roles/1/groups/1', (request) => {
+    request.reply({
+      statusCode: 200,
+    });
+  });
+
+  cy.intercept('DELETE', '/api/roles/1/permissions/1', (request) => {
     request.reply({
       statusCode: 200,
     });
@@ -365,6 +489,16 @@ Before(() => {
   setGroupIntercepts();
   setRoleIntercepts();
   setLibraryIntercepts();
+
+  cy.intercept('GET', '/api/permissions', {
+    statusCode: 200,
+    body: {
+      content: [
+        permission1,
+        permission2,
+      ],
+    },
+  });
 
   cy.intercept('GET', '/api/csrf', (request) => {
     request.reply({ statusCode: 200 });

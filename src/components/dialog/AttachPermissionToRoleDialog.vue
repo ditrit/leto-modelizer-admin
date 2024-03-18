@@ -1,26 +1,16 @@
 <template>
   <q-dialog v-model="show">
-    <q-card class="attach-role-to-group-form">
+    <q-card class="attach-permission-to-role-form">
       <q-card-section class="flex row justify-center">
         <span class="text-h6">
-          {{ $t('AttachRoleToGroupDialog.text.title') }}
+          {{ $t('AttachPermissionToRoleDialog.text.title') }}
         </span>
       </q-card-section>
       <q-form @submit="onSubmit">
-        <q-card-section class="row items-center">
-          <q-icon
-            left
-            color="info"
-            :name="$t('AttachRoleToGroupDialog.icon.info')"
-          />
-          <span>
-            {{ $t('AttachRoleToGroupDialog.text.content') }}
-          </span>
-        </q-card-section>
         <q-card-section>
-          <roles-table
+          <permissions-table
             v-model:selected="selected"
-            :roles="roles"
+            :permissions="permissions"
             :show-action="false"
             :remove-action="false"
             :detach-action="false"
@@ -31,11 +21,11 @@
         <q-card-actions align="center">
           <q-btn
             v-close-popup
-            :label="$t('AttachRoleToGroupDialog.text.cancel')"
+            :label="$t('AttachPermissionToRoleDialog.text.cancel')"
             color="negative"
           />
           <q-btn
-            :label="$t('AttachRoleToGroupDialog.text.confirm')"
+            :label="$t('AttachPermissionToRoleDialog.text.confirm')"
             :loading="submitting"
             :disable="!selected.length"
             type="submit"
@@ -55,10 +45,11 @@
 <script setup>
 import { useDialog } from 'src/composables/Dialog';
 import { ref } from 'vue';
-import RolesTable from 'src/components/tables/RolesTable.vue';
-import ReloadRolesEvent from 'src/composables/events/ReloadRolesEvent';
+import PermissionsTable from 'src/components/tables/PermissionsTable.vue';
+import ReloadPermissionsEvent from 'src/composables/events/ReloadPermissionsEvent';
 import * as RoleService from 'src/services/RoleService';
 import * as UserService from 'src/services/UserService';
+import * as PermissionService from 'src/services/PermissionService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { useUserStore } from 'src/stores/UserStore';
@@ -66,46 +57,46 @@ import { useUserStore } from 'src/stores/UserStore';
 const userStore = useUserStore();
 const { t } = useI18n();
 const submitting = ref(false);
-const groupId = ref('');
+const roleId = ref('');
 const selected = ref([]);
-const roles = ref([]);
+const permissions = ref([]);
 
 /**
- * Get roles.
+ * Get all permissions.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function search() {
-  return RoleService.find().then((data) => {
-    roles.value = data.content;
+  return PermissionService.find().then((data) => {
+    permissions.value = data.content;
   });
 }
 
-const { show } = useDialog('attach-role-to-group', (event) => {
+const { show } = useDialog('attach-permission-to-role', (event) => {
   submitting.value = false;
-  groupId.value = event.groupId;
+  roleId.value = event.roleId;
   selected.value = [];
   return search();
 });
 
 /**
- * Attach one or more roles to a user.
+ * Attach one or more permissions to a role.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function onSubmit() {
   submitting.value = true;
 
-  const roleIdList = selected.value.map(({ id }) => id);
+  const permissionIdList = selected.value.map(({ id }) => id);
 
-  await Promise.allSettled(roleIdList
-    .map((roleId) => RoleService.associateRoleAndGroup(groupId.value, roleId)
+  await Promise.allSettled(permissionIdList
+    .map((permissionId) => RoleService.associateRoleAndPermission(roleId.value, permissionId)
       .catch(() => {
         Notify.create({
           type: 'negative',
-          message: t('AttachRoleToGroupDialog.text.notifyError'),
+          message: t('AttachPermissionToRoleDialog.text.notifyError'),
           html: true,
         });
 
-        throw new Error(roleId);
+        throw new Error(permissionId);
       })))
     .then((results) => {
       const failedRequestObjects = [];
@@ -122,14 +113,15 @@ async function onSubmit() {
       if (results.every(({ status }) => status === 'fulfilled')) {
         Notify.create({
           type: 'positive',
-          message: t('AttachRoleToGroupDialog.text.notifySuccess'),
+          message: t('AttachPermissionToRoleDialog.text.notifySuccess'),
           html: true,
         });
 
         show.value = false;
       }
-    }).finally(async () => {
-      ReloadRolesEvent.next();
+    })
+    .finally(async () => {
+      ReloadPermissionsEvent.next();
       submitting.value = false;
       userStore.permissions = await UserService.getMyPermissions();
     });
@@ -137,7 +129,7 @@ async function onSubmit() {
 </script>
 
 <style scoped>
-.attach-role-to-group-form {
-  min-width: 50vw;
+.attach-permission-to-role-form {
+  min-width: 60vw;
 }
 </style>

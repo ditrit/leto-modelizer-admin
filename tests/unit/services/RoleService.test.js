@@ -3,6 +3,7 @@ import { vi } from 'vitest';
 import { prepareRequest as api } from 'boot/axios';
 
 vi.mock('boot/axios');
+vi.mock('src/services/PermissionService');
 
 describe('Test: RoleService', () => {
   describe('Test function: find', () => {
@@ -28,8 +29,23 @@ describe('Test: RoleService', () => {
     });
   });
 
+  describe('Test function: findById', () => {
+    it('should return role by id', async () => {
+      const role = {
+        name: 'admin',
+      };
+
+      api.mockImplementation(() => ({
+        get: () => Promise.resolve({ data: role }),
+      }));
+
+      const data = await RoleService.findById('userLogin');
+      expect(data).toEqual({ name: 'admin' });
+    });
+  });
+
   describe('Test function: findByLogin', () => {
-    it('should roles of a user', async () => {
+    it('should return roles of a user', async () => {
       const roles = [{
         name: 'admin',
       }];
@@ -120,6 +136,17 @@ describe('Test: RoleService', () => {
     });
   });
 
+  describe('Test function: findSubRoles', () => {
+    it('should return all sub roles of a role', async () => {
+      api.mockImplementation(() => ({
+        get: () => Promise.resolve({ data: 'roles' }),
+      }));
+
+      const data = await RoleService.findSubRoles();
+      expect(data).toEqual('roles');
+    });
+  });
+
   describe('Test function: associateRoleAndGroup', () => {
     it('should call api.post with endpoint using "roleId"', async () => {
       const mockPostRequest = vi.fn(() => Promise.resolve());
@@ -153,6 +180,42 @@ describe('Test: RoleService', () => {
       await RoleService.dissociateRoleAndGroup('groupId', 'roleId');
 
       expect(mockDeleteRequest).toBeCalledWith('/roles/roleId/groups/groupId');
+    });
+  });
+
+  describe('Test function: associateRoleAndPermission', () => {
+    it('should call api.post with endpoint using "roleId"', async () => {
+      const mockPostRequest = vi.fn(() => Promise.resolve());
+
+      api.mockImplementation(() => ({
+        post: mockPostRequest,
+      }));
+
+      await RoleService.associateRoleAndPermission('roleId', 'permissionId');
+
+      expect(mockPostRequest).toBeCalledWith(
+        '/roles/roleId/permissions',
+        'permissionId',
+        {
+          headers: {
+            'Content-Type': 'text/plain',
+          },
+        },
+      );
+    });
+  });
+
+  describe('Test function: dissociateRoleAndPermission', () => {
+    it('should call api.delete with endpoint using "permissionId" and "roleId"', async () => {
+      const mockDeleteRequest = vi.fn(() => Promise.resolve());
+
+      api.mockImplementation(() => ({
+        delete: mockDeleteRequest,
+      }));
+
+      await RoleService.dissociateRoleAndPermission('roleId', 'permissionId');
+
+      expect(mockDeleteRequest).toBeCalledWith('/roles/roleId/permissions/permissionId');
     });
   });
 });

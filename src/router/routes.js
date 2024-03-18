@@ -33,6 +33,7 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/RolesPage.vue') },
+      { path: '/roles/:id', component: () => import('pages/RolePage.vue') },
     ],
   },
   {

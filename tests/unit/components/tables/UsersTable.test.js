@@ -87,7 +87,7 @@ describe('Test component: UsersTable', () => {
           label: 'Actions',
           align: 'left',
           field: 'login',
-          classes: 'group-actions',
+          classes: 'user-actions',
         },
       ]);
     });

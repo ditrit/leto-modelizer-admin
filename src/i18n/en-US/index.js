@@ -79,6 +79,27 @@ export default {
       title: 'Roles',
     },
   },
+  RolePage: {
+    text: {
+      goBack: 'Return to previous page',
+      notFound: 'Role not found.',
+      usersTab: 'Users',
+      groupsTab: 'Groups',
+      rolesTab: 'Sub roles',
+      permissionsTab: 'Permissions',
+      userList: 'List of users attributed to {role}',
+      groupList: 'Group of {role}',
+      roleList: 'Sub role of {role}',
+      permissionList: 'Permissions of {role}',
+      attachUser: 'Attach user',
+      attachGroup: 'Attach group',
+      attachPermission: 'Attach permission',
+    },
+    icon: {
+      goBack: 'fa-solid fa-chevron-left',
+      attach: 'fa-solid fa-link',
+    },
+  },
   LibrariesPage: {
     text: {
       title: 'Libraries',
@@ -165,6 +186,18 @@ export default {
       detachAction: 'fa-solid fa-link-slash',
     },
   },
+  PermissionsTable: {
+    text: {
+      keyColumn: 'Description',
+      entityColumn: 'Entity',
+      actionColumn: 'Operation',
+      actionsColumn: 'Actions',
+      detachAction: 'Detach permission',
+    },
+    icon: {
+      detachAction: 'fa-solid fa-link-slash',
+    },
+  },
   RemoveLibraryDialog: {
     text: {
       title: 'Do you want to delete the library {name} ?',
@@ -185,6 +218,16 @@ export default {
     },
     icon: {
       warning: 'fa-solid fa-triangle-exclamation',
+    },
+  },
+  RemoveRoleDialog: {
+    text: {
+      title: 'Do you want to delete the role {name} ?',
+      content: 'Please note, this action is irreversible.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifySuccess: 'Role is removed.',
+      notifyError: 'Error during role deletion.',
     },
   },
   RemoveGroupDialog: {
@@ -223,6 +266,15 @@ export default {
       notifySuccess: 'Role is detached from group.',
     },
   },
+  DetachGroupFromRoleDialog: {
+    text: {
+      title: 'Do you want to detach the group "{group}" from the role "{role}" ?',
+      content: 'You can always reassign the group to the role.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifySuccess: 'Group is detached from role.',
+    },
+  },
   DetachRoleFromUserDialog: {
     text: {
       title: 'Do you want to detach the role "{role}" from the user "{user}" ?',
@@ -230,6 +282,32 @@ export default {
       cancel: 'Cancel',
       confirm: 'Confirm',
       notifySuccess: 'Role is detached from user.',
+      warning: 'Losing your role means losing permission, and if you no longer have admin access, you will be redirected to Leto-Modelizer.',
+    },
+    icon: {
+      warning: 'fa-solid fa-triangle-exclamation',
+    },
+  },
+  DetachUserFromRoleDialog: {
+    text: {
+      title: 'Do you want to detach the user "{user}" from the role "{role}" ?',
+      content: 'You can always reassign the user to the role.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifySuccess: 'User is detached from role.',
+      warning: 'Losing your role means losing permission, and if you no longer have admin access, you will be redirected to Leto-Modelizer.',
+    },
+    icon: {
+      warning: 'fa-solid fa-triangle-exclamation',
+    },
+  },
+  DetachPermissionFromRoleDialog: {
+    text: {
+      title: 'Do you want to detach the permission "{permission}" from the role "{role}" ?',
+      content: 'You can always reassign the permission to the role.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifySuccess: 'Permission is detached from role.',
       warning: 'Losing your role means losing permission, and if you no longer have admin access, you will be redirected to Leto-Modelizer.',
     },
     icon: {
@@ -282,6 +360,19 @@ export default {
       info: 'fa-solid fa-circle-info',
     },
   },
+  AttachUserToRoleDialog: {
+    text: {
+      title: 'Attach one or more users to role',
+      content: 'By associating a role to a user, it will inherit all the role\'s permissions.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifyError: 'Error during attachment of a user to the role.',
+      notifySuccess: 'User(s) successfully attached to the role.',
+    },
+    icon: {
+      info: 'fa-solid fa-circle-info',
+    },
+  },
   AttachRoleToGroupDialog: {
     text: {
       title: 'Attach one or more roles to group',
@@ -290,6 +381,31 @@ export default {
       confirm: 'Confirm',
       notifyError: 'Error during attachment of a role to the group.',
       notifySuccess: 'Role(s) successfully attached to the group.',
+    },
+    icon: {
+      info: 'fa-solid fa-circle-info',
+    },
+  },
+  AttachGroupToRoleDialog: {
+    text: {
+      title: 'Attach one or more groups to role',
+      content: 'By associating a role to a group, it will inherit all the role\'s permissions.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifyError: 'Error during attachment of a group to the role.',
+      notifySuccess: 'Group(s) successfully attached to the role.',
+    },
+    icon: {
+      info: 'fa-solid fa-circle-info',
+    },
+  },
+  AttachPermissionToRoleDialog: {
+    text: {
+      title: 'Attach one or more permissions to role',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifyError: 'Error during attachment of a permission to the role.',
+      notifySuccess: 'Permission(s) successfully attached to the role.',
     },
     icon: {
       info: 'fa-solid fa-circle-info',
@@ -321,6 +437,38 @@ export default {
     },
     icon: {
       synchronize: 'fa-solid fa-rotate',
+    },
+  },
+  Permissions: {
+    text: {
+      ADMIN_ACCESS_NULL: 'Permission to access and use leto-modelizer-admin',
+      COMPONENT_CREATE_NULL: 'Permission to create a component',
+      COMPONENT_TEMPLATE_CREATE_NULL: 'Permission to create a component from template',
+      DIAGRAM_CREATE_NULL: 'Permission to create a diagram',
+      DIAGRAM_DELETE_NULL: 'Permission to delete a diagram',
+      DIAGRAM_TEMPLATE_CREATE_NULL: 'Permission to create a diagram from template',
+      LIBRARY_ACCESS_ID: 'Permission to access a specific library defined by its id',
+      LIBRARY_ACCESS_NULL: 'Permission to access all libraries',
+      LIBRARY_CREATE_NULL: 'Permission to create a library',
+      LIBRARY_DELETE_NULL: 'Permission to delete a library',
+      LIBRARY_DELETE_ID: 'Permission to delete a specific library defined by its id',
+      LIBRARY_UPDATE_ID: 'Permission to update a specific library defined by its id',
+      LIBRARY_UPDATE_NULL: 'Permission to update a library',
+      PROJECT_CREATE_NULL: 'Permission to create a project',
+      PROJECT_TEMPLATE_CREATE_NULL: 'Permission to create a project from template',
+      libraryInfo: 'More information about library',
+      ADMIN: 'Administration application',
+      PROJECT: 'Project',
+      COMPONENT: 'Component',
+      DIAGRAM: 'Diagram',
+      PROJECT_TEMPLATE: 'Project template',
+      COMPONENT_TEMPLATE: 'Component template',
+      DIAGRAM_TEMPLATE: 'Diagram template',
+      LIBRARY: 'Library',
+      DELETE: 'Delete',
+      CREATE: 'Create',
+      UPDATE: 'Update',
+      ACCESS: 'Access',
     },
   },
 };

@@ -81,6 +81,21 @@ describe('Test: GroupService', () => {
     });
   });
 
+  describe('Test function: findByRoleId', () => {
+    it('should return all groups of a role', async () => {
+      const groups = [{
+        name: 'group',
+      }];
+
+      api.mockImplementation(() => ({
+        get: () => Promise.resolve({ data: groups }),
+      }));
+
+      const data = await GroupService.findByRoleId('login');
+      expect(data).toEqual([{ name: 'group' }]);
+    });
+  });
+
   describe('Test function: associateGroupAndUser', () => {
     it('should call api.post with endpoint using "groupId"', async () => {
       const mockPostRequest = vi.fn(() => Promise.resolve());

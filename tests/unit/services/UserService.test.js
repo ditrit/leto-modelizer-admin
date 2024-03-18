@@ -3,6 +3,7 @@ import { vi } from 'vitest';
 import { prepareRequest as api } from 'boot/axios';
 
 vi.mock('boot/axios');
+vi.mock('src/services/PermissionService');
 
 describe('Test: UserService', () => {
   describe('Test function: getCurrent', () => {
@@ -91,6 +92,17 @@ describe('Test: UserService', () => {
       }));
 
       const data = await UserService.findByGroupId();
+      expect(data).toEqual('users');
+    });
+  });
+
+  describe('Test function: findByRoleId', () => {
+    it('should return all users of a role', async () => {
+      api.mockImplementation(() => ({
+        get: () => Promise.resolve({ data: 'users' }),
+      }));
+
+      const data = await UserService.findByRoleId();
       expect(data).toEqual('users');
     });
   });
