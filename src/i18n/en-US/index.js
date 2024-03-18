@@ -165,6 +165,18 @@ export default {
       detachAction: 'fa-solid fa-link-slash',
     },
   },
+  PermissionsTable: {
+    text: {
+      keyColumn: 'Description',
+      entityColumn: 'Entity',
+      actionColumn: 'Operation',
+      actionsColumn: 'Actions',
+      detachAction: 'Detach permission',
+    },
+    icon: {
+      detachAction: 'fa-solid fa-link-slash',
+    },
+  },
   RemoveLibraryDialog: {
     text: {
       title: 'Do you want to delete the library {name} ?',
@@ -321,6 +333,38 @@ export default {
     },
     icon: {
       synchronize: 'fa-solid fa-rotate',
+    },
+  },
+  Permissions: {
+    text: {
+      ADMIN_ACCESS_NULL: 'Permission to access and use leto-modelizer-admin',
+      COMPONENT_CREATE_NULL: 'Permission to create a component',
+      COMPONENT_TEMPLATE_CREATE_NULL: 'Permission to create a component from template',
+      DIAGRAM_CREATE_NULL: 'Permission to create a diagram',
+      DIAGRAM_DELETE_NULL: 'Permission to delete a diagram',
+      DIAGRAM_TEMPLATE_CREATE_NULL: 'Permission to create a diagram from template',
+      LIBRARY_ACCESS_ID: 'Permission to access a specific library defined by its id',
+      LIBRARY_ACCESS_NULL: 'Permission to access all libraries',
+      LIBRARY_CREATE_NULL: 'Permission to create a library',
+      LIBRARY_DELETE_NULL: 'Permission to delete a library',
+      LIBRARY_DELETE_ID: 'Permission to delete a specific library defined by its id',
+      LIBRARY_UPDATE_ID: 'Permission to update a specific library defined by its id',
+      LIBRARY_UPDATE_NULL: 'Permission to update a library',
+      PROJECT_CREATE_NULL: 'Permission to create a project',
+      PROJECT_TEMPLATE_CREATE_NULL: 'Permission to create a project from template',
+      libraryInfo: 'More information about library',
+      ADMIN: 'Administration application',
+      PROJECT: 'Project',
+      COMPONENT: 'Component',
+      DIAGRAM: 'Diagram',
+      PROJECT_TEMPLATE: 'Project template',
+      COMPONENT_TEMPLATE: 'Component template',
+      DIAGRAM_TEMPLATE: 'Diagram template',
+      LIBRARY: 'Library',
+      DELETE: 'Delete',
+      CREATE: 'Create',
+      UPDATE: 'Update',
+      ACCESS: 'Access',
     },
   },
 };
