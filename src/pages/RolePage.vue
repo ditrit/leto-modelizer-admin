@@ -101,7 +101,21 @@
         >
           {{ $t('RolePage.text.groupList', { role: role.name }) }}
         </h6>
+        <q-banner
+          v-if="isSuperAdmin"
+          dense
+          class="bg-warning text-white text-weight-bold q-mb-md"
+          data-cy="page_role_groups_warning"
+        >
+          <template #avatar>
+            <q-icon
+              :name="$t('RolePage.icon.warning')"
+            />
+          </template>
+          {{ $t("RolePage.text.addGroupMessage") }}
+        </q-banner>
         <q-btn
+          v-if="!isSuperAdmin"
           outline
           no-caps
           color="primary"
@@ -115,7 +129,8 @@
           :groups="groups"
           :show-action="false"
           :remove-action="false"
-          @detach="openDetachGroupFromRoleDialog"
+          :detach-action="!isSuperAdmin"
+          @detach="(event) => isSuperAdmin ? false : openDetachGroupFromRoleDialog(event)"
         />
       </q-tab-panel>
       <q-tab-panel
@@ -128,6 +143,19 @@
         >
           {{ $t('RolePage.text.roleList', { role: role.name }) }}
         </h6>
+        <q-banner
+          v-if="isSuperAdmin"
+          dense
+          class="bg-warning text-white text-weight-bold q-mb-md"
+          data-cy="page_role_roles_warning"
+        >
+          <template #avatar>
+            <q-icon
+              :name="$t('RolePage.icon.warning')"
+            />
+          </template>
+          {{ $t("RolePage.text.addRoleMessage") }}
+        </q-banner>
         <roles-table
           :roles="roles"
           :show-action="false"
@@ -145,7 +173,21 @@
         >
           {{ $t('RolePage.text.permissionList', { role: role.name }) }}
         </h6>
+        <q-banner
+          v-if="isSuperAdmin"
+          dense
+          class="bg-warning text-white text-weight-bold q-mb-md"
+          data-cy="page_role_permission_warning"
+        >
+          <template #avatar>
+            <q-icon
+              :name="$t('RolePage.icon.warning')"
+            />
+          </template>
+          {{ $t("RolePage.text.addPermissionMessage") }}
+        </q-banner>
         <q-btn
+          v-if="!isSuperAdmin"
           outline
           no-caps
           color="primary"
@@ -159,7 +201,8 @@
           :permissions="permissions"
           :show-action="false"
           :remove-action="false"
-          @detach="openDetachPermissionFromRoleDialog"
+          :detach-action="!isSuperAdmin"
+          @detach="(event) => isSuperAdmin ? false : openDetachPermissionFromRoleDialog(event)"
         />
       </q-tab-panel>
     </q-tab-panels>
@@ -167,7 +210,12 @@
 </template>
 
 <script setup>
-import { onMounted, ref, onUnmounted } from 'vue';
+import {
+  ref,
+  computed,
+  onMounted,
+  onUnmounted,
+} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import * as RoleService from 'src/services/RoleService';
 import { Notify } from 'quasar';
@@ -194,6 +242,7 @@ const groups = ref([]);
 const roles = ref([]);
 const permissions = ref([]);
 const currentTab = ref('users');
+const isSuperAdmin = computed(() => role.value.name === process.env.SUPER_ADMINISTRATOR_ROLE_NAME);
 
 let reloadUsersEventRef;
 let reloadGroupsEventRef;

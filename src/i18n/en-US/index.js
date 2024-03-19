@@ -99,10 +99,14 @@ export default {
       attachUser: 'Attach user',
       attachGroup: 'Attach group',
       attachPermission: 'Attach permission',
+      addGroupMessage: 'Attaching groups to the Super Administrator role is restricted.',
+      addRoleMessage: 'Attaching roles to the Super Administrator role is restricted.',
+      addPermissionMessage: 'Attaching permissions to the Super Administrator role is restricted.',
     },
     icon: {
       goBack: 'fa-solid fa-chevron-left',
       attach: 'fa-solid fa-link',
+      warning: 'fa-solid fa-triangle-exclamation',
     },
   },
   LibrariesPage: {
