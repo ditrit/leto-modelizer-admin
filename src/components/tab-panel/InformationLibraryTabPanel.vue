@@ -48,7 +48,7 @@ const props = defineProps({
 });
 const { t } = useI18n();
 const { notEmpty } = useFieldRules('InformationLibraryTabPanel');
-const url = ref('');
+const url = ref(props.library.synchronizeUrl);
 const loading = ref(false);
 const urlError = ref(false);
 const urlErrorMessage = ref('');
@@ -103,6 +103,6 @@ async function synchronize() {
 }
 
 watch(() => props.library, () => {
-  url.value = `${props.library.url}index.json`;
+  url.value = props.library.synchronizeUrl;
 });
 </script>

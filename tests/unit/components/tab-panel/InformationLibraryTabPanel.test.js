@@ -42,7 +42,7 @@ describe('Test component: InformationLibraryTabPanel', async () => {
     it('should update value', async () => {
       await wrapper.setProps({
         library: {
-          url: 'test/',
+          synchronizeUrl: 'test/index.json',
         },
       });
 

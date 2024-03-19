@@ -150,7 +150,10 @@ async function loadLibrary() {
 
   return LibraryService.findById(route.params.id)
     .then((data) => {
-      library.value = data;
+      library.value = {
+        ...data,
+        synchronizeUrl: `${data.url}index.json`,
+      };
 
       return loadUser(data.maintainer);
     })
