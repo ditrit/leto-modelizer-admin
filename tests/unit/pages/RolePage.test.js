@@ -10,6 +10,7 @@ import * as PermissionService from 'src/services/PermissionService';
 import { useRoute, useRouter } from 'vue-router';
 import ReloadUsersEvent from 'src/composables/events/ReloadUsersEvent';
 import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
+import ReloadRolesEvent from 'src/composables/events/ReloadRolesEvent';
 import ReloadPermissionsEvent from 'src/composables/events/ReloadPermissionsEvent';
 import DialogEvent from 'src/composables/events/DialogEvent';
 
@@ -24,6 +25,7 @@ vi.mock('src/services/PermissionService');
 vi.mock('vue-router');
 vi.mock('src/composables/events/ReloadUsersEvent');
 vi.mock('src/composables/events/ReloadGroupsEvent');
+vi.mock('src/composables/events/ReloadRolesEvent');
 vi.mock('src/composables/events/ReloadPermissionsEvent');
 vi.mock('src/composables/events/DialogEvent');
 
@@ -34,6 +36,8 @@ describe('Test component: RolePage', () => {
   let reloadUsersUnsubscribe;
   let reloadGroupsSubscribe;
   let reloadGroupsUnsubscribe;
+  let reloadRolesSubscribe;
+  let reloadRolesUnsubscribe;
   let reloadPermissionsSubscribe;
   let reloadPermissionsUnsubscribe;
 
@@ -46,6 +50,8 @@ describe('Test component: RolePage', () => {
     reloadUsersUnsubscribe = vi.fn();
     reloadGroupsSubscribe = vi.fn();
     reloadGroupsUnsubscribe = vi.fn();
+    reloadRolesSubscribe = vi.fn();
+    reloadRolesUnsubscribe = vi.fn();
     reloadPermissionsSubscribe = vi.fn();
     reloadPermissionsUnsubscribe = vi.fn();
 
@@ -68,6 +74,11 @@ describe('Test component: RolePage', () => {
     ReloadGroupsEvent.subscribe.mockImplementation(() => {
       reloadGroupsSubscribe();
       return { unsubscribe: reloadGroupsUnsubscribe };
+    });
+
+    ReloadRolesEvent.subscribe.mockImplementation(() => {
+      reloadRolesSubscribe();
+      return { unsubscribe: reloadRolesUnsubscribe };
     });
 
     ReloadPermissionsEvent.subscribe.mockImplementation(() => {
@@ -114,9 +125,9 @@ describe('Test component: RolePage', () => {
     });
   });
 
-  describe('Test function: loadSubRoles', () => {
+  describe('Test function: loadRoles', () => {
     it('should set roles', async () => {
-      await wrapper.vm.loadSubRoles();
+      await wrapper.vm.loadRoles();
 
       expect(wrapper.vm.roles).toEqual('roles');
     });
@@ -150,6 +161,19 @@ describe('Test component: RolePage', () => {
 
       expect(DialogEvent.next).toBeCalledWith({
         key: 'attach-group-to-role',
+        type: 'open',
+        roleId: 'id1',
+      });
+    });
+  });
+
+  describe('Test function: openAttachRoleToRoleDialog', () => {
+    it('should open dialog', () => {
+      DialogEvent.next.mockImplementation();
+      wrapper.vm.openAttachRoleToRoleDialog();
+
+      expect(DialogEvent.next).toBeCalledWith({
+        key: 'attach-role-to-role',
         type: 'open',
         roleId: 'id1',
       });
@@ -192,6 +216,20 @@ describe('Test component: RolePage', () => {
         key: 'detach-group-from-role',
         type: 'open',
         group: 'group',
+        role: { id: 1 },
+      });
+    });
+  });
+
+  describe('Test function: openDetachRoleFromRoleDialog', () => {
+    it('should open dialog', () => {
+      DialogEvent.next.mockImplementation();
+      wrapper.vm.openDetachRoleFromRoleDialog('roleToDetach');
+
+      expect(DialogEvent.next).toBeCalledWith({
+        key: 'detach-role-from-role',
+        type: 'open',
+        roleToDetach: 'roleToDetach',
         role: { id: 1 },
       });
     });
