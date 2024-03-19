@@ -76,7 +76,9 @@ const roles = ref([]);
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function search() {
-  return RoleService.find().then((data) => {
+  return RoleService.find({
+    name: 'not_SUPER_ADMINISTRATOR',
+  }).then((data) => {
     roles.value = data.content;
   });
 }
