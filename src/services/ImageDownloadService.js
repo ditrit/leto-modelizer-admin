@@ -37,3 +37,22 @@ export async function getUserPicture(login) {
 export async function getLibraryIcon(id) {
   return downloadImage(`/libraries/${id}/icon`);
 }
+
+/**
+ * Get template icon by id.
+ * @param {string} id - Template id.
+ * @returns {Promise<string>} Return a template icon on success, otherwise an error.
+ */
+export async function getTemplateIcon(id) {
+  return downloadImage(`/libraries/templates/${id}/icon`);
+}
+
+/**
+ * Get template schema by template id and its index.
+ * @param {string} id - Template id.
+ * @param {number} index - Template schema index in schema array.
+ * @returns {Promise<string>} Return a template schema on success, otherwise an error.
+ */
+export async function getTemplateSchema(id, index) {
+  return downloadImage(`/libraries/templates/${id}/schemas/${index}`);
+}
