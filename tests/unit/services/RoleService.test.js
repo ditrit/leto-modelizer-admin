@@ -218,4 +218,40 @@ describe('Test: RoleService', () => {
       expect(mockDeleteRequest).toBeCalledWith('/roles/roleId/permissions/permissionId');
     });
   });
+
+  describe('Test function: associateRoleAndRole', () => {
+    it('should call api.post with endpoint using "roleId"', async () => {
+      const mockPostRequest = vi.fn(() => Promise.resolve());
+
+      api.mockImplementation(() => ({
+        post: mockPostRequest,
+      }));
+
+      await RoleService.associateRoleAndRole('roleId', 'roleIdToDetach');
+
+      expect(mockPostRequest).toBeCalledWith(
+        '/roles/roleIdToDetach/roles',
+        'roleId',
+        {
+          headers: {
+            'Content-Type': 'text/plain',
+          },
+        },
+      );
+    });
+  });
+
+  describe('Test function: dissociateRoleAndRole', () => {
+    it('should call api.delete with endpoint using "roleIdToDetach" and "roleId"', async () => {
+      const mockDeleteRequest = vi.fn(() => Promise.resolve());
+
+      api.mockImplementation(() => ({
+        delete: mockDeleteRequest,
+      }));
+
+      await RoleService.dissociateRoleAndRole('roleId', 'roleIdToDetach');
+
+      expect(mockDeleteRequest).toBeCalledWith('/roles/roleIdToDetach/roles/roleId');
+    });
+  });
 });
