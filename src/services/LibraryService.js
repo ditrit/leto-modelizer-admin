@@ -12,6 +12,18 @@ export async function find() {
 }
 
 /**
+ * Get all template of library by its id.
+ * @param {string} libraryId - Library id.
+ * @returns {Promise<object[]>} Promise with an array of libraries on success
+ * otherwise an error.
+ */
+export async function findTemplates(libraryId) {
+  const api = await prepareRequest();
+
+  return api.get(`/libraries/${libraryId}/templates`).then(({ data }) => data);
+}
+
+/**
  * Get library by id.
  * @param {string} id - Library id.
  * @returns {Promise<object>} Return a library.
