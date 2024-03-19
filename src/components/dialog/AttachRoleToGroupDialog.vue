@@ -57,6 +57,7 @@ import { useDialog } from 'src/composables/Dialog';
 import { ref } from 'vue';
 import RolesTable from 'src/components/tables/RolesTable.vue';
 import ReloadRolesEvent from 'src/composables/events/ReloadRolesEvent';
+import ReloadPermissionsEvent from 'src/composables/events/ReloadPermissionsEvent';
 import * as RoleService from 'src/services/RoleService';
 import * as UserService from 'src/services/UserService';
 import { Notify } from 'quasar';
@@ -130,6 +131,7 @@ async function onSubmit() {
       }
     }).finally(async () => {
       ReloadRolesEvent.next();
+      ReloadPermissionsEvent.next();
       submitting.value = false;
       userStore.permissions = await UserService.getMyPermissions();
     });

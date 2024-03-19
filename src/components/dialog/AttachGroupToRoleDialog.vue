@@ -57,6 +57,7 @@ import { useDialog } from 'src/composables/Dialog';
 import { ref } from 'vue';
 import GroupsTable from 'src/components/tables/GroupsTable.vue';
 import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
+import ReloadPermissionsEvent from 'src/composables/events/ReloadPermissionsEvent';
 import * as RoleService from 'src/services/RoleService';
 import * as UserService from 'src/services/UserService';
 import * as GroupService from 'src/services/GroupService';
@@ -132,6 +133,7 @@ async function onSubmit() {
     })
     .finally(async () => {
       ReloadGroupsEvent.next();
+      ReloadPermissionsEvent.next();
       submitting.value = false;
       userStore.permissions = await UserService.getMyPermissions();
     });
