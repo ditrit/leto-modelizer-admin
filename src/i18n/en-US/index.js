@@ -138,10 +138,12 @@ export default {
       actionsColumn: 'Actions',
       showAction: 'Show library',
       removeAction: 'Remove library',
+      noData: 'No libraries found.',
     },
     icon: {
       showAction: 'fa-solid fa-pen-to-square',
       removeAction: 'fa-solid fa-trash',
+      noData: 'fa-solid fa-face-frown-open',
     },
   },
   GroupsTable: {
@@ -151,11 +153,13 @@ export default {
       showAction: 'Show group',
       removeAction: 'Remove group',
       detachAction: 'Detach group',
+      noData: 'No groups found.',
     },
     icon: {
       showAction: 'fa-solid fa-pen-to-square',
       removeAction: 'fa-solid fa-trash',
       detachAction: 'fa-solid fa-link-slash',
+      noData: 'fa-solid fa-face-frown-open',
     },
   },
   UsersTable: {
@@ -167,11 +171,13 @@ export default {
       showAction: 'Show user',
       removeAction: 'Remove user',
       detachAction: 'Detach user',
+      noData: 'No users found.',
     },
     icon: {
       showAction: 'fa-solid fa-pen-to-square',
       removeAction: 'fa-solid fa-trash',
       detachAction: 'fa-solid fa-link-slash',
+      noData: 'fa-solid fa-face-frown-open',
     },
   },
   RolesTable: {
@@ -181,11 +187,13 @@ export default {
       showAction: 'Show role',
       removeAction: 'Remove role',
       detachAction: 'Detach role',
+      noData: 'No roles found.',
     },
     icon: {
       showAction: 'fa-solid fa-pen-to-square',
       removeAction: 'fa-solid fa-trash',
       detachAction: 'fa-solid fa-link-slash',
+      noData: 'fa-solid fa-face-frown-open',
     },
   },
   PermissionsTable: {
@@ -195,9 +203,11 @@ export default {
       actionColumn: 'Operation',
       actionsColumn: 'Actions',
       detachAction: 'Detach permission',
+      noData: 'No Permissions found.',
     },
     icon: {
       detachAction: 'fa-solid fa-link-slash',
+      noData: 'fa-solid fa-face-frown-open',
     },
   },
   TemplatesTable: {
@@ -209,6 +219,10 @@ export default {
       pluginsColumn: 'Plugins',
       documentationUrlColumn: 'Link to documentation',
       actionsColumn: 'Actions',
+      noData: 'No templates found.',
+    },
+    icon: {
+      noData: 'fa-solid fa-face-frown-open',
     },
   },
   RemoveLibraryDialog: {
