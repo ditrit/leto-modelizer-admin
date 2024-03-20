@@ -46,6 +46,7 @@ module.exports = configure((/* ctx */) => ({
   boot: [
     'i18n',
     'axios',
+    'v-viewer',
     'vue-sanitize',
   ],
 

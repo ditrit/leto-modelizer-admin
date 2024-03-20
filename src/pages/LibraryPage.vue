@@ -77,6 +77,12 @@
           <q-tab
             name="information"
             :label="$t('LibraryPage.text.informationTab')"
+            data-cy="page_library_information_tab"
+          />
+          <q-tab
+            name="templates"
+            :label="$t('LibraryPage.text.templatesTab')"
+            data-cy="page_library_templates_tab"
           />
         </q-tabs>
       </q-card-section>
@@ -97,6 +103,15 @@
         :library="library"
         @synchronize="loadLibrary"
       />
+      <q-tab-panel name="templates">
+        <h6
+          class="q-ma-none q-mb-sm"
+          data-cy="page_library_templates_tab_title"
+        >
+          {{ $t('LibraryPage.text.templateTabTitle') }}
+        </h6>
+        <templates-table :templates="templates" />
+      </q-tab-panel>
     </q-tab-panels>
   </q-page>
 </template>
@@ -111,12 +126,14 @@ import LibraryAvatar from 'components/avatar/LibraryAvatar.vue';
 import InformationLibraryTabPanel from 'components/tab-panel/InformationLibraryTabPanel.vue';
 import UserTooltip from 'components/tooltip/UserTooltip.vue';
 import * as UserService from 'src/services/UserService';
+import TemplatesTable from 'components/tables/TemplatesTable.vue';
 
 const loading = ref(false);
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const library = ref({});
+const templates = ref([]);
 const user = ref(null);
 const loadingUser = ref(true);
 const currentTab = ref('information');
@@ -146,11 +163,12 @@ async function loadUser(login) {
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function loadLibrary() {
-  loading.value = true;
-
   return LibraryService.findById(route.params.id)
     .then((data) => {
-      library.value = data;
+      library.value = {
+        ...data,
+        synchronizeUrl: `${data.url}index.json`,
+      };
 
       return loadUser(data.maintainer);
     })
@@ -161,13 +179,34 @@ async function loadLibrary() {
         html: true,
       });
       router.push('/libraries');
-    })
-    .finally(() => {
-      loading.value = false;
     });
 }
 
-onMounted(() => {
-  loadLibrary();
+/**
+ * Load templates of library.
+ * @returns {Promise<void>} Promise with nothing on success.
+ */
+async function loadTemplates() {
+  return LibraryService.findTemplates(library.value.id)
+    .then((data) => {
+      templates.value = data.content.map((template) => ({
+        ...template,
+        plugins: template.plugins.join(', '),
+      }));
+    })
+    .catch(() => {
+      Notify.create({
+        type: 'negative',
+        message: t('LibraryPage.text.notFound'),
+        html: true,
+      });
+    });
+}
+
+onMounted(async () => {
+  loading.value = true;
+  await loadLibrary();
+  await loadTemplates();
+  loading.value = false;
 });
 </script>

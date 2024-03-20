@@ -26,6 +26,9 @@ Feature: Test roundtrip of the application: Libraries
   ## 503 Should display an error on duplicate library url
   ## 504 Should Synchronize library
 
+  ################## Templates of library ##################
+  ## 601 Should display all library templates
+
   Scenario: Roundtrip about Libraries
     Given I visit the '/'
     When  I click on '[data-cy="drawer_item_libraries"]'
@@ -169,3 +172,15 @@ Feature: Test roundtrip of the application: Libraries
     And  I expect '.library-field-url div[role="alert"]' not exists
     And  I click on '[data-cy="library_button_synchronize"]'
     Then I expect 'positive' toast to appear with text 'Library is synchronized.'
+
+    ####################################################
+    ################## Templates of library ############
+    ####################################################
+
+    ## 601 Should display all library templates
+    When I click on '[data-cy="page_library_templates_tab"]'
+    Then I expect '[data-cy="page_library_templates_tab_title"]' exists
+    And  I expect '[data-cy="templates_table"] tbody tr:nth-child(1) td.template-name' is 'templateName'
+    And  I expect '[data-cy="templates_table"] tbody tr:nth-child(1) td.template-type' is 'Project'
+    And  I expect '[data-cy="templates_table"] tbody tr:nth-child(1) td.template-description' is 'templateDescription'
+    And  I expect '[data-cy="templates_table"] tbody tr:nth-child(1) td.template-plugins' is 'plugin1, plugin2'

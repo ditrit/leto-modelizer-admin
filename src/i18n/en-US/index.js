@@ -117,6 +117,8 @@ export default {
       goBack: 'Return to previous page',
       notFound: 'Library not found.',
       informationTab: 'Information',
+      templatesTab: 'Templates',
+      templateTabTitle: 'List of templates',
     },
     icon: {
       goBack: 'fa-solid fa-chevron-left',
@@ -196,6 +198,17 @@ export default {
     },
     icon: {
       detachAction: 'fa-solid fa-link-slash',
+    },
+  },
+  TemplatesTable: {
+    text: {
+      iconColumn: 'Icon',
+      nameColumn: 'Name',
+      typeColumn: 'Type',
+      descriptionColumn: 'Description',
+      pluginsColumn: 'Plugins',
+      documentationUrlColumn: 'Link to documentation',
+      actionsColumn: 'Actions',
     },
   },
   RemoveLibraryDialog: {
@@ -469,6 +482,13 @@ export default {
       CREATE: 'Create',
       UPDATE: 'Update',
       ACCESS: 'Access',
+    },
+  },
+  TemplateTypes: {
+    text: {
+      PROJECT: 'Project',
+      COMPONENT: 'Component',
+      DIAGRAM: 'Diagram',
     },
   },
 };

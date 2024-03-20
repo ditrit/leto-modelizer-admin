@@ -18,6 +18,13 @@ describe('Test component: LibraryPage', () => {
   let push;
   const library = {
     id: 1,
+    url: 'test/',
+  };
+  const templates = {
+    content: [{
+      id: 2,
+      plugins: ['test1', 'test2'],
+    }],
   };
 
   beforeEach(() => {
@@ -27,6 +34,7 @@ describe('Test component: LibraryPage', () => {
     useRouter.mockImplementation(() => ({ push }));
 
     LibraryService.findById.mockImplementation(() => Promise.resolve(library));
+    LibraryService.findTemplates.mockImplementation(() => Promise.resolve(templates));
 
     wrapper = shallowMount(LibraryPage);
   });
@@ -38,12 +46,13 @@ describe('Test component: LibraryPage', () => {
   describe('Test function: loadLibrary', () => {
     it('should set data on valid library', async () => {
       wrapper.vm.library = {};
-      wrapper.vm.loading = true;
 
       await wrapper.vm.loadLibrary();
 
-      expect(wrapper.vm.library).toEqual(library);
-      expect(wrapper.vm.loading).toBeFalsy();
+      expect(wrapper.vm.library).toEqual({
+        ...library,
+        synchronizeUrl: 'test/index.json',
+      });
     });
 
     it('should redirect on unknown library', async () => {
@@ -52,6 +61,20 @@ describe('Test component: LibraryPage', () => {
       await wrapper.vm.loadLibrary();
 
       expect(push).toBeCalledWith('/libraries');
+    });
+  });
+
+  describe('Test function: loadTemplates', () => {
+    it('should set data on valid library', async () => {
+      wrapper.vm.library = { id: 1 };
+      wrapper.vm.templates = {};
+
+      await wrapper.vm.loadTemplates();
+
+      expect(wrapper.vm.templates).toEqual([{
+        ...templates.content[0],
+        plugins: 'test1, test2',
+      }]);
     });
   });
 });

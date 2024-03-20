@@ -51,6 +51,33 @@ describe('Test: LibraryService', () => {
     });
   });
 
+  describe('Test function: findTemplates', () => {
+    it('should return the templates of library', async () => {
+      const templates = [{
+        insertDate: '2024-03-19T13:08:35.111+00:00',
+        updateDate: '2024-03-19T13:08:35.111+00:00',
+        id: '2b4ea8b2-e0b4-4a1f-919d-c441fcf30ce5',
+        libraryId: '88aa76fa-9b7b-4e28-9181-e0354984d859',
+        documentationUrl: 'doc url',
+        name: 'Template of diagram',
+        type: 'DIAGRAM',
+        description: 'Diagram template example.',
+        basePath: '.github/workflows/',
+        plugins: ['githubator-plugin'],
+        icon: 'diagram.svg',
+        schemas: ['schema.svg'],
+        files: ['CI.yml'],
+      }];
+
+      api.mockImplementation(() => ({
+        get: () => Promise.resolve({ data: templates }),
+      }));
+
+      const data = await LibraryService.findTemplates('id');
+      expect(data).toEqual(templates);
+    });
+  });
+
   describe('Test function: remove', () => {
     it('should remove the library corresponding to the given id', async () => {
       const mockDeleteRequest = vi.fn(() => Promise.resolve());

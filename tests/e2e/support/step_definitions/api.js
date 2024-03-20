@@ -57,6 +57,17 @@ const permission2 = {
   action: 'CREATE',
   key: 'description_2',
 };
+const templates = {
+  content: [{
+    id: 1,
+    name: 'templateName',
+    type: 'PROJECT',
+    description: 'templateDescription',
+    plugins: ['plugin1', 'plugin2'],
+    schemas: [],
+    files: [],
+  }],
+};
 
 /**
  * User-specific intercepts
@@ -481,6 +492,11 @@ function setLibraryIntercepts() {
         },
       });
     }
+  });
+
+  cy.intercept('GET', '/api/libraries/1/templates', {
+    statusCode: 200,
+    body: templates,
   });
 }
 

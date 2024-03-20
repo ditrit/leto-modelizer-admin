@@ -43,4 +43,30 @@ describe('Test: ImageDownloadService', () => {
       expect(libraryIcon).toEqual(mockLibraryIcon);
     });
   });
+
+  describe('Test function: getTemplateIcon', () => {
+    it('should return the template icon', async () => {
+      const mockTemplateIcon = 'data:image/png;base64,';
+
+      api.mockImplementation(() => ({
+        get: () => Promise.resolve({ data: 'picture', headers: { 'content-type': 'image/png' } }),
+      }));
+
+      const templateIcon = await ImageDownloadService.getTemplateIcon('id');
+      expect(templateIcon).toEqual(mockTemplateIcon);
+    });
+  });
+
+  describe('Test function: getTemplateSchema', () => {
+    it('should return the template schema', async () => {
+      const mockTemplateSchema = 'data:image/png;base64,';
+
+      api.mockImplementation(() => ({
+        get: () => Promise.resolve({ data: 'picture', headers: { 'content-type': 'image/png' } }),
+      }));
+
+      const templateSchema = await ImageDownloadService.getTemplateSchema('id', 0);
+      expect(templateSchema).toEqual(mockTemplateSchema);
+    });
+  });
 });
