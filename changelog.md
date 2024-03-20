@@ -51,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Setup Library page with:
   * Display all information of a library.
   * Add form to synchronize library.
+  * Display all templates of a library.
 * Setup Groups page with:
   * Table to display all groups.
   * Add action to redirect on group page.
