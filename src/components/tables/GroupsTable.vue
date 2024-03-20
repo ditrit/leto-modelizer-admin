@@ -2,7 +2,6 @@
   <q-table
     class="shadow-5"
     table-header-class="bg-grey-3"
-    hide-bottom
     row-key="id"
     :pagination="pagination"
     :columns="columns"
@@ -48,6 +47,17 @@
           @click="$emit('remove', cell.row)"
         />
       </q-td>
+    </template>
+    <template #no-data>
+      <div class="full-width row flex-center q-gutter-sm">
+        <q-icon
+          size="2em"
+          :name="$t('GroupsTable.icon.noData')"
+        />
+        <span>
+          {{ $t('GroupsTable.text.noData') }}
+        </span>
+      </div>
     </template>
   </q-table>
 </template>

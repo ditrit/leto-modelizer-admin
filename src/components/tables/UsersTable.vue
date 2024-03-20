@@ -2,7 +2,6 @@
   <q-table
     class="shadow-5"
     table-header-class="bg-grey-3"
-    hide-bottom
     row-key="login"
     :pagination="pagination"
     :columns="columns"
@@ -61,6 +60,17 @@
           @click="$emit('remove', cell.row)"
         />
       </q-td>
+    </template>
+    <template #no-data>
+      <div class="full-width row flex-center q-gutter-sm">
+        <q-icon
+          size="2em"
+          :name="$t('UsersTable.icon.noData')"
+        />
+        <span>
+          {{ $t('UsersTable.text.noData') }}
+        </span>
+      </div>
     </template>
   </q-table>
 </template>
