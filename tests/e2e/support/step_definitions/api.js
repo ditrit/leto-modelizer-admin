@@ -265,6 +265,29 @@ function setRoleIntercepts() {
         admin,
         dev,
       ],
+      pageable: {
+        pageNumber: 0,
+      },
+      totalPages: 1,
+      size: 10,
+      totalElements: 3,
+    },
+  });
+
+  cy.intercept('GET', '/api/roles?page=0&count=10', {
+    statusCode: 200,
+    body: {
+      content: [
+        superAdmin,
+        admin,
+        dev,
+      ],
+      pageable: {
+        pageNumber: 0,
+      },
+      totalPages: 1,
+      size: 10,
+      totalElements: 3,
     },
   });
 

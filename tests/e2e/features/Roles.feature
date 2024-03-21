@@ -32,6 +32,9 @@ Feature: Test roundtrip of the application: Roles
   ## 701 Should delete selected role
   ## 702 Should not be able to delete super admin role
 
+  ################## Filter role #################
+  ## 801 Should change url on filter name
+
   Scenario: Roundtrip about Roles
     Given I visit the '/'
     When  I click on '[data-cy="drawer_item_roles"]'
@@ -211,3 +214,12 @@ Feature: Test roundtrip of the application: Roles
 
     When I click on '[data-cy="button_confirm"]'
     Then I expect 'negative' toast to appear with text 'Error during role deletion.'
+
+    ####################################################
+    ################## Filter role ################
+    ####################################################
+
+    ## 801 Should change url on filter name
+    When I set on '[data-cy="role_filter_name"]' text 'test'
+    And  I wait 3 seconds
+    Then I expect current url is 'roles\?name=test'
