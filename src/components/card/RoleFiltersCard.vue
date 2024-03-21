@@ -9,8 +9,8 @@
         :model-value="name"
         label="by name"
         debounce="2000"
-        @update:model-value="(value) => $emit('update:name', value)"
         data-cy="role_filter_name"
+        @update:model-value="(value) => $emit('update:name', value)"
       >
         <template #prepend>
           <q-icon name="fa-solid fa-magnifying-glass" />
