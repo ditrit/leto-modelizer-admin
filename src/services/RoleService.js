@@ -1,14 +1,16 @@
-import { prepareRequest } from 'boot/axios';
+import { prepareQueryParameters, prepareRequest } from 'boot/axios';
 
 /**
  * Get all roles.
+ * @param {object} filters - API filters.
  * @returns {Promise<object[]>} Promise with an array of roles on success
  * otherwise an error.
  */
-export async function find() {
+export async function find(filters) {
   const api = await prepareRequest();
+  const queryParameters = prepareQueryParameters(filters);
 
-  return api.get('/roles').then(({ data }) => data);
+  return api.get(`/roles${queryParameters}`).then(({ data }) => data);
 }
 
 /**

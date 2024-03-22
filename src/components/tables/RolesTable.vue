@@ -2,7 +2,7 @@
   <q-table
     class="shadow-5"
     table-header-class="bg-grey-3"
-    :pagination="pagination"
+    hide-pagination
     :columns="columns"
     :rows="roles"
     row-key="id"
@@ -63,7 +63,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 defineEmits(['remove', 'show', 'detach']);
@@ -87,9 +87,6 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const pagination = ref({
-  rowsPerPage: 0, // infinite
-});
 const displayActionsColumn = computed(
   () => props.showAction || props.removeAction || props.detachAction,
 );

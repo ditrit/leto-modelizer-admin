@@ -466,6 +466,19 @@ export default {
       synchronize: 'fa-solid fa-rotate',
     },
   },
+  TablePaginationCard: {
+    text: {
+      content: '{current}/{max} of {total}',
+      menuTitle: 'Roles per page:',
+    },
+    icon: {
+      first: 'fa-solid fa-backward-step',
+      last: 'fa-solid fa-forward-step',
+      previous: 'fa-solid fa-chevron-left',
+      next: 'fa-solid fa-chevron-right',
+      menu: 'fa-solid fa-ellipsis-vertical',
+    },
+  },
   Permissions: {
     text: {
       ADMIN_ACCESS_NULL: 'Permission to access and use leto-modelizer-admin',

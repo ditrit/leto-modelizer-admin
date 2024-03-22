@@ -59,6 +59,23 @@ async function prepareRequest() {
   return api;
 }
 
+/**
+ * Transform filters into query parameters string.
+ * @param {object} filters - API Filters.
+ * @returns {string} Formatted string to put in url, works even if there are no filters.
+ */
+function prepareQueryParameters(filters = {}) {
+  const queryParameters = Object.keys(filters)
+    .filter((key) => filters[key]?.length > 0)
+    .map((key) => `${key}=${filters[key]}`);
+
+  if (queryParameters.length === 0) {
+    return '';
+  }
+
+  return `?${queryParameters.join('&')}`;
+}
+
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
 
@@ -71,4 +88,4 @@ export default boot(({ app }) => {
   //       so you can easily perform requests against your app's API
 });
 
-export { prepareRequest };
+export { prepareRequest, prepareQueryParameters };
