@@ -1,22 +1,12 @@
 <template>
   <q-dialog v-model="show">
-    <q-card class="attach-group-to-role-form">
+    <q-card class="attach-group-to-group-form">
       <q-card-section class="flex row justify-center">
         <span class="text-h6">
-          {{ $t('AttachGroupToRoleDialog.text.title') }}
+          {{ $t('AttachGroupToGroupDialog.text.title') }}
         </span>
       </q-card-section>
       <q-form @submit="onSubmit">
-        <q-card-section class="row items-center">
-          <q-icon
-            left
-            color="info"
-            :name="$t('AttachGroupToRoleDialog.icon.info')"
-          />
-          <span>
-            {{ $t('AttachGroupToRoleDialog.text.content') }}
-          </span>
-        </q-card-section>
         <q-card-section>
           <groups-table
             v-model:selected="selected"
@@ -31,11 +21,11 @@
         <q-card-actions align="center">
           <q-btn
             v-close-popup
-            :label="$t('AttachGroupToRoleDialog.text.cancel')"
+            :label="$t('AttachGroupToGroupDialog.text.cancel')"
             color="negative"
           />
           <q-btn
-            :label="$t('AttachGroupToRoleDialog.text.confirm')"
+            :label="$t('AttachGroupToGroupDialog.text.confirm')"
             :loading="submitting"
             :disable="!selected.length"
             type="submit"
@@ -58,39 +48,37 @@ import { ref } from 'vue';
 import GroupsTable from 'src/components/tables/GroupsTable.vue';
 import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 import ReloadPermissionsEvent from 'src/composables/events/ReloadPermissionsEvent';
-import * as RoleService from 'src/services/RoleService';
-import * as UserService from 'src/services/UserService';
 import * as GroupService from 'src/services/GroupService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
-import { useUserStore } from 'src/stores/UserStore';
 
-const userStore = useUserStore();
 const { t } = useI18n();
 const submitting = ref(false);
-const roleId = ref('');
+const groupId = ref('');
 const selected = ref([]);
 const groups = ref([]);
 
 /**
- * Get all groups.
+ * Get all roles except current group.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function search() {
-  return GroupService.find().then((data) => {
+  return GroupService.find({
+    id: `not_${groupId.value}`,
+  }).then((data) => {
     groups.value = data.content;
   });
 }
 
-const { show } = useDialog('attach-group-to-role', (event) => {
+const { show } = useDialog('attach-group-to-group', (event) => {
   submitting.value = false;
-  roleId.value = event.roleId;
+  groupId.value = event.groupId;
   selected.value = [];
   return search();
 });
 
 /**
- * Attach one or more groups to a role.
+ * Attach one or more groups to a group.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function onSubmit() {
@@ -99,15 +87,15 @@ async function onSubmit() {
   const groupIdList = selected.value.map(({ id }) => id);
 
   await Promise.allSettled(groupIdList
-    .map((groupId) => RoleService.associateRoleAndGroup(groupId, roleId.value)
+    .map((groupIdToAttach) => GroupService.associateGroupAndGroup(groupIdToAttach, groupId.value)
       .catch(() => {
         Notify.create({
           type: 'negative',
-          message: t('AttachGroupToRoleDialog.text.notifyError'),
+          message: t('AttachGroupToGroupDialog.text.notifyError'),
           html: true,
         });
 
-        throw new Error(groupId);
+        throw new Error(groupIdToAttach);
       })))
     .then((results) => {
       const failedRequestObjects = [];
@@ -124,7 +112,7 @@ async function onSubmit() {
       if (results.every(({ status }) => status === 'fulfilled')) {
         Notify.create({
           type: 'positive',
-          message: t('AttachGroupToRoleDialog.text.notifySuccess'),
+          message: t('AttachGroupToGroupDialog.text.notifySuccess'),
           html: true,
         });
 
@@ -135,13 +123,12 @@ async function onSubmit() {
       ReloadGroupsEvent.next();
       ReloadPermissionsEvent.next();
       submitting.value = false;
-      userStore.permissions = await UserService.getMyPermissions();
     });
 }
 </script>
 
 <style scoped>
-.attach-role-to-group-form {
+.attach-group-to-group-form {
   min-width: 50vw;
 }
 </style>

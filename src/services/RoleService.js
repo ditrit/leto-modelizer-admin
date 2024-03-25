@@ -164,3 +164,31 @@ export async function dissociateRoleAndPermission(roleId, permissionId) {
 
   return api.delete(`/roles/${roleId}/permissions/${permissionId}`);
 }
+
+/**
+ * Associate role and role.
+ * @param {string} roleId - Role id.
+ * @param {string} roleIdToAttach - Role id to attach to the role.
+ * @returns {Promise<object[]>} Return an array of roles.
+ */
+export async function associateRoleAndRole(roleId, roleIdToAttach) {
+  const api = await prepareRequest();
+
+  return api.post(`/roles/${roleIdToAttach}/roles`, roleId, {
+    headers: {
+      'Content-Type': 'text/plain',
+    },
+  });
+}
+
+/**
+ * Dissociate role and role.
+ * @param {string} roleId - Role id.
+ * @param {string} roleIdToDetach - Role id to detach to the role.
+ * @returns {Promise<object>} Promise with nothing on success otherwise an error.
+ */
+export async function dissociateRoleAndRole(roleId, roleIdToDetach) {
+  const api = await prepareRequest();
+
+  return api.delete(`/roles/${roleIdToDetach}/roles/${roleId}`);
+}

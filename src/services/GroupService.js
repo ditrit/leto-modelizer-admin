@@ -1,14 +1,16 @@
-import { prepareRequest } from 'boot/axios';
+import { prepareQueryParameters, prepareRequest } from 'boot/axios';
 
 /**
  * Get all groups.
+ * @param {object} filters - API filters.
  * @returns {Promise<object[]>} Promise with an array of groups on success
  * otherwise an error.
  */
-export async function find() {
+export async function find(filters) {
   const api = await prepareRequest();
+  const queryParameters = prepareQueryParameters(filters);
 
-  return api.get('/groups').then(({ data }) => data);
+  return api.get(`/groups${queryParameters}`).then(({ data }) => data);
 }
 
 /**
@@ -68,6 +70,17 @@ export async function findByRoleId(roleId) {
 }
 
 /**
+ * Get all groups associated to the group.
+ * @param {string} groupId - Group id.
+ * @returns {Promise<object[]>} Return an array of groups.
+ */
+export async function findSubGroups(groupId) {
+  const api = await prepareRequest();
+
+  return api.get(`groups/${groupId}/groups`).then(({ data }) => data);
+}
+
+/**
  * Associate group and user.
  * @param {string} userLogin - User login.
  * @param {string} groupId - Group id.
@@ -93,4 +106,32 @@ export async function dissociateGroupAndUser(userLogin, groupId) {
   const api = await prepareRequest();
 
   return api.delete(`/groups/${groupId}/users/${userLogin}`);
+}
+
+/**
+ * Associate group and group.
+ * @param {string} groupId - Group id.
+ * @param {string} groupIdToAttach - Group id to attach to the group.
+ * @returns {Promise<object>} Promise with nothing on success otherwise an error.
+ */
+export async function associateGroupAndGroup(groupId, groupIdToAttach) {
+  const api = await prepareRequest();
+
+  return api.post(`/groups/${groupId}/groups`, groupIdToAttach, {
+    headers: {
+      'Content-Type': 'text/plain',
+    },
+  });
+}
+
+/**
+ * Dissociate group and group.
+ * @param {string} groupId - Group id.
+ * @param {string} groupIdToDetach - Group id to detach to the group.
+ * @returns {Promise<object>} Promise with nothing on success otherwise an error.
+ */
+export async function dissociateGroupAndGroup(groupId, groupIdToDetach) {
+  const api = await prepareRequest();
+
+  return api.delete(`/groups/${groupId}/groups/${groupIdToDetach}`);
 }

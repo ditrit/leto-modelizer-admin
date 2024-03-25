@@ -181,6 +181,13 @@ function setGroupIntercepts() {
     },
   });
 
+  cy.intercept('GET', '/api/groups?id=not_2', {
+    statusCode: 200,
+    body: {
+      content: [group1],
+    },
+  });
+
   cy.intercept('GET', '/api/groups/1', {
     statusCode: 200,
     body: group1,
@@ -206,6 +213,16 @@ function setGroupIntercepts() {
     body: 'Not Found',
   });
 
+  cy.intercept('GET', '/api/groups/unknown/groups', {
+    statusCode: 404,
+    body: 'Not Found',
+  });
+
+  cy.intercept('GET', '/api/groups/unknown/permissions', {
+    statusCode: 404,
+    body: 'Not Found',
+  });
+
   cy.intercept('GET', '/api/groups/1/users', {
     statusCode: 200,
     body: {
@@ -217,6 +234,20 @@ function setGroupIntercepts() {
     statusCode: 200,
     body: {
       content: [adminUser],
+    },
+  });
+
+  cy.intercept('GET', '/api/groups/1/groups', {
+    statusCode: 200,
+    body: {
+      content: [group1],
+    },
+  });
+
+  cy.intercept('GET', '/api/groups/2/groups', {
+    statusCode: 200,
+    body: {
+      content: [group1],
     },
   });
 
@@ -234,13 +265,49 @@ function setGroupIntercepts() {
     },
   });
 
+  cy.intercept('GET', '/api/groups/1/permissions', {
+    statusCode: 200,
+    body: {
+      content: [{
+        entity: 'ADMIN',
+        action: 'ACCESS',
+      }],
+    },
+  });
+
+  cy.intercept('GET', '/api/groups/2/permissions', {
+    statusCode: 200,
+    body: {
+      content: [{
+        entity: 'ADMIN',
+        action: 'ACCESS',
+      }],
+    },
+  });
+
   cy.intercept('POST', '/api/groups/2/users', (request) => {
     request.reply({
       statusCode: 200,
     });
   });
 
+  cy.intercept('POST', '/api/groups/1/groups', (request) => {
+    request.reply({
+      statusCode: 200,
+    });
+  });
+
+  cy.intercept('POST', '/api/groups/2/groups', (request) => {
+    request.reply({
+      statusCode: 200,
+    });
+  });
+
   cy.intercept('DELETE', '/api/groups/1', (request) => {
+    request.reply({ statusCode: 204 });
+  });
+
+  cy.intercept('DELETE', '/api/groups/1/groups/2', (request) => {
     request.reply({ statusCode: 204 });
   });
 
@@ -274,6 +341,13 @@ function setRoleIntercepts() {
     },
   });
 
+  cy.intercept('GET', '/api/roles?name=not_SUPER_ADMINISTRATOR&id=not_1', {
+    statusCode: 200,
+    body: {
+      content: [admin],
+    },
+  });
+
   cy.intercept('GET', '/api/roles?page=0&count=10', {
     statusCode: 200,
     body: {
@@ -288,6 +362,33 @@ function setRoleIntercepts() {
       totalPages: 1,
       size: 10,
       totalElements: 3,
+    },
+  });
+
+  cy.intercept('GET', '/api/roles?name=lk_*TEST*&page=0&count=10', {
+    statusCode: 200,
+    body: {
+      content: [
+        superAdmin,
+        admin,
+        dev,
+      ],
+      pageable: {
+        pageNumber: 0,
+      },
+      totalPages: 1,
+      size: 10,
+      totalElements: 3,
+    },
+  });
+
+  cy.intercept('GET', '/api/roles?name=not_SUPER_ADMINISTRATOR', {
+    statusCode: 200,
+    body: {
+      content: [
+        admin,
+        dev,
+      ],
     },
   });
 
@@ -363,6 +464,12 @@ function setRoleIntercepts() {
     });
   });
 
+  cy.intercept('POST', '/api/roles/2/roles', (request) => {
+    request.reply({
+      statusCode: 200,
+    });
+  });
+
   cy.intercept('POST', '/api/roles/1/permissions', (request) => {
     request.reply({
       statusCode: 200,
@@ -381,7 +488,19 @@ function setRoleIntercepts() {
     });
   });
 
+  cy.intercept('POST', '/api/roles/2/groups', (request) => {
+    request.reply({
+      statusCode: 200,
+    });
+  });
+
   cy.intercept('DELETE', '/api/roles/3/groups/2', (request) => {
+    request.reply({
+      statusCode: 200,
+    });
+  });
+
+  cy.intercept('DELETE', '/api/roles/3/roles/1', (request) => {
     request.reply({
       statusCode: 200,
     });

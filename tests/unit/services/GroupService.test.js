@@ -96,6 +96,21 @@ describe('Test: GroupService', () => {
     });
   });
 
+  describe('Test function: findSubGroups', () => {
+    it('should return the group sub groups', async () => {
+      const subGroups = [{
+        name: 'subGroups',
+      }];
+
+      api.mockImplementation(() => ({
+        get: () => Promise.resolve({ data: subGroups }),
+      }));
+
+      const data = await GroupService.findSubGroups('groupId');
+      expect(data).toEqual([{ name: 'subGroups' }]);
+    });
+  });
+
   describe('Test function: associateGroupAndUser', () => {
     it('should call api.post with endpoint using "groupId"', async () => {
       const mockPostRequest = vi.fn(() => Promise.resolve());
@@ -129,6 +144,42 @@ describe('Test: GroupService', () => {
       await GroupService.dissociateGroupAndUser('userLogin', 'groupId');
 
       expect(mockDeleteRequest).toBeCalledWith('/groups/groupId/users/userLogin');
+    });
+  });
+
+  describe('Test function: associateGroupAndGroup', () => {
+    it('should call api.post with endpoint using "groupId"', async () => {
+      const mockPostRequest = vi.fn(() => Promise.resolve());
+
+      api.mockImplementation(() => ({
+        post: mockPostRequest,
+      }));
+
+      await GroupService.associateGroupAndGroup('groupId', 'groupIdToAttach');
+
+      expect(mockPostRequest).toBeCalledWith(
+        '/groups/groupId/groups',
+        'groupIdToAttach',
+        {
+          headers: {
+            'Content-Type': 'text/plain',
+          },
+        },
+      );
+    });
+  });
+
+  describe('Test function: dissociateGroupAndGroup', () => {
+    it('should call api.delete with endpoint using "groupId" and "groupIdToDetach"', async () => {
+      const mockDeleteRequest = vi.fn(() => Promise.resolve());
+
+      api.mockImplementation(() => ({
+        delete: mockDeleteRequest,
+      }));
+
+      await GroupService.dissociateGroupAndGroup('groupId', 'groupIdToDetach');
+
+      expect(mockDeleteRequest).toBeCalledWith('/groups/groupId/groups/groupIdToDetach');
     });
   });
 });

@@ -45,3 +45,20 @@ export async function findByRoleId(roleId) {
     })),
   }));
 }
+
+/**
+ * Get all permissions associated to the group.
+ * @param {string} groupId - Group id.
+ * @returns {Promise<object[]>} Return an array of groups.
+ */
+export async function findByGroupId(groupId) {
+  const api = await prepareRequest();
+
+  return api.get(`groups/${groupId}/permissions`).then(({ data }) => ({
+    ...data,
+    content: data.content.map((permission) => ({
+      ...permission,
+      key: generatePermissionKey(permission),
+    })),
+  }));
+}

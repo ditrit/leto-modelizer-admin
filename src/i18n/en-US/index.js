@@ -46,16 +46,21 @@ export default {
       goBack: 'Return to previous page',
       notFound: 'Group not found.',
       userList: 'List of users attributed to {group}',
-      roleList: 'Role of {group}',
-      rolesTab: 'Roles',
+      groupList: 'List of parent groups attributed to {group}',
+      roleList: 'List of roles attributed to {group}',
+      permissionList: 'List of permissions attributed to {group}',
       usersTab: 'Users',
+      groupsTab: 'Groups',
+      rolesTab: 'Roles',
+      permissionsTab: 'Permissions',
       attachUser: 'Attach user',
+      groupRole: 'Attach group',
       attachRole: 'Attach role',
+      attachGroup: 'Attach group',
     },
     icon: {
       goBack: 'fa-solid fa-chevron-left',
-      attachUser: 'fa-solid fa-link',
-      attachRole: 'fa-solid fa-link',
+      attach: 'fa-solid fa-link',
     },
   },
   UserPage: {
@@ -65,7 +70,7 @@ export default {
       rolesTab: 'Roles',
       groupsTab: 'Groups',
       roleList: 'List of roles attributed to {user}',
-      groupList: 'Group of {user}',
+      groupList: 'List of groups attributed to {user}',
       attachGroup: 'Attach group',
       attachRole: 'Attach role',
     },
@@ -85,19 +90,24 @@ export default {
       notFound: 'Role not found.',
       usersTab: 'Users',
       groupsTab: 'Groups',
-      rolesTab: 'Sub roles',
+      rolesTab: 'Roles',
       permissionsTab: 'Permissions',
       userList: 'List of users attributed to {role}',
-      groupList: 'Group of {role}',
-      roleList: 'Sub role of {role}',
-      permissionList: 'Permissions of {role}',
+      groupList: 'List of groups attributed to {role}',
+      roleList: 'List of parent roles attributed to {role}',
+      permissionList: 'List of permissions attributed to {role}',
       attachUser: 'Attach user',
       attachGroup: 'Attach group',
+      attachRole: 'Attach role',
       attachPermission: 'Attach permission',
+      addGroupMessage: 'Attaching groups to the Super Administrator role is restricted.',
+      addRoleMessage: 'Attaching roles to the Super Administrator role is restricted.',
+      addPermissionMessage: 'Attaching permissions to the Super Administrator role is restricted.',
     },
     icon: {
       goBack: 'fa-solid fa-chevron-left',
       attach: 'fa-solid fa-link',
+      warning: 'fa-solid fa-triangle-exclamation',
     },
   },
   LibrariesPage: {
@@ -293,6 +303,15 @@ export default {
       notifySuccess: 'Role is detached from group.',
     },
   },
+  DetachRoleFromRoleDialog: {
+    text: {
+      title: 'Do you want to detach the role "{roleToDetach}" from the role "{role}" ?',
+      content: 'You can always reassign the role to the role.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifySuccess: 'Role is detached from role.',
+    },
+  },
   DetachGroupFromRoleDialog: {
     text: {
       title: 'Do you want to detach the group "{group}" from the role "{role}" ?',
@@ -300,6 +319,15 @@ export default {
       cancel: 'Cancel',
       confirm: 'Confirm',
       notifySuccess: 'Group is detached from role.',
+    },
+  },
+  DetachGroupFromGroupDialog: {
+    text: {
+      title: 'Do you want to detach the group "{groupToDetach}" from the group "{group}" ?',
+      content: 'You can always reassign the group to the group.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifySuccess: 'Group is detached from group.',
     },
   },
   DetachRoleFromUserDialog: {
@@ -413,6 +441,15 @@ export default {
       info: 'fa-solid fa-circle-info',
     },
   },
+  AttachRoleToRoleDialog: {
+    text: {
+      title: 'Attach one or more roles to role',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifyError: 'Error during attachment of a role to the role.',
+      notifySuccess: 'Role(s) successfully attached to the role.',
+    },
+  },
   AttachGroupToRoleDialog: {
     text: {
       title: 'Attach one or more groups to role',
@@ -436,6 +473,15 @@ export default {
     },
     icon: {
       info: 'fa-solid fa-circle-info',
+    },
+  },
+  AttachGroupToGroupDialog: {
+    text: {
+      title: 'Attach one or more groups to group',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifyError: 'Error during attachment of a group to the group.',
+      notifySuccess: 'Group(s) successfully attached to the group.',
     },
   },
   AddLibraryPage: {

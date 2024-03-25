@@ -3,22 +3,22 @@
     <q-card>
       <q-card-section class="flex row justify-center">
         <span class="text-h6 text-center">
-          {{ $t('DetachGroupFromRoleDialog.text.title',
-                { group: group.name, role: role.name }) }}
+          {{ $t('DetachGroupFromGroupDialog.text.title',
+                { groupToDetach: grouptoDetach.name, group: group.name }) }}
         </span>
       </q-card-section>
       <q-form @submit="onSubmit">
         <q-card-section class="column flex-center">
-          {{ $t('DetachGroupFromRoleDialog.text.content') }}
+          {{ $t('DetachGroupFromGroupDialog.text.content') }}
         </q-card-section>
         <q-card-actions align="center">
           <q-btn
             v-close-popup
-            :label="$t('DetachGroupFromRoleDialog.text.cancel')"
+            :label="$t('DetachGroupFromGroupDialog.text.cancel')"
             color="negative"
           />
           <q-btn
-            :label="$t('DetachGroupFromRoleDialog.text.confirm')"
+            :label="$t('DetachGroupFromGroupDialog.text.confirm')"
             :loading="submitting"
             type="submit"
             color="positive"
@@ -39,22 +39,19 @@ import { useDialog } from 'src/composables/Dialog';
 import { ref } from 'vue';
 import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 import ReloadPermissionsEvent from 'src/composables/events/ReloadPermissionsEvent';
-import * as RoleService from 'src/services/RoleService';
-import * as UserService from 'src/services/UserService';
+import * as GroupService from 'src/services/GroupService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
-import { useUserStore } from 'src/stores/UserStore';
 
-const userStore = useUserStore();
 const { t } = useI18n();
 const submitting = ref(false);
 const group = ref(null);
-const role = ref();
+const grouptoDetach = ref();
 
-const { show } = useDialog('detach-group-from-role', (event) => {
+const { show } = useDialog('detach-group-from-group', (event) => {
   submitting.value = false;
   group.value = event.group;
-  role.value = event.role;
+  grouptoDetach.value = event.grouptoDetach;
 });
 
 /**
@@ -65,18 +62,16 @@ async function onSubmit() {
   submitting.value = true;
 
   // TODO: generic error management
-  await RoleService.dissociateRoleAndGroup(group.value.id, role.value.id);
+  await GroupService.dissociateGroupAndGroup(grouptoDetach.value.id, group.value.id);
 
   Notify.create({
     type: 'positive',
-    message: t('DetachGroupFromRoleDialog.text.notifySuccess'),
+    message: t('DetachGroupFromGroupDialog.text.notifySuccess'),
     html: true,
   });
 
   ReloadGroupsEvent.next();
   ReloadPermissionsEvent.next();
-
-  userStore.permissions = await UserService.getMyPermissions();
 
   submitting.value = false;
   show.value = false;
