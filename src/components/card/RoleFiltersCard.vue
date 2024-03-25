@@ -6,6 +6,7 @@
       </span>
       <q-input
         outlined
+        dense
         :model-value="name"
         label="by name"
         debounce="2000"
