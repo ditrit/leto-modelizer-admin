@@ -6,25 +6,18 @@
     >
       {{ $t('RolesPage.text.title') }}
     </h4>
-    <div class="row justify-between items-center q-mb-md">
-      <role-filters-card
-        :name="filterRoleName"
-        @update:name="searchByName"
-      />
-      <table-pagination-card
-        :current="paginationCurrent"
-        :max="paginationMax"
-        :total="paginationTotal"
-        :size="paginationSize"
-        @update:current="updatePage"
-        @update:size="updateSize"
-      />
-    </div>
     <roles-table
+      v-model:filter-name="roleName"
+      v-model:current-page="currentPage"
+      v-model:max-page="maxPage"
+      v-model:elements-per-page="elementsPerPage"
+      v-model:total-elements="totalElements"
       :roles="roles"
       :detach-action="false"
+      :loading="loading"
       @show="goToRole"
       @remove="openRemoveRoleDialog"
+      @on-filter="search"
     />
   </q-page>
 </template>
@@ -36,17 +29,16 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import ReloadRolesEvent from 'src/composables/events/ReloadRolesEvent';
-import TablePaginationCard from 'components/card/TablePaginationCard.vue';
-import RoleFiltersCard from 'components/card/RoleFiltersCard.vue';
 
 const router = useRouter();
 const route = useRoute();
 const roles = ref([]);
-const paginationCurrent = ref(1);
-const paginationMax = ref(1);
-const paginationSize = ref(10);
-const paginationTotal = ref(0);
-const filterRoleName = ref('');
+const roleName = ref('');
+const currentPage = ref(0);
+const maxPage = ref(0);
+const elementsPerPage = ref(10);
+const totalElements = ref(0);
+const loading = ref(false);
 let reloadRolesEventRef;
 
 /**
@@ -75,19 +67,41 @@ function openRemoveRoleDialog(role) {
 function updateRoute() {
   const queryParameters = [];
 
-  if (paginationSize.value !== 10) {
-    queryParameters.push(`size=${paginationSize.value}`);
+  if (elementsPerPage.value !== 10) {
+    queryParameters.push(`size=${elementsPerPage.value}`);
   }
 
-  if (paginationCurrent.value !== 1) {
-    queryParameters.push(`page=${paginationCurrent.value}`);
+  if (currentPage.value !== 1) {
+    queryParameters.push(`page=${currentPage.value}`);
   }
 
-  if (filterRoleName.value.length > 0) {
-    queryParameters.push(`name=${filterRoleName.value}`);
+  if (roleName.value?.length > 0) {
+    queryParameters.push(`name=${roleName.value}`);
   }
 
   router.push(queryParameters.length > 0 ? `/roles?${queryParameters.join('&')}` : '/roles');
+}
+
+/**
+ * Create API filters from component ref.
+ * @returns {object} Object that contains role filters.
+ */
+function getFilters() {
+  const filters = {};
+
+  if (roleName.value?.length > 0) {
+    filters.name = `lk_*${roleName.value}*`;
+  }
+
+  if (currentPage.value >= 1) {
+    filters.page = `${currentPage.value - 1}`;
+  }
+
+  if (elementsPerPage.value !== 10) {
+    filters.count = `${elementsPerPage.value}`;
+  }
+
+  return filters;
 }
 
 /**
@@ -95,68 +109,47 @@ function updateRoute() {
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function search() {
+  loading.value = true;
   updateRoute();
 
-  return RoleService.find({
-    name: filterRoleName.value?.length > 0 ? `lk_*${filterRoleName.value.toUpperCase()}*` : null,
-    page: `${paginationCurrent.value - 1}`,
-    count: `${paginationSize.value}`,
-  }).then((data) => {
+  return RoleService.find(getFilters()).then((data) => {
     roles.value = data.content;
-    paginationCurrent.value = data.pageable.pageNumber + 1;
-    paginationMax.value = data.totalPages;
-    paginationSize.value = data.size;
-    paginationTotal.value = data.totalElements;
+    currentPage.value = data.pageable.pageNumber + 1;
+    maxPage.value = data.totalPages;
+    elementsPerPage.value = data.size;
+    totalElements.value = data.totalElements;
+
+    if (data.totalPages > 0 && currentPage.value > maxPage.value) {
+      currentPage.value = maxPage.value;
+      return search();
+    }
+
+    return Promise.resolve();
+  }).finally(() => {
+    loading.value = false;
   });
 }
 
 /**
- * Set filter role name and call search roles.
- * @param {string} value - Filter role name.
- * @returns {Promise<void>} Promise with nothing on success.
- */
-async function searchByName(value) {
-  filterRoleName.value = value;
-  return search();
-}
-
-/**
- * Set current page and call search roles.
- * @param {number} value - Current page value.
- * @returns {Promise<void>} Promise with nothing on success.
- */
-async function updatePage(value) {
-  paginationCurrent.value = value;
-  return search();
-}
-
-/**
- * Set page size and call search roles.
- * @param {number} value - Page size value.
- * @returns {Promise<void>} Promise with nothing on success.
- */
-async function updateSize(value) {
-  paginationSize.value = value;
-  return search();
-}
-
-/**
  * Init filters and pagination from query parameters in url.
+ * @param {object} query - URL query parameters.
  */
-function init() {
-  if (route.query.size) {
-    paginationSize.value = route.query.size;
+function init(query) {
+  if (query.size) {
+    elementsPerPage.value = parseInt(query.size, 10) || 10;
   }
-  if (route.query.page) {
-    paginationCurrent.value = route.query.page;
+
+  if (query.page) {
+    currentPage.value = parseInt(query.page, 10) || 0;
   }
-  if (route.query.name) {
-    filterRoleName.value = route.query.name;
+
+  if (query.name) {
+    roleName.value = query.name;
   }
 }
 
 onMounted(async () => {
-  init();
+  init(route.query);
   reloadRolesEventRef = ReloadRolesEvent.subscribe(search);
 
   await search();

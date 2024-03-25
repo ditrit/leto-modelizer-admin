@@ -74,10 +74,37 @@ describe('Test component: RolesPage', () => {
   });
 
   describe('Test function: search', () => {
-    it('should set roles', () => {
-      wrapper.vm.search();
+    it('should set roles', async () => {
+      await wrapper.vm.search();
 
       expect(wrapper.vm.roles).toEqual(('roles'));
+    });
+
+    it('should research on page out of bound', async () => {
+      RoleService.find.mockReset();
+      RoleService.find.mockImplementationOnce(() => Promise.resolve({
+        content: 'roles',
+        pageable: {
+          pageNumber: 10,
+        },
+        totalPages: 1,
+        size: 0,
+        totalElements: 0,
+      }));
+      RoleService.find.mockImplementationOnce(() => Promise.resolve({
+        content: 'roles',
+        pageable: {
+          pageNumber: 0,
+        },
+        totalPages: 1,
+        size: 0,
+        totalElements: 0,
+      }));
+
+      await wrapper.vm.search();
+
+      expect(wrapper.vm.currentPage).toEqual(1);
+      expect(RoleService.find).toHaveBeenCalledTimes(2);
     });
   });
 
@@ -97,9 +124,9 @@ describe('Test component: RolesPage', () => {
 
   describe('Test function: updateRoute', () => {
     it('should push routes without filters', () => {
-      wrapper.vm.paginationCurrent = 1;
-      wrapper.vm.paginationSize = 10;
-      wrapper.vm.filterRoleName = '';
+      wrapper.vm.currentPage = 1;
+      wrapper.vm.elementsPerPage = 10;
+      wrapper.vm.roleName = '';
 
       wrapper.vm.updateRoute();
 
@@ -107,9 +134,9 @@ describe('Test component: RolesPage', () => {
     });
 
     it('should push routes with size filter', () => {
-      wrapper.vm.paginationCurrent = 1;
-      wrapper.vm.paginationSize = 11;
-      wrapper.vm.filterRoleName = '';
+      wrapper.vm.currentPage = 1;
+      wrapper.vm.elementsPerPage = 11;
+      wrapper.vm.roleName = '';
 
       wrapper.vm.updateRoute();
 
@@ -117,9 +144,9 @@ describe('Test component: RolesPage', () => {
     });
 
     it('should push routes with current page filter', () => {
-      wrapper.vm.paginationCurrent = 2;
-      wrapper.vm.paginationSize = 10;
-      wrapper.vm.filterRoleName = '';
+      wrapper.vm.currentPage = 2;
+      wrapper.vm.elementsPerPage = 10;
+      wrapper.vm.roleName = '';
 
       wrapper.vm.updateRoute();
 
@@ -127,9 +154,9 @@ describe('Test component: RolesPage', () => {
     });
 
     it('should push routes with role name filter', () => {
-      wrapper.vm.paginationCurrent = 1;
-      wrapper.vm.paginationSize = 10;
-      wrapper.vm.filterRoleName = 'test';
+      wrapper.vm.currentPage = 1;
+      wrapper.vm.elementsPerPage = 10;
+      wrapper.vm.roleName = 'test';
 
       wrapper.vm.updateRoute();
 
@@ -137,9 +164,9 @@ describe('Test component: RolesPage', () => {
     });
 
     it('should push routes with all filters', () => {
-      wrapper.vm.paginationCurrent = 2;
-      wrapper.vm.paginationSize = 11;
-      wrapper.vm.filterRoleName = 'test';
+      wrapper.vm.currentPage = 2;
+      wrapper.vm.elementsPerPage = 11;
+      wrapper.vm.roleName = 'test';
 
       wrapper.vm.updateRoute();
 
@@ -147,62 +174,94 @@ describe('Test component: RolesPage', () => {
     });
   });
 
-  describe('Test function: searchByName', () => {
-    it('should set filterRoleName', () => {
-      wrapper.vm.filterRoleName = '';
-      wrapper.vm.searchByName('test');
-      expect(wrapper.vm.filterRoleName).toEqual('test');
-    });
-  });
-
-  describe('Test function: updatePage', () => {
-    it('should set paginationCurrent', () => {
-      wrapper.vm.paginationCurrent = 1;
-      wrapper.vm.updatePage(2);
-      expect(wrapper.vm.paginationCurrent).toEqual(2);
-    });
-  });
-
-  describe('Test function: updateSize', () => {
-    it('should set paginationSize', () => {
-      wrapper.vm.paginationSize = 10;
-      wrapper.vm.updateSize(11);
-      expect(wrapper.vm.paginationSize).toEqual(11);
-    });
-  });
-
   describe('Test function: init', () => {
-    it('should not change on no query parameters', () => {
-      wrapper.vm.paginationCurrent = 2;
-      wrapper.vm.paginationSize = 12;
-      wrapper.vm.filterRoleName = 'test';
+    it('should not change value without query parameters', () => {
+      wrapper.vm.elementsPerPage = 100;
+      wrapper.vm.currentPage = 200;
+      wrapper.vm.roleName = 'test';
 
-      wrapper.vm.init();
+      wrapper.vm.init({});
 
-      expect(wrapper.vm.paginationCurrent).toEqual(2);
-      expect(wrapper.vm.paginationSize).toEqual(12);
-      expect(wrapper.vm.filterRoleName).toEqual('test');
+      expect(wrapper.vm.elementsPerPage).toEqual(100);
+      expect(wrapper.vm.currentPage).toEqual(200);
+      expect(wrapper.vm.roleName).toEqual('test');
     });
 
-    it('should change with query parameters', () => {
-      useRoute.mockImplementation(() => ({
-        query: {
-          size: 15,
-          page: 3,
-          name: 'test1',
-        },
-      }));
-      wrapper = shallowMount(RolesPage);
+    it('should set default value with bad query parameters', () => {
+      wrapper.vm.elementsPerPage = 100;
+      wrapper.vm.currentPage = 200;
+      wrapper.vm.roleName = 'test';
 
-      wrapper.vm.paginationCurrent = 2;
-      wrapper.vm.paginationSize = 12;
-      wrapper.vm.filterRoleName = 'test';
+      wrapper.vm.init({
+        size: 'a',
+        page: 'b',
+      });
 
-      wrapper.vm.init();
+      expect(wrapper.vm.elementsPerPage).toEqual(10);
+      expect(wrapper.vm.currentPage).toEqual(0);
+      expect(wrapper.vm.roleName).toEqual('test');
+    });
 
-      expect(wrapper.vm.paginationCurrent).toEqual(3);
-      expect(wrapper.vm.paginationSize).toEqual(15);
-      expect(wrapper.vm.filterRoleName).toEqual('test1');
+    it('should set value from query parameters', () => {
+      wrapper.vm.elementsPerPage = 100;
+      wrapper.vm.currentPage = 200;
+      wrapper.vm.roleName = 'test';
+
+      wrapper.vm.init({
+        size: '2',
+        page: '1',
+        name: 'test2',
+      });
+
+      expect(wrapper.vm.elementsPerPage).toEqual(2);
+      expect(wrapper.vm.currentPage).toEqual(1);
+      expect(wrapper.vm.roleName).toEqual('test2');
+    });
+  });
+
+  describe('Test function: getFilters', () => {
+    it('should return object with no filters', () => {
+      wrapper.vm.currentPage = 0;
+      wrapper.vm.elementsPerPage = 10;
+      wrapper.vm.roleName = '';
+
+      expect({}).toEqual(wrapper.vm.getFilters());
+    });
+
+    it('should return object with name filter', () => {
+      wrapper.vm.currentPage = 0;
+      wrapper.vm.elementsPerPage = 10;
+      wrapper.vm.roleName = 'test';
+
+      expect({ name: 'lk_*test*' }).toEqual(wrapper.vm.getFilters());
+    });
+
+    it('should return object with page filter', () => {
+      wrapper.vm.currentPage = 2;
+      wrapper.vm.elementsPerPage = 10;
+      wrapper.vm.roleName = '';
+
+      expect({ page: '1' }).toEqual(wrapper.vm.getFilters());
+    });
+
+    it('should return object with count filter', () => {
+      wrapper.vm.currentPage = 0;
+      wrapper.vm.elementsPerPage = 5;
+      wrapper.vm.roleName = '';
+
+      expect({ count: '5' }).toEqual(wrapper.vm.getFilters());
+    });
+
+    it('should return object with all filters', () => {
+      wrapper.vm.currentPage = 2;
+      wrapper.vm.elementsPerPage = 5;
+      wrapper.vm.roleName = 'test';
+
+      expect({
+        count: '5',
+        page: '1',
+        name: 'lk_*test*',
+      }).toEqual(wrapper.vm.getFilters());
     });
   });
 });
