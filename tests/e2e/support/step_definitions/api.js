@@ -345,10 +345,16 @@ function setRoleIntercepts() {
     statusCode: 200,
     body: {
       content: [admin],
+      pageable: {
+        pageNumber: 0,
+      },
+      totalPages: 1,
+      size: 10,
+      totalElements: 3,
     },
   });
 
-  cy.intercept('GET', '/api/roles?page=0&count=10', {
+  cy.intercept('GET', '/api/roles?page=0', {
     statusCode: 200,
     body: {
       content: [
@@ -365,7 +371,7 @@ function setRoleIntercepts() {
     },
   });
 
-  cy.intercept('GET', '/api/roles?name=lk_*TEST*&page=0&count=10', {
+  cy.intercept('GET', '/api/roles?name=lk_*test*&page=0', {
     statusCode: 200,
     body: {
       content: [
@@ -390,6 +396,12 @@ function setRoleIntercepts() {
         dev,
       ],
     },
+    pageable: {
+      pageNumber: 0,
+    },
+    totalPages: 1,
+    size: 10,
+    totalElements: 3,
   });
 
   cy.intercept('GET', '/api/roles/unknown', {
