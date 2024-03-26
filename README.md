@@ -58,20 +58,20 @@ cd leto-modelizer-admin
 
 We are using [Leto-Modelizer-Api](https://github.com/ditrit/leto-modelizer-api) authentication (as a backend). To configure it, you must fill the configuration inside `global.config.json` root file.
 
-All the fields are mandatory.
-
 ```json
 {
   "backendUrl": "https://localhost:8443",
   "backendAppId": "leto-modelizer-api-dev",
-  "letoModelizerUrl": "http://localhost:8080"
+  "letoModelizerUrl": "http://localhost:8080",
+  "inputDebounceTime": 1000
 }
 ```
 
 Here's a description of each key in the provided configuration:
-- `backendUrl`: the url of the backend.
-- `backendAppId`: the application ID of the backend.
-- `letoModelizerUrl`: the url of the leto-modelizer application.
+- `backendUrl`: the url of the backend, this field is mandatory.
+- `backendAppId`: the application ID of the backend, this field is mandatory.
+- `letoModelizerUrl`: the url of the leto-modelizer application, this field is mandatory.
+- `inputDebounceTime`: debounce time for filters input, default time is 1000ms.
 
 ### Native build
 
