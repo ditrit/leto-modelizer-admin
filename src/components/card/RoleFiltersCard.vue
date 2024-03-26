@@ -7,9 +7,10 @@
       <q-input
         outlined
         dense
+        clearable
         :model-value="name"
         label="by name"
-        debounce="2000"
+        :debounce="inputDebounceTime"
         data-cy="role_filter_name"
         @update:model-value="(value) => $emit('update:name', value)"
       >
@@ -22,6 +23,8 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+
 defineEmits(['update:name']);
 defineProps({
   name: {
@@ -29,4 +32,5 @@ defineProps({
     default: '',
   },
 });
+const inputDebounceTime = ref(process.env.INPUT_DEBOUNCE_TIME);
 </script>
