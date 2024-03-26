@@ -131,7 +131,7 @@ Feature: Test roundtrip of the application: Users
     Then I expect '[data-cy="button_confirm"]' to be enabled
     And  I expect '[data-cy="roles_table"] tbody tr.selected td.role-name' is 'Administrator'
 
-    When I click on '[data-cy="button_confirm"]'
+    When I force click on '[data-cy="button_confirm"]'
     Then I expect 'positive' toast to appear with text 'Role(s) successfully attached to the user.'
 
     When I click on '[data-cy="page_user_go_back"]'

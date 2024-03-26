@@ -81,6 +81,7 @@ module.exports = configure((/* ctx */) => ({
       BACKEND_APP_ID: configuration.backendAppId,
       LETO_MODELIZER_URL: configuration.letoModelizerUrl,
       SUPER_ADMINISTRATOR_ROLE_NAME: 'SUPER_ADMINISTRATOR',
+      INPUT_DEBOUNCE_TIME: configuration.inputDebounceTime || 1000,
     },
 
     vueRouterMode: 'history', // available values: 'hash', 'history'

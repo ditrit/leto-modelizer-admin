@@ -1,76 +1,108 @@
 <template>
-  <q-table
-    class="shadow-5"
-    table-header-class="bg-grey-3"
-    hide-pagination
-    :columns="columns"
-    :rows="roles"
-    row-key="id"
-    data-cy="roles_table"
-  >
-    <template #body-cell-actions="cell">
-      <q-td
-        key="actions"
-        :props="cell"
-      >
-        <q-btn
-          v-if="showAction"
-          dense
-          flat
-          rounded
-          color="primary"
-          :icon="t('RolesTable.icon.showAction')"
-          :title="t('RolesTable.text.showAction')"
-          :data-cy="`role_${cell.row.id}_button_show`"
-          @click="$emit('show', cell.row.id)"
-        />
-        <q-btn
-          v-if="detachAction"
-          dense
-          flat
-          rounded
-          color="negative"
-          :icon="t('RolesTable.icon.detachAction')"
-          :title="t('RolesTable.text.detachAction')"
-          :data-cy="`role_${cell.row.id}_button_detach`"
-          @click="$emit('detach', cell.row)"
-        />
-        <q-btn
-          v-if="removeAction"
-          dense
-          flat
-          rounded
-          color="negative"
-          :icon="t('RolesTable.icon.removeAction')"
-          :title="t('RolesTable.text.removeAction')"
-          :data-cy="`role_${cell.row.id}_button_remove`"
-          @click="$emit('remove', cell.row)"
-        />
-      </q-td>
-    </template>
-    <template #no-data>
-      <div class="full-width row flex-center q-gutter-sm">
-        <q-icon
-          size="2em"
-          :name="$t('RolesTable.icon.noData')"
-        />
-        <span>
-          {{ $t('RolesTable.text.noData') }}
-        </span>
-      </div>
-    </template>
-  </q-table>
+  <div>
+    <div class="row justify-between items-center q-mb-md">
+      <role-filters-card
+        :name="filterName"
+        @update:name="setFilterName"
+      />
+      <table-pagination-card
+        :current="currentPage"
+        :max="maxPage"
+        :total="totalElements"
+        :size="elementsPerPage"
+        @update:current="setCurrentPage"
+        @update:size="setElementsPerPage"
+      />
+    </div>
+    <q-table
+      v-bind="$attrs"
+      class="shadow-5"
+      table-header-class="bg-grey-3"
+      hide-pagination
+      :columns="columns"
+      :rows="roles"
+      :loading="loading"
+      row-key="id"
+      data-cy="roles_table"
+    >
+      <template #body-cell-actions="cell">
+        <q-td
+          key="actions"
+          :props="cell"
+        >
+          <q-btn
+            v-if="showAction"
+            dense
+            flat
+            rounded
+            color="primary"
+            :icon="t('RolesTable.icon.showAction')"
+            :title="t('RolesTable.text.showAction')"
+            :data-cy="`role_${cell.row.id}_button_show`"
+            @click="$emit('show', cell.row.id)"
+          />
+          <q-btn
+            v-if="detachAction"
+            dense
+            flat
+            rounded
+            color="negative"
+            :icon="t('RolesTable.icon.detachAction')"
+            :title="t('RolesTable.text.detachAction')"
+            :data-cy="`role_${cell.row.id}_button_detach`"
+            @click="$emit('detach', cell.row)"
+          />
+          <q-btn
+            v-if="removeAction"
+            dense
+            flat
+            rounded
+            color="negative"
+            :icon="t('RolesTable.icon.removeAction')"
+            :title="t('RolesTable.text.removeAction')"
+            :data-cy="`role_${cell.row.id}_button_remove`"
+            @click="$emit('remove', cell.row)"
+          />
+        </q-td>
+      </template>
+      <template #no-data>
+        <div class="full-width row flex-center q-gutter-sm">
+          <q-icon
+            size="2em"
+            :name="$t('RolesTable.icon.noData')"
+          />
+          <span>
+            {{ $t('RolesTable.text.noData') }}
+          </span>
+        </div>
+      </template>
+    </q-table>
+  </div>
 </template>
 
 <script setup>
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import TablePaginationCard from 'components/card/TablePaginationCard.vue';
+import RoleFiltersCard from 'components/card/RoleFiltersCard.vue';
 
-defineEmits(['remove', 'show', 'detach']);
+const emits = defineEmits([
+  'remove',
+  'show',
+  'detach',
+  'onFilter',
+  'update:filter-name',
+  'update:current-page',
+  'update:elements-per-page',
+]);
 const props = defineProps({
   roles: {
     type: Array,
     required: true,
+  },
+  loading: {
+    type: Boolean,
+    default: false,
   },
   showAction: {
     type: Boolean,
@@ -83,6 +115,26 @@ const props = defineProps({
   detachAction: {
     type: Boolean,
     default: true,
+  },
+  filterName: {
+    type: String,
+    default: '',
+  },
+  currentPage: {
+    type: Number,
+    default: 0,
+  },
+  maxPage: {
+    type: Number,
+    default: 0,
+  },
+  elementsPerPage: {
+    type: Number,
+    default: 10,
+  },
+  totalElements: {
+    type: Number,
+    default: 0,
   },
 });
 
@@ -113,4 +165,32 @@ const columns = computed(() => {
 
   return arrayOfColumns;
 });
+
+/**
+ * Emit events to update currentPage props.
+ * @param {number} value - Current page value;
+ */
+function setCurrentPage(value) {
+  emits('update:current-page', value);
+  emits('onFilter');
+}
+
+/**
+ * Emit events to update elementsPerPage props.
+ * @param {number} value - Elements per page value;
+ */
+function setElementsPerPage(value) {
+  emits('update:elements-per-page', value);
+  emits('onFilter');
+}
+
+/**
+ * Emit events to update role filterName props.
+ * @param {string} value - Role nameFilter value;
+ */
+function setFilterName(value) {
+  emits('update:filter-name', value);
+  emits('onFilter');
+}
+
 </script>
