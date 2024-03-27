@@ -64,11 +64,12 @@
     <template #no-data>
       <div class="full-width row flex-center q-gutter-sm">
         <q-icon
+          v-if="noDataIcon"
           size="2em"
-          :name="$t('UsersTable.icon.noData')"
+          :name="noDataIcon"
         />
-        <span>
-          {{ $t('UsersTable.text.noData') }}
+        <span v-if="noDataLabel">
+          {{ noDataLabel }}
         </span>
       </div>
     </template>
@@ -97,6 +98,14 @@ const props = defineProps({
   removeAction: {
     type: Boolean,
     default: true,
+  },
+  noDataLabel: {
+    type: String,
+    default: null,
+  },
+  noDataIcon: {
+    type: String,
+    default: null,
   },
 });
 
