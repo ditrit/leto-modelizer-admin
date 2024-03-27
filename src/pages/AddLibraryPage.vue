@@ -38,14 +38,14 @@
       <q-space />
       <div class="full-width row justify-center">
         <q-btn
-          label="cancel"
+          :label="$t('AddLibraryPage.text.cancel')"
           color="negative"
           class="q-mr-xl"
           type="reset"
           data-cy="library_button_cancel"
         />
         <q-btn
-          label="Add"
+          :label="$t('AddLibraryPage.text.add')"
           color="positive"
           type="submit"
           data-cy="library_button_add"

@@ -491,6 +491,8 @@ export default {
   AddLibraryPage: {
     text: {
       title: 'Add library',
+      add: 'Add',
+      cancel: 'Cancel',
       url: 'Url of library',
       role: 'Name of library role',
       notEmpty: 'Field is required.',
