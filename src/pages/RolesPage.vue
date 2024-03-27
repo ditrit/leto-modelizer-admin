@@ -15,6 +15,8 @@
       :roles="roles"
       :detach-action="false"
       :loading="loading"
+      :no-data-label="$t('RolesTable.text.noData')"
+      :no-data-icon="$t('RolesTable.icon.noData')"
       @show="goToRole"
       @remove="openRemoveRoleDialog"
       @on-filter="search"

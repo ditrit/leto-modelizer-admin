@@ -88,6 +88,8 @@
           :users="users"
           :show-action="false"
           :remove-action="false"
+          :no-data-label="$t('UsersTable.text.noData')"
+          :no-data-icon="$t('UsersTable.icon.noData')"
           @detach="openDetachUserFromRoleDialog"
         />
       </q-tab-panel>
@@ -172,6 +174,8 @@
           :show-action="false"
           :remove-action="false"
           :detach-action="!isSuperAdmin"
+          :no-data-label="$t('RolesTable.text.noData')"
+          :no-data-icon="$t('RolesTable.icon.noData')"
           @detach="(event) => isSuperAdmin ? false : openDetachRoleFromRoleDialog(event)"
         />
       </q-tab-panel>

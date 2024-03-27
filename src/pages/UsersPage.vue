@@ -9,6 +9,8 @@
     <users-table
       :users="users"
       :detach-action="false"
+      :no-data-label="$t('UsersTable.text.noData')"
+      :no-data-icon="$t('UsersTable.icon.noData')"
       @show="goToUser"
       @remove="openRemoveUserDialog"
     />

@@ -24,6 +24,8 @@
             :show-action="false"
             :remove-action="false"
             :detach-action="false"
+            :no-data-label="$t('UsersTable.text.noData')"
+            :no-data-icon="$t('UsersTable.icon.noData')"
             selection="multiple"
             class="full-width"
           />
