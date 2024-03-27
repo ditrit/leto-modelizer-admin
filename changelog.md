@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Display all information of a user.
   * Display all groups related to a user.
   * Display all roles related to a user.
+  * Display all permissions related to a user.
   * Redirect to leto-modelizer if current user is deleted.
   * Add action to attach one or multiple existing groups to the selected user.
   * Add action to detach a group to the selected user.
