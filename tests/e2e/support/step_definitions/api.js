@@ -137,6 +137,11 @@ function setUserIntercepts() {
     body: 'Not Found',
   });
 
+  cy.intercept('GET', '/api/users/unknown/permissions', {
+    statusCode: 404,
+    body: 'Not Found',
+  });
+
   cy.intercept('GET', '/api/users/admin/roles', {
     statusCode: 200,
     body: {
@@ -162,6 +167,20 @@ function setUserIntercepts() {
     statusCode: 200,
     body: {
       content: [group1],
+    },
+  });
+
+  cy.intercept('GET', '/api/users/admin/permissions', {
+    statusCode: 200,
+    body: {
+      content: [permission1],
+    },
+  });
+
+  cy.intercept('GET', '/api/users/login/permissions', {
+    statusCode: 200,
+    body: {
+      content: [permission1],
     },
   });
 
