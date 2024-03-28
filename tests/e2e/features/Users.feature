@@ -70,6 +70,15 @@ Feature: Test roundtrip of the application: Users
     And  I expect '[data-cy="roles_table"]' exists
     And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'Super administrator'
 
+    # Display related permissions
+    When I click on '[data-cy="page_user_permissions_tab"]'
+    Then I expect '[data-cy="page_user_permissions_tab"]' exists
+    And  I expect '[data-cy="page_user_permissions_tab_panel"]' exists
+    And  I expect '[data-cy="page_user_permissions_title"]' exists
+    And  I expect '[data-cy="permissions_table"]' exists
+    And  I expect '[data-cy="permissions_table"] tbody tr:nth-child(1) td.permission-entity' is 'Project'
+    And  I expect '[data-cy="permissions_table"] tbody tr:nth-child(1) td.permission-action' is 'Create'
+
     When I click on '[data-cy="page_user_go_back"]'
     Then I expect current url is '/users'
 

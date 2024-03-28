@@ -3,7 +3,6 @@ import { vi } from 'vitest';
 import { prepareRequest as api } from 'boot/axios';
 
 vi.mock('boot/axios');
-vi.mock('src/services/PermissionService');
 
 describe('Test: UserService', () => {
   describe('Test function: getCurrent', () => {

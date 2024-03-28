@@ -6,6 +6,7 @@ import { vi } from 'vitest';
 import * as UserService from 'src/services/UserService';
 import * as GroupService from 'src/services/GroupService';
 import * as RoleService from 'src/services/RoleService';
+import * as PermissionService from 'src/services/PermissionService';
 import { useRoute, useRouter } from 'vue-router';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
@@ -18,6 +19,7 @@ vi.mock('vue-router');
 vi.mock('src/services/UserService');
 vi.mock('src/services/GroupService');
 vi.mock('src/services/RoleService');
+vi.mock('src/services/PermissionService');
 vi.mock('src/composables/events/ReloadGroupsEvent');
 vi.mock('src/composables/events/DialogEvent');
 
@@ -39,6 +41,7 @@ describe('Test component: UserPage', () => {
     useRouter.mockImplementation(() => ({ push }));
 
     UserService.findByLogin.mockImplementation(() => Promise.resolve(user));
+    PermissionService.findByLogin.mockImplementation(() => Promise.resolve({ content: ['permission'] }));
     GroupService.findByLogin.mockImplementation(() => Promise.resolve({ content: ['group'] }));
     RoleService.findByLogin.mockImplementation(() => Promise.resolve({ content: [{ name: 'role', type: 'type' }] }));
 
@@ -91,6 +94,16 @@ describe('Test component: UserPage', () => {
       await wrapper.vm.loadRoles();
 
       expect(wrapper.vm.roles).toEqual([{ name: 'role', type: 'type' }]);
+    });
+  });
+
+  describe('Test function: loadPermissions', () => {
+    it('should set permissions', async () => {
+      wrapper.vm.permissions = [];
+
+      await wrapper.vm.loadPermissions();
+
+      expect(wrapper.vm.permissions).toEqual(['permission']);
     });
   });
 
