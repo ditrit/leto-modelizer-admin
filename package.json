@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@4tw/cypress-drag-drop": "=2.2.5",
-    "@badeball/cypress-cucumber-preprocessor": "=20.0.2",
+    "@badeball/cypress-cucumber-preprocessor": "=20.0.3",
     "@cypress/browserify-preprocessor": "=3.0.2",
     "@intlify/vite-plugin-vue-i18n": "=6.0.3",
     "@quasar/app-vite": "=1.8.0",

@@ -125,6 +125,8 @@
           :roles="roles"
           :show-action="false"
           :remove-action="false"
+          :no-data-label="$t('RolesTable.text.noData')"
+          :no-data-icon="$t('RolesTable.icon.noData')"
           @detach="openDetachRoleFromUserDialog"
         />
       </q-tab-panel>

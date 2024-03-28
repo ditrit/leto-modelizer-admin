@@ -24,6 +24,8 @@
             :show-action="false"
             :detach-action="false"
             :remove-action="false"
+            :no-data-label="$t('UsersTable.text.noData')"
+            :no-data-icon="$t('UsersTable.icon.noData')"
             selection="multiple"
             class="full-width"
           />
@@ -57,6 +59,7 @@ import { useDialog } from 'src/composables/Dialog';
 import { ref } from 'vue';
 import UsersTable from 'src/components/tables/UsersTable.vue';
 import ReloadUsersEvent from 'src/composables/events/ReloadUsersEvent';
+import SelectEvent from 'src/composables/events/SelectEvent';
 import * as UserService from 'src/services/UserService';
 import * as GroupService from 'src/services/GroupService';
 import { Notify } from 'quasar';
@@ -69,6 +72,7 @@ const submitting = ref(false);
 const groupId = ref('');
 const selected = ref([]);
 const users = ref([]);
+const selectOnly = ref(false);
 
 /**
  * Get users.
@@ -84,6 +88,7 @@ const { show } = useDialog('attach-user-to-group', (event) => {
   submitting.value = false;
   groupId.value = event.groupId;
   selected.value = [];
+  selectOnly.value = event.selectOnly || false;
   return search();
 });
 
@@ -92,6 +97,13 @@ const { show } = useDialog('attach-user-to-group', (event) => {
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function onSubmit() {
+  if (selectOnly.value) {
+    SelectEvent.SelectUsersEvent.next(selected.value);
+    show.value = false;
+
+    return;
+  }
+
   submitting.value = true;
 
   const userLoginList = selected.value.map(({ login }) => login);

@@ -18,6 +18,10 @@ const group2 = {
   id: '2',
   name: 'Group 2',
 };
+const group3 = {
+  id: '3',
+  name: 'GROUP',
+};
 const superAdmin = {
   id: 1,
   name: 'Super administrator',
@@ -198,6 +202,11 @@ function setGroupIntercepts() {
     body: group2,
   });
 
+  cy.intercept('GET', '/api/groups/3', {
+    statusCode: 200,
+    body: group3,
+  });
+
   cy.intercept('GET', '/api/groups/unknown', {
     statusCode: 404,
     body: 'Not Found',
@@ -251,6 +260,21 @@ function setGroupIntercepts() {
     },
   });
 
+  cy.intercept('GET', '/api/groups/3/groups', {
+    statusCode: 200,
+    body: {
+      content: [group1],
+    },
+  });
+
+  cy.intercept('GET', '/api/groups/3/users', {
+    statusCode: 200,
+    body: {
+      content: [adminUser],
+    },
+
+  });
+
   cy.intercept('GET', '/api/groups/1/roles', {
     statusCode: 200,
     body: {
@@ -283,6 +307,34 @@ function setGroupIntercepts() {
         action: 'ACCESS',
       }],
     },
+  });
+
+  cy.intercept('GET', '/api/groups/3/permissions', {
+    statusCode: 200,
+    body: {
+      content: [{
+        entity: 'ADMIN',
+        action: 'ACCESS',
+      }],
+    },
+  });
+
+  cy.intercept('GET', '/api/groups/3/roles', {
+    statusCode: 200,
+    body: {
+      content: [dev],
+    },
+  });
+
+  cy.intercept('POST', '/api/groups', {
+    statusCode: 200,
+    body: { id: '3' },
+  });
+
+  cy.intercept('POST', '/api/groups/3/users', (request) => {
+    request.reply({
+      statusCode: 200,
+    });
   });
 
   cy.intercept('POST', '/api/groups/2/users', (request) => {
@@ -501,6 +553,12 @@ function setRoleIntercepts() {
   });
 
   cy.intercept('POST', '/api/roles/2/groups', (request) => {
+    request.reply({
+      statusCode: 200,
+    });
+  });
+
+  cy.intercept('POST', '/api/roles/3/groups', (request) => {
     request.reply({
       statusCode: 200,
     });

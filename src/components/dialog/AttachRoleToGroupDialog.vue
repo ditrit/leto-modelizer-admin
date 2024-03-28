@@ -24,6 +24,8 @@
             :show-action="false"
             :remove-action="false"
             :detach-action="false"
+            :no-data-label="$t('RolesTable.text.noData')"
+            :no-data-icon="$t('RolesTable.icon.noData')"
             selection="multiple"
             class="full-width"
           />
@@ -58,6 +60,7 @@ import { ref } from 'vue';
 import RolesTable from 'src/components/tables/RolesTable.vue';
 import ReloadRolesEvent from 'src/composables/events/ReloadRolesEvent';
 import ReloadPermissionsEvent from 'src/composables/events/ReloadPermissionsEvent';
+import SelectEvent from 'src/composables/events/SelectEvent';
 import * as RoleService from 'src/services/RoleService';
 import * as UserService from 'src/services/UserService';
 import { Notify } from 'quasar';
@@ -70,6 +73,7 @@ const submitting = ref(false);
 const groupId = ref('');
 const selected = ref([]);
 const roles = ref([]);
+const selectOnly = ref(false);
 
 /**
  * Get roles.
@@ -87,6 +91,7 @@ const { show } = useDialog('attach-role-to-group', (event) => {
   submitting.value = false;
   groupId.value = event.groupId;
   selected.value = [];
+  selectOnly.value = event.selectOnly || false;
   return search();
 });
 
@@ -95,6 +100,13 @@ const { show } = useDialog('attach-role-to-group', (event) => {
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function onSubmit() {
+  if (selectOnly.value) {
+    SelectEvent.SelectRolesEvent.next(selected.value);
+    show.value = false;
+
+    return;
+  }
+
   submitting.value = true;
 
   const roleIdList = selected.value.map(({ id }) => id);

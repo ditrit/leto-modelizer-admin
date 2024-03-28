@@ -39,6 +39,10 @@ export default {
   GroupsPage: {
     text: {
       title: 'User Groups',
+      add: 'Add',
+    },
+    icon: {
+      add: 'fa-solid fa-plus',
     },
   },
   GroupPage: {
@@ -487,15 +491,40 @@ export default {
   AddLibraryPage: {
     text: {
       title: 'Add library',
+      add: 'Add',
+      cancel: 'Cancel',
       url: 'Url of library',
       role: 'Name of library role',
       notEmpty: 'Field is required.',
-      validRoleName: 'Must start and end with a capital letter/number, use uppercase letters, numbers, _, or -.',
+      validName: 'Must start and end with a capital letter/number, use uppercase letters, numbers, _, or -.',
       notifyError: 'Error during library creation.',
       notifySuccess: 'Library is created.',
       urlAlreadyExists: 'Library with this url already exists.',
       urlNotFound: 'Library with this url can not be downloaded.',
       roleAlreadyExists: 'Library with this role already exists.',
+    },
+  },
+  AddGroupPage: {
+    text: {
+      title: 'Create a user group',
+      add: 'Add',
+      cancel: 'Cancel',
+      subtitle: 'You must attach at least one user and one role to the new group.',
+      name: 'Group name',
+      users: 'Group member(s)',
+      roles: 'Group role(s)',
+      notEmpty: 'Field is required.',
+      validName: 'Must start and end with a capital letter/number, use uppercase letters, numbers, _, or -.',
+      notifyError: 'Error during group creation.',
+      notifySuccess: 'Group is created.',
+      groupAlreadyExists: 'Group with this name already exists.',
+      attachUser: 'Add a member',
+      attachRole: 'Add a role',
+      addUsertoGroupMessage: 'Please add at least one member to create a group',
+      addRoletoGroupMessage: 'Please add at least one role to create a group',
+    },
+    icon: {
+      attach: 'fa-solid fa-link',
     },
   },
   InformationLibraryTabPanel: {

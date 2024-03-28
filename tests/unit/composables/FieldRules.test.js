@@ -39,17 +39,17 @@ describe('Test: FieldRules', () => {
     });
   });
 
-  describe('Test function: isValidRoleName', () => {
+  describe('Test function: isValidName', () => {
     it('should return error text when the value is not valid', () => {
-      expect(wrapper.vm.isValidRoleName('role')).toEqual('test.text.validRoleName');
+      expect(wrapper.vm.isValidName('role')).toEqual('test.text.validName');
     });
 
     it('should return true when the value is empty', () => {
-      expect(wrapper.vm.isValidRoleName('')).toEqual(true);
+      expect(wrapper.vm.isValidName('')).toEqual(true);
     });
 
     it('should return true when the value is valid', () => {
-      expect(wrapper.vm.isValidRoleName('ROLE-1')).toEqual(true);
+      expect(wrapper.vm.isValidName('ROLE-1')).toEqual(true);
     });
   });
 });

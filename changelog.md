@@ -58,6 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Table to display all groups.
   * Add action to redirect on group page.
   * Add action to delete a group.
+* Setup Add Group page.
 * Setup Group page with:
   * Display all information of a group.
   * Display all users related to a group.

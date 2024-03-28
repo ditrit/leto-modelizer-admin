@@ -88,6 +88,8 @@
           :users="users"
           :show-action="false"
           :remove-action="false"
+          :no-data-label="$t('UsersTable.text.noData')"
+          :no-data-icon="$t('UsersTable.icon.noData')"
           @detach="openDetachUserFromGroupDialog"
         />
       </q-tab-panel>
@@ -142,6 +144,8 @@
           :roles="roles"
           :show-action="false"
           :remove-action="false"
+          :no-data-label="$t('RolesTable.text.noData')"
+          :no-data-icon="$t('RolesTable.icon.noData')"
           @detach="openDetachRoleFromGroupDialog"
         />
       </q-tab-panel>

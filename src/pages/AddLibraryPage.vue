@@ -18,7 +18,7 @@
         class="library-field-role"
         data-cy="library_field_role"
         :label="$t('AddLibraryPage.text.role')"
-        :rules="[isValidRoleName]"
+        :rules="[isValidName]"
         :error="roleError"
         :error-message="roleErrorMessage"
         @update:model-value="clearRoleError"
@@ -38,14 +38,14 @@
       <q-space />
       <div class="full-width row justify-center">
         <q-btn
-          label="cancel"
+          :label="$t('AddLibraryPage.text.cancel')"
           color="negative"
           class="q-mr-xl"
           type="reset"
           data-cy="library_button_cancel"
         />
         <q-btn
-          label="Add"
+          :label="$t('AddLibraryPage.text.add')"
           color="positive"
           type="submit"
           data-cy="library_button_add"
@@ -71,7 +71,7 @@ const urlErrorMessage = ref('');
 const role = ref('');
 const roleError = ref(false);
 const roleErrorMessage = ref('');
-const { notEmpty, isValidRoleName } = useFieldRules('AddLibraryPage');
+const { notEmpty, isValidName } = useFieldRules('AddLibraryPage');
 const ERROR_LIBRARY_URL_ALREADY_EXIST = 'Library with this url already exists';
 const ERROR_LIBRARY_ROLE_ALREADY_EXIST = 'Library with this role already exists';
 

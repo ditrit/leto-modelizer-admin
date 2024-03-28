@@ -4,6 +4,7 @@ import { vi } from 'vitest';
 import AttachRoleToGroupDialog from 'src/components/dialog/AttachRoleToGroupDialog.vue';
 import * as UserService from 'src/services/UserService';
 import * as RoleService from 'src/services/RoleService';
+import SelectEvent from 'src/composables/events/SelectEvent';
 import { Notify } from 'quasar';
 import { createPinia, setActivePinia } from 'pinia';
 import { useUserStore } from 'stores/UserStore';
@@ -14,6 +15,7 @@ installQuasarPlugin({
 
 vi.mock('src/services/UserService');
 vi.mock('src/services/RoleService');
+vi.mock('src/composables/events/SelectEvent');
 vi.stubGlobal('$sanitize', true);
 
 describe('Test component: AttachRoleToGroupDialog', () => {
@@ -44,6 +46,15 @@ describe('Test component: AttachRoleToGroupDialog', () => {
     beforeEach(() => {
       wrapper.vm.selected = [{ id: '1' }, { id: '2' }];
       wrapper.vm.groupId = 'groupId';
+    });
+
+    it('should send SelectRoles event', async () => {
+      wrapper.vm.selectOnly = true;
+      SelectEvent.SelectRolesEvent.next = vi.fn();
+
+      await wrapper.vm.onSubmit();
+
+      expect(SelectEvent.SelectRolesEvent.next).toHaveBeenCalled();
     });
 
     it('should send positive notification after attaching roles to group', async () => {

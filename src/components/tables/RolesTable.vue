@@ -1,11 +1,15 @@
 <template>
   <div>
-    <div class="row justify-between items-center q-mb-md">
+    <div
+      class="row justify-between items-center q-mb-md"
+    >
       <role-filters-card
+        v-if="!hideFilters"
         :name="filterName"
         @update:name="setFilterName"
       />
       <table-pagination-card
+        v-if="!hidePagination"
         :current="currentPage"
         :max="maxPage"
         :total="totalElements"
@@ -66,13 +70,16 @@
         </q-td>
       </template>
       <template #no-data>
-        <div class="full-width row flex-center q-gutter-sm">
+        <div
+          class="full-width row flex-center q-gutter-sm"
+          data-cy="roles_table_no_data"
+        >
           <q-icon
             size="2em"
-            :name="$t('RolesTable.icon.noData')"
+            :name="noDataIcon"
           />
-          <span>
-            {{ $t('RolesTable.text.noData') }}
+          <span v-if="noDataLabel">
+            {{ noDataLabel }}
           </span>
         </div>
       </template>
@@ -115,6 +122,22 @@ const props = defineProps({
   detachAction: {
     type: Boolean,
     default: true,
+  },
+  hideFilters: {
+    type: Boolean,
+    default: false,
+  },
+  hidePagination: {
+    type: Boolean,
+    default: false,
+  },
+  noDataLabel: {
+    type: String,
+    default: null,
+  },
+  noDataIcon: {
+    type: String,
+    default: null,
   },
   filterName: {
     type: String,
