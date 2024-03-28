@@ -17,7 +17,7 @@
     "test:ci": "vitest run"
   },
   "dependencies": {
-    "@quasar/extras": "=1.16.9",
+    "@quasar/extras": "=1.16.10",
     "axios": "=1.6.8",
     "pinia": "=2.1.7",
     "quasar": "=2.15.1",
@@ -43,7 +43,7 @@
     "eslint-config-airbnb-base": "=15.0.0",
     "eslint-plugin-cypress": "=2.15.1",
     "eslint-plugin-import": "=2.29.1",
-    "eslint-plugin-jsdoc": "=48.2.1",
+    "eslint-plugin-jsdoc": "=48.2.2",
     "eslint-plugin-vue": "=9.24.0",
     "gherkin-lint": "=4.2.4",
     "jsdoc": "=4.0.2",
