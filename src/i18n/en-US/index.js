@@ -51,7 +51,6 @@ export default {
       notFound: 'Group not found.',
       userList: 'List of users attributed to {group}',
       groupList: 'List of parent groups attributed to {group}',
-      roleList: 'List of roles attributed to {group}',
       permissionList: 'List of permissions attributed to {group}',
       usersTab: 'Users',
       groupsTab: 'Groups',
@@ -59,7 +58,6 @@ export default {
       permissionsTab: 'Permissions',
       attachUser: 'Attach user',
       groupRole: 'Attach group',
-      attachRole: 'Attach role',
       attachGroup: 'Attach group',
     },
     icon: {
