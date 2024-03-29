@@ -106,35 +106,11 @@
           @detach="openDetachGroupFromUserDialog"
         />
       </q-tab-panel>
-      <q-tab-panel
+      <roles-tab-panel
         name="roles"
-        data-cy="page_user_roles_tab_panel"
-      >
-        <h6
-          class="q-ma-none q-mb-sm"
-          data-cy="page_user_roles_title"
-        >
-          {{ $t('UserPage.text.roleList', { user: user.name }) }}
-        </h6>
-        <q-btn
-          outline
-          no-caps
-          color="primary"
-          class="bg-white q-mb-md"
-          data-cy="page_user_button_attach_role"
-          :label="$t('UserPage.text.attachRole')"
-          :icon="$t('UserPage.icon.attach')"
-          @click="openAttachRoleToUserDialog"
-        />
-        <roles-table
-          :roles="roles"
-          :show-action="false"
-          :remove-action="false"
-          :no-data-label="$t('RolesTable.text.noData')"
-          :no-data-icon="$t('RolesTable.icon.noData')"
-          @detach="openDetachRoleFromUserDialog"
-        />
-      </q-tab-panel>
+        type="USER"
+        :entity="user"
+      />
       <q-tab-panel
         name="permissions"
         data-cy="page_user_permissions_tab_panel"
@@ -164,14 +140,12 @@ import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import GroupsTable from 'src/components/tables/GroupsTable.vue';
 import * as GroupService from 'src/services/GroupService';
-import * as RoleService from 'src/services/RoleService';
 import * as PermissionService from 'src/services/PermissionService';
-import RolesTable from 'src/components/tables/RolesTable.vue';
 import PermissionsTable from 'src/components/tables/PermissionsTable.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
-import ReloadRolesEvent from 'src/composables/events/ReloadRolesEvent';
 import UserAvatar from 'components/avatar/UserAvatar.vue';
+import RolesTabPanel from 'components/tab-panel/RolesTabPanel.vue';
 
 const loading = ref(false);
 const { t } = useI18n();
@@ -179,12 +153,10 @@ const route = useRoute();
 const router = useRouter();
 const user = ref({});
 const groups = ref([]);
-const roles = ref([]);
 const permissions = ref([]);
 const currentTab = ref('groups');
 
 let reloadGroupsEventRef;
-let reloadRolesEventRef;
 
 /**
  * Load user from login in url. If the user does not exist, redirect to the users page.
@@ -219,16 +191,6 @@ async function loadGroups() {
  * Get roles using user login.
  * @returns {Promise<void>} Promise with nothing on success.
  */
-async function loadRoles() {
-  return RoleService.findByLogin(route.params.login).then((data) => {
-    roles.value = data.content;
-  });
-}
-
-/**
- * Get roles using user login.
- * @returns {Promise<void>} Promise with nothing on success.
- */
 async function loadPermissions() {
   return PermissionService.findByLogin(route.params.login).then((data) => {
     permissions.value = data.content;
@@ -244,7 +206,6 @@ async function search() {
   Promise.allSettled([
     loadUser(),
     loadGroups(),
-    loadRoles(),
     loadPermissions(),
   ])
     .finally(() => {
@@ -264,17 +225,6 @@ function openAttachGroupToUserDialog() {
 }
 
 /**
- * Open dialog to attach a role to user.
- */
-function openAttachRoleToUserDialog() {
-  DialogEvent.next({
-    key: 'attach-role-to-user',
-    type: 'open',
-    userLogin: route.params.login,
-  });
-}
-
-/**
  * Open dialog to remove user group.
  * @param {object} group - User group object to remove for the dialog.
  */
@@ -287,27 +237,12 @@ function openDetachGroupFromUserDialog(group) {
   });
 }
 
-/**
- * Open dialog to remove user role.
- * @param {object} role - User role object to remove for the dialog.
- */
-function openDetachRoleFromUserDialog(role) {
-  DialogEvent.next({
-    key: 'detach-role-from-user',
-    type: 'open',
-    role,
-    user: user.value,
-  });
-}
-
 onMounted(async () => {
   reloadGroupsEventRef = ReloadGroupsEvent.subscribe(loadGroups);
-  reloadRolesEventRef = ReloadRolesEvent.subscribe(loadRoles);
   await search();
 });
 
 onUnmounted(() => {
   reloadGroupsEventRef.unsubscribe();
-  reloadRolesEventRef.unsubscribe();
 });
 </script>

@@ -72,11 +72,9 @@ export default {
       rolesTab: 'Roles',
       groupsTab: 'Groups',
       permissionsTab: 'Permissions',
-      roleList: 'List of roles attributed to {user}',
       groupList: 'List of groups attributed to {user}',
       permissionList: 'List of permissions attributed to {user}',
       attachGroup: 'Attach group',
-      attachRole: 'Attach role',
     },
     icon: {
       goBack: 'fa-solid fa-chevron-left',
