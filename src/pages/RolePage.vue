@@ -135,50 +135,13 @@
           @detach="(event) => isSuperAdmin ? false : openDetachGroupFromRoleDialog(event)"
         />
       </q-tab-panel>
-      <q-tab-panel
+      <roles-tab-panel
         name="roles"
-        data-cy="page_role_roles_tab_panel"
-      >
-        <h6
-          class="q-ma-none q-mb-sm"
-          data-cy="page_role_roles_title"
-        >
-          {{ $t('RolePage.text.roleList', { role: role.name }) }}
-        </h6>
-        <q-banner
-          v-if="isSuperAdmin"
-          dense
-          class="bg-warning text-white text-weight-bold q-mb-md"
-          data-cy="page_role_roles_warning"
-        >
-          <template #avatar>
-            <q-icon
-              :name="$t('RolePage.icon.warning')"
-            />
-          </template>
-          {{ $t("RolePage.text.addRoleMessage") }}
-        </q-banner>
-        <q-btn
-          v-if="!isSuperAdmin"
-          outline
-          no-caps
-          color="primary"
-          class="bg-white q-mb-md"
-          data-cy="page_role_button_attach_role"
-          :label="$t('RolePage.text.attachRole')"
-          :icon="$t('RolePage.icon.attach')"
-          @click="openAttachRoleToRoleDialog"
-        />
-        <roles-table
-          :roles="roles"
-          :show-action="false"
-          :remove-action="false"
-          :detach-action="!isSuperAdmin"
-          :no-data-label="$t('RolesTable.text.noData')"
-          :no-data-icon="$t('RolesTable.icon.noData')"
-          @detach="(event) => isSuperAdmin ? false : openDetachRoleFromRoleDialog(event)"
-        />
-      </q-tab-panel>
+        type="ROLE"
+        :entity="role"
+        :is-super-admin="isSuperAdmin"
+        :warning-text="$t('RolePage.text.addRoleMessage')"
+      />
       <q-tab-panel
         name="permissions"
         data-cy="page_role_permissions_tab_panel"
@@ -238,7 +201,6 @@ import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import GroupsTable from 'src/components/tables/GroupsTable.vue';
 import UsersTable from 'src/components/tables/UsersTable.vue';
-import RolesTable from 'src/components/tables/RolesTable.vue';
 import PermissionsTable from 'src/components/tables/PermissionsTable.vue';
 import * as GroupService from 'src/services/GroupService';
 import * as UserService from 'src/services/UserService';
@@ -246,8 +208,8 @@ import * as PermissionService from 'src/services/PermissionService';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 import ReloadUsersEvent from 'src/composables/events/ReloadUsersEvent';
-import ReloadRolesEvent from 'src/composables/events/ReloadRolesEvent';
 import ReloadPermissionsEvent from 'src/composables/events/ReloadPermissionsEvent';
+import RolesTabPanel from 'components/tab-panel/RolesTabPanel.vue';
 
 const loading = ref(false);
 const { t } = useI18n();
@@ -256,14 +218,12 @@ const router = useRouter();
 const role = ref({});
 const users = ref([]);
 const groups = ref([]);
-const roles = ref([]);
 const permissions = ref([]);
 const currentTab = ref('users');
 const isSuperAdmin = computed(() => role.value.name === process.env.SUPER_ADMINISTRATOR_ROLE_NAME);
 
 let reloadUsersEventRef;
 let reloadGroupsEventRef;
-let reloadRolesEventRef;
 let reloadPermissionsEventRef;
 
 /**
@@ -306,16 +266,6 @@ async function loadUsers() {
 }
 
 /**
- * Get all sub roles of a role by its id.
- * @returns {Promise<void>} Promise with nothing on success.
- */
-async function loadRoles() {
-  return RoleService.findSubRoles(route.params.id).then((data) => {
-    roles.value = data.content;
-  });
-}
-
-/**
  * Get all permissions of a role by its id.
  * @returns {Promise<void>} Promise with nothing on success.
  */
@@ -335,7 +285,6 @@ async function search() {
     loadRole(),
     loadGroups(),
     loadUsers(),
-    loadRoles(),
     loadPermissions(),
   ])
     .finally(() => {
@@ -360,17 +309,6 @@ function openAttachUserToRoleDialog() {
 function openAttachGroupToRoleDialog() {
   DialogEvent.next({
     key: 'attach-group-to-role',
-    type: 'open',
-    roleId: route.params.id,
-  });
-}
-
-/**
- * Open dialog to attach a role to role.
- */
-function openAttachRoleToRoleDialog() {
-  DialogEvent.next({
-    key: 'attach-role-to-role',
     type: 'open',
     roleId: route.params.id,
   });
@@ -414,19 +352,6 @@ function openDetachGroupFromRoleDialog(group) {
 }
 
 /**
- * Open dialog to remove role from role.
- * @param {object} roleToDetach - Role object to remove for the dialog.
- */
-function openDetachRoleFromRoleDialog(roleToDetach) {
-  DialogEvent.next({
-    key: 'detach-role-from-role',
-    type: 'open',
-    roleToDetach,
-    role: role.value,
-  });
-}
-
-/**
  * Open dialog to remove role permission.
  * @param {object} permission - Permission object to remove for the dialog.
  */
@@ -442,7 +367,6 @@ function openDetachPermissionFromRoleDialog(permission) {
 onMounted(async () => {
   reloadGroupsEventRef = ReloadGroupsEvent.subscribe(loadGroups);
   reloadUsersEventRef = ReloadUsersEvent.subscribe(loadUsers);
-  reloadRolesEventRef = ReloadRolesEvent.subscribe(loadRoles);
   reloadPermissionsEventRef = ReloadPermissionsEvent.subscribe(loadPermissions);
   await search();
 });
@@ -450,7 +374,6 @@ onMounted(async () => {
 onUnmounted(() => {
   reloadGroupsEventRef.unsubscribe();
   reloadUsersEventRef.unsubscribe();
-  reloadRolesEventRef.unsubscribe();
   reloadPermissionsEventRef.unsubscribe();
 });
 </script>
