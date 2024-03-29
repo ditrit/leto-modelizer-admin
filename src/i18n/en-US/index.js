@@ -543,6 +543,16 @@ export default {
       synchronize: 'fa-solid fa-rotate',
     },
   },
+  RolesTabPanel: {
+    text: {
+      title: 'List of roles attributed to {name}',
+      attach: 'Attach role',
+    },
+    icon: {
+      attach: 'fa-solid fa-link',
+      warning: 'fa-solid fa-triangle-exclamation',
+    },
+  },
   TablePaginationCard: {
     text: {
       content: '{current}/{max} of {total}',
