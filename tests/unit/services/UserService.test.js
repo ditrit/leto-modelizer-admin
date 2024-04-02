@@ -50,7 +50,7 @@ describe('Test: UserService', () => {
         get: () => Promise.resolve({ data: users }),
       }));
 
-      const data = await UserService.find();
+      const data = await UserService.find({});
       expect(data).toEqual(users);
     });
   });
@@ -90,7 +90,7 @@ describe('Test: UserService', () => {
         get: () => Promise.resolve({ data: 'users' }),
       }));
 
-      const data = await UserService.findByGroupId();
+      const data = await UserService.findByGroupId({});
       expect(data).toEqual('users');
     });
   });
@@ -101,7 +101,7 @@ describe('Test: UserService', () => {
         get: () => Promise.resolve({ data: 'users' }),
       }));
 
-      const data = await UserService.findByRoleId();
+      const data = await UserService.findByRoleId({});
       expect(data).toEqual('users');
     });
   });

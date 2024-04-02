@@ -1,4 +1,4 @@
-import { prepareRequest } from 'boot/axios';
+import { prepareQueryParameters, prepareRequest } from 'boot/axios';
 
 /**
  * Get information about the current user.
@@ -24,13 +24,15 @@ export async function getMyPermissions() {
 
 /**
  * Get all users.
+ * @param {object} filters - API filters.
  * @returns {Promise<object[]>} Promise with an array of users on success
  * otherwise an error.
  */
-export async function find() {
+export async function find(filters) {
   const api = await prepareRequest();
+  const queryParameters = prepareQueryParameters(filters);
 
-  return api.get('/users').then(({ data }) => data);
+  return api.get(`/users${queryParameters}`).then(({ data }) => data);
 }
 
 /**
@@ -58,23 +60,27 @@ export async function remove(id) {
 /**
  * Get all users of a group.
  * @param {string} groupId - Group id.
+ * @param {object} filters - API filters.
  * @returns {Promise<object[]>} Return an array of users.
  */
-export async function findByGroupId(groupId) {
+export async function findByGroupId(groupId, filters) {
   const api = await prepareRequest();
+  const queryParameters = prepareQueryParameters(filters);
 
-  return api.get(`groups/${groupId}/users`)
+  return api.get(`groups/${groupId}/users${queryParameters}`)
     .then(({ data }) => data);
 }
 
 /**
  * Get all users of a role.
  * @param {string} roleId - Role id.
+ * @param {object} filters - API filters.
  * @returns {Promise<object[]>} Return an array of users.
  */
-export async function findByRoleId(roleId) {
+export async function findByRoleId(roleId, filters) {
   const api = await prepareRequest();
+  const queryParameters = prepareQueryParameters(filters);
 
-  return api.get(`roles/${roleId}/users`)
+  return api.get(`roles/${roleId}/users${queryParameters}`)
     .then(({ data }) => data);
 }
