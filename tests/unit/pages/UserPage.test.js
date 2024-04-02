@@ -5,7 +5,6 @@ import { Notify } from 'quasar';
 import { vi } from 'vitest';
 import * as UserService from 'src/services/UserService';
 import * as GroupService from 'src/services/GroupService';
-import * as RoleService from 'src/services/RoleService';
 import * as PermissionService from 'src/services/PermissionService';
 import { useRoute, useRouter } from 'vue-router';
 import DialogEvent from 'src/composables/events/DialogEvent';
@@ -18,7 +17,6 @@ installQuasarPlugin({
 vi.mock('vue-router');
 vi.mock('src/services/UserService');
 vi.mock('src/services/GroupService');
-vi.mock('src/services/RoleService');
 vi.mock('src/services/PermissionService');
 vi.mock('src/composables/events/ReloadGroupsEvent');
 vi.mock('src/composables/events/DialogEvent');
@@ -43,7 +41,6 @@ describe('Test component: UserPage', () => {
     UserService.findByLogin.mockImplementation(() => Promise.resolve(user));
     PermissionService.findByLogin.mockImplementation(() => Promise.resolve({ content: ['permission'] }));
     GroupService.findByLogin.mockImplementation(() => Promise.resolve({ content: ['group'] }));
-    RoleService.findByLogin.mockImplementation(() => Promise.resolve({ content: [{ name: 'role', type: 'type' }] }));
 
     ReloadGroupsEvent.subscribe.mockImplementation(() => {
       subscribe();
@@ -87,16 +84,6 @@ describe('Test component: UserPage', () => {
     });
   });
 
-  describe('Test function: loadRoles', () => {
-    it('should set roles', async () => {
-      wrapper.vm.roles = [];
-
-      await wrapper.vm.loadRoles();
-
-      expect(wrapper.vm.roles).toEqual([{ name: 'role', type: 'type' }]);
-    });
-  });
-
   describe('Test function: loadPermissions', () => {
     it('should set permissions', async () => {
       wrapper.vm.permissions = [];
@@ -120,19 +107,6 @@ describe('Test component: UserPage', () => {
     });
   });
 
-  describe('Test function: openAttachRoleToUserDialog', () => {
-    it('should open dialog', () => {
-      DialogEvent.next.mockImplementation();
-      wrapper.vm.openAttachRoleToUserDialog();
-
-      expect(DialogEvent.next).toBeCalledWith({
-        key: 'attach-role-to-user',
-        type: 'open',
-        userLogin: 'id1',
-      });
-    });
-  });
-
   describe('Test function: openDetachGroupFromUserDialog', () => {
     it('should open dialog', () => {
       DialogEvent.next.mockImplementation();
@@ -142,22 +116,6 @@ describe('Test component: UserPage', () => {
         key: 'detach-group-from-user',
         type: 'open',
         group: 'group',
-        user: {
-          id: 1,
-        },
-      });
-    });
-  });
-
-  describe('Test function: openDetachRoleFromUserDialog', () => {
-    it('should open dialog', () => {
-      DialogEvent.next.mockImplementation();
-      wrapper.vm.openDetachRoleFromUserDialog('role');
-
-      expect(DialogEvent.next).toBeCalledWith({
-        key: 'detach-role-from-user',
-        type: 'open',
-        role: 'role',
         user: {
           id: 1,
         },

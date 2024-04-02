@@ -144,8 +144,8 @@ Feature: Test roundtrip of the application: Groups
 
     # Display related roles
     When I click on '[data-cy="page_group_roles_tab"]'
-    Then I expect '[data-cy="page_group_roles_tab_panel"]' exists
-    And  I expect '[data-cy="page_group_roles_title"]' exists
+    Then I expect '[data-cy="roles_tab_panel"]' exists
+    And  I expect '[data-cy="roles_title"]' exists
     And  I expect '[data-cy="roles_table"]' exists
     And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'Super administrator'
 
@@ -232,9 +232,9 @@ Feature: Test roundtrip of the application: Groups
 
     ## 801 Should disabled confirm button if no role is selected
     When I click on '[data-cy="page_group_roles_tab"]'
-    Then I expect '[data-cy="page_group_roles_tab_panel"]' exists
+    Then I expect '[data-cy="roles_tab_panel"]' exists
 
-    When I click on '[data-cy="page_group_button_attach_role"]'
+    When I click on '[data-cy="button_attach"]'
     Then I expect '[data-cy="roles_table"]' exists
     And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'Administrator'
     And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td [role="checkbox"]' exists

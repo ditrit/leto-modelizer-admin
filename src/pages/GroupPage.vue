@@ -120,35 +120,11 @@
           @detach="openDetachGroupFromGroupDialog"
         />
       </q-tab-panel>
-      <q-tab-panel
+      <roles-tab-panel
         name="roles"
-        data-cy="page_group_roles_tab_panel"
-      >
-        <h6
-          class="q-ma-none q-mb-sm"
-          data-cy="page_group_roles_title"
-        >
-          {{ $t('GroupPage.text.roleList', { group: group.name }) }}
-        </h6>
-        <q-btn
-          outline
-          no-caps
-          color="primary"
-          class="bg-white q-mb-md"
-          data-cy="page_group_button_attach_role"
-          :label="$t('GroupPage.text.attachRole')"
-          :icon="$t('GroupPage.icon.attach')"
-          @click="openAttachRoleToGroupDialog"
-        />
-        <roles-table
-          :roles="roles"
-          :show-action="false"
-          :remove-action="false"
-          :no-data-label="$t('RolesTable.text.noData')"
-          :no-data-icon="$t('RolesTable.icon.noData')"
-          @detach="openDetachRoleFromGroupDialog"
-        />
-      </q-tab-panel>
+        type="GROUP"
+        :entity="group"
+      />
       <q-tab-panel
         name="permissions"
         data-cy="page_group_permissions_tab_panel"
@@ -175,19 +151,17 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import * as GroupService from 'src/services/GroupService';
 import * as UserService from 'src/services/UserService';
-import * as RoleService from 'src/services/RoleService';
 import * as PermissionService from 'src/services/PermissionService';
 import UsersTable from 'src/components/tables/UsersTable.vue';
 import GroupsTable from 'src/components/tables/GroupsTable.vue';
-import RolesTable from 'src/components/tables/RolesTable.vue';
 import PermissionsTable from 'src/components/tables/PermissionsTable.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import ReloadUsersEvent from 'src/composables/events/ReloadUsersEvent';
 import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
-import ReloadRolesEvent from 'src/composables/events/ReloadRolesEvent';
 import ReloadPermissionsEvent from 'src/composables/events/ReloadPermissionsEvent';
+import RolesTabPanel from 'components/tab-panel/RolesTabPanel.vue';
 
 const loading = ref(false);
 const { t } = useI18n();
@@ -196,13 +170,11 @@ const router = useRouter();
 const group = ref({});
 const users = ref([]);
 const groups = ref([]);
-const roles = ref([]);
 const permissions = ref([]);
 const currentTab = ref('users');
 
 let reloadUsersEventRef;
 let reloadGroupsEventRef;
-let reloadRolesEventRef;
 let reloadPermissionsEventRef;
 
 /**
@@ -245,16 +217,6 @@ async function loadGroups() {
 }
 
 /**
- * Get roles using group Id.
- * @returns {Promise<void>} Promise with nothing on success.
- */
-async function loadRoles() {
-  return RoleService.findByGroupId(route.params.id).then((data) => {
-    roles.value = data.content;
-  });
-}
-
-/**
  * Get permissions using group Id.
  * @returns {Promise<void>} Promise with nothing on success.
  */
@@ -274,7 +236,6 @@ async function search() {
     loadGroup(),
     loadUsers(),
     loadGroups(),
-    loadRoles(),
     loadPermissions(),
   ])
     .finally(() => {
@@ -299,17 +260,6 @@ function openAttachUserToGroupDialog() {
 function openAttachGroupToGroupDialog() {
   DialogEvent.next({
     key: 'attach-group-to-group',
-    type: 'open',
-    groupId: route.params.id,
-  });
-}
-
-/**
- * Open dialog to attach a role to a group.
- */
-function openAttachRoleToGroupDialog() {
-  DialogEvent.next({
-    key: 'attach-role-to-group',
     type: 'open',
     groupId: route.params.id,
   });
@@ -341,23 +291,9 @@ function openDetachGroupFromGroupDialog(grouptoDetach) {
   });
 }
 
-/**
- * Open dialog to detach a role from a group.
- * @param {object} role - Role object to remove for the dialog.
- */
-function openDetachRoleFromGroupDialog(role) {
-  DialogEvent.next({
-    key: 'detach-role-from-group',
-    type: 'open',
-    group: group.value,
-    role,
-  });
-}
-
 onMounted(async () => {
   reloadUsersEventRef = ReloadUsersEvent.subscribe(loadUsers);
   reloadGroupsEventRef = ReloadGroupsEvent.subscribe(loadGroups);
-  reloadRolesEventRef = ReloadRolesEvent.subscribe(loadRoles);
   reloadPermissionsEventRef = ReloadPermissionsEvent.subscribe(loadPermissions);
   await search();
 });
@@ -365,7 +301,6 @@ onMounted(async () => {
 onUnmounted(() => {
   reloadUsersEventRef.unsubscribe();
   reloadGroupsEventRef.unsubscribe();
-  reloadRolesEventRef.unsubscribe();
   reloadPermissionsEventRef.unsubscribe();
 });
 </script>

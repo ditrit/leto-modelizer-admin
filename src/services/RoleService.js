@@ -27,12 +27,14 @@ export async function findById(id) {
 /**
  * Get all roles of a user by its login.
  * @param {string} userLogin - User login.
+ * @param {object} filters - API filters.
  * @returns {Promise<object[]>} Return an array of roles.
  */
-export async function findByLogin(userLogin) {
+export async function findByLogin(userLogin, filters) {
   const api = await prepareRequest();
+  const queryParameters = prepareQueryParameters(filters);
 
-  return api.get(`/users/${userLogin}/roles`).then(({ data }) => data);
+  return api.get(`/users/${userLogin}/roles${queryParameters}`).then(({ data }) => data);
 }
 
 /**
@@ -88,24 +90,28 @@ export async function dissociateRoleAndUser(userLogin, roleId) {
 /**
  * Get all roles of a group.
  * @param {string} groupId - Group id.
+ * @param {object} filters - API filters.
  * @returns {Promise<object[]>} Return an array of roles.
  */
-export async function findByGroupId(groupId) {
+export async function findByGroupId(groupId, filters) {
   const api = await prepareRequest();
+  const queryParameters = prepareQueryParameters(filters);
 
-  return api.get(`groups/${groupId}/roles`)
+  return api.get(`groups/${groupId}/roles${queryParameters}`)
     .then(({ data }) => data);
 }
 
 /**
  * Get all sub roles of a role.
  * @param {string} roleId - Role id.
+ * @param {object} filters - API filters.
  * @returns {Promise<object>} Promise with nothing on success otherwise an error.
  */
-export async function findSubRoles(roleId) {
+export async function findSubRoles(roleId, filters) {
   const api = await prepareRequest();
+  const queryParameters = prepareQueryParameters(filters);
 
-  return api.get(`/roles/${roleId}/roles`)
+  return api.get(`/roles/${roleId}/roles${queryParameters}`)
     .then(({ data }) => data);
 }
 

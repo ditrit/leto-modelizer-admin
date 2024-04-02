@@ -54,7 +54,7 @@ describe('Test: RoleService', () => {
         get: () => Promise.resolve({ data: roles }),
       }));
 
-      const data = await RoleService.findByLogin('userLogin');
+      const data = await RoleService.findByLogin('userLogin', {});
       expect(data).toEqual([{ name: 'admin' }]);
     });
   });
@@ -131,7 +131,7 @@ describe('Test: RoleService', () => {
         get: () => Promise.resolve({ data: 'roles' }),
       }));
 
-      const data = await RoleService.findByGroupId();
+      const data = await RoleService.findByGroupId('id', {});
       expect(data).toEqual('roles');
     });
   });
@@ -142,7 +142,7 @@ describe('Test: RoleService', () => {
         get: () => Promise.resolve({ data: 'roles' }),
       }));
 
-      const data = await RoleService.findSubRoles();
+      const data = await RoleService.findSubRoles('id', {});
       expect(data).toEqual('roles');
     });
   });

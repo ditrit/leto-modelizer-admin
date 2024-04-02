@@ -40,7 +40,7 @@ Feature: Test roundtrip of the application: Roles
   ## 1102 Should not be able to delete super admin role
 
   ################## Filter role #################
-  ## 801 Should change url on filter name
+  ## 1201 Should change url on filter name
 
   Scenario: Roundtrip about Roles
     Given I visit the '/'
@@ -84,8 +84,8 @@ Feature: Test roundtrip of the application: Roles
     # Display related roles
     When I click on '[data-cy="page_role_roles_tab"]'
     Then I expect '[data-cy="page_role_roles_tab"]' exists
-    And  I expect '[data-cy="page_role_roles_tab_panel"]' exists
-    And  I expect '[data-cy="page_role_roles_title"]' exists
+    And  I expect '[data-cy="roles_tab_panel"]' exists
+    And  I expect '[data-cy="roles_title"]' exists
     And  I expect '[data-cy="roles_table"]' exists
     And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'Developer'
 
@@ -176,9 +176,9 @@ Feature: Test roundtrip of the application: Roles
 
     ## 701 Should disabled confirm button if no role is selected
     When I click on '[data-cy="page_role_roles_tab"]'
-    Then I expect '[data-cy="page_role_roles_tab_panel"]' exists
+    Then I expect '[data-cy="roles_tab_panel"]' exists
 
-    When I click on '[data-cy="page_role_button_attach_role"]'
+    When I click on '[data-cy="button_attach"]'
     Then I expect '[data-cy="roles_table"]' exists
     And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'Administrator'
     And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td [role="checkbox"]' exists
@@ -257,7 +257,7 @@ Feature: Test roundtrip of the application: Roles
     ################## Filter role ################
     ####################################################
 
-    ## 801 Should change url on filter name
+    ## 1201 Should change url on filter name
     When I set on '[data-cy="role_filter_name"]' text 'test'
-    And  I wait 3 seconds
+    And  I wait 2 seconds
     Then I expect current url is 'roles\?name=test'

@@ -51,7 +51,6 @@ export default {
       notFound: 'Group not found.',
       userList: 'List of users attributed to {group}',
       groupList: 'List of parent groups attributed to {group}',
-      roleList: 'List of roles attributed to {group}',
       permissionList: 'List of permissions attributed to {group}',
       usersTab: 'Users',
       groupsTab: 'Groups',
@@ -59,7 +58,6 @@ export default {
       permissionsTab: 'Permissions',
       attachUser: 'Attach user',
       groupRole: 'Attach group',
-      attachRole: 'Attach role',
       attachGroup: 'Attach group',
     },
     icon: {
@@ -74,11 +72,9 @@ export default {
       rolesTab: 'Roles',
       groupsTab: 'Groups',
       permissionsTab: 'Permissions',
-      roleList: 'List of roles attributed to {user}',
       groupList: 'List of groups attributed to {user}',
       permissionList: 'List of permissions attributed to {user}',
       attachGroup: 'Attach group',
-      attachRole: 'Attach role',
     },
     icon: {
       goBack: 'fa-solid fa-chevron-left',
@@ -100,11 +96,9 @@ export default {
       permissionsTab: 'Permissions',
       userList: 'List of users attributed to {role}',
       groupList: 'List of groups attributed to {role}',
-      roleList: 'List of parent roles attributed to {role}',
       permissionList: 'List of permissions attributed to {role}',
       attachUser: 'Attach user',
       attachGroup: 'Attach group',
-      attachRole: 'Attach role',
       attachPermission: 'Attach permission',
       addGroupMessage: 'Attaching groups to the Super Administrator role is restricted.',
       addRoleMessage: 'Attaching roles to the Super Administrator role is restricted.',
@@ -543,6 +537,16 @@ export default {
       synchronize: 'fa-solid fa-rotate',
     },
   },
+  RolesTabPanel: {
+    text: {
+      title: 'List of roles attributed to {name}',
+      attach: 'Attach role',
+    },
+    icon: {
+      attach: 'fa-solid fa-link',
+      warning: 'fa-solid fa-triangle-exclamation',
+    },
+  },
   TablePaginationCard: {
     text: {
       content: '{current}/{max} of {total}',
@@ -554,6 +558,15 @@ export default {
       previous: 'fa-solid fa-chevron-left',
       next: 'fa-solid fa-chevron-right',
       menu: 'fa-solid fa-ellipsis-vertical',
+    },
+  },
+  RoleFiltersCard: {
+    text: {
+      title: 'Filters',
+      byName: 'by name',
+    },
+    icon: {
+      byName: 'fa-solid fa-magnifying-glass',
     },
   },
   Permissions: {
