@@ -122,7 +122,7 @@ describe('Test component: RolesTabPanel', async () => {
       });
     });
 
-    it('should call detach role to group', async () => {
+    it('should call detach role from group', async () => {
       await wrapper.setProps({ type: 'GROUP' });
       DialogEvent.next.mockImplementation();
 
@@ -251,7 +251,7 @@ describe('Test component: RolesTabPanel', async () => {
       expect(wrapper.vm.roles).toEqual(([]));
     });
 
-    it('should set do nothing without valid entity', async () => {
+    it('should do nothing without valid entity', async () => {
       await wrapper.setProps({ type: 'ROLE', entity: {} });
       RoleService.findSubRoles.mockReset();
       await wrapper.vm.search();

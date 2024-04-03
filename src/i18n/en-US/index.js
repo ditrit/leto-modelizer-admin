@@ -556,7 +556,7 @@ export default {
   TablePaginationCard: {
     text: {
       content: '{current}/{max} of {total}',
-      menuTitle: 'Roles per page:',
+      menuTitle: 'Row per page:',
     },
     icon: {
       first: 'fa-solid fa-backward-step',

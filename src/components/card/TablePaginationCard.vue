@@ -59,7 +59,6 @@
               v-close-popup
               :active="pageSize === size"
               active-class="text-white text-weight-bold bg-secondary"
-              class=""
               clickable
               @click="$emit('update:size', pageSize)"
             >
