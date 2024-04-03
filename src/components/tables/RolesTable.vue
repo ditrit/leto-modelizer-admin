@@ -1,11 +1,12 @@
 <template>
   <div>
     <div
-      class="row justify-between items-center q-mb-md"
+      class="row justify-between items-center"
     >
       <role-filters-card
         v-if="!hideFilters"
         :name="filterName"
+        class="q-mb-md"
         @update:name="setFilterName"
       />
       <table-pagination-card
@@ -14,6 +15,7 @@
         :max="maxPage"
         :total="totalElements"
         :size="elementsPerPage"
+        class="q-mb-md"
         @update:current="setCurrentPage"
         @update:size="setElementsPerPage"
       />
