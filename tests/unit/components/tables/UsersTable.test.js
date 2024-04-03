@@ -58,6 +58,14 @@ describe('Test component: UsersTable', () => {
     it('should return array with "actions" column when displayActionsColumn is truthy', () => {
       expect(wrapper.vm.columns).toStrictEqual([
         {
+          name: 'avatar',
+          required: true,
+          label: 'Avatar',
+          align: 'left',
+          field: 'avatar',
+          classes: 'user-avatar',
+        },
+        {
           name: 'name',
           required: true,
           label: 'Name',
@@ -100,6 +108,14 @@ describe('Test component: UsersTable', () => {
       });
 
       expect(wrapper.vm.columns).toStrictEqual([
+        {
+          name: 'avatar',
+          required: true,
+          label: 'Avatar',
+          align: 'left',
+          field: 'avatar',
+          classes: 'user-avatar',
+        },
         {
           name: 'name',
           required: true,

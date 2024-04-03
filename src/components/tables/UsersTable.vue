@@ -33,7 +33,7 @@
       table-header-class="bg-grey-3"
       data-cy="users_table"
     >
-      <template #body-cell-name="cell">
+      <template #body-cell-avatar="cell">
         <q-td
           :props="cell"
         >
@@ -41,9 +41,6 @@
             :login="cell.row.login"
             small
           />
-          <span class="q-pl-md">
-            {{ cell.row.name }}
-          </span>
         </q-td>
       </template>
       <template #body-cell-actions="cell">
@@ -191,6 +188,14 @@ const displayActionsColumn = computed(
 );
 const columns = computed(() => {
   const arrayOfColumns = [{
+    name: 'avatar',
+    required: true,
+    label: t('UsersTable.text.avatarColumn'),
+    align: 'left',
+    field: 'avatar',
+    classes: 'user-avatar',
+  },
+  {
     name: 'name',
     required: true,
     label: t('UsersTable.text.nameColumn'),

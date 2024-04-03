@@ -170,6 +170,7 @@ export default {
   },
   UsersTable: {
     text: {
+      avatarColumn: 'Avatar',
       nameColumn: 'Name',
       loginColumn: 'Login',
       emailColumn: 'Email',
