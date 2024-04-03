@@ -547,6 +547,16 @@ export default {
       warning: 'fa-solid fa-triangle-exclamation',
     },
   },
+  UsersTabPanel: {
+    text: {
+      title: 'List of users attributed to {name}',
+      attach: 'Attach user',
+    },
+    icon: {
+      attach: 'fa-solid fa-link',
+      warning: 'fa-solid fa-triangle-exclamation',
+    },
+  },
   TablePaginationCard: {
     text: {
       content: '{current}/{max} of {total}',
