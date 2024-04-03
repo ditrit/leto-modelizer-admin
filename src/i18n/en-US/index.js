@@ -49,14 +49,12 @@ export default {
     text: {
       goBack: 'Return to previous page',
       notFound: 'Group not found.',
-      userList: 'List of users attributed to {group}',
       groupList: 'List of parent groups attributed to {group}',
       permissionList: 'List of permissions attributed to {group}',
       usersTab: 'Users',
       groupsTab: 'Groups',
       rolesTab: 'Roles',
       permissionsTab: 'Permissions',
-      attachUser: 'Attach user',
       groupRole: 'Attach group',
       attachGroup: 'Attach group',
     },
@@ -94,10 +92,8 @@ export default {
       groupsTab: 'Groups',
       rolesTab: 'Roles',
       permissionsTab: 'Permissions',
-      userList: 'List of users attributed to {role}',
       groupList: 'List of groups attributed to {role}',
       permissionList: 'List of permissions attributed to {role}',
-      attachUser: 'Attach user',
       attachGroup: 'Attach group',
       attachPermission: 'Attach permission',
       addGroupMessage: 'Attaching groups to the Super Administrator role is restricted.',
@@ -174,6 +170,7 @@ export default {
   },
   UsersTable: {
     text: {
+      avatarColumn: 'Avatar',
       nameColumn: 'Name',
       loginColumn: 'Login',
       emailColumn: 'Email',
@@ -547,10 +544,20 @@ export default {
       warning: 'fa-solid fa-triangle-exclamation',
     },
   },
+  UsersTabPanel: {
+    text: {
+      title: 'List of users attributed to {name}',
+      attach: 'Attach user',
+    },
+    icon: {
+      attach: 'fa-solid fa-link',
+      warning: 'fa-solid fa-triangle-exclamation',
+    },
+  },
   TablePaginationCard: {
     text: {
       content: '{current}/{max} of {total}',
-      menuTitle: 'Roles per page:',
+      menuTitle: 'Row per page:',
     },
     icon: {
       first: 'fa-solid fa-backward-step',
@@ -567,6 +574,19 @@ export default {
     },
     icon: {
       byName: 'fa-solid fa-magnifying-glass',
+    },
+  },
+  UserFiltersCard: {
+    text: {
+      filters: 'Filters',
+      name: 'by name',
+      login: 'by login',
+      email: 'by email',
+    },
+    icon: {
+      name: 'fa-solid fa-magnifying-glass',
+      login: 'fa-solid fa-magnifying-glass',
+      email: 'fa-solid fa-magnifying-glass',
     },
   },
   Permissions: {

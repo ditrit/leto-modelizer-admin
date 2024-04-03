@@ -68,8 +68,8 @@ Feature: Test roundtrip of the application: Roles
     And  I expect '[data-cy="page_role_title"]' exists
 
     # Display related users
-    And  I expect '[data-cy="page_role_users_tab_panel"]' exists
-    And  I expect '[data-cy="page_role_users_title"]' exists
+    And  I expect '[data-cy="users_tab_panel"]' exists
+    And  I expect '[data-cy="users_title"]' exists
     And  I expect '[data-cy="users_table"]' exists
     And  I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-name' is 'Admin'
 
@@ -114,9 +114,9 @@ Feature: Test roundtrip of the application: Roles
     Then I expect current url is '/roles/1'
 
     When I click on '[data-cy="page_role_users_tab"]'
-    Then I expect '[data-cy="page_role_users_tab_panel"]' exists
+    Then I expect '[data-cy="users_tab_panel"]' exists
 
-    When I click on '[data-cy="page_role_button_attach_user"]'
+    When I click on '[data-cy="button_attach"]'
     Then I expect '[data-cy="users_table"]' exists
     And  I expect '[data-cy="users_table"] tbody tr:nth-child(2) td.user-name' is 'Name'
     And  I expect '[data-cy="users_table"] tbody tr:nth-child(2) td [role="checkbox"]' exists

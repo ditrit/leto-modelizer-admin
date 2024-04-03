@@ -129,8 +129,8 @@ Feature: Test roundtrip of the application: Groups
 
     # Display related users
     And  I expect '[data-cy="page_group_users_tab"]' exists
-    And  I expect '[data-cy="page_group_users_tab_panel"]' exists
-    And  I expect '[data-cy="page_group_users_title"]' exists
+    And  I expect '[data-cy="users_tab_panel"]' exists
+    And  I expect '[data-cy="users_title"]' exists
     And  I expect '[data-cy="users_table"]' exists
     And  I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-name' is 'Admin'
     And  I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-login' is 'admin'
@@ -169,9 +169,10 @@ Feature: Test roundtrip of the application: Groups
 
     ## 401 Should disabled confirm button if no user is selected
     When I click on '[data-cy="groups_table"] [data-cy="group_2_button_show"]'
+    And  I wait 1 second
     Then I expect current url is '/groups/2'
 
-    When I click on '[data-cy="page_group_button_attach_user"]'
+    When I click on '[data-cy="button_attach"]'
     Then I expect '[data-cy="users_table"]' exists
     And  I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-name' is 'Admin'
     And  I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-login' is 'admin'

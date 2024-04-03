@@ -70,7 +70,7 @@
         >
           <div class="flex justify-center">
             <templates-carousel
-              :template-id="props.row.id"
+              :template-id="props.row.id.toString()"
               :schemas="props.row.schemas"
               style="max-width: 250px"
             />

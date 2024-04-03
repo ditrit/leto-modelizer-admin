@@ -106,6 +106,23 @@ function setUserIntercepts() {
   cy.intercept('GET', '/api/users', {
     statusCode: 200,
     body: {
+      ...defaultResponse,
+      content: [adminUser, user],
+    },
+  });
+
+  cy.intercept('GET', '/api/users?page=0', {
+    statusCode: 200,
+    body: {
+      ...defaultResponse,
+      content: [adminUser, user],
+    },
+  });
+
+  cy.intercept('GET', '/api/users?page=0&count=5', {
+    statusCode: 200,
+    body: {
+      ...defaultResponse,
       content: [adminUser, user],
     },
   });
@@ -210,6 +227,46 @@ function setUserIntercepts() {
     },
   });
 
+  cy.intercept('GET', '/api/users?name=lk_*admin*', {
+    statusCode: 200,
+    body: {
+      ...defaultResponse,
+      content: [
+        adminUser,
+      ],
+    },
+  });
+
+  cy.intercept('GET', '/api/users?login=lk_*login*', {
+    statusCode: 200,
+    body: {
+      content: [
+        user,
+      ],
+      pageable: {
+        pageNumber: 0,
+      },
+      totalPages: 1,
+      size: 10,
+      totalElements: 3,
+    },
+  });
+
+  cy.intercept('GET', '/api/users?email=lk_*test*', {
+    statusCode: 200,
+    body: {
+      content: [
+        user,
+      ],
+      pageable: {
+        pageNumber: 0,
+      },
+      totalPages: 1,
+      size: 10,
+      totalElements: 3,
+    },
+  });
+
   cy.intercept('DELETE', '/api/users/admin', (request) => {
     request.reply({ statusCode: 204 });
   });
@@ -226,6 +283,7 @@ function setGroupIntercepts() {
   cy.intercept('GET', '/api/groups', {
     statusCode: 200,
     body: {
+      ...defaultResponse,
       content: [group1, group2],
     },
   });
@@ -233,6 +291,7 @@ function setGroupIntercepts() {
   cy.intercept('GET', '/api/groups?id=not_2', {
     statusCode: 200,
     body: {
+      ...defaultResponse,
       content: [group1],
     },
   });
@@ -280,6 +339,7 @@ function setGroupIntercepts() {
   cy.intercept('GET', '/api/groups/1/users', {
     statusCode: 200,
     body: {
+      ...defaultResponse,
       content: [adminUser],
     },
   });
@@ -287,6 +347,23 @@ function setGroupIntercepts() {
   cy.intercept('GET', '/api/groups/2/users', {
     statusCode: 200,
     body: {
+      ...defaultResponse,
+      content: [adminUser],
+    },
+  });
+
+  cy.intercept('GET', '/api/groups/2/users?page=0&count=5', {
+    statusCode: 200,
+    body: {
+      ...defaultResponse,
+      content: [adminUser],
+    },
+  });
+
+  cy.intercept('GET', '/api/groups/3/users', {
+    statusCode: 200,
+    body: {
+      ...defaultResponse,
       content: [adminUser],
     },
   });
@@ -294,6 +371,7 @@ function setGroupIntercepts() {
   cy.intercept('GET', '/api/groups/1/groups', {
     statusCode: 200,
     body: {
+      ...defaultResponse,
       content: [group1],
     },
   });
@@ -301,6 +379,7 @@ function setGroupIntercepts() {
   cy.intercept('GET', '/api/groups/2/groups', {
     statusCode: 200,
     body: {
+      ...defaultResponse,
       content: [group1],
     },
   });
@@ -308,16 +387,9 @@ function setGroupIntercepts() {
   cy.intercept('GET', '/api/groups/3/groups', {
     statusCode: 200,
     body: {
+      ...defaultResponse,
       content: [group1],
     },
-  });
-
-  cy.intercept('GET', '/api/groups/3/users', {
-    statusCode: 200,
-    body: {
-      content: [adminUser],
-    },
-
   });
 
   cy.intercept('GET', '/api/groups/1/roles?page=0&count=0', {
@@ -352,36 +424,6 @@ function setGroupIntercepts() {
     },
   });
 
-  cy.intercept('GET', '/api/groups/1/permissions', {
-    statusCode: 200,
-    body: {
-      content: [{
-        entity: 'ADMIN',
-        action: 'ACCESS',
-      }],
-    },
-  });
-
-  cy.intercept('GET', '/api/groups/2/permissions', {
-    statusCode: 200,
-    body: {
-      content: [{
-        entity: 'ADMIN',
-        action: 'ACCESS',
-      }],
-    },
-  });
-
-  cy.intercept('GET', '/api/groups/3/permissions', {
-    statusCode: 200,
-    body: {
-      content: [{
-        entity: 'ADMIN',
-        action: 'ACCESS',
-      }],
-    },
-  });
-
   cy.intercept('GET', '/api/groups/3/roles', {
     statusCode: 200,
     body: {
@@ -395,6 +437,39 @@ function setGroupIntercepts() {
     body: {
       ...defaultResponse,
       content: [dev],
+    },
+  });
+
+  cy.intercept('GET', '/api/groups/1/permissions', {
+    statusCode: 200,
+    body: {
+      ...defaultResponse,
+      content: [{
+        entity: 'ADMIN',
+        action: 'ACCESS',
+      }],
+    },
+  });
+
+  cy.intercept('GET', '/api/groups/2/permissions', {
+    statusCode: 200,
+    body: {
+      ...defaultResponse,
+      content: [{
+        entity: 'ADMIN',
+        action: 'ACCESS',
+      }],
+    },
+  });
+
+  cy.intercept('GET', '/api/groups/3/permissions', {
+    statusCode: 200,
+    body: {
+      ...defaultResponse,
+      content: [{
+        entity: 'ADMIN',
+        action: 'ACCESS',
+      }],
     },
   });
 
@@ -561,6 +636,17 @@ function setRoleIntercepts() {
   cy.intercept('GET', '/api/roles/1/users', {
     statusCode: 200,
     body: {
+      ...defaultResponse,
+      content: [
+        adminUser,
+      ],
+    },
+  });
+
+  cy.intercept('GET', '/api/roles/1/users?page=0&count=5', {
+    statusCode: 200,
+    body: {
+      ...defaultResponse,
       content: [
         adminUser,
       ],
@@ -570,6 +656,7 @@ function setRoleIntercepts() {
   cy.intercept('GET', '/api/roles/1/groups', {
     statusCode: 200,
     body: {
+      ...defaultResponse,
       content: [
         group1,
       ],
@@ -599,6 +686,7 @@ function setRoleIntercepts() {
   cy.intercept('GET', '/api/roles/1/permissions', {
     statusCode: 200,
     body: {
+      ...defaultResponse,
       content: [
         permission1,
       ],
@@ -793,6 +881,16 @@ function setLibraryIntercepts() {
     statusCode: 200,
     body: templates,
   });
+
+  cy.intercept('GET', '/api/libraries/2/templates', {
+    statusCode: 200,
+    body: templates,
+  });
+
+  cy.intercept('GET', '/api/libraries/undefined/templates', {
+    statusCode: 404,
+    body: 'Not Found',
+  });
 }
 
 Before(() => {
@@ -804,6 +902,7 @@ Before(() => {
   cy.intercept('GET', '/api/permissions', {
     statusCode: 200,
     body: {
+      ...defaultResponse,
       content: [
         permission1,
         permission2,

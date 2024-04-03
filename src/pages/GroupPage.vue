@@ -64,35 +64,11 @@
       transition-next="jump-down"
       class="bg-grey-1"
     >
-      <q-tab-panel
+      <users-tab-panel
         name="users"
-        data-cy="page_group_users_tab_panel"
-      >
-        <h6
-          class="q-ma-none q-mb-sm"
-          data-cy="page_group_users_title"
-        >
-          {{ $t('GroupPage.text.userList', { group: group.name }) }}
-        </h6>
-        <q-btn
-          outline
-          no-caps
-          color="primary"
-          class="bg-white q-mb-md"
-          data-cy="page_group_button_attach_user"
-          :label="$t('GroupPage.text.attachUser')"
-          :icon="$t('GroupPage.icon.attach')"
-          @click="openAttachUserToGroupDialog"
-        />
-        <users-table
-          :users="users"
-          :show-action="false"
-          :remove-action="false"
-          :no-data-label="$t('UsersTable.text.noData')"
-          :no-data-icon="$t('UsersTable.icon.noData')"
-          @detach="openDetachUserFromGroupDialog"
-        />
-      </q-tab-panel>
+        type="GROUP"
+        :entity="group"
+      />
       <q-tab-panel
         name="groups"
         data-cy="page_group_groups_tab_panel"
@@ -150,30 +126,26 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import * as GroupService from 'src/services/GroupService';
-import * as UserService from 'src/services/UserService';
 import * as PermissionService from 'src/services/PermissionService';
-import UsersTable from 'src/components/tables/UsersTable.vue';
 import GroupsTable from 'src/components/tables/GroupsTable.vue';
 import PermissionsTable from 'src/components/tables/PermissionsTable.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
-import ReloadUsersEvent from 'src/composables/events/ReloadUsersEvent';
 import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 import ReloadPermissionsEvent from 'src/composables/events/ReloadPermissionsEvent';
 import RolesTabPanel from 'components/tab-panel/RolesTabPanel.vue';
+import UsersTabPanel from 'components/tab-panel/UsersTabPanel.vue';
 
 const loading = ref(false);
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const group = ref({});
-const users = ref([]);
 const groups = ref([]);
 const permissions = ref([]);
 const currentTab = ref('users');
 
-let reloadUsersEventRef;
 let reloadGroupsEventRef;
 let reloadPermissionsEventRef;
 
@@ -194,16 +166,6 @@ async function loadGroup() {
       });
       router.push('/groups');
     });
-}
-
-/**
- * Get users using group Id.
- * @returns {Promise<void>} Promise with nothing on success.
- */
-async function loadUsers() {
-  return UserService.findByGroupId(route.params.id).then((data) => {
-    users.value = data.content;
-  });
 }
 
 /**
@@ -234,24 +196,12 @@ async function search() {
 
   Promise.allSettled([
     loadGroup(),
-    loadUsers(),
     loadGroups(),
     loadPermissions(),
   ])
     .finally(() => {
       loading.value = false;
     });
-}
-
-/**
- * Open dialog to attach a user to a group.
- */
-function openAttachUserToGroupDialog() {
-  DialogEvent.next({
-    key: 'attach-user-to-group',
-    type: 'open',
-    groupId: route.params.id,
-  });
 }
 
 /**
@@ -262,19 +212,6 @@ function openAttachGroupToGroupDialog() {
     key: 'attach-group-to-group',
     type: 'open',
     groupId: route.params.id,
-  });
-}
-
-/**
- * Open dialog to detach a user from a group.
- * @param {object} user - User object to remove for the dialog.
- */
-function openDetachUserFromGroupDialog(user) {
-  DialogEvent.next({
-    key: 'detach-user-from-group',
-    type: 'open',
-    group: group.value,
-    user,
   });
 }
 
@@ -292,14 +229,12 @@ function openDetachGroupFromGroupDialog(grouptoDetach) {
 }
 
 onMounted(async () => {
-  reloadUsersEventRef = ReloadUsersEvent.subscribe(loadUsers);
   reloadGroupsEventRef = ReloadGroupsEvent.subscribe(loadGroups);
   reloadPermissionsEventRef = ReloadPermissionsEvent.subscribe(loadPermissions);
   await search();
 });
 
 onUnmounted(() => {
-  reloadUsersEventRef.unsubscribe();
   reloadGroupsEventRef.unsubscribe();
   reloadPermissionsEventRef.unsubscribe();
 });

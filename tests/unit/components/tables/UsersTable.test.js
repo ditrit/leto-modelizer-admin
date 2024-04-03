@@ -58,6 +58,14 @@ describe('Test component: UsersTable', () => {
     it('should return array with "actions" column when displayActionsColumn is truthy', () => {
       expect(wrapper.vm.columns).toStrictEqual([
         {
+          name: 'avatar',
+          required: true,
+          label: 'Avatar',
+          align: 'left',
+          field: 'avatar',
+          classes: 'user-avatar',
+        },
+        {
           name: 'name',
           required: true,
           label: 'Name',
@@ -101,6 +109,14 @@ describe('Test component: UsersTable', () => {
 
       expect(wrapper.vm.columns).toStrictEqual([
         {
+          name: 'avatar',
+          required: true,
+          label: 'Avatar',
+          align: 'left',
+          field: 'avatar',
+          classes: 'user-avatar',
+        },
+        {
           name: 'name',
           required: true,
           label: 'Name',
@@ -125,6 +141,56 @@ describe('Test component: UsersTable', () => {
           classes: 'user-email',
         },
       ]);
+    });
+  });
+
+  describe('Test function: setCurrentPage', () => {
+    it('should emit valid event', () => {
+      wrapper.vm.setCurrentPage(5);
+      expect(wrapper.emitted()).toEqual({
+        onFilter: [[]],
+        'update:current-page': [[5]],
+      });
+    });
+  });
+
+  describe('Test function: setElementsPerPage', () => {
+    it('should emit valid event', () => {
+      wrapper.vm.setElementsPerPage(5);
+      expect(wrapper.emitted()).toEqual({
+        onFilter: [[]],
+        'update:elements-per-page': [[5]],
+      });
+    });
+  });
+
+  describe('Test function: setFilterName', () => {
+    it('should emit valid event', () => {
+      wrapper.vm.setFilterName(5);
+      expect(wrapper.emitted()).toEqual({
+        onFilter: [[]],
+        'update:filter-name': [[5]],
+      });
+    });
+  });
+
+  describe('Test function: setFilterLogin', () => {
+    it('should emit valid event', () => {
+      wrapper.vm.setFilterLogin(5);
+      expect(wrapper.emitted()).toEqual({
+        onFilter: [[]],
+        'update:filter-login': [[5]],
+      });
+    });
+  });
+
+  describe('Test function: setFilterEmail', () => {
+    it('should emit valid event', () => {
+      wrapper.vm.setFilterEmail(5);
+      expect(wrapper.emitted()).toEqual({
+        onFilter: [[]],
+        'update:filter-email': [[5]],
+      });
     });
   });
 });

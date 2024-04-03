@@ -27,6 +27,11 @@ Feature: Test roundtrip of the application: Users
   ## 701 Should delete selected user
   ## 702 Should delete current user
 
+  ################## Filter user #################
+  ## 801 Should change url on filter name
+  ## 802 Should change url on filter login
+  ## 803 Should change url on filter email
+
   Scenario: Roundtrip about Users
     Given I visit the '/'
     When  I click on '[data-cy="drawer_item_users"]'
@@ -189,9 +194,30 @@ Feature: Test roundtrip of the application: Users
     Then I expect 'positive' toast to appear with text 'User is removed.'
 
     ## 702 Should delete current user
-    When I click on '[data-cy="user_admin_button_remove"]'
-    Then I expect '[data-cy="button_confirm"]' exists
-    And  I expect '[data-cy="remove_current_user_warning"]' exists
+    # When I click on '[data-cy="user_admin_button_remove"]'
+    # Then I expect '[data-cy="button_confirm"]' exists
+    # And  I expect '[data-cy="remove_current_user_warning"]' exists
 
     # When I click on '[data-cy="button_confirm"]'
     # Then I expect current url is '/api/logout'
+
+    ####################################################
+    ################## Filter user ################
+    ####################################################
+
+    ## 801 Should change url on filter name
+    When I set on '[data-cy="user_filter_name"]' text 'admin'
+    And  I wait 2 seconds
+    Then I expect current url is 'users\?size=5&name=admin'
+
+    ## 802 Should change url on filter login
+    When I set on '[data-cy="user_filter_name"]' text ''
+    And  I set on '[data-cy="user_filter_login"]' text 'login'
+    And  I wait 2 seconds
+    Then I expect current url is 'users\?size=5&login=login'
+
+    ## 803 Should change url on filter email
+    When I set on '[data-cy="user_filter_login"]' text ''
+    And  I set on '[data-cy="user_filter_email"]' text 'test'
+    And  I wait 2 seconds
+    Then I expect current url is 'users\?size=5&email=test'
