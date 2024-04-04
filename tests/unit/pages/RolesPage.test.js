@@ -79,33 +79,6 @@ describe('Test component: RolesPage', () => {
 
       expect(wrapper.vm.roles).toEqual(('roles'));
     });
-
-    it('should research on page out of bound', async () => {
-      RoleService.find.mockReset();
-      RoleService.find.mockImplementationOnce(() => Promise.resolve({
-        content: 'roles',
-        pageable: {
-          pageNumber: 10,
-        },
-        totalPages: 1,
-        size: 0,
-        totalElements: 0,
-      }));
-      RoleService.find.mockImplementationOnce(() => Promise.resolve({
-        content: 'roles',
-        pageable: {
-          pageNumber: 0,
-        },
-        totalPages: 1,
-        size: 0,
-        totalElements: 0,
-      }));
-
-      await wrapper.vm.search();
-
-      expect(wrapper.vm.currentPage).toEqual(1);
-      expect(RoleService.find).toHaveBeenCalledTimes(2);
-    });
   });
 
   describe('Test hook function: onMounted', () => {

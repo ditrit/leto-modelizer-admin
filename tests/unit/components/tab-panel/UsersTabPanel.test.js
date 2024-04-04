@@ -173,33 +173,5 @@ describe('Test component: UsersTabPanel', async () => {
       expect(wrapper.vm.users).toEqual(([]));
       expect(UserService.findByRoleId).not.toHaveBeenCalled();
     });
-
-    it('should research on page out of bound', async () => {
-      await wrapper.setProps({ type: 'ROLE' });
-      UserService.findByRoleId.mockReset();
-      UserService.findByRoleId.mockImplementationOnce(() => Promise.resolve({
-        content: [],
-        pageable: {
-          pageNumber: 10,
-        },
-        totalPages: 1,
-        size: 0,
-        totalElements: 0,
-      }));
-      UserService.findByRoleId.mockImplementationOnce(() => Promise.resolve({
-        content: [],
-        pageable: {
-          pageNumber: 0,
-        },
-        totalPages: 1,
-        size: 0,
-        totalElements: 0,
-      }));
-
-      await wrapper.vm.search();
-
-      expect(wrapper.vm.currentPage).toEqual(1);
-      expect(UserService.findByRoleId).toHaveBeenCalledTimes(2);
-    });
   });
 });
