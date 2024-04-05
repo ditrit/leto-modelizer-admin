@@ -4,7 +4,7 @@
       <q-card-section class="flex row justify-center">
         <span class="text-h6 text-center">
           {{ $t('DetachGroupFromGroupDialog.text.title',
-                { groupToDetach: grouptoDetach.name, group: group.name }) }}
+                { groupToDetach: groupToDetach.name, group: group.name }) }}
         </span>
       </q-card-section>
       <q-form @submit="onSubmit">
@@ -46,12 +46,12 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 const submitting = ref(false);
 const group = ref(null);
-const grouptoDetach = ref();
+const groupToDetach = ref();
 
 const { show } = useDialog('detach-group-from-group', (event) => {
   submitting.value = false;
   group.value = event.group;
-  grouptoDetach.value = event.grouptoDetach;
+  groupToDetach.value = event.groupToDetach;
 });
 
 /**
@@ -62,7 +62,7 @@ async function onSubmit() {
   submitting.value = true;
 
   // TODO: generic error management
-  await GroupService.dissociateGroupAndGroup(grouptoDetach.value.id, group.value.id);
+  await GroupService.dissociateGroupAndGroup(groupToDetach.value.id, group.value.id);
 
   Notify.create({
     type: 'positive',

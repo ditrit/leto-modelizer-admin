@@ -88,7 +88,7 @@ export default {
       rolesTab: 'Roles',
       permissionsTab: 'Permissions',
       permissionList: 'List of permissions attributed to {role}',
-
+      attachPermission: 'Attach permission',
       addGroupMessage: 'Attaching groups to the Super Administrator role is restricted.',
       addRoleMessage: 'Attaching roles to the Super Administrator role is restricted.',
       addPermissionMessage: 'Attaching permissions to the Super Administrator role is restricted.',
