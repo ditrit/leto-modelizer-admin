@@ -589,6 +589,15 @@ export default {
       email: 'fa-solid fa-magnifying-glass',
     },
   },
+  GroupFiltersCard: {
+    text: {
+      title: 'Filters',
+      byName: 'by name',
+    },
+    icon: {
+      byName: 'fa-solid fa-magnifying-glass',
+    },
+  },
   Permissions: {
     text: {
       ADMIN_ACCESS_NULL: 'Permission to access and use leto-modelizer-admin',
