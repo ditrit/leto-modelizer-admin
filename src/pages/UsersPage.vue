@@ -143,11 +143,6 @@ async function search() {
       elementsPerPage.value = data.size;
       totalElements.value = data.totalElements;
 
-      if (data.totalPages > 0 && currentPage.value > maxPage.value) {
-        currentPage.value = maxPage.value;
-        return search();
-      }
-
       return Promise.resolve();
     })
     .finally(() => {

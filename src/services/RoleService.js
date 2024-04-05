@@ -1,5 +1,8 @@
-import { prepareQueryParameters, prepareRequest } from 'boot/axios';
-
+import {
+  prepareQueryParameters,
+  prepareRequest,
+  makeFilterRequest,
+} from 'boot/axios';
 /**
  * Get all roles.
  * @param {object} filters - API filters.
@@ -10,7 +13,7 @@ export async function find(filters) {
   const api = await prepareRequest();
   const queryParameters = prepareQueryParameters(filters);
 
-  return api.get(`/roles${queryParameters}`).then(({ data }) => data);
+  return makeFilterRequest(api, `/roles${queryParameters}`).then(({ data }) => data);
 }
 
 /**
@@ -34,7 +37,7 @@ export async function findByLogin(userLogin, filters) {
   const api = await prepareRequest();
   const queryParameters = prepareQueryParameters(filters);
 
-  return api.get(`/users/${userLogin}/roles${queryParameters}`).then(({ data }) => data);
+  return makeFilterRequest(api, `/users/${userLogin}/roles${queryParameters}`).then(({ data }) => data);
 }
 
 /**
@@ -97,7 +100,7 @@ export async function findByGroupId(groupId, filters) {
   const api = await prepareRequest();
   const queryParameters = prepareQueryParameters(filters);
 
-  return api.get(`groups/${groupId}/roles${queryParameters}`)
+  return makeFilterRequest(api, `groups/${groupId}/roles${queryParameters}`)
     .then(({ data }) => data);
 }
 
@@ -111,7 +114,7 @@ export async function findSubRoles(roleId, filters) {
   const api = await prepareRequest();
   const queryParameters = prepareQueryParameters(filters);
 
-  return api.get(`/roles/${roleId}/roles${queryParameters}`)
+  return makeFilterRequest(api, `/roles/${roleId}/roles${queryParameters}`)
     .then(({ data }) => data);
 }
 

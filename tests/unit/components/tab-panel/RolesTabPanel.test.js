@@ -259,33 +259,5 @@ describe('Test component: RolesTabPanel', async () => {
       expect(wrapper.vm.roles).toEqual(([]));
       expect(RoleService.findSubRoles).not.toHaveBeenCalled();
     });
-
-    it('should research on page out of bound', async () => {
-      await wrapper.setProps({ type: 'ROLE' });
-      RoleService.findSubRoles.mockReset();
-      RoleService.findSubRoles.mockImplementationOnce(() => Promise.resolve({
-        content: [],
-        pageable: {
-          pageNumber: 10,
-        },
-        totalPages: 1,
-        size: 0,
-        totalElements: 0,
-      }));
-      RoleService.findSubRoles.mockImplementationOnce(() => Promise.resolve({
-        content: [],
-        pageable: {
-          pageNumber: 0,
-        },
-        totalPages: 1,
-        size: 0,
-        totalElements: 0,
-      }));
-
-      await wrapper.vm.search();
-
-      expect(wrapper.vm.currentPage).toEqual(1);
-      expect(RoleService.findSubRoles).toHaveBeenCalledTimes(2);
-    });
   });
 });

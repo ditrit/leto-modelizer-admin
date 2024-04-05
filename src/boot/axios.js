@@ -37,6 +37,27 @@ api.interceptors.response.use(
 );
 
 /**
+ * Make a filter request (GET) to the specified URL using the provided API.
+ * @param {object} apiInstance - The API object used to make the request.
+ * @param {string} url - The URL to make the filter request to.
+ * @returns {Promise<object>} The response data of the filter request.
+ */
+async function makeFilterRequest(apiInstance, url) {
+  return apiInstance.get(url).then((response) => {
+    const { data } = response;
+
+    if (data.totalPages > 0 && data.pageable.pageNumber + 1 > data.totalPages) {
+      // TODO : for now we don't have any entity attribute name that ends with 'page'.
+      // Be careful if this case arises, you'll need to adjust the regex.
+      const newUrl = url.replace(/page=\d+/, `page=${data.totalPages - 1}`);
+      return makeFilterRequest(apiInstance, newUrl);
+    }
+
+    return response;
+  });
+}
+
+/**
  * Asynchronously prepares a request by ensuring the availability of a valid CSRF token.
  *
  * This function uses a CSRF token to check if token is valid.
@@ -88,4 +109,8 @@ export default boot(({ app }) => {
   //       so you can easily perform requests against your app's API
 });
 
-export { prepareRequest, prepareQueryParameters };
+export {
+  prepareRequest,
+  prepareQueryParameters,
+  makeFilterRequest,
+};

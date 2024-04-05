@@ -243,33 +243,6 @@ describe('Test component: UsersPage', () => {
 
       expect(wrapper.vm.users).toEqual(('users'));
     });
-
-    it('should research on page out of bound', async () => {
-      UserService.find.mockReset();
-      UserService.find.mockImplementationOnce(() => Promise.resolve({
-        content: 'users',
-        pageable: {
-          pageNumber: 10,
-        },
-        totalPages: 1,
-        size: 0,
-        totalElements: 0,
-      }));
-      UserService.find.mockImplementationOnce(() => Promise.resolve({
-        content: 'users',
-        pageable: {
-          pageNumber: 0,
-        },
-        totalPages: 1,
-        size: 0,
-        totalElements: 0,
-      }));
-
-      await wrapper.vm.search();
-
-      expect(wrapper.vm.currentPage).toEqual(1);
-      expect(UserService.find).toHaveBeenCalledTimes(2);
-    });
   });
 
   describe('Test function: init', () => {

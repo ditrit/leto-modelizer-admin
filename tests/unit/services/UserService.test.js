@@ -1,6 +1,6 @@
 import * as UserService from 'src/services/UserService';
 import { vi } from 'vitest';
-import { prepareRequest as api } from 'boot/axios';
+import { prepareRequest as api, makeFilterRequest } from 'boot/axios';
 
 vi.mock('boot/axios');
 
@@ -46,9 +46,7 @@ describe('Test: UserService', () => {
         email: 'email',
       }];
 
-      api.mockImplementation(() => ({
-        get: () => Promise.resolve({ data: users }),
-      }));
+      makeFilterRequest.mockImplementation(vi.fn(() => Promise.resolve({ data: users })));
 
       const data = await UserService.find({});
       expect(data).toEqual(users);
@@ -62,9 +60,7 @@ describe('Test: UserService', () => {
         login: 'login',
       };
 
-      api.mockImplementation(() => ({
-        get: () => Promise.resolve({ data: user }),
-      }));
+      makeFilterRequest.mockImplementation(vi.fn(() => Promise.resolve({ data: user })));
 
       const res = await UserService.findByLogin(user.login);
       expect(res).toEqual(user);
@@ -86,9 +82,7 @@ describe('Test: UserService', () => {
 
   describe('Test function: findByGroupId', () => {
     it('should return all users of a group', async () => {
-      api.mockImplementation(() => ({
-        get: () => Promise.resolve({ data: 'users' }),
-      }));
+      makeFilterRequest.mockImplementation(vi.fn(() => Promise.resolve({ data: 'users' })));
 
       const data = await UserService.findByGroupId({});
       expect(data).toEqual('users');
@@ -97,9 +91,7 @@ describe('Test: UserService', () => {
 
   describe('Test function: findByRoleId', () => {
     it('should return all users of a role', async () => {
-      api.mockImplementation(() => ({
-        get: () => Promise.resolve({ data: 'users' }),
-      }));
+      makeFilterRequest.mockImplementation(vi.fn(() => Promise.resolve({ data: 'users' })));
 
       const data = await UserService.findByRoleId({});
       expect(data).toEqual('users');
