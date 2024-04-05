@@ -70,9 +70,7 @@ export default {
       rolesTab: 'Roles',
       groupsTab: 'Groups',
       permissionsTab: 'Permissions',
-      groupList: 'List of groups attributed to {user}',
       permissionList: 'List of permissions attributed to {user}',
-      attachGroup: 'Attach group',
     },
     icon: {
       goBack: 'fa-solid fa-chevron-left',
@@ -93,7 +91,7 @@ export default {
       rolesTab: 'Roles',
       permissionsTab: 'Permissions',
       permissionList: 'List of permissions attributed to {role}',
-      attachPermission: 'Attach permission',
+
       addGroupMessage: 'Attaching groups to the Super Administrator role is restricted.',
       addRoleMessage: 'Attaching roles to the Super Administrator role is restricted.',
       addPermissionMessage: 'Attaching permissions to the Super Administrator role is restricted.',

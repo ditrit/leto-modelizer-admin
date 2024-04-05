@@ -79,33 +79,11 @@
       transition-next="jump-down"
       class="bg-grey-1"
     >
-      <q-tab-panel
+      <groups-tab-panel
         name="groups"
-        data-cy="page_user_groups_tab_panel"
-      >
-        <h6
-          class="q-ma-none q-mb-sm"
-          data-cy="page_user_groups_title"
-        >
-          {{ $t('UserPage.text.groupList', { user: user.name }) }}
-        </h6>
-        <q-btn
-          outline
-          no-caps
-          color="primary"
-          class="bg-white q-mb-md"
-          data-cy="page_user_button_attach_group"
-          :label="$t('UserPage.text.attachGroup')"
-          :icon="$t('UserPage.icon.attach')"
-          @click="openAttachGroupToUserDialog"
-        />
-        <groups-table
-          :groups="groups"
-          :show-action="false"
-          :remove-action="false"
-          @detach="openDetachGroupFromUserDialog"
-        />
-      </q-tab-panel>
+        type="USER"
+        :entity="user"
+      />
       <roles-tab-panel
         name="roles"
         type="USER"
@@ -133,30 +111,24 @@
 </template>
 
 <script setup>
-import { onMounted, ref, onUnmounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import * as UserService from 'src/services/UserService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
-import GroupsTable from 'src/components/tables/GroupsTable.vue';
-import * as GroupService from 'src/services/GroupService';
 import * as PermissionService from 'src/services/PermissionService';
 import PermissionsTable from 'src/components/tables/PermissionsTable.vue';
-import DialogEvent from 'src/composables/events/DialogEvent';
-import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 import UserAvatar from 'components/avatar/UserAvatar.vue';
 import RolesTabPanel from 'components/tab-panel/RolesTabPanel.vue';
+import GroupsTabPanel from 'components/tab-panel/GroupsTabPanel.vue';
 
 const loading = ref(false);
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const user = ref({});
-const groups = ref([]);
 const permissions = ref([]);
 const currentTab = ref('groups');
-
-let reloadGroupsEventRef;
 
 /**
  * Load user from login in url. If the user does not exist, redirect to the users page.
@@ -178,16 +150,6 @@ async function loadUser() {
 }
 
 /**
- * Get groups using user login.
- * @returns {Promise<void>} Promise with nothing on success.
- */
-async function loadGroups() {
-  return GroupService.findByLogin(route.params.login).then((data) => {
-    groups.value = data.content;
-  });
-}
-
-/**
  * Get roles using user login.
  * @returns {Promise<void>} Promise with nothing on success.
  */
@@ -205,7 +167,6 @@ async function search() {
 
   Promise.allSettled([
     loadUser(),
-    loadGroups(),
     loadPermissions(),
   ])
     .finally(() => {
@@ -213,36 +174,7 @@ async function search() {
     });
 }
 
-/**
- * Open dialog to attach a group to user.
- */
-function openAttachGroupToUserDialog() {
-  DialogEvent.next({
-    key: 'attach-group-to-user',
-    type: 'open',
-    userLogin: route.params.login,
-  });
-}
-
-/**
- * Open dialog to remove user group.
- * @param {object} group - User group object to remove for the dialog.
- */
-function openDetachGroupFromUserDialog(group) {
-  DialogEvent.next({
-    key: 'detach-group-from-user',
-    type: 'open',
-    group,
-    user: user.value,
-  });
-}
-
 onMounted(async () => {
-  reloadGroupsEventRef = ReloadGroupsEvent.subscribe(loadGroups);
   await search();
-});
-
-onUnmounted(() => {
-  reloadGroupsEventRef.unsubscribe();
 });
 </script>
