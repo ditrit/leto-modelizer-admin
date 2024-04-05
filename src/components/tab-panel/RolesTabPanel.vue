@@ -28,7 +28,7 @@
       no-caps
       color="primary"
       class="bg-white q-mb-md"
-      data-cy="button_attach"
+      data-cy="button_attach_role"
       :label="$t('RolesTabPanel.text.attach')"
       :icon="$t('RolesTabPanel.icon.attach')"
       @click="openAttachDialog"

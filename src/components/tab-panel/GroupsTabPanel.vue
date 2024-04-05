@@ -28,7 +28,7 @@
       no-caps
       color="primary"
       class="bg-white q-mb-md"
-      data-cy="button_attach"
+      data-cy="button_attach_group"
       :label="$t('GroupsTabPanel.text.attach')"
       :icon="$t('GroupsTabPanel.icon.attach')"
       @click="openAttachDialog"
