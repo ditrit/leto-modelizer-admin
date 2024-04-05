@@ -49,14 +49,11 @@ export default {
     text: {
       goBack: 'Return to previous page',
       notFound: 'Group not found.',
-      groupList: 'List of parent groups attributed to {group}',
       permissionList: 'List of permissions attributed to {group}',
       usersTab: 'Users',
       groupsTab: 'Groups',
       rolesTab: 'Roles',
       permissionsTab: 'Permissions',
-      groupRole: 'Attach group',
-      attachGroup: 'Attach group',
     },
     icon: {
       goBack: 'fa-solid fa-chevron-left',
