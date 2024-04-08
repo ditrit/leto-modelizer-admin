@@ -1,7 +1,7 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest';
 import { shallowMount } from '@vue/test-utils';
 import GroupsPage from 'pages/GroupsPage.vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { vi } from 'vitest';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import * as GroupService from 'src/services/GroupService';
@@ -26,8 +26,19 @@ describe('Test component: GroupsPage', () => {
     unsubscribe = vi.fn();
 
     useRouter.mockImplementation(() => ({ push }));
+    useRoute.mockImplementation(() => ({
+      query: {},
+    }));
 
-    GroupService.find.mockImplementation(() => Promise.resolve({ content: ['group'] }));
+    GroupService.find.mockImplementation(() => Promise.resolve({
+      content: ['groups'],
+      pageable: {
+        pageNumber: 0,
+      },
+      totalPages: 1,
+      size: 0,
+      totalElements: 0,
+    }));
 
     ReloadGroupsEvent.subscribe.mockImplementation(() => {
       subscribe();
@@ -68,7 +79,150 @@ describe('Test component: GroupsPage', () => {
 
       await wrapper.vm.search();
 
-      expect(wrapper.vm.groups).toEqual(['group']);
+      expect(wrapper.vm.groups).toEqual(['groups']);
+    });
+  });
+
+  describe('Test function: updateRoute', () => {
+    it('should push routes without filters', () => {
+      wrapper.vm.currentPage = 1;
+      wrapper.vm.elementsPerPage = 10;
+      wrapper.vm.groupName = '';
+
+      wrapper.vm.updateRoute();
+
+      expect(push).toBeCalledWith('/groups');
+    });
+
+    it('should push routes with size filter', () => {
+      wrapper.vm.currentPage = 1;
+      wrapper.vm.elementsPerPage = 11;
+      wrapper.vm.groupName = '';
+
+      wrapper.vm.updateRoute();
+
+      expect(push).toBeCalledWith('/groups?size=11');
+    });
+
+    it('should push routes with current page filter', () => {
+      wrapper.vm.currentPage = 2;
+      wrapper.vm.elementsPerPage = 10;
+      wrapper.vm.groupName = '';
+
+      wrapper.vm.updateRoute();
+
+      expect(push).toBeCalledWith('/groups?page=2');
+    });
+
+    it('should push routes with group name filter', () => {
+      wrapper.vm.currentPage = 1;
+      wrapper.vm.elementsPerPage = 10;
+      wrapper.vm.groupName = 'test';
+
+      wrapper.vm.updateRoute();
+
+      expect(push).toBeCalledWith('/groups?name=test');
+    });
+
+    it('should push routes with all filters', () => {
+      wrapper.vm.currentPage = 2;
+      wrapper.vm.elementsPerPage = 11;
+      wrapper.vm.groupName = 'test';
+
+      wrapper.vm.updateRoute();
+
+      expect(push).toBeCalledWith('/groups?size=11&page=2&name=test');
+    });
+  });
+
+  describe('Test function: init', () => {
+    it('should not change value without query parameters', () => {
+      wrapper.vm.elementsPerPage = 100;
+      wrapper.vm.currentPage = 200;
+      wrapper.vm.groupName = 'test';
+
+      wrapper.vm.init({});
+
+      expect(wrapper.vm.elementsPerPage).toEqual(100);
+      expect(wrapper.vm.currentPage).toEqual(200);
+      expect(wrapper.vm.groupName).toEqual('test');
+    });
+
+    it('should set default value with bad query parameters', () => {
+      wrapper.vm.elementsPerPage = 100;
+      wrapper.vm.currentPage = 200;
+      wrapper.vm.groupName = 'test';
+
+      wrapper.vm.init({
+        size: 'a',
+        page: 'b',
+      });
+
+      expect(wrapper.vm.elementsPerPage).toEqual(10);
+      expect(wrapper.vm.currentPage).toEqual(0);
+      expect(wrapper.vm.groupName).toEqual('test');
+    });
+
+    it('should set value from query parameters', () => {
+      wrapper.vm.elementsPerPage = 100;
+      wrapper.vm.currentPage = 200;
+      wrapper.vm.groupName = 'test';
+
+      wrapper.vm.init({
+        size: '2',
+        page: '1',
+        name: 'test2',
+      });
+
+      expect(wrapper.vm.elementsPerPage).toEqual(2);
+      expect(wrapper.vm.currentPage).toEqual(1);
+      expect(wrapper.vm.groupName).toEqual('test2');
+    });
+  });
+
+  describe('Test function: getFilters', () => {
+    it('should return object with no filters', () => {
+      wrapper.vm.currentPage = 0;
+      wrapper.vm.elementsPerPage = 10;
+      wrapper.vm.groupName = '';
+
+      expect({}).toEqual(wrapper.vm.getFilters());
+    });
+
+    it('should return object with name filter', () => {
+      wrapper.vm.currentPage = 0;
+      wrapper.vm.elementsPerPage = 10;
+      wrapper.vm.groupName = 'test';
+
+      expect({ name: 'lk_*test*' }).toEqual(wrapper.vm.getFilters());
+    });
+
+    it('should return object with page filter', () => {
+      wrapper.vm.currentPage = 2;
+      wrapper.vm.elementsPerPage = 10;
+      wrapper.vm.groupName = '';
+
+      expect({ page: '1' }).toEqual(wrapper.vm.getFilters());
+    });
+
+    it('should return object with count filter', () => {
+      wrapper.vm.currentPage = 0;
+      wrapper.vm.elementsPerPage = 5;
+      wrapper.vm.groupName = '';
+
+      expect({ count: '5' }).toEqual(wrapper.vm.getFilters());
+    });
+
+    it('should return object with all filters', () => {
+      wrapper.vm.currentPage = 2;
+      wrapper.vm.elementsPerPage = 5;
+      wrapper.vm.groupName = 'test';
+
+      expect({
+        count: '5',
+        page: '1',
+        name: 'lk_*test*',
+      }).toEqual(wrapper.vm.getFilters());
     });
   });
 

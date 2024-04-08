@@ -1,6 +1,6 @@
 import * as GroupService from 'src/services/GroupService';
 import { vi } from 'vitest';
-import { prepareRequest as api } from 'boot/axios';
+import { prepareRequest as api, makeFilterRequest } from 'boot/axios';
 
 vi.mock('boot/axios');
 
@@ -11,11 +11,9 @@ describe('Test: GroupService', () => {
         name: 'groups',
       }];
 
-      api.mockImplementation(() => ({
-        get: () => Promise.resolve({ data: groups }),
-      }));
+      makeFilterRequest.mockImplementation(vi.fn(() => Promise.resolve({ data: groups })));
 
-      const data = await GroupService.find();
+      const data = await GroupService.find({});
       expect(data).toEqual(groups);
     });
   });
@@ -72,11 +70,9 @@ describe('Test: GroupService', () => {
         name: 'group',
       }];
 
-      api.mockImplementation(() => ({
-        get: () => Promise.resolve({ data: groups }),
-      }));
+      makeFilterRequest.mockImplementation(vi.fn(() => Promise.resolve({ data: groups })));
 
-      const data = await GroupService.findByLogin('login');
+      const data = await GroupService.findByLogin('login', {});
       expect(data).toEqual([{ name: 'group' }]);
     });
   });
@@ -87,11 +83,9 @@ describe('Test: GroupService', () => {
         name: 'group',
       }];
 
-      api.mockImplementation(() => ({
-        get: () => Promise.resolve({ data: groups }),
-      }));
+      makeFilterRequest.mockImplementation(vi.fn(() => Promise.resolve({ data: groups })));
 
-      const data = await GroupService.findByRoleId('login');
+      const data = await GroupService.findByRoleId('login', {});
       expect(data).toEqual([{ name: 'group' }]);
     });
   });
@@ -102,11 +96,9 @@ describe('Test: GroupService', () => {
         name: 'subGroups',
       }];
 
-      api.mockImplementation(() => ({
-        get: () => Promise.resolve({ data: subGroups }),
-      }));
+      makeFilterRequest.mockImplementation(vi.fn(() => Promise.resolve({ data: subGroups })));
 
-      const data = await GroupService.findSubGroups('groupId');
+      const data = await GroupService.findSubGroups('groupId', {});
       expect(data).toEqual([{ name: 'subGroups' }]);
     });
   });

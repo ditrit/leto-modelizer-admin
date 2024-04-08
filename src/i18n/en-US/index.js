@@ -49,14 +49,11 @@ export default {
     text: {
       goBack: 'Return to previous page',
       notFound: 'Group not found.',
-      groupList: 'List of parent groups attributed to {group}',
       permissionList: 'List of permissions attributed to {group}',
       usersTab: 'Users',
       groupsTab: 'Groups',
       rolesTab: 'Roles',
       permissionsTab: 'Permissions',
-      groupRole: 'Attach group',
-      attachGroup: 'Attach group',
     },
     icon: {
       goBack: 'fa-solid fa-chevron-left',
@@ -70,9 +67,7 @@ export default {
       rolesTab: 'Roles',
       groupsTab: 'Groups',
       permissionsTab: 'Permissions',
-      groupList: 'List of groups attributed to {user}',
       permissionList: 'List of permissions attributed to {user}',
-      attachGroup: 'Attach group',
     },
     icon: {
       goBack: 'fa-solid fa-chevron-left',
@@ -92,9 +87,7 @@ export default {
       groupsTab: 'Groups',
       rolesTab: 'Roles',
       permissionsTab: 'Permissions',
-      groupList: 'List of groups attributed to {role}',
       permissionList: 'List of permissions attributed to {role}',
-      attachGroup: 'Attach group',
       attachPermission: 'Attach permission',
       addGroupMessage: 'Attaching groups to the Super Administrator role is restricted.',
       addRoleMessage: 'Attaching roles to the Super Administrator role is restricted.',
@@ -554,6 +547,16 @@ export default {
       warning: 'fa-solid fa-triangle-exclamation',
     },
   },
+  GroupsTabPanel: {
+    text: {
+      title: 'List of groups attributed to {name}',
+      attach: 'Attach group',
+    },
+    icon: {
+      attach: 'fa-solid fa-link',
+      warning: 'fa-solid fa-triangle-exclamation',
+    },
+  },
   TablePaginationCard: {
     text: {
       content: '{current}/{max} of {total}',
@@ -587,6 +590,15 @@ export default {
       name: 'fa-solid fa-magnifying-glass',
       login: 'fa-solid fa-magnifying-glass',
       email: 'fa-solid fa-magnifying-glass',
+    },
+  },
+  GroupFiltersCard: {
+    text: {
+      title: 'Filters',
+      byName: 'by name',
+    },
+    icon: {
+      byName: 'fa-solid fa-magnifying-glass',
     },
   },
   Permissions: {

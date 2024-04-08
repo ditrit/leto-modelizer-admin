@@ -38,6 +38,9 @@ Feature: Test roundtrip of the application: Groups
   ################## Delete group ##################
   ## 1001 Should delete selected group
 
+  ################## Filter group #################
+  ## 1101 Should change url on filter name
+
   Scenario: Roundtrip about Groups
     Given I visit the '/'
     When  I click on '[data-cy="drawer_item_groups"]'
@@ -137,8 +140,8 @@ Feature: Test roundtrip of the application: Groups
 
     # Display related groups
     When I click on '[data-cy="page_group_groups_tab"]'
-    Then I expect '[data-cy="page_group_groups_tab_panel"]' exists
-    And  I expect '[data-cy="page_group_groups_title"]' exists
+    Then I expect '[data-cy="groups_tab_panel"]' exists
+    And  I expect '[data-cy="groups_title"]' exists
     And  I expect '[data-cy="groups_table"]' exists
     And  I expect '[data-cy="groups_table"] tbody tr:nth-child(1) td.group-name' is 'Group 1'
 
@@ -172,7 +175,7 @@ Feature: Test roundtrip of the application: Groups
     And  I wait 1 second
     Then I expect current url is '/groups/2'
 
-    When I click on '[data-cy="button_attach"]'
+    When I click on '[data-cy="button_attach_user"]'
     Then I expect '[data-cy="users_table"]' exists
     And  I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-name' is 'Admin'
     And  I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-login' is 'admin'
@@ -202,9 +205,9 @@ Feature: Test roundtrip of the application: Groups
 
     ## 601 Should disabled confirm button if no group is selected
     When I click on '[data-cy="page_group_groups_tab"]'
-    Then I expect '[data-cy="page_group_groups_tab_panel"]' exists
+    Then I expect '[data-cy="groups_tab_panel"]' exists
 
-    When I click on '[data-cy="page_group_button_attach_group"]'
+    When I click on '[data-cy="button_attach_group"]'
     Then I expect '[data-cy="groups_table"]' exists
     And  I expect '[data-cy="groups_table"] tbody tr:nth-child(1) td.group-name' is 'Group 1'
     And  I expect '[data-cy="groups_table"] tbody tr:nth-child(1) td [role="checkbox"]' exists
@@ -225,6 +228,7 @@ Feature: Test roundtrip of the application: Groups
     ## 701 Should successfully detach a group
     When I click on '[data-cy="group_1_button_detach"]'
     And  I click on '[data-cy="button_confirm"]'
+    And  I wait 1 second
     Then I expect 'positive' toast to appear with text 'Group is detached from group.'
 
     ####################################################
@@ -235,7 +239,7 @@ Feature: Test roundtrip of the application: Groups
     When I click on '[data-cy="page_group_roles_tab"]'
     Then I expect '[data-cy="roles_tab_panel"]' exists
 
-    When I click on '[data-cy="button_attach"]'
+    When I click on '[data-cy="button_attach_role"]'
     Then I expect '[data-cy="roles_table"]' exists
     And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'Administrator'
     And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td [role="checkbox"]' exists
@@ -273,3 +277,12 @@ Feature: Test roundtrip of the application: Groups
 
     When I click on '[data-cy="button_confirm"]'
     Then I expect 'positive' toast to appear with text 'Group is removed.'
+
+    ####################################################
+    ################## Filter group ################
+    ####################################################
+
+    ## 1201 Should change url on filter name
+    When I set on '[data-cy="group_filter_name"]' text 'test'
+    And  I wait 2 seconds
+    Then I expect current url is 'groups\?size=5&name=test'

@@ -3,11 +3,9 @@ import { shallowMount } from '@vue/test-utils';
 import RolePage from 'pages/RolePage.vue';
 import { Notify } from 'quasar';
 import { vi } from 'vitest';
-import * as GroupService from 'src/services/GroupService';
 import * as RoleService from 'src/services/RoleService';
 import * as PermissionService from 'src/services/PermissionService';
 import { useRoute, useRouter } from 'vue-router';
-import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 import ReloadPermissionsEvent from 'src/composables/events/ReloadPermissionsEvent';
 import DialogEvent from 'src/composables/events/DialogEvent';
 
@@ -15,19 +13,15 @@ installQuasarPlugin({
   plugins: [Notify],
 });
 
-vi.mock('src/services/GroupService');
 vi.mock('src/services/RoleService');
 vi.mock('src/services/PermissionService');
 vi.mock('vue-router');
-vi.mock('src/composables/events/ReloadGroupsEvent');
 vi.mock('src/composables/events/ReloadPermissionsEvent');
 vi.mock('src/composables/events/DialogEvent');
 
 describe('Test component: RolePage', () => {
   let wrapper;
   let push;
-  let reloadGroupsSubscribe;
-  let reloadGroupsUnsubscribe;
   let reloadPermissionsSubscribe;
   let reloadPermissionsUnsubscribe;
 
@@ -36,8 +30,6 @@ describe('Test component: RolePage', () => {
   };
 
   beforeEach(() => {
-    reloadGroupsSubscribe = vi.fn();
-    reloadGroupsUnsubscribe = vi.fn();
     reloadPermissionsSubscribe = vi.fn();
     reloadPermissionsUnsubscribe = vi.fn();
 
@@ -48,12 +40,6 @@ describe('Test component: RolePage', () => {
 
     RoleService.findById.mockImplementation(() => Promise.resolve(role));
     PermissionService.findByRoleId.mockImplementation(() => Promise.resolve({ content: 'permissions' }));
-    GroupService.findByRoleId.mockImplementation(() => Promise.resolve({ content: 'groups' }));
-
-    ReloadGroupsEvent.subscribe.mockImplementation(() => {
-      reloadGroupsSubscribe();
-      return { unsubscribe: reloadGroupsUnsubscribe };
-    });
 
     ReloadPermissionsEvent.subscribe.mockImplementation(() => {
       reloadPermissionsSubscribe();
@@ -83,32 +69,11 @@ describe('Test component: RolePage', () => {
     });
   });
 
-  describe('Test function: loadGroups', () => {
-    it('should set groups', async () => {
-      await wrapper.vm.loadGroups();
-
-      expect(wrapper.vm.groups).toEqual('groups');
-    });
-  });
-
   describe('Test function: loadPermissions', () => {
     it('should set permissions', async () => {
       await wrapper.vm.loadPermissions();
 
       expect(wrapper.vm.permissions).toEqual('permissions');
-    });
-  });
-
-  describe('Test function: openAttachGroupToRoleDialog', () => {
-    it('should open dialog', () => {
-      DialogEvent.next.mockImplementation();
-      wrapper.vm.openAttachGroupToRoleDialog();
-
-      expect(DialogEvent.next).toBeCalledWith({
-        key: 'attach-group-to-role',
-        type: 'open',
-        roleId: 'id1',
-      });
     });
   });
 
@@ -121,20 +86,6 @@ describe('Test component: RolePage', () => {
         key: 'attach-permission-to-role',
         type: 'open',
         roleId: 'id1',
-      });
-    });
-  });
-
-  describe('Test function: openDetachGroupFromRoleDialog', () => {
-    it('should open dialog', () => {
-      DialogEvent.next.mockImplementation();
-      wrapper.vm.openDetachGroupFromRoleDialog('group');
-
-      expect(DialogEvent.next).toBeCalledWith({
-        key: 'detach-group-from-role',
-        type: 'open',
-        group: 'group',
-        role: { id: 1 },
       });
     });
   });
@@ -154,22 +105,12 @@ describe('Test component: RolePage', () => {
   });
 
   describe('Test hook function: onMounted', () => {
-    it('should subscribe ReloadGroupsEvent', () => {
-      expect(reloadGroupsSubscribe).toHaveBeenCalledTimes(1);
-    });
-
     it('should subscribe ReloadPermissionsEvent', () => {
       expect(reloadPermissionsSubscribe).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('Test hook function: onUnmounted', () => {
-    it('should unsubscribe ReloadGroupsEvent', () => {
-      expect(reloadGroupsUnsubscribe).toHaveBeenCalledTimes(0);
-      wrapper.unmount();
-      expect(reloadGroupsUnsubscribe).toHaveBeenCalledTimes(1);
-    });
-
     it('should unsubscribe ReloadPermissionsEvent', () => {
       expect(reloadPermissionsUnsubscribe).toHaveBeenCalledTimes(0);
       wrapper.unmount();

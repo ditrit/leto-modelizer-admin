@@ -96,4 +96,34 @@ describe('Test component: GroupsTable', () => {
       ]);
     });
   });
+
+  describe('Test function: setCurrentPage', () => {
+    it('should emit valid event', () => {
+      wrapper.vm.setCurrentPage(5);
+      expect(wrapper.emitted()).toEqual({
+        onFilter: [[]],
+        'update:current-page': [[5]],
+      });
+    });
+  });
+
+  describe('Test function: setElementsPerPage', () => {
+    it('should emit valid event', () => {
+      wrapper.vm.setElementsPerPage(5);
+      expect(wrapper.emitted()).toEqual({
+        onFilter: [[]],
+        'update:elements-per-page': [[5]],
+      });
+    });
+  });
+
+  describe('Test function: setFilterName', () => {
+    it('should emit valid event', () => {
+      wrapper.vm.setFilterName(5);
+      expect(wrapper.emitted()).toEqual({
+        onFilter: [[]],
+        'update:filter-name': [[5]],
+      });
+    });
+  });
 });

@@ -14,7 +14,7 @@
       no-caps
       color="primary"
       class="bg-white q-mb-md"
-      data-cy="button_attach"
+      data-cy="button_attach_user"
       :label="$t('UsersTabPanel.text.attach')"
       :icon="$t('UsersTabPanel.icon.attach')"
       @click="openAttachDialog"

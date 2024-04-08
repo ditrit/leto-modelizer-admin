@@ -21,7 +21,7 @@ describe('Test component: DetachGroupFromGroupDialog', () => {
     wrapper.vm.group = {
       id: 'groupId',
     };
-    wrapper.vm.grouptoDetach = {
+    wrapper.vm.groupToDetach = {
       id: 'groupIdtoDetach',
     };
   });

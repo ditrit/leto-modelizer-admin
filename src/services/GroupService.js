@@ -1,4 +1,8 @@
-import { prepareQueryParameters, prepareRequest } from 'boot/axios';
+import {
+  prepareQueryParameters,
+  prepareRequest,
+  makeFilterRequest,
+} from 'boot/axios';
 
 /**
  * Get all groups.
@@ -10,7 +14,7 @@ export async function find(filters) {
   const api = await prepareRequest();
   const queryParameters = prepareQueryParameters(filters);
 
-  return api.get(`/groups${queryParameters}`).then(({ data }) => data);
+  return makeFilterRequest(api, `/groups${queryParameters}`).then(({ data }) => data);
 }
 
 /**
@@ -49,35 +53,41 @@ export async function remove(id) {
 /**
  * Get all groups of a user by its login.
  * @param {string} login - User login.
+ * @param {object} filters - API filters.
  * @returns {Promise<object[]>} Return an array of groups.
  */
-export async function findByLogin(login) {
+export async function findByLogin(login, filters) {
   const api = await prepareRequest();
+  const queryParameters = prepareQueryParameters(filters);
 
-  return api.get(`users/${login}/groups`).then(({ data }) => data);
+  return makeFilterRequest(api, `users/${login}/groups${queryParameters}`).then(({ data }) => data);
 }
 
 /**
  * Get all groups of a role.
  * @param {string} roleId - Role id.
+ * @param {object} filters - API filters.
  * @returns {Promise<object[]>} Return an array of groups.
  */
-export async function findByRoleId(roleId) {
+export async function findByRoleId(roleId, filters) {
   const api = await prepareRequest();
+  const queryParameters = prepareQueryParameters(filters);
 
-  return api.get(`roles/${roleId}/groups`)
+  return makeFilterRequest(api, `roles/${roleId}/groups${queryParameters}`)
     .then(({ data }) => data);
 }
 
 /**
  * Get all groups associated to the group.
  * @param {string} groupId - Group id.
+ * @param {object} filters - API filters.
  * @returns {Promise<object[]>} Return an array of groups.
  */
-export async function findSubGroups(groupId) {
+export async function findSubGroups(groupId, filters) {
   const api = await prepareRequest();
+  const queryParameters = prepareQueryParameters(filters);
 
-  return api.get(`groups/${groupId}/groups`).then(({ data }) => data);
+  return makeFilterRequest(api, `groups/${groupId}/groups${queryParameters}`).then(({ data }) => data);
 }
 
 /**

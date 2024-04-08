@@ -19,17 +19,26 @@
       />
     </div>
     <groups-table
+      v-model:filter-name="groupName"
+      v-model:current-page="currentPage"
+      v-model:max-page="maxPage"
+      v-model:elements-per-page="elementsPerPage"
+      v-model:total-elements="totalElements"
       :groups="groups"
       :detach-action="false"
+      :loading="loading"
+      :no-data-label="$t('GroupsTable.text.noData')"
+      :no-data-icon="$t('GroupsTable.icon.noData')"
       @show="goToGroup"
       @remove="openRemoveGroupDialog"
+      @on-filter="search"
     />
   </q-page>
 </template>
 
 <script setup>
 import GroupsTable from 'src/components/tables/GroupsTable.vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import {
   onMounted,
@@ -40,7 +49,14 @@ import * as GroupService from 'src/services/GroupService';
 import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 
 const router = useRouter();
+const route = useRoute();
 const groups = ref([]);
+const groupName = ref('');
+const currentPage = ref(0);
+const maxPage = ref(0);
+const elementsPerPage = ref(10);
+const totalElements = ref(0);
+const loading = ref(false);
 
 let reloadGroupsEventRef;
 
@@ -65,16 +81,89 @@ function openRemoveGroupDialog(group) {
 }
 
 /**
+ * Update route url with value of filters and pagination.
+ */
+function updateRoute() {
+  const queryParameters = [];
+
+  if (elementsPerPage.value !== 10) {
+    queryParameters.push(`size=${elementsPerPage.value}`);
+  }
+
+  if (currentPage.value !== 1) {
+    queryParameters.push(`page=${currentPage.value}`);
+  }
+
+  if (groupName.value?.length > 0) {
+    queryParameters.push(`name=${groupName.value}`);
+  }
+
+  router.push(queryParameters.length > 0 ? `/groups?${queryParameters.join('&')}` : '/groups');
+}
+
+/**
+ * Create API filters from component ref.
+ * @returns {object} Object that contains role filters.
+ */
+function getFilters() {
+  const filters = {};
+
+  if (groupName.value?.length > 0) {
+    filters.name = `lk_*${groupName.value}*`;
+  }
+
+  if (currentPage.value >= 1) {
+    filters.page = `${currentPage.value - 1}`;
+  }
+
+  if (elementsPerPage.value !== 10) {
+    filters.count = `${elementsPerPage.value}`;
+  }
+
+  return filters;
+}
+
+/**
  * Get groups.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function search() {
-  return GroupService.find().then((data) => {
+  loading.value = true;
+  updateRoute();
+
+  return GroupService.find(getFilters()).then((data) => {
     groups.value = data.content;
+    currentPage.value = data.pageable.pageNumber + 1;
+    maxPage.value = data.totalPages;
+    elementsPerPage.value = data.size;
+    totalElements.value = data.totalElements;
+
+    return Promise.resolve();
+  }).finally(() => {
+    loading.value = false;
   });
 }
 
+/**
+ * Init filters and pagination from query parameters in url.
+ * @param {object} query - URL query parameters.
+ */
+function init(query) {
+  if (query.size) {
+    elementsPerPage.value = parseInt(query.size, 10) || 10;
+  }
+
+  if (query.page) {
+    currentPage.value = parseInt(query.page, 10) || 0;
+  }
+
+  if (query.name) {
+    groupName.value = query.name;
+  }
+}
+
 onMounted(async () => {
+  init(route.query);
   reloadGroupsEventRef = ReloadGroupsEvent.subscribe(search);
   await search();
 });

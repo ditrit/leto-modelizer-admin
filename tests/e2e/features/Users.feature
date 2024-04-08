@@ -62,8 +62,8 @@ Feature: Test roundtrip of the application: Users
     And  I expect '[data-cy="page_user_title"]' is 'Admin'
 
     # Display related groups
-    And  I expect '[data-cy="page_user_groups_tab_panel"]' exists
-    And  I expect '[data-cy="page_user_groups_title"]' exists
+    And  I expect '[data-cy="groups_tab_panel"]' exists
+    And  I expect '[data-cy="groups_title"]' exists
     And  I expect '[data-cy="groups_table"]' exists
     And  I expect '[data-cy="groups_table"] tbody tr:nth-child(1) td.group-name' is 'Group 1'
 
@@ -101,9 +101,9 @@ Feature: Test roundtrip of the application: Users
     Then I expect current url is '/users/admin'
 
     When I click on '[data-cy="page_user_groups_tab"]'
-    Then I expect '[data-cy="page_user_groups_tab_panel"]' exists
+    Then I expect '[data-cy="groups_tab_panel"]' exists
 
-    When I click on '[data-cy="page_user_button_attach_group"]'
+    When I click on '[data-cy="button_attach_group"]'
     Then I expect '[data-cy="groups_table"]' exists
     And  I expect '[data-cy="groups_table"] tbody tr:nth-child(2) td.group-name' is 'Group 2'
     And  I expect '[data-cy="groups_table"] tbody tr:nth-child(2) td [role="checkbox"]' exists
@@ -134,7 +134,7 @@ Feature: Test roundtrip of the application: Users
     When I click on '[data-cy="page_user_roles_tab"]'
     Then I expect '[data-cy="roles_tab_panel"]' exists
 
-    When I click on '[data-cy="button_attach"]'
+    When I click on '[data-cy="button_attach_role"]'
     Then I expect '[data-cy="roles_table"]' exists
     And  I expect '[data-cy="roles_table"] tbody tr:nth-child(2) td.role-name' is 'Administrator'
     And  I expect '[data-cy="roles_table"] tbody tr:nth-child(2) td [role="checkbox"]' exists
