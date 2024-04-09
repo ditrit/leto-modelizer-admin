@@ -79,13 +79,15 @@
       transition-next="jump-down"
       class="bg-grey-1"
     >
-      <groups-tab-panel
+      <access-control-tab-panel
         name="groups"
+        access-control-type="group"
         type="USER"
         :entity="user"
       />
-      <roles-tab-panel
+      <access-control-tab-panel
         name="roles"
+        access-control-type="role"
         type="USER"
         :entity="user"
       />
@@ -119,8 +121,7 @@ import { useI18n } from 'vue-i18n';
 import * as PermissionService from 'src/services/PermissionService';
 import PermissionsTable from 'src/components/tables/PermissionsTable.vue';
 import UserAvatar from 'components/avatar/UserAvatar.vue';
-import RolesTabPanel from 'components/tab-panel/RolesTabPanel.vue';
-import GroupsTabPanel from 'components/tab-panel/GroupsTabPanel.vue';
+import AccessControlTabPanel from 'components/tab-panel/AccessControlTabPanel.vue';
 
 const loading = ref(false);
 const { t } = useI18n();

@@ -69,15 +69,17 @@
         type="ROLE"
         :entity="role"
       />
-      <groups-tab-panel
+      <access-control-tab-panel
         name="groups"
+        access-control-type="group"
         type="ROLE"
         :entity="role"
         :is-super-admin="isSuperAdmin"
         :warning-text="$t('RolePage.text.addGroupMessage')"
       />
-      <roles-tab-panel
+      <access-control-tab-panel
         name="roles"
+        access-control-type="role"
         type="ROLE"
         :entity="role"
         :is-super-admin="isSuperAdmin"
@@ -144,9 +146,8 @@ import PermissionsTable from 'src/components/tables/PermissionsTable.vue';
 import * as PermissionService from 'src/services/PermissionService';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import ReloadPermissionsEvent from 'src/composables/events/ReloadPermissionsEvent';
-import RolesTabPanel from 'components/tab-panel/RolesTabPanel.vue';
 import UsersTabPanel from 'components/tab-panel/UsersTabPanel.vue';
-import GroupsTabPanel from 'components/tab-panel/GroupsTabPanel.vue';
+import AccessControlTabPanel from 'components/tab-panel/AccessControlTabPanel.vue';
 
 const loading = ref(false);
 const { t } = useI18n();

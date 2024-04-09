@@ -18,13 +18,14 @@
         @click="$router.push('/add-group')"
       />
     </div>
-    <groups-table
+    <access-control-table
       v-model:filter-name="groupName"
       v-model:current-page="currentPage"
       v-model:max-page="maxPage"
       v-model:elements-per-page="elementsPerPage"
       v-model:total-elements="totalElements"
-      :groups="groups"
+      access-control-type="group"
+      :rows="groups"
       :detach-action="false"
       :loading="loading"
       :no-data-label="$t('GroupsTable.text.noData')"
@@ -37,7 +38,7 @@
 </template>
 
 <script setup>
-import GroupsTable from 'src/components/tables/GroupsTable.vue';
+import AccessControlTable from 'src/components/tables/AccessControlTable.vue';
 import { useRouter, useRoute } from 'vue-router';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import {

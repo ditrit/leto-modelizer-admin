@@ -6,13 +6,14 @@
     >
       {{ $t('RolesPage.text.title') }}
     </h4>
-    <roles-table
+    <access-control-table
       v-model:filter-name="roleName"
       v-model:current-page="currentPage"
       v-model:max-page="maxPage"
       v-model:elements-per-page="elementsPerPage"
       v-model:total-elements="totalElements"
-      :roles="roles"
+      access-control-type="role"
+      :rows="roles"
       :detach-action="false"
       :loading="loading"
       :no-data-label="$t('RolesTable.text.noData')"
@@ -25,7 +26,7 @@
 </template>
 
 <script setup>
-import RolesTable from 'src/components/tables/RolesTable.vue';
+import AccessControlTable from 'src/components/tables/AccessControlTable.vue';
 import * as RoleService from 'src/services/RoleService';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
