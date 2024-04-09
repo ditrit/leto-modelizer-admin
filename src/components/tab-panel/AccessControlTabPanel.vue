@@ -1,23 +1,23 @@
 <template>
   <q-tab-panel
-    name="roles"
-    data-cy="roles_tab_panel"
+    :name="`${type}s`"
+    :data-cy="`${type}s_tab_panel`"
   >
     <h6
       class="q-ma-none q-mb-sm"
-      data-cy="roles_title"
+      :data-cy="`${type}s_title`"
     >
-      {{ $t('RolesTabPanel.text.title', { name: entity.name }) }}
+      {{ $t(`${translationKey}sTabPanel.text.title`, { name: entity.name }) }}
     </h6>
     <q-banner
       v-if="isSuperAdmin"
       dense
       class="bg-warning text-white text-weight-bold q-mb-md"
-      data-cy="tab_role_warning"
+      :data-cy="`tab_${type}_warning`"
     >
       <template #avatar>
         <q-icon
-          :name="$t('RolesTabPanel.icon.warning')"
+          :name="$t(`${translationKey}sTabPanel.icon.warning`)"
         />
       </template>
       {{ warningText }}
@@ -28,22 +28,23 @@
       no-caps
       color="primary"
       class="bg-white q-mb-md"
-      data-cy="button_attach_role"
-      :label="$t('RolesTabPanel.text.attach')"
-      :icon="$t('RolesTabPanel.icon.attach')"
+      :data-cy="`button_attach_${type}`"
+      :label="$t(`${translationKey}sTabPanel.text.attach`)"
+      :icon="$t(`${translationKey}sTabPanel.icon.attach`)"
       @click="openAttachDialog"
     />
-    <roles-table
-      v-model:filter-name="roleName"
+    <access-control-table
+      v-model:filter-name="name"
       v-model:current-page="currentPage"
       v-model:max-page="maxPage"
       v-model:elements-per-page="elementsPerPage"
       v-model:total-elements="totalElements"
-      :roles="roles"
+      :access-control-type="type"
+      :rows="rows"
       :show-action="false"
       :remove-action="false"
-      :no-data-label="$t('RolesTable.text.noData')"
-      :no-data-icon="$t('RolesTable.icon.noData')"
+      :no-data-label="$t(`${translationKey}sTable.text.noData`)"
+      :no-data-icon="$t(`${translationKey}sTable.icon.noData`)"
       @detach="(event) => isSuperAdmin ? false : openDetachDialog(event)"
       @on-filter="search"
     />
@@ -51,24 +52,29 @@
 </template>
 
 <script setup>
+import * as GroupService from 'src/services/GroupService';
 import * as RoleService from 'src/services/RoleService';
-import RolesTable from 'components/tables/RolesTable.vue';
+import AccessControlTable from 'components/tables/AccessControlTable.vue';
 import {
   onMounted,
   onUnmounted,
   ref,
+  computed,
   watch,
 } from 'vue';
+import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 import ReloadRolesEvent from 'src/composables/events/ReloadRolesEvent';
 import DialogEvent from 'src/composables/events/DialogEvent';
 
-const roles = ref([]);
-const roleName = ref('');
+const rows = ref([]);
+const name = ref('');
 const currentPage = ref(0);
 const maxPage = ref(0);
 const elementsPerPage = ref(10);
 const totalElements = ref(0);
 const loading = ref(false);
+
+let reloadGroupsEventRef;
 let reloadRolesEventRef;
 
 const props = defineProps({
@@ -77,6 +83,10 @@ const props = defineProps({
     required: true,
   },
   type: {
+    type: String,
+    required: true,
+  },
+  subType: {
     type: String,
     required: true,
   },
@@ -90,64 +100,71 @@ const props = defineProps({
   },
 });
 
+const translationKey = computed(() => (props.type === 'role' ? 'Role' : 'Group'));
+
 /**
- * Open dialog to attach role to entity.
+ * Open dialog to attach a role or group to an entity depending on props sub type.
  * @returns {void} Nothing.
  */
 function openAttachDialog() {
-  if (props.type === 'ROLE') {
+  if (props.subType === 'user') {
     return DialogEvent.next({
-      key: 'attach-role-to-role',
-      type: 'open',
-      roleId: props.entity.id,
-    });
-  }
-
-  if (props.type === 'USER') {
-    return DialogEvent.next({
-      key: 'attach-role-to-user',
+      key: `attach-${props.type}-to-user`,
       type: 'open',
       userLogin: props.entity.login,
     });
   }
 
   return DialogEvent.next({
-    key: 'attach-role-to-group',
+    key: 'attach-access-control',
     type: 'open',
-    groupId: props.entity.id,
+    accessControl: props.entity,
+    accessControlType: props.type,
+    targetAccessControlType: props.subType,
   });
 }
 
 /**
- * Open dialog to remove role from entity.
- * @param {object} role - Role object to remove for the dialog.
+ * Open dialog to remove a role or group from an entity.
+ * @param {object} accessControlToDetach - The role or group object to remove for the dialog.
  * @returns {void} Nothing.
  */
-function openDetachDialog(role) {
-  if (props.type === 'ROLE') {
+function openDetachDialog(accessControlToDetach) {
+  if (props.subType === 'user') {
     return DialogEvent.next({
-      key: 'detach-role-from-role',
-      type: 'open',
-      roleToDetach: role,
-      role: props.entity,
-    });
-  }
-
-  if (props.type === 'USER') {
-    return DialogEvent.next({
-      key: 'detach-role-from-user',
+      key: `detach-${props.type}-from-user`,
       type: 'open',
       user: props.entity,
-      role,
+      role: accessControlToDetach,
+      group: accessControlToDetach,
     });
   }
 
   return DialogEvent.next({
-    key: 'detach-role-from-group',
+    key: 'detach-access-control',
     type: 'open',
-    group: props.entity,
-    role,
+    accessControl: props.entity,
+    targetAccessControl: accessControlToDetach,
+    accessControlType: props.type,
+    targetAccessControlType: props.subType,
   });
+}
+
+/**
+ * Load groups and invoke the appropriate method from GroupService based on the entity value.
+ * @param {object} filters - API filters.
+ * @returns {object} Object that contains group filters.
+ */
+async function loadGroups(filters) {
+  if (props.subType === 'role') {
+    return GroupService.findByRoleId(props.entity.id, filters);
+  }
+
+  if (props.subType === 'user') {
+    return GroupService.findByLogin(props.entity.login, filters);
+  }
+
+  return GroupService.findSubGroups(props.entity.id, filters);
 }
 
 /**
@@ -156,11 +173,11 @@ function openDetachDialog(role) {
  * @returns {object} Object that contains role filters.
  */
 async function loadRoles(filters) {
-  if (props.type === 'ROLE') {
+  if (props.subType === 'role') {
     return RoleService.findSubRoles(props.entity.id, filters);
   }
 
-  if (props.type === 'USER') {
+  if (props.subType === 'user') {
     return RoleService.findByLogin(props.entity.login, filters);
   }
 
@@ -172,7 +189,7 @@ async function loadRoles(filters) {
  * @returns {boolean} True if it is valid otherwise false.
  */
 function checkEntity() {
-  if (props.type === 'USER') {
+  if (props.subType === 'user') {
     return !!props.entity.login;
   }
   return !!props.entity.id;
@@ -180,17 +197,18 @@ function checkEntity() {
 
 /**
  * Create API filters from component ref.
- * @returns {object} Object that contains role filters.
+ * @returns {object} Object that contains group filters.
  */
 function getFilters() {
   const filters = {};
+  const types = ['group', 'role'];
 
-  if (roleName.value?.length > 0 && props.type === 'ROLE') {
-    filters.parentName = `lk_*${roleName.value}*`;
+  if (name.value?.length > 0 && types.includes(props.subType)) {
+    filters.parentName = `lk_*${name.value}*`;
   }
 
-  if (roleName.value?.length > 0 && props.type !== 'ROLE') {
-    filters.name = `lk_*${roleName.value}*`;
+  if (name.value?.length > 0 && !types.includes(props.subType)) {
+    filters.name = `lk_*${name.value}*`;
   }
 
   if (currentPage.value >= 1) {
@@ -205,7 +223,7 @@ function getFilters() {
 }
 
 /**
- * Search and display roles.
+ * Search and display access controls.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function search() {
@@ -215,8 +233,10 @@ async function search() {
 
   loading.value = true;
 
-  return loadRoles(getFilters()).then((data) => {
-    roles.value = data.content;
+  const promise = props.type === 'group' ? loadGroups : loadRoles;
+
+  return promise(getFilters()).then((data) => {
+    rows.value = data.content;
     currentPage.value = data.pageable.pageNumber + 1;
     maxPage.value = data.totalPages;
     elementsPerPage.value = data.size;
@@ -233,11 +253,13 @@ watch(() => props.entity, async () => {
 });
 
 onMounted(async () => {
+  reloadGroupsEventRef = ReloadGroupsEvent.subscribe(search);
   reloadRolesEventRef = ReloadRolesEvent.subscribe(search);
   await search();
 });
 
 onUnmounted(() => {
+  reloadGroupsEventRef.unsubscribe();
   reloadRolesEventRef.unsubscribe();
 });
 </script>
