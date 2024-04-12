@@ -66,17 +66,19 @@
     >
       <users-tab-panel
         name="users"
-        type="GROUP"
+        type="group"
         :entity="group"
       />
-      <groups-tab-panel
+      <access-control-tab-panel
         name="groups"
-        type="GROUP"
+        type="group"
+        sub-type="group"
         :entity="group"
       />
-      <roles-tab-panel
+      <access-control-tab-panel
         name="roles"
-        type="GROUP"
+        type="role"
+        sub-type="group"
         :entity="group"
       />
       <q-tab-panel
@@ -109,9 +111,8 @@ import PermissionsTable from 'src/components/tables/PermissionsTable.vue';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import ReloadPermissionsEvent from 'src/composables/events/ReloadPermissionsEvent';
-import RolesTabPanel from 'components/tab-panel/RolesTabPanel.vue';
 import UsersTabPanel from 'components/tab-panel/UsersTabPanel.vue';
-import GroupsTabPanel from 'components/tab-panel/GroupsTabPanel.vue';
+import AccessControlTabPanel from 'components/tab-panel/AccessControlTabPanel.vue';
 
 const loading = ref(false);
 const { t } = useI18n();

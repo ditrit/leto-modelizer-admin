@@ -18,9 +18,10 @@
           </span>
         </q-card-section>
         <q-card-section>
-          <groups-table
+          <access-control-table
             v-model:selected="selected"
-            :groups="groups"
+            access-control-type="group"
+            :rows="groups"
             :show-action="false"
             :detach-action="false"
             :remove-action="false"
@@ -55,7 +56,7 @@
 <script setup>
 import { useDialog } from 'src/composables/Dialog';
 import { ref, computed } from 'vue';
-import GroupsTable from 'src/components/tables/GroupsTable.vue';
+import AccessControlTable from 'src/components/tables/AccessControlTable.vue';
 import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 import * as GroupService from 'src/services/GroupService';
 import * as UserService from 'src/services/UserService';

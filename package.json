@@ -24,7 +24,7 @@
     "v-viewer": "=3.0.13",
     "vue": "=3.4.21",
     "vue-3-sanitize": "=0.1.4",
-    "vue-i18n": "=9.11.0",
+    "vue-i18n": "=9.12.0",
     "vue-router": "=4.3.0"
   },
   "devDependencies": {
@@ -34,21 +34,21 @@
     "@intlify/vite-plugin-vue-i18n": "=6.0.3",
     "@quasar/app-vite": "=1.8.0",
     "@quasar/quasar-app-extension-testing-unit-vitest": "=1.0.0",
-    "@vitest/coverage-v8": "=1.4.0",
+    "@vitest/coverage-v8": "=1.5.0",
     "@vue/test-utils": "=2.4.5",
     "autoprefixer": "=10.4.19",
-    "cypress": "=13.7.2",
+    "cypress": "=13.7.3",
     "cypress-real-events": "=1.12.0",
     "eslint": "=8.57.0",
     "eslint-config-airbnb-base": "=15.0.0",
     "eslint-plugin-cypress": "=2.15.1",
     "eslint-plugin-import": "=2.29.1",
     "eslint-plugin-jsdoc": "=48.2.3",
-    "eslint-plugin-vue": "=9.24.0",
+    "eslint-plugin-vue": "=9.24.1",
     "gherkin-lint": "=4.2.4",
     "jsdoc": "=4.0.2",
     "nunjucks": "=3.2.4",
-    "vitest": "=1.4.0"
+    "vitest": "=1.5.0"
   },
   "engines": {
     "node": "^18 || ^16 || ^14.19",

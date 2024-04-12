@@ -3,14 +3,13 @@
     <div
       class="row justify-between items-center"
     >
-      <role-filters-card
-        v-if="!hideFilters"
+      <access-control-filters-card
+        :access-control-type="accessControlType"
         :name="filterName"
         class="q-mb-md"
         @update:name="setFilterName"
       />
       <table-pagination-card
-        v-if="!hidePagination"
         :current="currentPage"
         :max="maxPage"
         :total="totalElements"
@@ -26,10 +25,10 @@
       table-header-class="bg-grey-3"
       hide-pagination
       :columns="columns"
-      :rows="roles"
-      :loading="loading"
+      :rows="rows"
       row-key="id"
-      data-cy="roles_table"
+      :loading="loading"
+      :data-cy="`${accessControlType}s_table`"
     >
       <template #body-cell-actions="cell">
         <q-td
@@ -42,9 +41,9 @@
             flat
             rounded
             color="primary"
-            :icon="t('RolesTable.icon.showAction')"
-            :title="t('RolesTable.text.showAction')"
-            :data-cy="`role_${cell.row.id}_button_show`"
+            :icon="t(`${translationKey}sTable.icon.showAction`)"
+            :title="t(`${translationKey}sTable.text.showAction`)"
+            :data-cy="`${accessControlType}_${cell.row.id}_button_show`"
             @click="$emit('show', cell.row.id)"
           />
           <q-btn
@@ -53,9 +52,9 @@
             flat
             rounded
             color="negative"
-            :icon="t('RolesTable.icon.detachAction')"
-            :title="t('RolesTable.text.detachAction')"
-            :data-cy="`role_${cell.row.id}_button_detach`"
+            :icon="t(`${translationKey}sTable.icon.detachAction`)"
+            :title="t(`${translationKey}sTable.text.detachAction`)"
+            :data-cy="`${accessControlType}_${cell.row.id}_button_detach`"
             @click="$emit('detach', cell.row)"
           />
           <q-btn
@@ -64,9 +63,9 @@
             flat
             rounded
             color="negative"
-            :icon="t('RolesTable.icon.removeAction')"
-            :title="t('RolesTable.text.removeAction')"
-            :data-cy="`role_${cell.row.id}_button_remove`"
+            :icon="t(`${translationKey}sTable.icon.removeAction`)"
+            :title="t(`${translationKey}sTable.text.removeAction`)"
+            :data-cy="`${accessControlType}_${cell.row.id}_button_remove`"
             @click="$emit('remove', cell.row)"
           />
         </q-td>
@@ -74,7 +73,7 @@
       <template #no-data>
         <div
           class="full-width row flex-center q-gutter-sm"
-          data-cy="roles_table_no_data"
+          :data-cy="`${accessControlType}s_table_no_data`"
         >
           <q-icon
             size="2em"
@@ -93,7 +92,7 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import TablePaginationCard from 'components/card/TablePaginationCard.vue';
-import RoleFiltersCard from 'components/card/RoleFiltersCard.vue';
+import AccessControlFiltersCard from 'components/card/AccessControlFiltersCard.vue';
 
 const emits = defineEmits([
   'remove',
@@ -105,7 +104,11 @@ const emits = defineEmits([
   'update:elements-per-page',
 ]);
 const props = defineProps({
-  roles: {
+  accessControlType: {
+    type: String,
+    required: true,
+  },
+  rows: {
     type: Array,
     required: true,
   },
@@ -124,14 +127,6 @@ const props = defineProps({
   detachAction: {
     type: Boolean,
     default: true,
-  },
-  hideFilters: {
-    type: Boolean,
-    default: false,
-  },
-  hidePagination: {
-    type: Boolean,
-    default: false,
   },
   noDataLabel: {
     type: String,
@@ -167,27 +162,27 @@ const { t } = useI18n();
 const displayActionsColumn = computed(
   () => props.showAction || props.removeAction || props.detachAction,
 );
+const translationKey = computed(() => (props.accessControlType === 'role' ? 'Role' : 'Group'));
 const columns = computed(() => {
   const arrayOfColumns = [{
     name: 'name',
     required: true,
-    label: t('RolesTable.text.nameColumn'),
+    label: t(`${translationKey.value}sTable.text.nameColumn`),
     align: 'left',
     field: 'name',
-    classes: 'role-name',
+    classes: `${props.accessControlType}-name`,
   }];
 
   if (displayActionsColumn.value) {
     arrayOfColumns.push({
       name: 'actions',
       required: true,
-      label: t('RolesTable.text.actionsColumn'),
+      label: t(`${translationKey.value}sTable.text.actionsColumn`),
       align: 'left',
       field: 'id',
-      classes: 'role-actions',
+      classes: `${props.accessControlType}-actions`,
     });
   }
-
   return arrayOfColumns;
 });
 
@@ -210,12 +205,11 @@ function setElementsPerPage(value) {
 }
 
 /**
- * Emit events to update role filterName props.
- * @param {string} value - Role nameFilter value;
+ * Emit events to update filterName props.
+ * @param {string} value - NameFilter value;
  */
 function setFilterName(value) {
   emits('update:filter-name', value);
   emits('onFilter');
 }
-
 </script>

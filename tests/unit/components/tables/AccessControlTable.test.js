@@ -1,16 +1,17 @@
 import { installQuasarPlugin } from '@quasar/quasar-app-extension-testing-unit-vitest';
 import { shallowMount } from '@vue/test-utils';
-import GroupsTable from 'src/components/tables/GroupsTable.vue';
+import AccessControlTable from 'src/components/tables/AccessControlTable.vue';
 
 installQuasarPlugin();
 
-describe('Test component: GroupsTable', () => {
+describe('Test component: AccessControlTable', () => {
   let wrapper;
 
   beforeEach(async () => {
-    wrapper = shallowMount(GroupsTable, {
+    wrapper = shallowMount(AccessControlTable, {
       props: {
-        groups: [],
+        accessControlType: 'role',
+        rows: [],
         showAction: true,
         removeAction: false,
         detachAction: false,
@@ -55,6 +56,20 @@ describe('Test component: GroupsTable', () => {
     });
   });
 
+  describe('Test computed: translationKey', () => {
+    it('should be "Role"', () => {
+      expect(wrapper.vm.translationKey).toBe('Role');
+    });
+
+    it('should be "Group" when accessControlType is not "role"', async () => {
+      await wrapper.setProps({
+        accessControlType: 'group',
+      });
+
+      expect(wrapper.vm.translationKey).toBe('Group');
+    });
+  });
+
   describe('Test computed: columns', () => {
     it('should return array with two elements when displayColumns is truthy', () => {
       expect(wrapper.vm.columns).toStrictEqual([
@@ -64,7 +79,7 @@ describe('Test component: GroupsTable', () => {
           label: 'Name',
           align: 'left',
           field: 'name',
-          classes: 'group-name',
+          classes: 'role-name',
         },
         {
           name: 'actions',
@@ -72,13 +87,14 @@ describe('Test component: GroupsTable', () => {
           label: 'Actions',
           align: 'left',
           field: 'id',
-          classes: 'group-actions',
+          classes: 'role-actions',
         },
       ]);
     });
 
     it('should return array with one element when displayColumns is falsy', async () => {
       await wrapper.setProps({
+        accessControlType: 'group',
         showAction: false,
         removeAction: false,
         detachAction: false,
