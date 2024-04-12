@@ -143,7 +143,7 @@ async function onSubmit() {
 </script>
 
 <style scoped>
-.attach-role-to-user-form {
+.attach-user-to-role-form {
   min-width: 50vw;
 }
 </style>
