@@ -66,21 +66,21 @@
     >
       <users-tab-panel
         name="users"
-        type="ROLE"
+        type="role"
         :entity="role"
       />
       <access-control-tab-panel
         name="groups"
-        access-control-type="group"
-        type="ROLE"
+        type="group"
+        sub-type="role"
         :entity="role"
         :is-super-admin="isSuperAdmin"
         :warning-text="$t('RolePage.text.addGroupMessage')"
       />
       <access-control-tab-panel
         name="roles"
-        access-control-type="role"
-        type="ROLE"
+        type="role"
+        sub-type="role"
         :entity="role"
         :is-super-admin="isSuperAdmin"
         :warning-text="$t('RolePage.text.addRoleMessage')"

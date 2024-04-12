@@ -66,19 +66,19 @@
     >
       <users-tab-panel
         name="users"
-        type="GROUP"
+        type="group"
         :entity="group"
       />
       <access-control-tab-panel
         name="groups"
-        access-control-type="group"
-        type="GROUP"
+        type="group"
+        sub-type="group"
         :entity="group"
       />
       <access-control-tab-panel
         name="roles"
-        access-control-type="role"
-        type="GROUP"
+        type="role"
+        sub-type="group"
         :entity="group"
       />
       <q-tab-panel

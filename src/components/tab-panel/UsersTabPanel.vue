@@ -77,7 +77,7 @@ let reloadUsersEventRef;
  * @returns {void} Nothing.
  */
 function openAttachDialog() {
-  if (props.type === 'ROLE') {
+  if (props.type === 'role') {
     return DialogEvent.next({
       key: 'attach-user-to-role',
       type: 'open',
@@ -98,7 +98,7 @@ function openAttachDialog() {
  * @returns {void} Nothing.
  */
 function openDetachDialog(user) {
-  if (props.type === 'ROLE') {
+  if (props.type === 'role') {
     return DialogEvent.next({
       key: 'detach-user-from-role',
       type: 'open',
@@ -121,7 +121,7 @@ function openDetachDialog(user) {
  * @returns {object} Object that contains role filters.
  */
 async function loadUsers(filters) {
-  if (props.type === 'ROLE') {
+  if (props.type === 'role') {
     return UserService.findByRoleId(props.entity.id, filters);
   }
 

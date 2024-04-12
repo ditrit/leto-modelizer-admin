@@ -81,14 +81,14 @@
     >
       <access-control-tab-panel
         name="groups"
-        access-control-type="group"
-        type="USER"
+        type="group"
+        sub-type="user"
         :entity="user"
       />
       <access-control-tab-panel
         name="roles"
-        access-control-type="role"
-        type="USER"
+        type="role"
+        sub-type="user"
         :entity="user"
       />
       <q-tab-panel

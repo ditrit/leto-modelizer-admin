@@ -37,14 +37,14 @@ describe('Test component: UsersTabPanel', async () => {
           id: 'id',
           name: 'test',
         },
-        type: 'ROLE',
+        type: 'role',
       },
     });
   });
 
   describe('Test function: openAttachDialog', () => {
     it('should call attach user to role', async () => {
-      await wrapper.setProps({ type: 'ROLE' });
+      await wrapper.setProps({ type: 'role' });
       DialogEvent.next.mockImplementation();
 
       wrapper.vm.openAttachDialog();
@@ -57,7 +57,7 @@ describe('Test component: UsersTabPanel', async () => {
     });
 
     it('should call attach user to group', async () => {
-      await wrapper.setProps({ type: 'GROUP' });
+      await wrapper.setProps({ type: 'group' });
       DialogEvent.next.mockImplementation();
 
       wrapper.vm.openAttachDialog();
@@ -72,7 +72,7 @@ describe('Test component: UsersTabPanel', async () => {
 
   describe('Test function: openDetachDialog', () => {
     it('should call detach user from role', async () => {
-      await wrapper.setProps({ type: 'ROLE' });
+      await wrapper.setProps({ type: 'role' });
       DialogEvent.next.mockImplementation();
 
       wrapper.vm.openDetachDialog('test');
@@ -89,7 +89,7 @@ describe('Test component: UsersTabPanel', async () => {
     });
 
     it('should call detach user from group', async () => {
-      await wrapper.setProps({ type: 'GROUP' });
+      await wrapper.setProps({ type: 'group' });
       DialogEvent.next.mockImplementation();
 
       wrapper.vm.openDetachDialog('test');
@@ -108,7 +108,7 @@ describe('Test component: UsersTabPanel', async () => {
 
   describe('Test function: loadUsers', () => {
     it('should load subRoles', async () => {
-      await wrapper.setProps({ type: 'ROLE' });
+      await wrapper.setProps({ type: 'role' });
 
       const result = await wrapper.vm.loadUsers({});
 
@@ -117,7 +117,7 @@ describe('Test component: UsersTabPanel', async () => {
     });
 
     it('should load group roles', async () => {
-      await wrapper.setProps({ type: 'GROUP' });
+      await wrapper.setProps({ type: 'group' });
 
       const result = await wrapper.vm.loadUsers({});
 
@@ -166,7 +166,7 @@ describe('Test component: UsersTabPanel', async () => {
     });
 
     it('should do nothing without valid entity', async () => {
-      await wrapper.setProps({ type: 'ROLE', entity: {} });
+      await wrapper.setProps({ type: 'role', entity: {} });
       UserService.findByRoleId.mockReset();
       await wrapper.vm.search();
 
