@@ -234,9 +234,11 @@ function openAttachUserToGroupDialog() {
  */
 function openAttachRoleToGroupDialog() {
   DialogEvent.next({
-    key: 'attach-role-to-group',
+    key: 'attach-access-control',
     type: 'open',
     selectOnly: true,
+    accessControlType: 'role',
+    targetAccessControlType: 'group',
   });
 }
 
