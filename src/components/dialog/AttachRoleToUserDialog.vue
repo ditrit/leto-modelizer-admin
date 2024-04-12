@@ -18,9 +18,10 @@
           </span>
         </q-card-section>
         <q-card-section>
-          <roles-table
+          <access-control-table
             v-model:selected="selected"
-            :roles="roles"
+            access-control-type="role"
+            :rows="roles"
             :show-action="false"
             :remove-action="false"
             :detach-action="false"
@@ -57,7 +58,7 @@
 <script setup>
 import { useDialog } from 'src/composables/Dialog';
 import { ref, computed } from 'vue';
-import RolesTable from 'src/components/tables/RolesTable.vue';
+import AccessControlTable from 'src/components/tables/AccessControlTable.vue';
 import ReloadRolesEvent from 'src/composables/events/ReloadRolesEvent';
 import * as RoleService from 'src/services/RoleService';
 import * as UserService from 'src/services/UserService';

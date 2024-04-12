@@ -77,8 +77,9 @@
           :icon="$t('AddGroupPage.icon.attach')"
           @click="openAttachRoleToGroupDialog"
         />
-        <roles-table
-          :roles="selectedRoles"
+        <access-control-table
+          :rows="selectedRoles"
+          access-control-type="role"
           :show-action="false"
           :detach-action="false"
           hide-filters
@@ -121,7 +122,7 @@ import { useFieldRules } from 'src/composables/FieldRules';
 import * as GroupService from 'src/services/GroupService';
 import * as RoleService from 'src/services/RoleService';
 import UsersTable from 'src/components/tables/UsersTable.vue';
-import RolesTable from 'src/components/tables/RolesTable.vue';
+import AccessControlTable from 'src/components/tables/AccessControlTable.vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import SelectEvent from 'src/composables/events/SelectEvent';
 import { useI18n } from 'vue-i18n';
