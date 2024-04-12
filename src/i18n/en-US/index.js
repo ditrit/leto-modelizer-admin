@@ -286,7 +286,7 @@ export default {
   },
   DetachRoleFromGroupDialog: {
     text: {
-      title: 'Do you want to detach the role "{role}" from the group "{group}" ?',
+      title: 'Do you want to detach the role "{accessControlToDetach}" from the group "{accessControl}" ?',
       content: 'You can always reassign the role to the group.',
       cancel: 'Cancel',
       confirm: 'Confirm',
@@ -295,7 +295,7 @@ export default {
   },
   DetachRoleFromRoleDialog: {
     text: {
-      title: 'Do you want to detach the role "{roleToDetach}" from the role "{role}" ?',
+      title: 'Do you want to detach the role "{accessControlToDetach}" from the role "{accessControl}" ?',
       content: 'You can always reassign the role to the role.',
       cancel: 'Cancel',
       confirm: 'Confirm',
@@ -304,7 +304,7 @@ export default {
   },
   DetachGroupFromRoleDialog: {
     text: {
-      title: 'Do you want to detach the group "{group}" from the role "{role}" ?',
+      title: 'Do you want to detach the group "{accessControlToDetach}" from the role "{accessControl}" ?',
       content: 'You can always reassign the group to the role.',
       cancel: 'Cancel',
       confirm: 'Confirm',
@@ -313,7 +313,7 @@ export default {
   },
   DetachGroupFromGroupDialog: {
     text: {
-      title: 'Do you want to detach the group "{groupToDetach}" from the group "{group}" ?',
+      title: 'Do you want to detach the group "{accessControlToDetach}" from the group "{accessControl}" ?',
       content: 'You can always reassign the group to the group.',
       cancel: 'Cancel',
       confirm: 'Confirm',
