@@ -202,6 +202,7 @@ function setUserIntercepts() {
   cy.intercept('GET', '/api/users/login/groups', {
     statusCode: 200,
     body: {
+      ...defaultResponse,
       content: [group2],
     },
   });
@@ -232,6 +233,7 @@ function setUserIntercepts() {
   cy.intercept('GET', '/api/users/login/permissions', {
     statusCode: 200,
     body: {
+      ...defaultResponse,
       content: [permission1],
     },
   });
