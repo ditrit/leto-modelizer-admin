@@ -12,7 +12,7 @@
       :alt="login"
     />
     <template v-else>
-      {{ login.at(0) }}
+      {{ login.at(0).toUpperCase() }}
     </template>
   </q-avatar>
 </template>

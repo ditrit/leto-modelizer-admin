@@ -20,7 +20,6 @@
         >
           <user-avatar
             :login="user.login"
-            color="white"
             size="100px"
             square
           />
