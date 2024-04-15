@@ -10,6 +10,8 @@
       v-if="templateIcon"
       :src="templateIcon"
       :alt="id"
+      fit="contain"
+      class="template-avatar"
       width="85%"
     />
   </q-avatar>
@@ -49,3 +51,9 @@ onMounted(async () => {
   await loadTemplateIcon();
 });
 </script>
+
+<style lang="scss" scoped>
+.q-img.template-avatar {
+  position: initial;
+}
+</style>

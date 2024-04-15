@@ -10,6 +10,8 @@
       v-if="libraryIcon"
       :src="libraryIcon"
       :alt="id"
+      fit="contain"
+      class="library-avatar"
       width="85%"
     />
   </q-avatar>
@@ -49,3 +51,9 @@ onMounted(async () => {
   await loadLibraryIcon();
 });
 </script>
+
+<style lang="scss" scoped>
+.q-img.library-avatar {
+  position: initial;
+}
+</style>

@@ -2,6 +2,7 @@
   <q-img
     v-if="templateSchema"
     :src="templateSchema"
+    fit="contain"
     :alt="id"
   />
 </template>
