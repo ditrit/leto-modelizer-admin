@@ -592,6 +592,20 @@ export default {
       email: 'fa-solid fa-magnifying-glass',
     },
   },
+  PermissionFiltersCard: {
+    text: {
+      filters: 'Filters',
+      entity: 'by entity',
+      action: 'by operation',
+      libraryId: 'by library',
+      noResults: 'No results',
+    },
+    icon: {
+      entity: 'fa-solid fa-magnifying-glass',
+      action: 'fa-solid fa-magnifying-glass',
+      libraryId: 'fa-solid fa-magnifying-glass',
+    },
+  },
   GroupFiltersCard: {
     text: {
       title: 'Filters',

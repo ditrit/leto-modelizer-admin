@@ -1,6 +1,6 @@
 import * as LibraryService from 'src/services/LibraryService';
 import { vi } from 'vitest';
-import { prepareRequest as api } from 'boot/axios';
+import { prepareRequest as api, makeFilterRequest } from 'boot/axios';
 
 vi.mock('boot/axios');
 
@@ -42,11 +42,9 @@ describe('Test: LibraryService', () => {
         description: 'Library with all templates types.',
       }];
 
-      api.mockImplementation(() => ({
-        get: () => Promise.resolve({ data: libraries }),
-      }));
+      makeFilterRequest.mockImplementation(vi.fn(() => Promise.resolve({ data: libraries })));
 
-      const data = await LibraryService.find();
+      const data = await LibraryService.find({});
       expect(data).toEqual(libraries);
     });
   });
