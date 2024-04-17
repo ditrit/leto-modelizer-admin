@@ -4,7 +4,6 @@ import UserPage from 'pages/UserPage.vue';
 import { Notify } from 'quasar';
 import { vi } from 'vitest';
 import * as UserService from 'src/services/UserService';
-import * as PermissionService from 'src/services/PermissionService';
 import { useRoute, useRouter } from 'vue-router';
 
 installQuasarPlugin({
@@ -13,7 +12,6 @@ installQuasarPlugin({
 
 vi.mock('vue-router');
 vi.mock('src/services/UserService');
-vi.mock('src/services/PermissionService');
 vi.mock('src/composables/events/DialogEvent');
 
 describe('Test component: UserPage', () => {
@@ -30,7 +28,6 @@ describe('Test component: UserPage', () => {
     useRouter.mockImplementation(() => ({ push }));
 
     UserService.findByLogin.mockImplementation(() => Promise.resolve(user));
-    PermissionService.findByLogin.mockImplementation(() => Promise.resolve({ content: ['permission'] }));
 
     wrapper = shallowMount(UserPage);
   });
@@ -56,16 +53,6 @@ describe('Test component: UserPage', () => {
       await wrapper.vm.loadUser();
 
       expect(push).toBeCalledWith('/users');
-    });
-  });
-
-  describe('Test function: loadPermissions', () => {
-    it('should set permissions', async () => {
-      wrapper.vm.permissions = [];
-
-      await wrapper.vm.loadPermissions();
-
-      expect(wrapper.vm.permissions).toEqual(['permission']);
     });
   });
 });

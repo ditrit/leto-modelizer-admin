@@ -90,23 +90,11 @@
         sub-type="user"
         :entity="user"
       />
-      <q-tab-panel
+      <permissions-tab-panel
         name="permissions"
-        data-cy="page_user_permissions_tab_panel"
-      >
-        <h6
-          class="q-ma-none q-mb-sm"
-          data-cy="page_user_permissions_title"
-        >
-          {{ $t('UserPage.text.permissionList', { user: user.name }) }}
-        </h6>
-        <permissions-table
-          :permissions="permissions"
-          :show-action="false"
-          :remove-action="false"
-          :detach-action="false"
-        />
-      </q-tab-panel>
+        type="user"
+        :entity="user"
+      />
     </q-tab-panels>
   </q-page>
 </template>
@@ -117,17 +105,15 @@ import { useRoute, useRouter } from 'vue-router';
 import * as UserService from 'src/services/UserService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
-import * as PermissionService from 'src/services/PermissionService';
-import PermissionsTable from 'src/components/tables/PermissionsTable.vue';
 import UserAvatar from 'components/avatar/UserAvatar.vue';
 import AccessControlTabPanel from 'components/tab-panel/AccessControlTabPanel.vue';
+import PermissionsTabPanel from 'components/tab-panel/PermissionsTabPanel.vue';
 
 const loading = ref(false);
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const user = ref({});
-const permissions = ref([]);
 const currentTab = ref('groups');
 
 /**
@@ -135,6 +121,8 @@ const currentTab = ref('groups');
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function loadUser() {
+  loading.value = true;
+
   return UserService.findByLogin(route.params.login)
     .then((data) => {
       user.value = data;
@@ -146,35 +134,13 @@ async function loadUser() {
         html: true,
       });
       router.push('/users');
-    });
-}
-
-/**
- * Get roles using user login.
- * @returns {Promise<void>} Promise with nothing on success.
- */
-async function loadPermissions() {
-  return PermissionService.findByLogin(route.params.login).then((data) => {
-    permissions.value = data.content;
-  });
-}
-
-/**
- * Search user and associated groups.
- */
-async function search() {
-  loading.value = true;
-
-  Promise.allSettled([
-    loadUser(),
-    loadPermissions(),
-  ])
+    })
     .finally(() => {
       loading.value = false;
     });
 }
 
 onMounted(async () => {
-  await search();
+  await loadUser();
 });
 </script>
