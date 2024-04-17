@@ -557,6 +557,16 @@ export default {
       warning: 'fa-solid fa-triangle-exclamation',
     },
   },
+  PermissionsTabPanel: {
+    text: {
+      title: 'List of permissions attributed to {name}',
+      attach: 'Attach permission',
+    },
+    icon: {
+      attach: 'fa-solid fa-link',
+      warning: 'fa-solid fa-triangle-exclamation',
+    },
+  },
   TablePaginationCard: {
     text: {
       content: '{current}/{max} of {total}',
