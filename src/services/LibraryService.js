@@ -1,14 +1,20 @@
-import { prepareRequest } from 'boot/axios';
+import {
+  prepareQueryParameters,
+  prepareRequest,
+  makeFilterRequest,
+} from 'boot/axios';
 
 /**
  * Get all libraries.
+ * @param {object} filters - API filters.
  * @returns {Promise<object[]>} Promise with an array of libraries on success
  * otherwise an error.
  */
-export async function find() {
+export async function find(filters) {
   const api = await prepareRequest();
+  const queryParameters = prepareQueryParameters(filters);
 
-  return api.get('/libraries').then(({ data }) => data);
+  return makeFilterRequest(api, `/libraries${queryParameters}`).then(({ data }) => data);
 }
 
 /**

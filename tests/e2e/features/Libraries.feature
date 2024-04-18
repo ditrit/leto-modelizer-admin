@@ -33,6 +33,7 @@ Feature: Test roundtrip of the application: Libraries
     Given I visit the '/'
     When  I click on '[data-cy="drawer_item_libraries"]'
     Then  I expect current url is '/libraries'
+    And   I set viewport size to '1536' px for width and '960' px for height
 
     ####################################################
     ################## List libraries ##################

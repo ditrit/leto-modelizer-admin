@@ -1,4 +1,8 @@
-import { prepareRequest } from 'boot/axios';
+import {
+  prepareQueryParameters,
+  prepareRequest,
+  makeFilterRequest,
+} from 'boot/axios';
 
 /**
  * Generates permission key based on the provided permission object.
@@ -32,13 +36,15 @@ export async function find() {
 /**
  * Get permissions of a user by its login.
  * @param {string} login - User login.
+ * @param {object} filters - API filters.
  * @returns {Promise<object>} Promise with the permissions of a user on success
  * otherwise an error.
  */
-export async function findByLogin(login) {
+export async function findByLogin(login, filters) {
   const api = await prepareRequest();
+  const queryParameters = prepareQueryParameters(filters);
 
-  return api.get(`/users/${login}/permissions`).then(({ data }) => ({
+  return makeFilterRequest(api, `/users/${login}/permissions${queryParameters}`).then(({ data }) => ({
     ...data,
     content: data.content.map((permission) => ({
       ...permission,
@@ -50,12 +56,14 @@ export async function findByLogin(login) {
 /**
  * Get all permissions of a role.
  * @param {string} roleId - Role id.
+ * @param {object} filters - API filters.
  * @returns {Promise<object[]>} Return an array of permissions.
  */
-export async function findByRoleId(roleId) {
+export async function findByRoleId(roleId, filters) {
   const api = await prepareRequest();
+  const queryParameters = prepareQueryParameters(filters);
 
-  return api.get(`roles/${roleId}/permissions`).then(({ data }) => ({
+  return makeFilterRequest(api, `roles/${roleId}/permissions${queryParameters}`).then(({ data }) => ({
     ...data,
     content: data.content.map((permission) => ({
       ...permission,
@@ -67,12 +75,14 @@ export async function findByRoleId(roleId) {
 /**
  * Get all permissions associated to the group.
  * @param {string} groupId - Group id.
+ * @param {object} filters - API filters.
  * @returns {Promise<object[]>} Return an array of groups.
  */
-export async function findByGroupId(groupId) {
+export async function findByGroupId(groupId, filters) {
   const api = await prepareRequest();
+  const queryParameters = prepareQueryParameters(filters);
 
-  return api.get(`groups/${groupId}/permissions`).then(({ data }) => ({
+  return makeFilterRequest(api, `groups/${groupId}/permissions${queryParameters}`).then(({ data }) => ({
     ...data,
     content: data.content.map((permission) => ({
       ...permission,

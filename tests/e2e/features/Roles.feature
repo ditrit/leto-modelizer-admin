@@ -46,6 +46,7 @@ Feature: Test roundtrip of the application: Roles
     Given I visit the '/'
     When  I click on '[data-cy="drawer_item_roles"]'
     Then  I expect current url is '/roles'
+    And   I set viewport size to '1536' px for width and '960' px for height
 
     ####################################################
     ################## List roles #################
@@ -92,8 +93,8 @@ Feature: Test roundtrip of the application: Roles
     # Display related permissions
     When I click on '[data-cy="page_role_permissions_tab"]'
     Then I expect '[data-cy="page_role_permissions_tab"]' exists
-    And  I expect '[data-cy="page_role_permissions_tab_panel"]' exists
-    And  I expect '[data-cy="page_role_permissions_title"]' exists
+    And  I expect '[data-cy="permissions_tab_panel"]' exists
+    And  I expect '[data-cy="permissions_title"]' exists
     And  I expect '[data-cy="permissions_table"]' exists
     And  I expect '[data-cy="permissions_table"] tbody tr:nth-child(1) td.permission-entity' is 'Project'
 
@@ -207,9 +208,9 @@ Feature: Test roundtrip of the application: Roles
 
     ## 901 Should disabled confirm button if no permission is selected
     When I click on '[data-cy="page_role_permissions_tab"]'
-    Then I expect '[data-cy="page_role_permissions_tab_panel"]' exists
+    Then I expect '[data-cy="permissions_tab_panel"]' exists
 
-    When I click on '[data-cy="page_role_button_attach_permission"]'
+    When I click on '[data-cy="button_attach_permission"]'
     Then I expect '[data-cy="permissions_table"]' exists
     And  I expect '[data-cy="permissions_table"] tbody tr:nth-child(1) td.permission-entity' is 'Project'
     And  I expect '[data-cy="permissions_table"] tbody tr:nth-child(1) td [role="checkbox"]' exists

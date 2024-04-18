@@ -1,6 +1,10 @@
 import * as PermissionService from 'src/services/PermissionService';
 import { vi } from 'vitest';
-import { prepareRequest as api } from 'boot/axios';
+import {
+  prepareRequest as api,
+  makeFilterRequest,
+  prepareQueryParameters,
+} from 'boot/axios';
 
 vi.mock('boot/axios');
 
@@ -26,6 +30,9 @@ describe('Test: PermissionService', () => {
         entity: 'admin', action: 'delete', libraryId: 456, key: 'admin_delete_ID',
       },
     ];
+
+    api.mockImplementation(vi.fn(() => 'api'));
+    prepareQueryParameters.mockImplementation(vi.fn(() => ''));
   });
 
   describe('Test function: generatePermissionKey', () => {
@@ -55,45 +62,39 @@ describe('Test: PermissionService', () => {
 
   describe('Test function: findByLogin', () => {
     it('should call api.get', async () => {
-      const mockGetRequest = vi.fn(() => Promise.resolve({ data: { content: expectedKeys } }));
+      makeFilterRequest.mockImplementation(vi.fn(() => Promise.resolve(
+        { data: { content: expectedKeys } },
+      )));
 
-      api.mockImplementation(() => ({
-        get: mockGetRequest,
-      }));
+      const result = await PermissionService.findByLogin('userLogin', {});
 
-      const result = await PermissionService.findByLogin('userLogin');
-
-      expect(mockGetRequest).toBeCalledWith('/users/userLogin/permissions');
+      expect(makeFilterRequest).toBeCalledWith('api', '/users/userLogin/permissions');
       expect(result.content).toEqual(expectedKeys);
     });
   });
 
   describe('Test function: findByRoleId', () => {
     it('should call api.get with endpoint using "roleId" and return permissions with generated key', async () => {
-      const mockGetRequest = vi.fn(() => Promise.resolve({ data: { content: expectedKeys } }));
+      makeFilterRequest.mockImplementation(vi.fn(() => Promise.resolve(
+        { data: { content: expectedKeys } },
+      )));
 
-      api.mockImplementation(() => ({
-        get: mockGetRequest,
-      }));
+      const result = await PermissionService.findByRoleId('roleId', {});
 
-      const result = await PermissionService.findByRoleId('roleId');
-
-      expect(mockGetRequest).toBeCalledWith('roles/roleId/permissions');
+      expect(makeFilterRequest).toBeCalledWith('api', 'roles/roleId/permissions');
       expect(result.content).toEqual(expectedKeys);
     });
   });
 
   describe('Test function: findByGroupId', () => {
     it('should return the group permissions', async () => {
-      const mockGetRequest = vi.fn(() => Promise.resolve({ data: { content: expectedKeys } }));
+      makeFilterRequest.mockImplementation(vi.fn(() => Promise.resolve(
+        { data: { content: expectedKeys } },
+      )));
 
-      api.mockImplementation(() => ({
-        get: mockGetRequest,
-      }));
+      const result = await PermissionService.findByGroupId('groupId', {});
 
-      const result = await PermissionService.findByGroupId('groupId');
-
-      expect(mockGetRequest).toBeCalledWith('groups/groupId/permissions');
+      expect(makeFilterRequest).toBeCalledWith('api', 'groups/groupId/permissions');
       expect(result.content).toEqual(expectedKeys);
     });
   });

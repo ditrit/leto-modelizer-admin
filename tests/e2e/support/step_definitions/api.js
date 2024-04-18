@@ -226,6 +226,7 @@ function setUserIntercepts() {
   cy.intercept('GET', '/api/users/admin/permissions', {
     statusCode: 200,
     body: {
+      ...defaultResponse,
       content: [permission1],
     },
   });
@@ -738,6 +739,16 @@ function setRoleIntercepts() {
   });
 
   cy.intercept('GET', '/api/roles/1/permissions', {
+    statusCode: 200,
+    body: {
+      ...defaultResponse,
+      content: [
+        permission1,
+      ],
+    },
+  });
+
+  cy.intercept('GET', '/api/roles/1/permissions?page=0&count=5', {
     statusCode: 200,
     body: {
       ...defaultResponse,

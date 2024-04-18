@@ -81,54 +81,39 @@
         sub-type="group"
         :entity="group"
       />
-      <q-tab-panel
+      <permissions-tab-panel
         name="permissions"
-        data-cy="page_group_permissions_tab_panel"
-      >
-        <h6
-          class="q-ma-none q-mb-sm"
-          data-cy="page_group_permissions_title"
-        >
-          {{ $t('GroupPage.text.permissionList', { group: group.name }) }}
-        </h6>
-        <permissions-table
-          :permissions="permissions"
-          :show-action="false"
-          :remove-action="false"
-          :detach-action="false"
-        />
-      </q-tab-panel>
+        type="group"
+        :entity="group"
+      />
     </q-tab-panels>
   </q-page>
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import * as GroupService from 'src/services/GroupService';
-import * as PermissionService from 'src/services/PermissionService';
-import PermissionsTable from 'src/components/tables/PermissionsTable.vue';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
-import ReloadPermissionsEvent from 'src/composables/events/ReloadPermissionsEvent';
 import UsersTabPanel from 'components/tab-panel/UsersTabPanel.vue';
 import AccessControlTabPanel from 'components/tab-panel/AccessControlTabPanel.vue';
+import PermissionsTabPanel from 'components/tab-panel/PermissionsTabPanel.vue';
 
 const loading = ref(false);
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const group = ref({});
-const permissions = ref([]);
 const currentTab = ref('users');
-
-let reloadPermissionsEventRef;
 
 /**
  * Load group from id in url. If the group does not exist, redirect to the libraries page.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function loadGroup() {
+  loading.value = true;
+
   return GroupService.findById(route.params.id)
     .then((data) => {
       group.value = data;
@@ -140,40 +125,13 @@ async function loadGroup() {
         html: true,
       });
       router.push('/groups');
-    });
-}
-
-/**
- * Get permissions using group Id.
- * @returns {Promise<void>} Promise with nothing on success.
- */
-async function loadPermissions() {
-  return PermissionService.findByGroupId(route.params.id).then((data) => {
-    permissions.value = data.content;
-  });
-}
-
-/**
- * Search user and associated groups.
- */
-async function search() {
-  loading.value = true;
-
-  Promise.allSettled([
-    loadGroup(),
-    loadPermissions(),
-  ])
+    })
     .finally(() => {
       loading.value = false;
     });
 }
 
 onMounted(async () => {
-  reloadPermissionsEventRef = ReloadPermissionsEvent.subscribe(loadPermissions);
-  await search();
-});
-
-onUnmounted(() => {
-  reloadPermissionsEventRef.unsubscribe();
+  await loadGroup();
 });
 </script>

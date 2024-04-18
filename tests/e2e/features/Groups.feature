@@ -154,8 +154,8 @@ Feature: Test roundtrip of the application: Groups
 
     # Display related permissions
     When I click on '[data-cy="page_group_permissions_tab"]'
-    Then I expect '[data-cy="page_group_permissions_tab_panel"]' exists
-    And  I expect '[data-cy="page_group_permissions_title"]' exists
+    Then I expect '[data-cy="permissions_tab_panel"]' exists
+    And  I expect '[data-cy="permissions_title"]' exists
     And  I expect '[data-cy="permissions_table"]' exists
 
     When I click on '[data-cy="page_group_go_back"]'

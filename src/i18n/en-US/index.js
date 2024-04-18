@@ -557,6 +557,16 @@ export default {
       warning: 'fa-solid fa-triangle-exclamation',
     },
   },
+  PermissionsTabPanel: {
+    text: {
+      title: 'List of permissions attributed to {name}',
+      attach: 'Attach permission',
+    },
+    icon: {
+      attach: 'fa-solid fa-link',
+      warning: 'fa-solid fa-triangle-exclamation',
+    },
+  },
   TablePaginationCard: {
     text: {
       content: '{current}/{max} of {total}',
@@ -590,6 +600,20 @@ export default {
       name: 'fa-solid fa-magnifying-glass',
       login: 'fa-solid fa-magnifying-glass',
       email: 'fa-solid fa-magnifying-glass',
+    },
+  },
+  PermissionFiltersCard: {
+    text: {
+      filters: 'Filters',
+      entity: 'by entity',
+      action: 'by operation',
+      libraryId: 'by library',
+      noResults: 'No results',
+    },
+    icon: {
+      entity: 'fa-solid fa-magnifying-glass',
+      action: 'fa-solid fa-magnifying-glass',
+      libraryId: 'fa-solid fa-magnifying-glass',
     },
   },
   GroupFiltersCard: {
