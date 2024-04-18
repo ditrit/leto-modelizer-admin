@@ -36,6 +36,7 @@ Feature: Test roundtrip of the application: Users
     Given I visit the '/'
     When  I click on '[data-cy="drawer_item_users"]'
     Then  I expect current url is '/users'
+    And   I set viewport size to '1536' px for width and '960' px for height
 
     ####################################################
     ################## List users #################
@@ -78,8 +79,8 @@ Feature: Test roundtrip of the application: Users
     # Display related permissions
     When I click on '[data-cy="page_user_permissions_tab"]'
     Then I expect '[data-cy="page_user_permissions_tab"]' exists
-    And  I expect '[data-cy="page_user_permissions_tab_panel"]' exists
-    And  I expect '[data-cy="page_user_permissions_title"]' exists
+    And  I expect '[data-cy="permissions_tab_panel"]' exists
+    And  I expect '[data-cy="permissions_title"]' exists
     And  I expect '[data-cy="permissions_table"]' exists
     And  I expect '[data-cy="permissions_table"] tbody tr:nth-child(1) td.permission-entity' is 'Project'
     And  I expect '[data-cy="permissions_table"] tbody tr:nth-child(1) td.permission-action' is 'Create'
