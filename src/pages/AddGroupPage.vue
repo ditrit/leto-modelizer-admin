@@ -173,7 +173,13 @@ const { isValidName } = useFieldRules('AddGroupPage');
  * @param {object} event - Event object representing selected Users.
  */
 async function setSelectedUsers(event) {
-  selectedUsers.value = event;
+  event.forEach((user) => {
+    const found = selectedUsers.value.some(({ login }) => login === user.login);
+
+    if (!found) {
+      selectedUsers.value.push(user);
+    }
+  });
 }
 
 /**
@@ -181,7 +187,13 @@ async function setSelectedUsers(event) {
  * @param {object} event - Event object representing selected roles.
  */
 async function setSelectedRoles(event) {
-  selectedRoles.value = event;
+  event.forEach((role) => {
+    const found = selectedRoles.value.some(({ id }) => id === role.id);
+
+    if (!found) {
+      selectedRoles.value.push(role);
+    }
+  });
 }
 
 /**
