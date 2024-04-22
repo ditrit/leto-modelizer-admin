@@ -52,9 +52,14 @@
           @click="openAttachUserToGroupDialog"
         />
         <users-table
-          :users="selectedUsers"
+          v-model:current-page="usersCurrentPage"
+          v-model:max-page="usersPages"
+          v-model:elements-per-page="usersPerPage"
+          v-model:total-elements="selectedUsers.length"
+          :users="paginatedUsers"
           :show-action="false"
           :detach-action="false"
+          hide-filters
           :no-data-label="$t('AddGroupPage.text.addUsertoGroupMessage')"
           class="full-width"
           @remove="removeUser"
@@ -78,12 +83,15 @@
           @click="openAttachRoleToGroupDialog"
         />
         <access-control-table
-          :rows="selectedRoles"
+          v-model:current-page="rolesCurrentPage"
+          v-model:max-page="rolesPages"
+          v-model:elements-per-page="rolesPerPage"
+          v-model:total-elements="selectedRoles.length"
+          :rows="paginatedRoles"
           access-control-type="role"
           :show-action="false"
           :detach-action="false"
           hide-filters
-          hide-pagination
           :no-data-label="$t('AddGroupPage.text.addRoletoGroupMessage')"
           class="full-width"
           @remove="removeRole"
@@ -128,6 +136,7 @@ import SelectEvent from 'src/composables/events/SelectEvent';
 import { useI18n } from 'vue-i18n';
 import { Notify } from 'quasar';
 import { useRouter } from 'vue-router';
+import { useClientSidePagination } from 'src/composables/ClientSidePagination';
 
 let selectUsersSubscription;
 let selectRolesSubscription;
@@ -139,6 +148,21 @@ const selectedUsers = ref([]);
 const selectedRoles = ref([]);
 const loading = ref(false);
 const submitting = ref(false);
+
+const {
+  paginatedItems: paginatedUsers,
+  pages: usersPages,
+  currentPage: usersCurrentPage,
+  itemsPerPage: usersPerPage,
+} = useClientSidePagination(selectedUsers.value);
+
+const {
+  paginatedItems: paginatedRoles,
+  pages: rolesPages,
+  currentPage: rolesCurrentPage,
+  itemsPerPage: rolesPerPage,
+} = useClientSidePagination(selectedRoles.value);
+
 const addButtonDisabled = computed(
   () => !selectedUsers.value.length || !selectedRoles.value.length || !name.value.length,
 );
