@@ -54,7 +54,7 @@ Feature: Test roundtrip of the application: Roles
 
     ## 101 Should display all roles
     And I expect '[data-cy="roles_table"] tbody tr' appear 3 times on screen
-    And I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'Super administrator'
+    And I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'SUPER_ADMINISTRATOR'
     And I expect '[data-cy="roles_table"] tbody tr:nth-child(2) td.role-name' is 'Administrator'
     And I expect '[data-cy="roles_table"] tbody tr:nth-child(3) td.role-name' is 'Developer'
 
@@ -63,8 +63,8 @@ Feature: Test roundtrip of the application: Roles
     ####################################################
 
     ## 201 Should display selected role information
-    When I click on '[data-cy="roles_table"] [data-cy="role_1_button_show"]'
-    Then I expect current url is '/roles/1'
+    When I click on '[data-cy="roles_table"] [data-cy="role_2_button_show"]'
+    Then I expect current url is '/roles/2'
     And  I expect '[data-cy="page_role_loading"]' not exists
     And  I expect '[data-cy="page_role_title"]' exists
 
@@ -111,8 +111,8 @@ Feature: Test roundtrip of the application: Roles
     ####################################################
 
     ## 301 Should disabled confirm button if no user is selected
-    When I click on '[data-cy="roles_table"] [data-cy="role_1_button_show"]'
-    Then I expect current url is '/roles/1'
+    When I click on '[data-cy="roles_table"] [data-cy="role_2_button_show"]'
+    Then I expect current url is '/roles/2'
 
     When I click on '[data-cy="page_role_users_tab"]'
     Then I expect '[data-cy="users_tab_panel"]' exists
@@ -181,7 +181,8 @@ Feature: Test roundtrip of the application: Roles
 
     When I click on '[data-cy="button_attach_role"]'
     Then I expect '[data-cy="roles_table"]' exists
-    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'Administrator'
+    And  I wait 1 second
+    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'Developer'
     And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td [role="checkbox"]' exists
     And  I expect '[data-cy="button_confirm"]' to be disabled
 
