@@ -29,13 +29,35 @@ vi.stubGlobal('$sanitize', true);
 describe('Test component: AttachAccessControlToAnotherDialog', () => {
   let wrapper;
   let store;
+  let groupData;
+  let roleData;
 
   beforeEach(() => {
     setActivePinia(createPinia());
     store = useUserStore();
 
-    GroupService.find.mockImplementation(() => Promise.resolve({ content: ['groups'] }));
-    RoleService.find.mockImplementation(() => Promise.resolve({ content: ['roles'] }));
+    roleData = {
+      content: ['roles'],
+      pageable: {
+        pageNumber: 0,
+      },
+      totalPages: 0,
+      size: 10,
+      totalElements: 0,
+    };
+
+    groupData = {
+      content: ['groups'],
+      pageable: {
+        pageNumber: 0,
+      },
+      totalPages: 0,
+      size: 10,
+      totalElements: 0,
+    };
+
+    GroupService.find.mockImplementation(() => Promise.resolve(groupData));
+    RoleService.find.mockImplementation(() => Promise.resolve(roleData));
 
     wrapper = mount(AttachAccessControlToAnotherDialog);
   });
@@ -71,6 +93,40 @@ describe('Test component: AttachAccessControlToAnotherDialog', () => {
     });
   });
 
+  describe('Test function: getSuperAdministratorId', () => {
+    it('should call RoleService.find with parameters to get SUPER_ADMINISTRATOR Id', async () => {
+      await wrapper.vm.getSuperAdministratorId();
+
+      expect(RoleService.find).toHaveBeenCalledWith({ name: 'SUPER_ADMINISTRATOR' });
+    });
+  });
+
+  describe('Test function: getFilters', () => {
+    it('should return empty filters', () => {
+      wrapper.vm.nameFilter = '';
+      wrapper.vm.currentPage = 0;
+      wrapper.vm.elementsPerPage = 10;
+
+      const result = wrapper.vm.getFilters();
+
+      expect(result).toEqual({});
+    });
+
+    it('should return filters', async () => {
+      wrapper.vm.nameFilter = 'test';
+      wrapper.vm.currentPage = 1;
+      wrapper.vm.elementsPerPage = 5;
+
+      const result = wrapper.vm.getFilters();
+
+      expect(result).toEqual({
+        name: 'lk_*test*',
+        page: '0',
+        count: '5',
+      });
+    });
+  });
+
   describe('Test function: loadGroups', () => {
     afterEach(() => {
       vi.clearAllMocks();
@@ -91,39 +147,22 @@ describe('Test component: AttachAccessControlToAnotherDialog', () => {
 
       await wrapper.vm.loadGroups();
 
-      expect(GroupService.find).toHaveBeenCalledWith();
+      expect(GroupService.find).toHaveBeenCalledWith({});
     });
   });
 
   describe('Test function: loadRoles', () => {
-    afterEach(() => {
-      vi.clearAllMocks();
-    });
-
     it('should call RoleService.find with correct parameters when targetAccessControlType.value is "role"', async () => {
       wrapper.vm.targetAccessControlType = 'role';
-      wrapper.vm.accessControl = { id: 'exampleId' };
+      wrapper.vm.superAdministratorId = 'superAdministratorId';
 
       await wrapper.vm.loadRoles();
 
-      expect(RoleService.find).toHaveBeenCalledWith({ name: 'not_SUPER_ADMINISTRATOR', id: 'not_exampleId' });
-    });
-
-    it('should call RoleService.find without parameters when targetAccessControlType.value is not "role"', async () => {
-      wrapper.vm.targetAccessControlType = 'not_role';
-      wrapper.vm.accessControl = { id: 'exampleId' };
-
-      await wrapper.vm.loadRoles();
-
-      expect(RoleService.find).toHaveBeenCalledWith({ name: 'not_SUPER_ADMINISTRATOR' });
+      expect(RoleService.find).toHaveBeenCalledWith({ id: 'not_superAdministratorId' });
     });
   });
 
   describe('Test function: search', () => {
-    afterEach(() => {
-      vi.clearAllMocks();
-    });
-
     it('should set rows as "groups"', async () => {
       wrapper.vm.accessControlType = 'group';
       wrapper.vm.rows = [];

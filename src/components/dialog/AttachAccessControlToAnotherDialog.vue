@@ -10,13 +10,21 @@
         <q-card-section>
           <access-control-table
             v-model:selected="selected"
+            v-model:filter-name="nameFilter"
+            v-model:current-page="currentPage"
+            v-model:max-page="maxPage"
+            v-model:elements-per-page="elementsPerPage"
+            v-model:total-elements="totalElements"
             :access-control-type="accessControlType"
             :rows="rows"
             :show-action="false"
             :remove-action="false"
             :detach-action="false"
+            :no-data-label="$t('RolesTable.text.noData')"
+            :no-data-icon="$t('RolesTable.icon.noData')"
             selection="multiple"
             class="full-width"
+            @on-filter="search"
           />
         </q-card-section>
         <q-card-actions align="center">
@@ -67,6 +75,12 @@ const targetAccessControlType = ref();
 const selectOnly = ref(false);
 const selected = ref([]);
 const rows = ref([]);
+const nameFilter = ref('');
+const currentPage = ref(0);
+const maxPage = ref(0);
+const elementsPerPage = ref(10);
+const totalElements = ref(0);
+const superAdministratorId = ref('');
 const translationKey = computed(() => {
   if (accessControlType.value === 'role') {
     return targetAccessControlType.value === 'role' ? 'AttachRoleToRole' : 'AttachRoleToGroup';
@@ -76,6 +90,39 @@ const translationKey = computed(() => {
 });
 
 /**
+ * Get ID of role SUPER_ADMINISTRATOR.
+ */
+async function getSuperAdministratorId() {
+  await RoleService.find({
+    name: 'SUPER_ADMINISTRATOR',
+  }).then(({ content }) => {
+    superAdministratorId.value = content[0].id;
+  });
+}
+
+/**
+ * Create API filters from component ref.
+ * @returns {object} Object that contains role filters.
+ */
+function getFilters() {
+  const filters = {};
+
+  if (nameFilter.value?.length > 0) {
+    filters.name = `lk_*${nameFilter.value}*`;
+  }
+
+  if (currentPage.value >= 1) {
+    filters.page = `${currentPage.value - 1}`;
+  }
+
+  if (elementsPerPage.value !== 10) {
+    filters.count = `${elementsPerPage.value}`;
+  }
+
+  return filters;
+}
+
+/**
  * Load groups and invoke the appropriate method from GroupService based on the target.
  * @returns {object} Object that contains group filters.
  */
@@ -83,10 +130,11 @@ async function loadGroups() {
   if (targetAccessControlType.value === 'group') {
     return GroupService.find({
       id: `not_${accessControl.value.id}`,
+      ...getFilters(),
     });
   }
 
-  return GroupService.find();
+  return GroupService.find(getFilters());
 }
 
 /**
@@ -96,13 +144,14 @@ async function loadGroups() {
 async function loadRoles() {
   if (targetAccessControlType.value === 'role') {
     return RoleService.find({
-      name: 'not_SUPER_ADMINISTRATOR',
-      id: `not_${accessControl.value.id}`,
+      id: `not_${superAdministratorId.value}`,
+      ...getFilters(),
     });
   }
 
   return RoleService.find({
-    name: 'not_SUPER_ADMINISTRATOR',
+    id: `not_${superAdministratorId.value}`,
+    ...getFilters(),
   });
 }
 
@@ -115,16 +164,22 @@ async function search() {
 
   return promise().then((data) => {
     rows.value = data.content;
+    currentPage.value = data.pageable.pageNumber + 1;
+    maxPage.value = data.totalPages;
+    elementsPerPage.value = data.size;
+    totalElements.value = data.totalElements;
   });
 }
 
-const { show } = useDialog('attach-access-control', (event) => {
+const { show } = useDialog('attach-access-control', async (event) => {
   submitting.value = false;
   selected.value = [];
   selectOnly.value = event.selectOnly || false;
   accessControl.value = event.accessControl;
   accessControlType.value = event.accessControlType;
   targetAccessControlType.value = event.targetAccessControlType;
+
+  await getSuperAdministratorId();
 
   return search();
 });
