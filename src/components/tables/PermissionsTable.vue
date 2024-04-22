@@ -27,6 +27,7 @@
       :pagination="pagination"
       :columns="columns"
       :rows="permissions"
+      hide-pagination
       row-key="id"
       :loading="loading"
       class="shadow-5"
