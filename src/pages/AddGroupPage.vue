@@ -41,16 +41,6 @@
         >
           {{ $t('AddGroupPage.text.users') }}
         </h6>
-        <q-btn
-          outline
-          no-caps
-          color="primary"
-          class="bg-white q-mb-md"
-          data-cy="page_add_group_button_attach_user"
-          :label="$t('AddGroupPage.text.attachUser')"
-          :icon="$t('AddGroupPage.icon.attach')"
-          @click="openAttachUserToGroupDialog"
-        />
         <users-table
           v-model:current-page="usersCurrentPage"
           v-model:max-page="usersPages"
@@ -63,7 +53,20 @@
           :no-data-label="$t('AddGroupPage.text.addUsertoGroupMessage')"
           class="full-width"
           @remove="removeUser"
-        />
+        >
+          <template #header>
+            <q-btn
+              outline
+              no-caps
+              color="primary"
+              class="bg-white q-mb-md"
+              data-cy="page_add_group_button_attach_user"
+              :label="$t('AddGroupPage.text.attachUser')"
+              :icon="$t('AddGroupPage.icon.attach')"
+              @click="openAttachUserToGroupDialog"
+            />
+          </template>
+        </users-table>
       </div>
       <div class="q-pb-md">
         <h6
@@ -72,16 +75,6 @@
         >
           {{ $t('AddGroupPage.text.roles') }}
         </h6>
-        <q-btn
-          outline
-          no-caps
-          color="primary"
-          class="bg-white q-mb-md"
-          data-cy="page_add_group_button_attach_role"
-          :label="$t('AddGroupPage.text.attachRole')"
-          :icon="$t('AddGroupPage.icon.attach')"
-          @click="openAttachRoleToGroupDialog"
-        />
         <access-control-table
           v-model:current-page="rolesCurrentPage"
           v-model:max-page="rolesPages"
@@ -95,7 +88,20 @@
           :no-data-label="$t('AddGroupPage.text.addRoletoGroupMessage')"
           class="full-width"
           @remove="removeRole"
-        />
+        >
+          <template #header>
+            <q-btn
+              outline
+              no-caps
+              color="primary"
+              class="bg-white q-mb-md"
+              data-cy="page_add_group_button_attach_role"
+              :label="$t('AddGroupPage.text.attachRole')"
+              :icon="$t('AddGroupPage.icon.attach')"
+              @click="openAttachRoleToGroupDialog"
+            />
+          </template>
+        </access-control-table>
       </div>
       <q-space />
       <div class="full-width row justify-center">

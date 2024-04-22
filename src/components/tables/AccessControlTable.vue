@@ -3,6 +3,7 @@
     <div
       class="row items-center"
     >
+      <slot name="header" />
       <access-control-filters-card
         v-if="!hideFilters"
         :access-control-type="accessControlType"

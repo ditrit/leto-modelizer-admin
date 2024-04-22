@@ -3,6 +3,7 @@
     <div
       class="row items-center"
     >
+      <slot name="header" />
       <user-filters-card
         v-if="!hideFilters"
         :name="filterName"
