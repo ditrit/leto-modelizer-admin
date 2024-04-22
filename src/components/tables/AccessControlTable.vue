@@ -1,14 +1,16 @@
 <template>
   <div>
     <div
-      class="row justify-between items-center"
+      class="row items-center"
     >
       <access-control-filters-card
+        v-if="!hideFilters"
         :access-control-type="accessControlType"
         :name="filterName"
         class="q-mb-md"
         @update:name="setFilterName"
       />
+      <q-space />
       <table-pagination-card
         :current="currentPage"
         :max="maxPage"
@@ -155,6 +157,10 @@ const props = defineProps({
   totalElements: {
     type: Number,
     default: 0,
+  },
+  hideFilters: {
+    type: Boolean,
+    default: false,
   },
 });
 

@@ -1,9 +1,10 @@
 <template>
   <div>
     <div
-      class="row justify-between items-center"
+      class="row items-center"
     >
       <user-filters-card
+        v-if="!hideFilters"
         :name="filterName"
         :login="filterLogin"
         :email="filterEmail"
@@ -12,6 +13,7 @@
         @update:login="setFilterLogin"
         @update:email="setFilterEmail"
       />
+      <q-space />
       <table-pagination-card
         :current="currentPage"
         :max="maxPage"
@@ -28,6 +30,7 @@
       :columns="columns"
       :rows="users"
       row-key="login"
+      hide-pagination
       :loading="loading"
       class="shadow-5"
       table-header-class="bg-grey-3"
@@ -176,6 +179,10 @@ const props = defineProps({
   totalElements: {
     type: Number,
     default: 0,
+  },
+  hideFilters: {
+    type: Boolean,
+    default: false,
   },
 });
 
