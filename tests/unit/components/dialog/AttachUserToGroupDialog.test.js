@@ -21,15 +21,104 @@ vi.stubGlobal('$sanitize', true);
 describe('Test component: AttachUserToGroupDialog', () => {
   let wrapper;
   let store;
+  let data;
 
   beforeEach(() => {
     setActivePinia(createPinia());
     store = useUserStore();
     store.login = 'login';
 
-    UserService.find.mockImplementation(() => Promise.resolve({ content: ['users'] }));
+    data = {
+      content: ['users'],
+      pageable: {
+        pageNumber: 0,
+      },
+      totalPages: 0,
+      size: 10,
+      totalElements: 0,
+    };
+
+    UserService.find.mockImplementation(() => Promise.resolve(data));
 
     wrapper = mount(AttachUserToGroupDialog);
+  });
+
+  describe('Test function: getFilters', () => {
+    it('should return object with no filters', () => {
+      wrapper.vm.currentPage = 0;
+      wrapper.vm.elementsPerPage = 10;
+      wrapper.vm.userName = '';
+      wrapper.vm.userLogin = '';
+      wrapper.vm.userEmail = '';
+
+      expect({}).toEqual(wrapper.vm.getFilters());
+    });
+
+    it('should return object with name filter', () => {
+      wrapper.vm.currentPage = 0;
+      wrapper.vm.elementsPerPage = 10;
+      wrapper.vm.userName = 'test';
+      wrapper.vm.userLogin = '';
+      wrapper.vm.userEmail = '';
+
+      expect({ name: 'lk_*test*' }).toEqual(wrapper.vm.getFilters());
+    });
+
+    it('should return object with login filter', () => {
+      wrapper.vm.currentPage = 0;
+      wrapper.vm.elementsPerPage = 10;
+      wrapper.vm.userName = '';
+      wrapper.vm.userLogin = 'test';
+      wrapper.vm.userEmail = '';
+
+      expect({ login: 'lk_*test*' }).toEqual(wrapper.vm.getFilters());
+    });
+
+    it('should return object with email filter', () => {
+      wrapper.vm.currentPage = 0;
+      wrapper.vm.elementsPerPage = 10;
+      wrapper.vm.userName = '';
+      wrapper.vm.userLogin = '';
+      wrapper.vm.userEmail = 'test';
+
+      expect({ email: 'lk_*test*' }).toEqual(wrapper.vm.getFilters());
+    });
+
+    it('should return object with page filter', () => {
+      wrapper.vm.currentPage = 2;
+      wrapper.vm.elementsPerPage = 10;
+      wrapper.vm.userName = '';
+      wrapper.vm.userLogin = '';
+      wrapper.vm.userEmail = '';
+
+      expect({ page: '1' }).toEqual(wrapper.vm.getFilters());
+    });
+
+    it('should return object with count filter', () => {
+      wrapper.vm.currentPage = 0;
+      wrapper.vm.elementsPerPage = 5;
+      wrapper.vm.userName = '';
+      wrapper.vm.userLogin = '';
+      wrapper.vm.userEmail = '';
+
+      expect({ count: '5' }).toEqual(wrapper.vm.getFilters());
+    });
+
+    it('should return object with all filters', () => {
+      wrapper.vm.currentPage = 2;
+      wrapper.vm.elementsPerPage = 5;
+      wrapper.vm.userName = 'userName';
+      wrapper.vm.userLogin = 'userLogin';
+      wrapper.vm.userEmail = 'userEmail';
+
+      expect({
+        count: '5',
+        page: '1',
+        name: 'lk_*userName*',
+        login: 'lk_*userLogin*',
+        email: 'lk_*userEmail*',
+      }).toEqual(wrapper.vm.getFilters());
+    });
   });
 
   describe('Test function: search', () => {
