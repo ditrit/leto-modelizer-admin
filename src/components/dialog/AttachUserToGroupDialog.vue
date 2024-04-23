@@ -20,6 +20,13 @@
         <q-card-section>
           <users-table
             v-model:selected="selected"
+            v-model:filter-name="userName"
+            v-model:filter-login="userLogin"
+            v-model:filter-email="userEmail"
+            v-model:current-page="currentPage"
+            v-model:max-page="maxPage"
+            v-model:elements-per-page="elementsPerPage"
+            v-model:total-elements="totalElements"
             :users="users"
             :show-action="false"
             :detach-action="false"
@@ -28,6 +35,7 @@
             :no-data-icon="$t('UsersTable.icon.noData')"
             selection="multiple"
             class="full-width"
+            @on-filter="search"
           />
         </q-card-section>
         <q-card-actions align="center">
@@ -73,14 +81,55 @@ const groupId = ref('');
 const selected = ref([]);
 const users = ref([]);
 const selectOnly = ref(false);
+const userName = ref('');
+const userLogin = ref('');
+const userEmail = ref('');
+const currentPage = ref(0);
+const maxPage = ref(0);
+const elementsPerPage = ref(10);
+const totalElements = ref(0);
+
+/**
+ * Create API filters from component ref.
+ * @returns {object} Object that contains user filters.
+ */
+function getFilters() {
+  const filters = {};
+
+  if (userName.value?.length > 0) {
+    filters.name = `lk_*${userName.value}*`;
+  }
+
+  if (userLogin.value?.length > 0) {
+    filters.login = `lk_*${userLogin.value}*`;
+  }
+
+  if (userEmail.value?.length > 0) {
+    filters.email = `lk_*${userEmail.value}*`;
+  }
+
+  if (currentPage.value >= 1) {
+    filters.page = `${currentPage.value - 1}`;
+  }
+
+  if (elementsPerPage.value !== 10) {
+    filters.count = `${elementsPerPage.value}`;
+  }
+
+  return filters;
+}
 
 /**
  * Get users.
  * @returns {Promise<void>} Promise with nothing on success.
  */
 async function search() {
-  return UserService.find().then((data) => {
+  return UserService.find(getFilters()).then((data) => {
     users.value = data.content;
+    currentPage.value = data.pageable.pageNumber + 1;
+    maxPage.value = data.totalPages;
+    elementsPerPage.value = data.size;
+    totalElements.value = data.totalElements;
   });
 }
 
@@ -109,7 +158,7 @@ async function onSubmit() {
   const userLoginList = selected.value.map(({ login }) => login);
 
   await Promise.allSettled(userLoginList
-    .map((userLogin) => GroupService.associateGroupAndUser(userLogin, groupId.value)
+    .map((login) => GroupService.associateGroupAndUser(login, groupId.value)
       .catch(() => {
         Notify.create({
           type: 'negative',
@@ -117,7 +166,7 @@ async function onSubmit() {
           html: true,
         });
 
-        throw new Error(userLogin);
+        throw new Error(login);
       })))
     .then((results) => {
       const failedRequestObjects = [];

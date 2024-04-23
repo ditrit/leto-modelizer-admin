@@ -88,7 +88,7 @@ async function prepareRequest() {
 function prepareQueryParameters(filters = {}) {
   const queryParameters = Object.keys(filters)
     .filter((key) => filters[key]?.length > 0)
-    .map((key) => `${key}=${filters[key]}`);
+    .map((key) => `${key}=${encodeURIComponent(filters[key])}`);
 
   if (queryParameters.length === 0) {
     return '';

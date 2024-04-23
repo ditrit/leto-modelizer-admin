@@ -41,24 +41,32 @@
         >
           {{ $t('AddGroupPage.text.users') }}
         </h6>
-        <q-btn
-          outline
-          no-caps
-          color="primary"
-          class="bg-white q-mb-md"
-          data-cy="page_add_group_button_attach_user"
-          :label="$t('AddGroupPage.text.attachUser')"
-          :icon="$t('AddGroupPage.icon.attach')"
-          @click="openAttachUserToGroupDialog"
-        />
         <users-table
-          :users="selectedUsers"
+          v-model:current-page="usersCurrentPage"
+          v-model:max-page="usersPages"
+          v-model:elements-per-page="usersPerPage"
+          v-model:total-elements="selectedUsers.length"
+          :users="paginatedUsers"
           :show-action="false"
           :detach-action="false"
+          hide-filters
           :no-data-label="$t('AddGroupPage.text.addUsertoGroupMessage')"
           class="full-width"
           @remove="removeUser"
-        />
+        >
+          <template #header>
+            <q-btn
+              outline
+              no-caps
+              color="primary"
+              class="bg-white q-mb-md"
+              data-cy="page_add_group_button_attach_user"
+              :label="$t('AddGroupPage.text.attachUser')"
+              :icon="$t('AddGroupPage.icon.attach')"
+              @click="openAttachUserToGroupDialog"
+            />
+          </template>
+        </users-table>
       </div>
       <div class="q-pb-md">
         <h6
@@ -67,27 +75,33 @@
         >
           {{ $t('AddGroupPage.text.roles') }}
         </h6>
-        <q-btn
-          outline
-          no-caps
-          color="primary"
-          class="bg-white q-mb-md"
-          data-cy="page_add_group_button_attach_role"
-          :label="$t('AddGroupPage.text.attachRole')"
-          :icon="$t('AddGroupPage.icon.attach')"
-          @click="openAttachRoleToGroupDialog"
-        />
         <access-control-table
-          :rows="selectedRoles"
+          v-model:current-page="rolesCurrentPage"
+          v-model:max-page="rolesPages"
+          v-model:elements-per-page="rolesPerPage"
+          v-model:total-elements="selectedRoles.length"
+          :rows="paginatedRoles"
           access-control-type="role"
           :show-action="false"
           :detach-action="false"
           hide-filters
-          hide-pagination
           :no-data-label="$t('AddGroupPage.text.addRoletoGroupMessage')"
           class="full-width"
           @remove="removeRole"
-        />
+        >
+          <template #header>
+            <q-btn
+              outline
+              no-caps
+              color="primary"
+              class="bg-white q-mb-md"
+              data-cy="page_add_group_button_attach_role"
+              :label="$t('AddGroupPage.text.attachRole')"
+              :icon="$t('AddGroupPage.icon.attach')"
+              @click="openAttachRoleToGroupDialog"
+            />
+          </template>
+        </access-control-table>
       </div>
       <q-space />
       <div class="full-width row justify-center">
@@ -128,6 +142,7 @@ import SelectEvent from 'src/composables/events/SelectEvent';
 import { useI18n } from 'vue-i18n';
 import { Notify } from 'quasar';
 import { useRouter } from 'vue-router';
+import { useClientSidePagination } from 'src/composables/ClientSidePagination';
 
 let selectUsersSubscription;
 let selectRolesSubscription;
@@ -139,6 +154,21 @@ const selectedUsers = ref([]);
 const selectedRoles = ref([]);
 const loading = ref(false);
 const submitting = ref(false);
+
+const {
+  paginatedItems: paginatedUsers,
+  pages: usersPages,
+  currentPage: usersCurrentPage,
+  itemsPerPage: usersPerPage,
+} = useClientSidePagination(selectedUsers.value);
+
+const {
+  paginatedItems: paginatedRoles,
+  pages: rolesPages,
+  currentPage: rolesCurrentPage,
+  itemsPerPage: rolesPerPage,
+} = useClientSidePagination(selectedRoles.value);
+
 const addButtonDisabled = computed(
   () => !selectedUsers.value.length || !selectedRoles.value.length || !name.value.length,
 );
@@ -149,7 +179,13 @@ const { isValidName } = useFieldRules('AddGroupPage');
  * @param {object} event - Event object representing selected Users.
  */
 async function setSelectedUsers(event) {
-  selectedUsers.value = event;
+  event.forEach((user) => {
+    const found = selectedUsers.value.some(({ login }) => login === user.login);
+
+    if (!found) {
+      selectedUsers.value.push(user);
+    }
+  });
 }
 
 /**
@@ -157,7 +193,13 @@ async function setSelectedUsers(event) {
  * @param {object} event - Event object representing selected roles.
  */
 async function setSelectedRoles(event) {
-  selectedRoles.value = event;
+  event.forEach((role) => {
+    const found = selectedRoles.value.some(({ id }) => id === role.id);
+
+    if (!found) {
+      selectedRoles.value.push(role);
+    }
+  });
 }
 
 /**

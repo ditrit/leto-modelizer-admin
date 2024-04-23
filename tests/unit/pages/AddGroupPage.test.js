@@ -43,11 +43,27 @@ describe('Test component: AddGroupPage', () => {
 
       expect(wrapper.vm.selectedUsers).toEqual([{ login: 'login', name: 'user' }]);
     });
+
+    it('should do nothing if user already exists in selectedUsers', () => {
+      wrapper.vm.selectedUsers = [{ login: 'login', name: 'user' }];
+
+      wrapper.vm.setSelectedUsers([{ login: 'login', name: 'user' }]);
+
+      expect(wrapper.vm.selectedUsers).toEqual([{ login: 'login', name: 'user' }]);
+    });
   });
 
   describe('Test function: setSelectedRoles', () => {
     it('should set selectedRoles', () => {
       wrapper.vm.selectedRoles = [];
+
+      wrapper.vm.setSelectedRoles([{ id: 'id', name: 'role' }]);
+
+      expect(wrapper.vm.selectedRoles).toEqual([{ id: 'id', name: 'role' }]);
+    });
+
+    it('should do nothing if role already exists in selectedRoles', () => {
+      wrapper.vm.selectedRoles = [{ id: 'id', name: 'role' }];
 
       wrapper.vm.setSelectedRoles([{ id: 'id', name: 'role' }]);
 

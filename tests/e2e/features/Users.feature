@@ -74,7 +74,7 @@ Feature: Test roundtrip of the application: Users
     And  I expect '[data-cy="roles_tab_panel"]' exists
     And  I expect '[data-cy="roles_title"]' exists
     And  I expect '[data-cy="roles_table"]' exists
-    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'Super administrator'
+    And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'SUPER_ADMINISTRATOR'
 
     # Display related permissions
     When I click on '[data-cy="page_user_permissions_tab"]'

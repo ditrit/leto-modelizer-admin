@@ -24,7 +24,7 @@ const group3 = {
 };
 const superAdmin = {
   id: 1,
-  name: 'Super administrator',
+  name: 'SUPER_ADMINISTRATOR',
 };
 const admin = {
   id: 2,
@@ -585,16 +585,19 @@ function setRoleIntercepts() {
     },
   });
 
-  cy.intercept('GET', '/api/roles?name=not_SUPER_ADMINISTRATOR&id=not_1', {
+  cy.intercept('GET', '/api/roles?name=SUPER_ADMINISTRATOR', {
     statusCode: 200,
     body: {
-      content: [admin],
-      pageable: {
-        pageNumber: 0,
-      },
-      totalPages: 1,
-      size: 10,
-      totalElements: 3,
+      ...defaultResponse,
+      content: [superAdmin],
+    },
+  });
+
+  cy.intercept('GET', '/api/roles?id=not_1', {
+    statusCode: 200,
+    body: {
+      ...defaultResponse,
+      content: [admin, dev],
     },
   });
 
@@ -632,20 +635,25 @@ function setRoleIntercepts() {
     },
   });
 
-  cy.intercept('GET', '/api/roles?name=not_SUPER_ADMINISTRATOR', {
+  cy.intercept('GET', '/api/roles?id=not_1&page=0&count=5', {
     statusCode: 200,
     body: {
+      ...defaultResponse,
       content: [
         admin,
         dev,
       ],
     },
-    pageable: {
-      pageNumber: 0,
+  });
+
+  cy.intercept('GET', '/api/roles?id=not_2|not_1&page=0&count=5', {
+    statusCode: 200,
+    body: {
+      ...defaultResponse,
+      content: [
+        dev,
+      ],
     },
-    totalPages: 1,
-    size: 10,
-    totalElements: 3,
   });
 
   cy.intercept('GET', '/api/roles/unknown', {
@@ -678,7 +686,12 @@ function setRoleIntercepts() {
     body: superAdmin,
   });
 
-  cy.intercept('GET', '/api/roles/1/users', {
+  cy.intercept('GET', '/api/roles/2', {
+    statusCode: 200,
+    body: admin,
+  });
+
+  cy.intercept('GET', '/api/roles/2/users', {
     statusCode: 200,
     body: {
       ...defaultResponse,
@@ -688,7 +701,7 @@ function setRoleIntercepts() {
     },
   });
 
-  cy.intercept('GET', '/api/roles/1/users?page=0&count=5', {
+  cy.intercept('GET', '/api/roles/2/users?page=0&count=5', {
     statusCode: 200,
     body: {
       ...defaultResponse,
@@ -698,7 +711,7 @@ function setRoleIntercepts() {
     },
   });
 
-  cy.intercept('GET', '/api/roles/1/groups', {
+  cy.intercept('GET', '/api/roles/2/groups', {
     statusCode: 200,
     body: {
       ...defaultResponse,
@@ -708,7 +721,7 @@ function setRoleIntercepts() {
     },
   });
 
-  cy.intercept('GET', '/api/roles/1/groups?page=0&count=5', {
+  cy.intercept('GET', '/api/roles/2/groups?page=0&count=5', {
     statusCode: 200,
     body: {
       ...defaultResponse,
@@ -718,7 +731,7 @@ function setRoleIntercepts() {
     },
   });
 
-  cy.intercept('GET', '/api/roles/1/roles', {
+  cy.intercept('GET', '/api/roles/2/roles', {
     statusCode: 200,
     body: {
       ...defaultResponse,
@@ -728,7 +741,7 @@ function setRoleIntercepts() {
     },
   });
 
-  cy.intercept('GET', '/api/roles/1/roles?page=0&count=5', {
+  cy.intercept('GET', '/api/roles/2/roles?page=0&count=5', {
     statusCode: 200,
     body: {
       ...defaultResponse,
@@ -738,7 +751,7 @@ function setRoleIntercepts() {
     },
   });
 
-  cy.intercept('GET', '/api/roles/1/permissions', {
+  cy.intercept('GET', '/api/roles/2/permissions', {
     statusCode: 200,
     body: {
       ...defaultResponse,
@@ -748,7 +761,7 @@ function setRoleIntercepts() {
     },
   });
 
-  cy.intercept('GET', '/api/roles/1/permissions?page=0&count=5', {
+  cy.intercept('GET', '/api/roles/2/permissions?page=0&count=5', {
     statusCode: 200,
     body: {
       ...defaultResponse,
@@ -758,7 +771,7 @@ function setRoleIntercepts() {
     },
   });
 
-  cy.intercept('POST', '/api/roles/1/users', (request) => {
+  cy.intercept('POST', '/api/roles/2/users', (request) => {
     request.reply({
       statusCode: 200,
     });
@@ -770,7 +783,7 @@ function setRoleIntercepts() {
     });
   });
 
-  cy.intercept('POST', '/api/roles/1/permissions', (request) => {
+  cy.intercept('POST', '/api/roles/2/permissions', (request) => {
     request.reply({
       statusCode: 200,
     });
@@ -782,7 +795,7 @@ function setRoleIntercepts() {
     });
   });
 
-  cy.intercept('POST', '/api/roles/1/groups', (request) => {
+  cy.intercept('POST', '/api/roles/2/groups', (request) => {
     request.reply({
       statusCode: 200,
     });
@@ -806,7 +819,7 @@ function setRoleIntercepts() {
     });
   });
 
-  cy.intercept('DELETE', '/api/roles/3/roles/1', (request) => {
+  cy.intercept('DELETE', '/api/roles/3/roles/2', (request) => {
     request.reply({
       statusCode: 200,
     });
@@ -824,19 +837,25 @@ function setRoleIntercepts() {
     });
   });
 
-  cy.intercept('DELETE', '/api/roles/1/groups/1', (request) => {
+  cy.intercept('DELETE', '/api/roles/2/groups/1', (request) => {
     request.reply({
       statusCode: 200,
     });
   });
 
-  cy.intercept('DELETE', '/api/roles/1/permissions/1', (request) => {
+  cy.intercept('DELETE', '/api/roles/2/permissions/1', (request) => {
     request.reply({
       statusCode: 200,
     });
   });
 
   cy.intercept('DELETE', '/api/roles/1/users/admin', (request) => {
+    request.reply({
+      statusCode: 200,
+    });
+  });
+
+  cy.intercept('DELETE', '/api/roles/2/users/admin', (request) => {
     request.reply({
       statusCode: 200,
     });
