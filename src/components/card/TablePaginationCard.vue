@@ -94,5 +94,5 @@ defineProps({
   },
 });
 defineEmits(['update:current', 'update:size']);
-const pageSizes = ref([5, 10, 15, 20, 25, 50]);
+const pageSizes = ref([1, 2, 3, 4, 5, 10, 15, 20, 25, 50]);
 </script>

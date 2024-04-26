@@ -7,12 +7,12 @@
       {{ $t('IndexPage.text.title') }}
     </h4>
     <users-table
-      v-model:filter-name="userName"
-      v-model:filter-login="userLogin"
-      v-model:filter-email="userEmail"
-      v-model:current-page="currentPage"
+      v-model:filter-name="filters.name"
+      v-model:filter-login="filters.login"
+      v-model:filter-email="filters.email"
+      v-model:current-page="filters.page"
       v-model:max-page="maxPage"
-      v-model:elements-per-page="elementsPerPage"
+      v-model:elements-per-page="filters.count"
       v-model:total-elements="totalElements"
       :users="users"
       :detach-action="false"
@@ -33,18 +33,21 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import * as UserService from 'src/services/UserService';
 import ReloadUsersEvent from 'src/composables/events/ReloadUsersEvent';
+import { useServerSideFilter } from 'src/composables/ServerSideFilter';
+import { userFilters } from 'src/composables/FiltersArray';
 
 const router = useRouter();
 const route = useRoute();
 const users = ref([]);
-const userName = ref('');
-const userLogin = ref('');
-const userEmail = ref('');
-const currentPage = ref(0);
 const maxPage = ref(0);
-const elementsPerPage = ref(10);
 const totalElements = ref(0);
 const loading = ref(false);
+const {
+  filters,
+  init,
+  getFilters,
+  generateQuery,
+} = useServerSideFilter(userFilters);
 
 let reloadUsersEventRef;
 
@@ -72,59 +75,10 @@ function openRemoveUserDialog(user) {
  * Update route url with value of filters and pagination.
  */
 function updateRoute() {
-  const queryParameters = [];
+  const query = new URLSearchParams(generateQuery()).toString();
+  const querySuffix = query.length > 0 ? `?${query}` : '';
 
-  if (elementsPerPage.value !== 10) {
-    queryParameters.push(`size=${elementsPerPage.value}`);
-  }
-
-  if (currentPage.value > 1) {
-    queryParameters.push(`page=${currentPage.value}`);
-  }
-
-  if (userName.value?.length > 0) {
-    queryParameters.push(`name=${userName.value}`);
-  }
-
-  if (userLogin.value?.length > 0) {
-    queryParameters.push(`login=${userLogin.value}`);
-  }
-
-  if (userEmail.value?.length > 0) {
-    queryParameters.push(`email=${userEmail.value}`);
-  }
-
-  router.push(queryParameters.length > 0 ? `/users?${queryParameters.join('&')}` : '/users');
-}
-
-/**
- * Create API filters from component ref.
- * @returns {object} Object that contains user filters.
- */
-function getFilters() {
-  const filters = {};
-
-  if (userName.value?.length > 0) {
-    filters.name = `lk_*${userName.value}*`;
-  }
-
-  if (userLogin.value?.length > 0) {
-    filters.login = `lk_*${userLogin.value}*`;
-  }
-
-  if (userEmail.value?.length > 0) {
-    filters.email = `lk_*${userEmail.value}*`;
-  }
-
-  if (currentPage.value >= 1) {
-    filters.page = `${currentPage.value - 1}`;
-  }
-
-  if (elementsPerPage.value !== 10) {
-    filters.count = `${elementsPerPage.value}`;
-  }
-
-  return filters;
+  router.push(`/users${querySuffix}`);
 }
 
 /**
@@ -138,9 +92,9 @@ async function search() {
   return UserService.find(getFilters())
     .then((data) => {
       users.value = data.content;
-      currentPage.value = data.pageable.pageNumber + 1;
+      filters.value.page = data.pageable.pageNumber + 1;
       maxPage.value = data.totalPages;
-      elementsPerPage.value = data.size;
+      filters.value.count = data.size;
       totalElements.value = data.totalElements;
 
       return Promise.resolve();
@@ -148,32 +102,6 @@ async function search() {
     .finally(() => {
       loading.value = false;
     });
-}
-
-/**
- * Init filters and pagination from query parameters in url.
- * @param {object} query - URL query parameters.
- */
-function init(query) {
-  if (query.size) {
-    elementsPerPage.value = parseInt(query.size, 10) || 10;
-  }
-
-  if (query.page) {
-    currentPage.value = parseInt(query.page, 10) || 0;
-  }
-
-  if (query.name) {
-    userName.value = query.name;
-  }
-
-  if (query.login) {
-    userLogin.value = query.login;
-  }
-
-  if (query.email) {
-    userEmail.value = query.email;
-  }
 }
 
 onMounted(async () => {
