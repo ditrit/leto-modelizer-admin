@@ -5,12 +5,14 @@ import * as GroupService from 'src/services/GroupService';
 import * as RoleService from 'src/services/RoleService';
 import { vi } from 'vitest';
 import { Notify } from 'quasar';
+import { useRoute } from 'vue-router';
 import DialogEvent from 'src/composables/events/DialogEvent';
 
 installQuasarPlugin({
   plugins: [Notify],
 });
 
+vi.mock('vue-router');
 vi.mock('src/services/GroupService');
 vi.mock('src/services/RoleService');
 vi.mock('src/composables/events/DialogEvent');
@@ -36,6 +38,10 @@ describe('Test component: AccessControlTabPanel', async () => {
     RoleService.findByLogin.mockImplementation(() => Promise.resolve(data));
     RoleService.findByGroupId.mockImplementation(() => Promise.resolve(data));
     RoleService.findSubRoles.mockImplementation(() => Promise.resolve(data));
+
+    useRoute.mockImplementation(() => ({
+      query: {},
+    }));
 
     wrapper = shallowMount(AccessControlTabPanel, {
       props: {
@@ -430,6 +436,77 @@ describe('Test component: AccessControlTabPanel', async () => {
         page: '0',
         count: '5',
       });
+    });
+  });
+
+  describe('Test function: emitQuery', () => {
+    it('should emit the correct query parameters', () => {
+      wrapper.vm.elementsPerPage = 20;
+      wrapper.vm.currentPage = 2;
+      wrapper.vm.name = 'Test';
+
+      wrapper.vm.emitQuery();
+
+      expect(wrapper.emitted()).toEqual({
+        'update:access-control-query': [[{ size: 20, page: 2, name: 'Test' }]],
+      });
+    });
+
+    it('should not emit any query parameters when all conditions are not met', () => {
+      wrapper.vm.elementsPerPage = 10;
+      wrapper.vm.currentPage = 1;
+      wrapper.vm.name = '';
+
+      wrapper.vm.emitQuery();
+
+      expect(wrapper.emitted()).toEqual({
+        'update:access-control-query': [[{ }]],
+      });
+    });
+  });
+
+  describe('Test function: init', () => {
+    it('should not change value without query parameters', () => {
+      wrapper.vm.elementsPerPage = 100;
+      wrapper.vm.currentPage = 200;
+      wrapper.vm.name = 'test';
+
+      wrapper.vm.init({});
+
+      expect(wrapper.vm.elementsPerPage).toEqual(100);
+      expect(wrapper.vm.currentPage).toEqual(200);
+      expect(wrapper.vm.name).toEqual('test');
+    });
+
+    it('should set default value with bad query parameters', () => {
+      wrapper.vm.elementsPerPage = 100;
+      wrapper.vm.currentPage = 200;
+      wrapper.vm.name = 'test';
+
+      wrapper.vm.init({
+        size: 'a',
+        page: 'b',
+      });
+
+      expect(wrapper.vm.elementsPerPage).toEqual(10);
+      expect(wrapper.vm.currentPage).toEqual(0);
+      expect(wrapper.vm.name).toEqual('test');
+    });
+
+    it('should set value from query parameters', () => {
+      wrapper.vm.elementsPerPage = 100;
+      wrapper.vm.currentPage = 200;
+      wrapper.vm.name = 'test';
+
+      wrapper.vm.init({
+        size: '2',
+        page: '1',
+        name: 'test2',
+      });
+
+      expect(wrapper.vm.elementsPerPage).toEqual(2);
+      expect(wrapper.vm.currentPage).toEqual(1);
+      expect(wrapper.vm.name).toEqual('test2');
     });
   });
 

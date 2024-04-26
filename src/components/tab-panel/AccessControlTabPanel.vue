@@ -62,9 +62,14 @@ import {
   computed,
   watch,
 } from 'vue';
+import { useRoute } from 'vue-router';
 import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 import ReloadRolesEvent from 'src/composables/events/ReloadRolesEvent';
 import DialogEvent from 'src/composables/events/DialogEvent';
+
+const emits = defineEmits([
+  'update:access-control-query',
+]);
 
 const rows = ref([]);
 const name = ref('');
@@ -73,6 +78,7 @@ const maxPage = ref(0);
 const elementsPerPage = ref(10);
 const totalElements = ref(0);
 const loading = ref(false);
+const route = useRoute();
 
 let reloadGroupsEventRef;
 let reloadRolesEventRef;
@@ -223,6 +229,45 @@ function getFilters() {
 }
 
 /**
+ * Emit query parameters built with filters and pagination values.
+ */
+function emitQuery() {
+  const queryParameters = {};
+
+  if (elementsPerPage.value !== 10) {
+    queryParameters.size = elementsPerPage.value;
+  }
+
+  if (currentPage.value > 1) {
+    queryParameters.page = currentPage.value;
+  }
+
+  if (name.value?.length > 0) {
+    queryParameters.name = name.value;
+  }
+
+  emits('update:access-control-query', queryParameters);
+}
+
+/**
+ * Init filters and pagination from query parameters in url.
+ * @param {object} query - URL query parameters.
+ */
+function init(query) {
+  if (query.size) {
+    elementsPerPage.value = parseInt(query.size, 10) || 10;
+  }
+
+  if (query.page) {
+    currentPage.value = parseInt(query.page, 10) || 0;
+  }
+
+  if (query.name) {
+    name.value = query.name;
+  }
+}
+
+/**
  * Search and display access controls.
  * @returns {Promise<void>} Promise with nothing on success.
  */
@@ -245,6 +290,7 @@ async function search() {
     return Promise.resolve();
   }).finally(() => {
     loading.value = false;
+    emitQuery();
   });
 }
 
@@ -253,6 +299,7 @@ watch(() => props.entity, async () => {
 });
 
 onMounted(async () => {
+  init(route.query);
   reloadGroupsEventRef = ReloadGroupsEvent.subscribe(search);
   reloadRolesEventRef = ReloadRolesEvent.subscribe(search);
   await search();
