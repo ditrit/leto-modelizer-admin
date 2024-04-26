@@ -18,13 +18,18 @@ describe('Test component: UserPage', () => {
   let wrapper;
   let push;
   const user = {
-    id: 1,
+    login: 'login',
   };
 
   beforeEach(() => {
     Notify.create = vi.fn();
     push = vi.fn();
-    useRoute.mockImplementation(() => ({ params: { login: 'id1' } }));
+    useRoute.mockImplementation(() => ({
+      params: { login: 'id1' },
+      query: {
+        tab: 'users',
+      },
+    }));
     useRouter.mockImplementation(() => ({ push }));
 
     UserService.findByLogin.mockImplementation(() => Promise.resolve(user));
@@ -34,6 +39,54 @@ describe('Test component: UserPage', () => {
 
   it('should mount the component', () => {
     expect(wrapper).not.toBeNull();
+  });
+
+  describe('Test computed: currentTab', () => {
+    it('should be "users"', () => {
+      expect(wrapper.vm.currentTab).toBe('users');
+    });
+
+    it('should be "groups" when route.query.tab is undefined', () => {
+      useRoute.mockImplementation(() => ({
+        params: { login: 'id1' },
+        query: {},
+      }));
+
+      wrapper = shallowMount(UserPage);
+
+      expect(wrapper.vm.currentTab).toBe('groups');
+    });
+  });
+
+  describe('Test function: updateUrl', () => {
+    it('should update the URL with current tab query params', () => {
+      wrapper.vm.tabsQuery = { groups: { page: 1 } };
+
+      wrapper.vm.updateUrl('groups');
+
+      expect(push).toBeCalledWith('/users/login?tab=groups&page=1');
+    });
+  });
+
+  describe('Test function: setTabsQuery', () => {
+    it('should set tabsQuery and call updateUrl', () => {
+      wrapper.vm.tabsQuery = {
+        users: {},
+        groups: {},
+        roles: {},
+        permissions: {},
+      };
+
+      wrapper.vm.setTabsQuery('users', { page: 1 });
+
+      expect(wrapper.vm.tabsQuery).toEqual({
+        users: { page: 1 },
+        groups: {},
+        roles: {},
+        permissions: {},
+      });
+      expect(push).toBeCalledWith('/users/login?tab=users&page=1');
+    });
   });
 
   describe('Test function: loadUser', () => {
