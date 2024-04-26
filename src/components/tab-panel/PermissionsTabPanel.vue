@@ -61,10 +61,15 @@ import {
   computed,
   watch,
 } from 'vue';
+import { useRoute } from 'vue-router';
 import * as PermissionService from 'src/services/PermissionService';
 import ReloadPermissionsEvent from 'src/composables/events/ReloadPermissionsEvent';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import PermissionsTable from 'src/components/tables/PermissionsTable.vue';
+
+const emits = defineEmits([
+  'update:permissions-query',
+]);
 
 const props = defineProps({
   entity: {
@@ -85,6 +90,7 @@ const props = defineProps({
   },
 });
 
+const route = useRoute();
 const permissions = ref([]);
 const entityName = ref('');
 const actionName = ref('');
@@ -139,6 +145,61 @@ async function loadPermissions(filters) {
   }
 
   return PermissionService.findByGroupId(props.entity.id, filters);
+}
+
+/**
+ * Emit query parameters built with filters and pagination values.
+ */
+function emitQuery() {
+  const queryParameters = {};
+
+  if (elementsPerPage.value !== 10) {
+    queryParameters.size = elementsPerPage.value;
+  }
+
+  if (currentPage.value > 1) {
+    queryParameters.page = currentPage.value;
+  }
+
+  if (entityName.value?.length > 0) {
+    queryParameters.entity = entityName.value;
+  }
+
+  if (actionName.value?.length > 0) {
+    queryParameters.action = actionName.value;
+  }
+
+  if (libraryId.value?.length > 0) {
+    queryParameters.libraryId = libraryId.value;
+  }
+
+  emits('update:permissions-query', queryParameters);
+}
+
+/**
+ * Init filters and pagination from query parameters in url.
+ * @param {object} query - URL query parameters.
+ */
+function init(query) {
+  if (query.size) {
+    elementsPerPage.value = parseInt(query.size, 10) || 10;
+  }
+
+  if (query.page) {
+    currentPage.value = parseInt(query.page, 10) || 0;
+  }
+
+  if (query.entity) {
+    entityName.value = query.entity;
+  }
+
+  if (query.action) {
+    actionName.value = query.action;
+  }
+
+  if (query.libraryId) {
+    libraryId.value = query.libraryId;
+  }
 }
 
 /**
@@ -203,6 +264,7 @@ async function search() {
     return Promise.resolve();
   }).finally(() => {
     loading.value = false;
+    emitQuery();
   });
 }
 
@@ -211,6 +273,7 @@ watch(() => props.entity, async () => {
 });
 
 onMounted(async () => {
+  init(route.query);
   reloadPermissionsEventRef = ReloadPermissionsEvent.subscribe(search);
   await search();
 });

@@ -5,12 +5,14 @@ import * as PermissionService from 'src/services/PermissionService';
 import ReloadPermissionsEvent from 'src/composables/events/ReloadPermissionsEvent';
 import { vi } from 'vitest';
 import { Notify } from 'quasar';
+import { useRoute } from 'vue-router';
 import DialogEvent from 'src/composables/events/DialogEvent';
 
 installQuasarPlugin({
   plugins: [Notify],
 });
 
+vi.mock('vue-router');
 vi.mock('src/services/PermissionService');
 vi.mock('src/composables/events/ReloadPermissionsEvent');
 vi.mock('src/composables/events/DialogEvent');
@@ -43,6 +45,10 @@ describe('Test component: PermissionsTabPanel', async () => {
     PermissionService.findByRoleId.mockImplementation(() => Promise.resolve(data));
     PermissionService.findByLogin.mockImplementation(() => Promise.resolve(data));
     PermissionService.findByGroupId.mockImplementation(() => Promise.resolve(data));
+
+    useRoute.mockImplementation(() => ({
+      query: {},
+    }));
 
     wrapper = shallowMount(PermissionsTabPanel, {
       props: {
@@ -138,6 +144,102 @@ describe('Test component: PermissionsTabPanel', async () => {
 
       expect(result).toEqual(data);
       expect(PermissionService.findByLogin).toBeCalledWith('login', {});
+    });
+  });
+
+  describe('Test function: emitQuery', () => {
+    it('should emit the correct query parameters', () => {
+      wrapper.vm.elementsPerPage = 20;
+      wrapper.vm.currentPage = 2;
+      wrapper.vm.entityName = 'entity';
+      wrapper.vm.actionName = 'action';
+      wrapper.vm.libraryId = 'libraryId';
+
+      wrapper.vm.emitQuery();
+
+      expect(wrapper.emitted()).toEqual({
+        'update:permissions-query': [[{
+          size: 20,
+          page: 2,
+          entity: 'entity',
+          action: 'action',
+          libraryId: 'libraryId',
+        }]],
+      });
+    });
+
+    it('should not emit any query parameters when all conditions are not met', () => {
+      wrapper.vm.elementsPerPage = 10;
+      wrapper.vm.currentPage = 1;
+      wrapper.vm.entityName = '';
+      wrapper.vm.actionName = '';
+      wrapper.vm.libraryId = '';
+
+      wrapper.vm.emitQuery();
+
+      expect(wrapper.emitted()).toEqual({
+        'update:permissions-query': [[{ }]],
+      });
+    });
+  });
+
+  describe('Test function: init', () => {
+    it('should not change value without query parameters', () => {
+      wrapper.vm.elementsPerPage = 100;
+      wrapper.vm.currentPage = 200;
+      wrapper.vm.entityName = 'entity';
+      wrapper.vm.actionName = 'action';
+      wrapper.vm.libraryId = 'libraryId';
+
+      wrapper.vm.init({});
+
+      expect(wrapper.vm.elementsPerPage).toEqual(100);
+      expect(wrapper.vm.currentPage).toEqual(200);
+      expect(wrapper.vm.entityName).toEqual('entity');
+      expect(wrapper.vm.actionName).toEqual('action');
+      expect(wrapper.vm.libraryId).toEqual('libraryId');
+    });
+
+    it('should set default value with bad query parameters', () => {
+      wrapper.vm.elementsPerPage = 100;
+      wrapper.vm.currentPage = 200;
+      wrapper.vm.entityName = 'entity';
+      wrapper.vm.actionName = 'action';
+      wrapper.vm.libraryId = 'libraryId';
+
+      wrapper.vm.init({
+        size: 'a',
+        page: 'b',
+      });
+
+      expect(wrapper.vm.elementsPerPage).toEqual(10);
+      expect(wrapper.vm.currentPage).toEqual(0);
+      expect(wrapper.vm.entityName).toEqual('entity');
+      expect(wrapper.vm.actionName).toEqual('action');
+      expect(wrapper.vm.libraryId).toEqual('libraryId');
+    });
+
+    it('should set value from query parameters', () => {
+      wrapper.vm.elementsPerPage = 100;
+      wrapper.vm.currentPage = 200;
+      wrapper.vm.entityName = 'entity';
+      wrapper.vm.actionName = 'action';
+      wrapper.vm.libraryId = 'libraryId';
+
+      wrapper.vm.init({
+        size: '2',
+        page: '1',
+        name: 'test2',
+        entity: 'newEntity',
+        action: 'newAction',
+        libraryId: 'newLibraryId',
+      });
+
+      expect(wrapper.vm.elementsPerPage).toEqual(2);
+      expect(wrapper.vm.currentPage).toEqual(1);
+      expect(wrapper.vm.entityName).toEqual('newEntity');
+      expect(wrapper.vm.actionName).toEqual('newAction');
+      expect(wrapper.vm.libraryId).toEqual('newLibraryId');
     });
   });
 
