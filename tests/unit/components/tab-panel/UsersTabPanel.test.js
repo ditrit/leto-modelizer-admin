@@ -4,12 +4,14 @@ import UsersTabPanel from 'src/components/tab-panel/UsersTabPanel.vue';
 import * as UserService from 'src/services/UserService';
 import { vi } from 'vitest';
 import { Notify } from 'quasar';
+import { useRoute } from 'vue-router';
 import DialogEvent from 'src/composables/events/DialogEvent';
 
 installQuasarPlugin({
   plugins: [Notify],
 });
 
+vi.mock('vue-router');
 vi.mock('src/services/UserService');
 vi.mock('src/composables/events/DialogEvent');
 
@@ -30,6 +32,10 @@ describe('Test component: UsersTabPanel', async () => {
 
     UserService.findByRoleId.mockImplementation(() => Promise.resolve(data));
     UserService.findByGroupId.mockImplementation(() => Promise.resolve(data));
+
+    useRoute.mockImplementation(() => ({
+      query: {},
+    }));
 
     wrapper = shallowMount(UsersTabPanel, {
       props: {
@@ -123,6 +129,101 @@ describe('Test component: UsersTabPanel', async () => {
 
       expect(result).toEqual(data);
       expect(UserService.findByGroupId).toBeCalledWith('id', {});
+    });
+  });
+
+  describe('Test function: emitQuery', () => {
+    it('should emit the correct query parameters', () => {
+      wrapper.vm.elementsPerPage = 20;
+      wrapper.vm.currentPage = 2;
+      wrapper.vm.userName = 'userName';
+      wrapper.vm.userLogin = 'userLogin';
+      wrapper.vm.userEmail = 'userEmail';
+
+      wrapper.vm.emitQuery();
+
+      expect(wrapper.emitted()).toEqual({
+        'update:users-query': [[{
+          size: 20,
+          page: 2,
+          name: 'userName',
+          login: 'userLogin',
+          email: 'userEmail',
+        }]],
+      });
+    });
+
+    it('should not emit any query parameters when all conditions are not met', () => {
+      wrapper.vm.elementsPerPage = 10;
+      wrapper.vm.currentPage = 1;
+      wrapper.vm.userName = '';
+      wrapper.vm.userLogin = '';
+      wrapper.vm.userEmail = '';
+
+      wrapper.vm.emitQuery();
+
+      expect(wrapper.emitted()).toEqual({
+        'update:users-query': [[{ }]],
+      });
+    });
+  });
+
+  describe('Test function: init', () => {
+    it('should not change value without query parameters', () => {
+      wrapper.vm.elementsPerPage = 100;
+      wrapper.vm.currentPage = 200;
+      wrapper.vm.userName = 'userName';
+      wrapper.vm.userLogin = 'userLogin';
+      wrapper.vm.userEmail = 'userEmail';
+
+      wrapper.vm.init({});
+
+      expect(wrapper.vm.elementsPerPage).toEqual(100);
+      expect(wrapper.vm.currentPage).toEqual(200);
+      expect(wrapper.vm.userName).toEqual('userName');
+      expect(wrapper.vm.userLogin).toEqual('userLogin');
+      expect(wrapper.vm.userEmail).toEqual('userEmail');
+    });
+
+    it('should set default value with bad query parameters', () => {
+      wrapper.vm.elementsPerPage = 100;
+      wrapper.vm.currentPage = 200;
+      wrapper.vm.userName = 'userName';
+      wrapper.vm.userLogin = 'userLogin';
+      wrapper.vm.userEmail = 'userEmail';
+
+      wrapper.vm.init({
+        size: 'a',
+        page: 'b',
+      });
+
+      expect(wrapper.vm.elementsPerPage).toEqual(10);
+      expect(wrapper.vm.currentPage).toEqual(0);
+      expect(wrapper.vm.userName).toEqual('userName');
+      expect(wrapper.vm.userLogin).toEqual('userLogin');
+      expect(wrapper.vm.userEmail).toEqual('userEmail');
+    });
+
+    it('should set value from query parameters', () => {
+      wrapper.vm.elementsPerPage = 100;
+      wrapper.vm.currentPage = 200;
+      wrapper.vm.userName = 'userName';
+      wrapper.vm.userLogin = 'userLogin';
+      wrapper.vm.userEmail = 'userEmail';
+
+      wrapper.vm.init({
+        size: '2',
+        page: '1',
+        name: 'newUserName',
+        login: 'newUserLogin',
+        email: 'newUserEmail',
+      });
+
+      expect(wrapper.vm.elementsPerPage).toEqual(2);
+      expect(wrapper.vm.currentPage).toEqual(1);
+      expect(wrapper.vm.userName).toEqual('newUserName');
+      expect(wrapper.vm.userLogin).toEqual('newUserLogin');
+      expect(wrapper.vm.userEmail).toEqual('newUserEmail');
     });
   });
 

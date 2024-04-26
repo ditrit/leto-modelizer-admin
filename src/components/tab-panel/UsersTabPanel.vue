@@ -45,10 +45,15 @@ import {
   ref,
   watch,
 } from 'vue';
+import { useRoute } from 'vue-router';
 import * as UserService from 'src/services/UserService';
 import ReloadUsersEvent from 'src/composables/events/ReloadUsersEvent';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import UsersTable from 'src/components/tables/UsersTable.vue';
+
+const emits = defineEmits([
+  'update:users-query',
+]);
 
 const props = defineProps({
   entity: {
@@ -61,6 +66,7 @@ const props = defineProps({
   },
 });
 
+const route = useRoute();
 const users = ref([]);
 const userName = ref('');
 const userLogin = ref('');
@@ -70,6 +76,7 @@ const maxPage = ref(0);
 const elementsPerPage = ref(10);
 const totalElements = ref(0);
 const loading = ref(false);
+
 let reloadUsersEventRef;
 
 /**
@@ -129,6 +136,61 @@ async function loadUsers(filters) {
 }
 
 /**
+ * Emit query parameters built with filters and pagination values.
+ */
+function emitQuery() {
+  const queryParameters = {};
+
+  if (elementsPerPage.value !== 10) {
+    queryParameters.size = elementsPerPage.value;
+  }
+
+  if (currentPage.value > 1) {
+    queryParameters.page = currentPage.value;
+  }
+
+  if (userName.value?.length > 0) {
+    queryParameters.name = userName.value;
+  }
+
+  if (userLogin.value?.length > 0) {
+    queryParameters.login = userLogin.value;
+  }
+
+  if (userEmail.value?.length > 0) {
+    queryParameters.email = userEmail.value;
+  }
+
+  emits('update:users-query', queryParameters);
+}
+
+/**
+ * Init filters and pagination from query parameters in url.
+ * @param {object} query - URL query parameters.
+ */
+function init(query) {
+  if (query.size) {
+    elementsPerPage.value = parseInt(query.size, 10) || 10;
+  }
+
+  if (query.page) {
+    currentPage.value = parseInt(query.page, 10) || 0;
+  }
+
+  if (query.name) {
+    userName.value = query.name;
+  }
+
+  if (query.login) {
+    userLogin.value = query.login;
+  }
+
+  if (query.email) {
+    userEmail.value = query.email;
+  }
+}
+
+/**
  * Create API filters from component ref.
  * @returns {object} Object that contains user filters.
  */
@@ -179,6 +241,7 @@ async function search() {
     return Promise.resolve();
   }).finally(() => {
     loading.value = false;
+    emitQuery();
   });
 }
 
@@ -187,6 +250,7 @@ watch(() => props.entity, async () => {
 });
 
 onMounted(async () => {
+  init(route.query);
   reloadUsersEventRef = ReloadUsersEvent.subscribe(search);
   await search();
 });
