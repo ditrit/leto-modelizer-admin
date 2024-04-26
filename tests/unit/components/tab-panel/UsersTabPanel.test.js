@@ -4,12 +4,14 @@ import UsersTabPanel from 'src/components/tab-panel/UsersTabPanel.vue';
 import * as UserService from 'src/services/UserService';
 import { vi } from 'vitest';
 import { Notify } from 'quasar';
+import { useRoute } from 'vue-router';
 import DialogEvent from 'src/composables/events/DialogEvent';
 
 installQuasarPlugin({
   plugins: [Notify],
 });
 
+vi.mock('vue-router');
 vi.mock('src/services/UserService');
 vi.mock('src/composables/events/DialogEvent');
 
@@ -30,6 +32,10 @@ describe('Test component: UsersTabPanel', async () => {
 
     UserService.findByRoleId.mockImplementation(() => Promise.resolve(data));
     UserService.findByGroupId.mockImplementation(() => Promise.resolve(data));
+
+    useRoute.mockImplementation(() => ({
+      query: {},
+    }));
 
     wrapper = shallowMount(UsersTabPanel, {
       props: {
@@ -123,38 +129,6 @@ describe('Test component: UsersTabPanel', async () => {
 
       expect(result).toEqual(data);
       expect(UserService.findByGroupId).toBeCalledWith('id', {});
-    });
-  });
-
-  describe('Test function: getFilters', () => {
-    it('should return empty filters', () => {
-      wrapper.vm.userName = '';
-      wrapper.vm.userLogin = '';
-      wrapper.vm.userEmail = '';
-      wrapper.vm.currentPage = 0;
-      wrapper.vm.elementsPerPage = 10;
-
-      const result = wrapper.vm.getFilters();
-
-      expect(result).toEqual({});
-    });
-
-    it('should return filters object', async () => {
-      wrapper.vm.userName = 'test';
-      wrapper.vm.userLogin = 'login';
-      wrapper.vm.userEmail = 'email';
-      wrapper.vm.currentPage = 1;
-      wrapper.vm.elementsPerPage = 5;
-
-      const result = wrapper.vm.getFilters();
-
-      expect(result).toEqual({
-        name: 'lk_*test*',
-        login: 'lk_*login*',
-        email: 'lk_*email*',
-        page: '0',
-        count: '5',
-      });
     });
   });
 

@@ -20,12 +20,12 @@
       @click="openAttachDialog"
     />
     <users-table
-      v-model:filter-name="userName"
-      v-model:filter-login="userLogin"
-      v-model:filter-email="userEmail"
-      v-model:current-page="currentPage"
+      v-model:filter-name="filters.name"
+      v-model:filter-login="filters.login"
+      v-model:filter-email="filters.email"
+      v-model:current-page="filters.page"
       v-model:max-page="maxPage"
-      v-model:elements-per-page="elementsPerPage"
+      v-model:elements-per-page="filters.count"
       v-model:total-elements="totalElements"
       :users="users"
       :show-action="false"
@@ -45,10 +45,17 @@ import {
   ref,
   watch,
 } from 'vue';
+import { useRoute } from 'vue-router';
 import * as UserService from 'src/services/UserService';
 import ReloadUsersEvent from 'src/composables/events/ReloadUsersEvent';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import UsersTable from 'src/components/tables/UsersTable.vue';
+import { useServerSideFilter } from 'src/composables/ServerSideFilter';
+import userFilters from 'src/composables/filters/UserFilters';
+
+const emits = defineEmits([
+  'update:users-query',
+]);
 
 const props = defineProps({
   entity: {
@@ -61,15 +68,18 @@ const props = defineProps({
   },
 });
 
+const route = useRoute();
 const users = ref([]);
-const userName = ref('');
-const userLogin = ref('');
-const userEmail = ref('');
-const currentPage = ref(0);
 const maxPage = ref(0);
-const elementsPerPage = ref(10);
 const totalElements = ref(0);
 const loading = ref(false);
+const {
+  filters,
+  init,
+  getFilters,
+  generateQuery,
+} = useServerSideFilter(userFilters);
+
 let reloadUsersEventRef;
 
 /**
@@ -117,45 +127,15 @@ function openDetachDialog(user) {
 
 /**
  * Load users and invoke the appropriate method from UserService based on the entity value.
- * @param {object} filters - API filters.
+ * @param {object} apiFilters - API filters.
  * @returns {object} Object that contains role filters.
  */
-async function loadUsers(filters) {
+async function loadUsers(apiFilters) {
   if (props.type === 'role') {
-    return UserService.findByRoleId(props.entity.id, filters);
+    return UserService.findByRoleId(props.entity.id, apiFilters);
   }
 
-  return UserService.findByGroupId(props.entity.id, filters);
-}
-
-/**
- * Create API filters from component ref.
- * @returns {object} Object that contains user filters.
- */
-function getFilters() {
-  const filters = {};
-
-  if (userName.value?.length > 0) {
-    filters.name = `lk_*${userName.value}*`;
-  }
-
-  if (userLogin.value?.length > 0) {
-    filters.login = `lk_*${userLogin.value}*`;
-  }
-
-  if (userEmail.value?.length > 0) {
-    filters.email = `lk_*${userEmail.value}*`;
-  }
-
-  if (currentPage.value >= 1) {
-    filters.page = `${currentPage.value - 1}`;
-  }
-
-  if (elementsPerPage.value !== 10) {
-    filters.count = `${elementsPerPage.value}`;
-  }
-
-  return filters;
+  return UserService.findByGroupId(props.entity.id, apiFilters);
 }
 
 /**
@@ -171,14 +151,15 @@ async function search() {
 
   return loadUsers(getFilters()).then((data) => {
     users.value = data.content;
-    currentPage.value = data.pageable.pageNumber + 1;
+    filters.value.page = data.pageable.pageNumber + 1;
     maxPage.value = data.totalPages;
-    elementsPerPage.value = data.size;
+    filters.value.count = data.size;
     totalElements.value = data.totalElements;
 
     return Promise.resolve();
   }).finally(() => {
     loading.value = false;
+    emits('update:users-query', generateQuery());
   });
 }
 
@@ -187,6 +168,7 @@ watch(() => props.entity, async () => {
 });
 
 onMounted(async () => {
+  init(route.query);
   reloadUsersEventRef = ReloadUsersEvent.subscribe(search);
   await search();
 });
