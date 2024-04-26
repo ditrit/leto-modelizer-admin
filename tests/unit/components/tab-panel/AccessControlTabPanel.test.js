@@ -5,12 +5,14 @@ import * as GroupService from 'src/services/GroupService';
 import * as RoleService from 'src/services/RoleService';
 import { vi } from 'vitest';
 import { Notify } from 'quasar';
+import { useRoute } from 'vue-router';
 import DialogEvent from 'src/composables/events/DialogEvent';
 
 installQuasarPlugin({
   plugins: [Notify],
 });
 
+vi.mock('vue-router');
 vi.mock('src/services/GroupService');
 vi.mock('src/services/RoleService');
 vi.mock('src/composables/events/DialogEvent');
@@ -36,6 +38,10 @@ describe('Test component: AccessControlTabPanel', async () => {
     RoleService.findByLogin.mockImplementation(() => Promise.resolve(data));
     RoleService.findByGroupId.mockImplementation(() => Promise.resolve(data));
     RoleService.findSubRoles.mockImplementation(() => Promise.resolve(data));
+
+    useRoute.mockImplementation(() => ({
+      query: {},
+    }));
 
     wrapper = shallowMount(AccessControlTabPanel, {
       props: {
@@ -373,63 +379,6 @@ describe('Test component: AccessControlTabPanel', async () => {
     it('should return false on invalid group entity', async () => {
       await wrapper.setProps({ subType: 'group', entity: {} });
       expect(wrapper.vm.checkEntity()).toBeFalsy();
-    });
-  });
-
-  describe('Test function: getFilters', () => {
-    it('should return empty filters', () => {
-      wrapper.vm.name = '';
-      wrapper.vm.currentPage = 0;
-      wrapper.vm.elementsPerPage = 10;
-
-      const result = wrapper.vm.getFilters();
-
-      expect(result).toEqual({});
-    });
-
-    it('should return filters adapted for Role', async () => {
-      await wrapper.setProps({ subType: 'role' });
-      wrapper.vm.name = 'test';
-      wrapper.vm.currentPage = 1;
-      wrapper.vm.elementsPerPage = 5;
-
-      const result = wrapper.vm.getFilters();
-
-      expect(result).toEqual({
-        parentName: 'lk_*test*',
-        page: '0',
-        count: '5',
-      });
-    });
-
-    it('should return filters adapted for Group', async () => {
-      await wrapper.setProps({ subType: 'group' });
-      wrapper.vm.name = 'test';
-      wrapper.vm.currentPage = 1;
-      wrapper.vm.elementsPerPage = 5;
-
-      const result = wrapper.vm.getFilters();
-
-      expect(result).toEqual({
-        parentName: 'lk_*test*',
-        page: '0',
-        count: '5',
-      });
-    });
-
-    it('should return filters adapted for not Role', async () => {
-      await wrapper.setProps({ subType: 'user' });
-      wrapper.vm.name = 'test';
-      wrapper.vm.currentPage = 1;
-      wrapper.vm.elementsPerPage = 5;
-
-      const result = wrapper.vm.getFilters();
-
-      expect(result).toEqual({
-        name: 'lk_*test*',
-        page: '0',
-        count: '5',
-      });
     });
   });
 
