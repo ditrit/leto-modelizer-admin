@@ -78,7 +78,7 @@ function updateRoute() {
     queryParameters.push(`size=${elementsPerPage.value}`);
   }
 
-  if (currentPage.value !== 1) {
+  if (currentPage.value > 1) {
     queryParameters.push(`page=${currentPage.value}`);
   }
 
