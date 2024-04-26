@@ -34,12 +34,12 @@
       @click="openAttachDialog"
     />
     <permissions-table
-      v-model:filter-entity="entityName"
-      v-model:filter-action="actionName"
-      v-model:filter-library-id="libraryId"
-      v-model:current-page="currentPage"
+      v-model:filter-entity="filters.entity"
+      v-model:filter-action="filters.action"
+      v-model:filter-library-id="filters.libraryId"
+      v-model:current-page="filters.page"
       v-model:max-page="maxPage"
-      v-model:elements-per-page="elementsPerPage"
+      v-model:elements-per-page="filters.count"
       v-model:total-elements="totalElements"
       :permissions="permissions"
       :show-action="false"
@@ -61,10 +61,20 @@ import {
   computed,
   watch,
 } from 'vue';
+import { useRoute } from 'vue-router';
 import * as PermissionService from 'src/services/PermissionService';
 import ReloadPermissionsEvent from 'src/composables/events/ReloadPermissionsEvent';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import PermissionsTable from 'src/components/tables/PermissionsTable.vue';
+import { useServerSideFilter } from 'src/composables/ServerSideFilter';
+import PageFilter from 'src/composables/filters/PageFilter';
+import CountFilter from 'src/composables/filters/CountFilter';
+import StringFilter from 'src/composables/filters/StringFilter';
+import Filter from 'src/composables/filters/Filter';
+
+const emits = defineEmits([
+  'update:permissions-query',
+]);
 
 const props = defineProps({
   entity: {
@@ -85,16 +95,24 @@ const props = defineProps({
   },
 });
 
+const route = useRoute();
 const permissions = ref([]);
-const entityName = ref('');
-const actionName = ref('');
-const libraryId = ref('');
-const currentPage = ref(0);
 const maxPage = ref(0);
-const elementsPerPage = ref(10);
 const totalElements = ref(0);
 const loading = ref(false);
 const showAttachDetachButton = computed(() => !props.isSuperAdmin && props.type === 'role');
+const {
+  filters,
+  init,
+  getFilters,
+  generateQuery,
+} = useServerSideFilter([
+  new PageFilter(),
+  new CountFilter(),
+  new Filter('entity', 'entity', 'entity', ''),
+  new StringFilter('action', 'action', 'action'),
+  new StringFilter('libraryId', 'libraryId', 'libraryId'),
+]);
 
 let reloadPermissionsEventRef;
 
@@ -126,49 +144,19 @@ function openDetachDialog(permission) {
 
 /**
  * Load permissions and invoke the appropriate method from PermissionService.
- * @param {object} filters - API filters.
+ * @param {object} apiFilters - API filters.
  * @returns {object} Object that contains role filters.
  */
-async function loadPermissions(filters) {
+async function loadPermissions(apiFilters) {
   if (props.type === 'role') {
-    return PermissionService.findByRoleId(props.entity.id, filters);
+    return PermissionService.findByRoleId(props.entity.id, apiFilters);
   }
 
   if (props.type === 'user') {
-    return PermissionService.findByLogin(props.entity.login, filters);
+    return PermissionService.findByLogin(props.entity.login, apiFilters);
   }
 
-  return PermissionService.findByGroupId(props.entity.id, filters);
-}
-
-/**
- * Create API filters from component ref.
- * @returns {object} Object that contains user filters.
- */
-function getFilters() {
-  const filters = {};
-
-  if (entityName.value?.length > 0) {
-    filters.entity = entityName.value;
-  }
-
-  if (actionName.value?.length > 0) {
-    filters.action = actionName.value;
-  }
-
-  if (libraryId.value?.length > 0) {
-    filters.libraryId = libraryId.value;
-  }
-
-  if (currentPage.value >= 1) {
-    filters.page = `${currentPage.value - 1}`;
-  }
-
-  if (elementsPerPage.value !== 10) {
-    filters.count = `${elementsPerPage.value}`;
-  }
-
-  return filters;
+  return PermissionService.findByGroupId(props.entity.id, apiFilters);
 }
 
 /**
@@ -195,14 +183,15 @@ async function search() {
 
   return loadPermissions(getFilters()).then((data) => {
     permissions.value = data.content;
-    currentPage.value = data.pageable.pageNumber + 1;
+    filters.value.page = data.pageable.pageNumber + 1;
     maxPage.value = data.totalPages;
-    elementsPerPage.value = data.size;
+    filters.value.count = data.size;
     totalElements.value = data.totalElements;
 
     return Promise.resolve();
   }).finally(() => {
     loading.value = false;
+    emits('update:permissions-query', generateQuery());
   });
 }
 
@@ -211,6 +200,7 @@ watch(() => props.entity, async () => {
 });
 
 onMounted(async () => {
+  init(route.query);
   reloadPermissionsEventRef = ReloadPermissionsEvent.subscribe(search);
   await search();
 });

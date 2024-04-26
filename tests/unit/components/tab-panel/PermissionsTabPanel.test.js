@@ -5,12 +5,14 @@ import * as PermissionService from 'src/services/PermissionService';
 import ReloadPermissionsEvent from 'src/composables/events/ReloadPermissionsEvent';
 import { vi } from 'vitest';
 import { Notify } from 'quasar';
+import { useRoute } from 'vue-router';
 import DialogEvent from 'src/composables/events/DialogEvent';
 
 installQuasarPlugin({
   plugins: [Notify],
 });
 
+vi.mock('vue-router');
 vi.mock('src/services/PermissionService');
 vi.mock('src/composables/events/ReloadPermissionsEvent');
 vi.mock('src/composables/events/DialogEvent');
@@ -43,6 +45,10 @@ describe('Test component: PermissionsTabPanel', async () => {
     PermissionService.findByRoleId.mockImplementation(() => Promise.resolve(data));
     PermissionService.findByLogin.mockImplementation(() => Promise.resolve(data));
     PermissionService.findByGroupId.mockImplementation(() => Promise.resolve(data));
+
+    useRoute.mockImplementation(() => ({
+      query: {},
+    }));
 
     wrapper = shallowMount(PermissionsTabPanel, {
       props: {
@@ -138,38 +144,6 @@ describe('Test component: PermissionsTabPanel', async () => {
 
       expect(result).toEqual(data);
       expect(PermissionService.findByLogin).toBeCalledWith('login', {});
-    });
-  });
-
-  describe('Test function: getFilters', () => {
-    it('should return empty filters', () => {
-      wrapper.vm.entityName = '';
-      wrapper.vm.actionName = '';
-      wrapper.vm.libraryId = '';
-      wrapper.vm.currentPage = 0;
-      wrapper.vm.elementsPerPage = 10;
-
-      const result = wrapper.vm.getFilters();
-
-      expect(result).toEqual({});
-    });
-
-    it('should return filters object', async () => {
-      wrapper.vm.entityName = 'entity';
-      wrapper.vm.actionName = 'action';
-      wrapper.vm.libraryId = 'libraryId';
-      wrapper.vm.currentPage = 1;
-      wrapper.vm.elementsPerPage = 5;
-
-      const result = wrapper.vm.getFilters();
-
-      expect(result).toEqual({
-        entity: 'entity',
-        action: 'action',
-        libraryId: 'libraryId',
-        page: '0',
-        count: '5',
-      });
     });
   });
 
