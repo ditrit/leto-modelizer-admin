@@ -20,9 +20,9 @@
     "@quasar/extras": "=1.16.11",
     "axios": "=1.6.8",
     "pinia": "=2.1.7",
-    "quasar": "=2.15.3",
+    "quasar": "=2.15.4",
     "v-viewer": "=3.0.13",
-    "vue": "=3.4.24",
+    "vue": "=3.4.25",
     "vue-3-sanitize": "=0.1.4",
     "vue-i18n": "=9.13.1",
     "vue-router": "=4.3.2"
@@ -32,12 +32,12 @@
     "@badeball/cypress-cucumber-preprocessor": "=20.0.4",
     "@cypress/browserify-preprocessor": "=3.0.2",
     "@intlify/vite-plugin-vue-i18n": "=6.0.3",
-    "@quasar/app-vite": "=1.8.2",
+    "@quasar/app-vite": "=1.8.4",
     "@quasar/quasar-app-extension-testing-unit-vitest": "=1.0.0",
-    "@vitest/coverage-v8": "=1.5.0",
+    "@vitest/coverage-v8": "=1.5.2",
     "@vue/test-utils": "=2.4.5",
     "autoprefixer": "=10.4.19",
-    "cypress": "=13.7.3",
+    "cypress": "=13.8.1",
     "cypress-real-events": "=1.12.0",
     "eslint": "=8.57.0",
     "eslint-config-airbnb-base": "=15.0.0",
@@ -48,7 +48,7 @@
     "gherkin-lint": "=4.2.4",
     "jsdoc": "=4.0.2",
     "nunjucks": "=3.2.4",
-    "vitest": "=1.5.0"
+    "vitest": "=1.5.2"
   },
   "engines": {
     "node": "^18 || ^16 || ^14.19",
