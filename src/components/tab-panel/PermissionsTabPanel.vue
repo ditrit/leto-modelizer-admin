@@ -34,12 +34,12 @@
       @click="openAttachDialog"
     />
     <permissions-table
-      v-model:filter-entity="entityName"
-      v-model:filter-action="actionName"
-      v-model:filter-library-id="libraryId"
-      v-model:current-page="currentPage"
+      v-model:filter-entity="filters.entity"
+      v-model:filter-action="filters.action"
+      v-model:filter-library-id="filters.libraryId"
+      v-model:current-page="filters.page"
       v-model:max-page="maxPage"
-      v-model:elements-per-page="elementsPerPage"
+      v-model:elements-per-page="filters.count"
       v-model:total-elements="totalElements"
       :permissions="permissions"
       :show-action="false"
@@ -66,6 +66,8 @@ import * as PermissionService from 'src/services/PermissionService';
 import ReloadPermissionsEvent from 'src/composables/events/ReloadPermissionsEvent';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import PermissionsTable from 'src/components/tables/PermissionsTable.vue';
+import { useServerSideFilter } from 'src/composables/ServerSideFilter';
+import { permissionFilters } from 'src/composables/FiltersArray';
 
 const emits = defineEmits([
   'update:permissions-query',
@@ -92,15 +94,16 @@ const props = defineProps({
 
 const route = useRoute();
 const permissions = ref([]);
-const entityName = ref('');
-const actionName = ref('');
-const libraryId = ref('');
-const currentPage = ref(0);
 const maxPage = ref(0);
-const elementsPerPage = ref(10);
 const totalElements = ref(0);
 const loading = ref(false);
 const showAttachDetachButton = computed(() => !props.isSuperAdmin && props.type === 'role');
+const {
+  filters,
+  init,
+  getFilters,
+  generateQuery,
+} = useServerSideFilter(permissionFilters);
 
 let reloadPermissionsEventRef;
 
@@ -132,104 +135,19 @@ function openDetachDialog(permission) {
 
 /**
  * Load permissions and invoke the appropriate method from PermissionService.
- * @param {object} filters - API filters.
+ * @param {object} apiFilters - API filters.
  * @returns {object} Object that contains role filters.
  */
-async function loadPermissions(filters) {
+async function loadPermissions(apiFilters) {
   if (props.type === 'role') {
-    return PermissionService.findByRoleId(props.entity.id, filters);
+    return PermissionService.findByRoleId(props.entity.id, apiFilters);
   }
 
   if (props.type === 'user') {
-    return PermissionService.findByLogin(props.entity.login, filters);
+    return PermissionService.findByLogin(props.entity.login, apiFilters);
   }
 
-  return PermissionService.findByGroupId(props.entity.id, filters);
-}
-
-/**
- * Emit query parameters built with filters and pagination values.
- */
-function emitQuery() {
-  const queryParameters = {};
-
-  if (elementsPerPage.value !== 10) {
-    queryParameters.size = elementsPerPage.value;
-  }
-
-  if (currentPage.value > 1) {
-    queryParameters.page = currentPage.value;
-  }
-
-  if (entityName.value?.length > 0) {
-    queryParameters.entity = entityName.value;
-  }
-
-  if (actionName.value?.length > 0) {
-    queryParameters.action = actionName.value;
-  }
-
-  if (libraryId.value?.length > 0) {
-    queryParameters.libraryId = libraryId.value;
-  }
-
-  emits('update:permissions-query', queryParameters);
-}
-
-/**
- * Init filters and pagination from query parameters in url.
- * @param {object} query - URL query parameters.
- */
-function init(query) {
-  if (query.size) {
-    elementsPerPage.value = parseInt(query.size, 10) || 10;
-  }
-
-  if (query.page) {
-    currentPage.value = parseInt(query.page, 10) || 0;
-  }
-
-  if (query.entity) {
-    entityName.value = query.entity;
-  }
-
-  if (query.action) {
-    actionName.value = query.action;
-  }
-
-  if (query.libraryId) {
-    libraryId.value = query.libraryId;
-  }
-}
-
-/**
- * Create API filters from component ref.
- * @returns {object} Object that contains user filters.
- */
-function getFilters() {
-  const filters = {};
-
-  if (entityName.value?.length > 0) {
-    filters.entity = entityName.value;
-  }
-
-  if (actionName.value?.length > 0) {
-    filters.action = actionName.value;
-  }
-
-  if (libraryId.value?.length > 0) {
-    filters.libraryId = libraryId.value;
-  }
-
-  if (currentPage.value >= 1) {
-    filters.page = `${currentPage.value - 1}`;
-  }
-
-  if (elementsPerPage.value !== 10) {
-    filters.count = `${elementsPerPage.value}`;
-  }
-
-  return filters;
+  return PermissionService.findByGroupId(props.entity.id, apiFilters);
 }
 
 /**
@@ -256,15 +174,15 @@ async function search() {
 
   return loadPermissions(getFilters()).then((data) => {
     permissions.value = data.content;
-    currentPage.value = data.pageable.pageNumber + 1;
+    filters.value.page = data.pageable.pageNumber + 1;
     maxPage.value = data.totalPages;
-    elementsPerPage.value = data.size;
+    filters.value.count = data.size;
     totalElements.value = data.totalElements;
 
     return Promise.resolve();
   }).finally(() => {
     loading.value = false;
-    emitQuery();
+    emits('update:permissions-query', generateQuery());
   });
 }
 

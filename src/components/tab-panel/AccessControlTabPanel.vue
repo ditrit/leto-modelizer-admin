@@ -34,10 +34,10 @@
       @click="openAttachDialog"
     />
     <access-control-table
-      v-model:filter-name="name"
-      v-model:current-page="currentPage"
+      v-model:filter-name="filters.name"
+      v-model:current-page="filters.page"
       v-model:max-page="maxPage"
-      v-model:elements-per-page="elementsPerPage"
+      v-model:elements-per-page="filters.count"
       v-model:total-elements="totalElements"
       :access-control-type="type"
       :rows="rows"
@@ -66,22 +66,13 @@ import { useRoute } from 'vue-router';
 import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 import ReloadRolesEvent from 'src/composables/events/ReloadRolesEvent';
 import DialogEvent from 'src/composables/events/DialogEvent';
+import { useServerSideFilter } from 'src/composables/ServerSideFilter';
+// import { getAccessControlFilters } from 'src/composables/FiltersArray';
+import { accessControlFilters } from 'src/composables/FiltersArray';
 
 const emits = defineEmits([
   'update:access-control-query',
 ]);
-
-const rows = ref([]);
-const name = ref('');
-const currentPage = ref(0);
-const maxPage = ref(0);
-const elementsPerPage = ref(10);
-const totalElements = ref(0);
-const loading = ref(false);
-const route = useRoute();
-
-let reloadGroupsEventRef;
-let reloadRolesEventRef;
 
 const props = defineProps({
   entity: {
@@ -106,7 +97,22 @@ const props = defineProps({
   },
 });
 
+const rows = ref([]);
+const maxPage = ref(0);
+const totalElements = ref(0);
+const loading = ref(false);
+const route = useRoute();
+const {
+  filters,
+  init,
+  getFilters,
+  generateQuery,
+} = useServerSideFilter(accessControlFilters);
+// } = useServerSideFilter(getAccessControlFilters(props.subType));
 const translationKey = computed(() => (props.type === 'role' ? 'Role' : 'Group'));
+
+let reloadGroupsEventRef;
+let reloadRolesEventRef;
 
 /**
  * Open dialog to attach a role or group to an entity depending on props sub type.
@@ -158,36 +164,36 @@ function openDetachDialog(accessControlToDetach) {
 
 /**
  * Load groups and invoke the appropriate method from GroupService based on the entity value.
- * @param {object} filters - API filters.
+ * @param {object} apiFilters - API filters.
  * @returns {object} Object that contains group filters.
  */
-async function loadGroups(filters) {
+async function loadGroups(apiFilters) {
   if (props.subType === 'role') {
-    return GroupService.findByRoleId(props.entity.id, filters);
+    return GroupService.findByRoleId(props.entity.id, apiFilters);
   }
 
   if (props.subType === 'user') {
-    return GroupService.findByLogin(props.entity.login, filters);
+    return GroupService.findByLogin(props.entity.login, apiFilters);
   }
 
-  return GroupService.findSubGroups(props.entity.id, filters);
+  return GroupService.findSubGroups(props.entity.id, apiFilters);
 }
 
 /**
  * Load roles and invoke the appropriate method from RoleService based on the entity value.
- * @param {object} filters - API filters.
+ * @param {object} apiFilters - API filters.
  * @returns {object} Object that contains role filters.
  */
-async function loadRoles(filters) {
+async function loadRoles(apiFilters) {
   if (props.subType === 'role') {
-    return RoleService.findSubRoles(props.entity.id, filters);
+    return RoleService.findSubRoles(props.entity.id, apiFilters);
   }
 
   if (props.subType === 'user') {
-    return RoleService.findByLogin(props.entity.login, filters);
+    return RoleService.findByLogin(props.entity.login, apiFilters);
   }
 
-  return RoleService.findByGroupId(props.entity.id, filters);
+  return RoleService.findByGroupId(props.entity.id, apiFilters);
 }
 
 /**
@@ -202,72 +208,6 @@ function checkEntity() {
 }
 
 /**
- * Create API filters from component ref.
- * @returns {object} Object that contains group filters.
- */
-function getFilters() {
-  const filters = {};
-  const types = ['group', 'role'];
-
-  if (name.value?.length > 0 && types.includes(props.subType)) {
-    filters.parentName = `lk_*${name.value}*`;
-  }
-
-  if (name.value?.length > 0 && !types.includes(props.subType)) {
-    filters.name = `lk_*${name.value}*`;
-  }
-
-  if (currentPage.value >= 1) {
-    filters.page = `${currentPage.value - 1}`;
-  }
-
-  if (elementsPerPage.value !== 10) {
-    filters.count = `${elementsPerPage.value}`;
-  }
-
-  return filters;
-}
-
-/**
- * Emit query parameters built with filters and pagination values.
- */
-function emitQuery() {
-  const queryParameters = {};
-
-  if (elementsPerPage.value !== 10) {
-    queryParameters.size = elementsPerPage.value;
-  }
-
-  if (currentPage.value > 1) {
-    queryParameters.page = currentPage.value;
-  }
-
-  if (name.value?.length > 0) {
-    queryParameters.name = name.value;
-  }
-
-  emits('update:access-control-query', queryParameters);
-}
-
-/**
- * Init filters and pagination from query parameters in url.
- * @param {object} query - URL query parameters.
- */
-function init(query) {
-  if (query.size) {
-    elementsPerPage.value = parseInt(query.size, 10) || 10;
-  }
-
-  if (query.page) {
-    currentPage.value = parseInt(query.page, 10) || 0;
-  }
-
-  if (query.name) {
-    name.value = query.name;
-  }
-}
-
-/**
  * Search and display access controls.
  * @returns {Promise<void>} Promise with nothing on success.
  */
@@ -279,18 +219,19 @@ async function search() {
   loading.value = true;
 
   const promise = props.type === 'group' ? loadGroups : loadRoles;
+  const hasParentAccessControl = ['group', 'role'].includes(props.subType);
 
-  return promise(getFilters()).then((data) => {
+  return promise(getFilters(hasParentAccessControl)).then((data) => {
     rows.value = data.content;
-    currentPage.value = data.pageable.pageNumber + 1;
+    filters.value.page = data.pageable.pageNumber + 1;
     maxPage.value = data.totalPages;
-    elementsPerPage.value = data.size;
+    filters.value.count = data.size;
     totalElements.value = data.totalElements;
 
     return Promise.resolve();
   }).finally(() => {
     loading.value = false;
-    emitQuery();
+    emits('update:access-control-query', generateQuery());
   });
 }
 

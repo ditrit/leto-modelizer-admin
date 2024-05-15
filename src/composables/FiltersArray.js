@@ -45,4 +45,74 @@ const userFilters = [
   ...defaultFilters,
 ];
 
-export { userFilters };
+const permissionFilters = [
+  {
+    filterName: 'entity',
+    queryName: 'entity',
+    defaultValue: '',
+    getFilterValue: (value) => value,
+    getValueFromUrl: (value) => value,
+    isDefaultValue: (value) => value?.length === 0 || !value,
+  },
+  {
+    filterName: 'action',
+    queryName: 'action',
+    defaultValue: '',
+    getFilterValue: (value) => `lk_*${value}*`,
+    getValueFromUrl: (value) => value,
+    isDefaultValue: (value) => value?.length === 0 || !value,
+  },
+  {
+    filterName: 'libraryId',
+    queryName: 'libraryId',
+    defaultValue: '',
+    getFilterValue: (value) => `lk_*${value}*`,
+    getValueFromUrl: (value) => value,
+    isDefaultValue: (value) => value?.length === 0 || !value,
+  },
+  ...defaultFilters,
+];
+
+/**
+ * Generate access control filters depending on sub type.
+ * @param {string} subType - Sub type.
+ * @returns {Array} Access control filters array.
+ */
+function getAccessControlFilters(subType = '') {
+  const types = ['group', 'role'];
+  const filterObject = {
+    defaultValue: '',
+    getFilterValue: (value) => `lk_*${value}*`,
+    getValueFromUrl: (value) => value,
+    isDefaultValue: (value) => value?.length === 0 || !value,
+  };
+
+  if (types.includes(subType)) {
+    filterObject.filterName = 'parentName';
+    filterObject.queryName = 'parentName';
+  } else {
+    filterObject.filterName = 'name';
+    filterObject.queryName = 'name';
+  }
+
+  return [filterObject, ...defaultFilters];
+}
+
+const accessControlFilters = [
+  {
+    filterName: 'name',
+    queryName: 'name',
+    defaultValue: '',
+    getFilterValue: (value) => `lk_*${value}*`,
+    getValueFromUrl: (value) => value,
+    isDefaultValue: (value) => value?.length === 0 || !value,
+  },
+  ...defaultFilters,
+];
+
+export {
+  userFilters,
+  permissionFilters,
+  accessControlFilters,
+  getAccessControlFilters,
+};

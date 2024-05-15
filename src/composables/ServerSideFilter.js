@@ -21,14 +21,17 @@ export function useServerSideFilter(filterDefinition) {
 
   /**
    * Create API filters.
+   * @param {boolean} filterParentName - True if entity contains parent name to filter.
    * @returns {object} Object that contains filters.
    */
-  function getFilters() {
+  function getFilters(filterParentName = false) {
     return Object.keys(filters.value).reduce((obj, key) => {
       const value = filterOptions[key]?.getFilterValue(filters.value[key]);
 
       if (filters.value[key] && value) {
-        obj[filterOptions[key].filterName] = value.toString();
+        const filterNameKey = filterParentName ? 'parentName' : filterOptions[key].filterName;
+
+        obj[filterNameKey] = value.toString();
       }
 
       return obj;
