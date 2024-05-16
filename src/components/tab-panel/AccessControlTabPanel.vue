@@ -67,8 +67,9 @@ import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 import ReloadRolesEvent from 'src/composables/events/ReloadRolesEvent';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import { useServerSideFilter } from 'src/composables/ServerSideFilter';
-// import { getAccessControlFilters } from 'src/composables/FiltersArray';
-import { accessControlFilters } from 'src/composables/FiltersArray';
+import PageFilter from 'src/composables/filters/PageFilter';
+import CountFilter from 'src/composables/filters/CountFilter';
+import AccessControlNameFilter from 'src/composables/filters/AccessControlNameFilter';
 
 const emits = defineEmits([
   'update:access-control-query',
@@ -107,8 +108,12 @@ const {
   init,
   getFilters,
   generateQuery,
-} = useServerSideFilter(accessControlFilters);
-// } = useServerSideFilter(getAccessControlFilters(props.subType));
+} = useServerSideFilter([
+  new PageFilter(),
+  new CountFilter(),
+  new AccessControlNameFilter(props.subType),
+]);
+
 const translationKey = computed(() => (props.type === 'role' ? 'Role' : 'Group'));
 
 let reloadGroupsEventRef;
@@ -219,9 +224,8 @@ async function search() {
   loading.value = true;
 
   const promise = props.type === 'group' ? loadGroups : loadRoles;
-  const hasParentAccessControl = ['group', 'role'].includes(props.subType);
 
-  return promise(getFilters(hasParentAccessControl)).then((data) => {
+  return promise(getFilters()).then((data) => {
     rows.value = data.content;
     filters.value.page = data.pageable.pageNumber + 1;
     maxPage.value = data.totalPages;

@@ -34,7 +34,9 @@ import DialogEvent from 'src/composables/events/DialogEvent';
 import * as UserService from 'src/services/UserService';
 import ReloadUsersEvent from 'src/composables/events/ReloadUsersEvent';
 import { useServerSideFilter } from 'src/composables/ServerSideFilter';
-import { userFilters } from 'src/composables/FiltersArray';
+import PageFilter from 'src/composables/filters/PageFilter';
+import CountFilter from 'src/composables/filters/CountFilter';
+import StringFilter from 'src/composables/filters/StringFilter';
 
 const router = useRouter();
 const route = useRoute();
@@ -47,7 +49,13 @@ const {
   init,
   getFilters,
   generateQuery,
-} = useServerSideFilter(userFilters);
+} = useServerSideFilter([
+  new PageFilter(),
+  new CountFilter(),
+  new StringFilter('name', 'name', 'name'),
+  new StringFilter('login', 'login', 'login'),
+  new StringFilter('email', 'email', 'email'),
+]);
 
 let reloadUsersEventRef;
 

@@ -67,7 +67,10 @@ import ReloadPermissionsEvent from 'src/composables/events/ReloadPermissionsEven
 import DialogEvent from 'src/composables/events/DialogEvent';
 import PermissionsTable from 'src/components/tables/PermissionsTable.vue';
 import { useServerSideFilter } from 'src/composables/ServerSideFilter';
-import { permissionFilters } from 'src/composables/FiltersArray';
+import PageFilter from 'src/composables/filters/PageFilter';
+import CountFilter from 'src/composables/filters/CountFilter';
+import StringFilter from 'src/composables/filters/StringFilter';
+import Filter from 'src/composables/filters/Filter';
 
 const emits = defineEmits([
   'update:permissions-query',
@@ -103,7 +106,13 @@ const {
   init,
   getFilters,
   generateQuery,
-} = useServerSideFilter(permissionFilters);
+} = useServerSideFilter([
+  new PageFilter(),
+  new CountFilter(),
+  new Filter('entity', 'entity', 'entity', ''),
+  new StringFilter('action', 'action', 'action'),
+  new StringFilter('libraryId', 'libraryId', 'libraryId'),
+]);
 
 let reloadPermissionsEventRef;
 

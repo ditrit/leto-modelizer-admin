@@ -11,9 +11,8 @@ export function useServerSideFilter(filterDefinition) {
   const filterOptions = {};
 
   const filters = ref(filterDefinition.reduce((acc, value) => {
-    filterOptions[value.filterName] = {
-      ...value,
-    };
+    filterOptions[value.filterName] = value;
+
     acc[value.filterName] = value.defaultValue;
 
     return acc;
@@ -21,17 +20,14 @@ export function useServerSideFilter(filterDefinition) {
 
   /**
    * Create API filters.
-   * @param {boolean} filterParentName - True if entity contains parent name to filter.
    * @returns {object} Object that contains filters.
    */
-  function getFilters(filterParentName = false) {
+  function getFilters() {
     return Object.keys(filters.value).reduce((obj, key) => {
       const value = filterOptions[key]?.getFilterValue(filters.value[key]);
 
       if (filters.value[key] && value) {
-        const filterNameKey = filterParentName ? 'parentName' : filterOptions[key].filterName;
-
-        obj[filterNameKey] = value.toString();
+        obj[filterOptions[key].serverName] = value.toString();
       }
 
       return obj;

@@ -66,8 +66,9 @@ import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { useUserStore } from 'src/stores/UserStore';
 import { useServerSideFilter } from 'src/composables/ServerSideFilter';
-// import { getAccessControlFilters } from 'src/composables/FiltersArray';
-import { accessControlFilters } from 'src/composables/FiltersArray';
+import PageFilter from 'src/composables/filters/PageFilter';
+import CountFilter from 'src/composables/filters/CountFilter';
+import AccessControlNameFilter from 'src/composables/filters/AccessControlNameFilter';
 
 const { t } = useI18n();
 const userStore = useUserStore();
@@ -91,8 +92,11 @@ const translationKey = computed(() => {
 const {
   filters,
   getFilters,
-} = useServerSideFilter(accessControlFilters);
-// } = useServerSideFilter(getAccessControlFilters());
+} = useServerSideFilter([
+  new PageFilter(),
+  new CountFilter(),
+  new AccessControlNameFilter(),
+]);
 
 /**
  * Get ID of role SUPER_ADMINISTRATOR.

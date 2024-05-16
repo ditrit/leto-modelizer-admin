@@ -49,8 +49,9 @@ import {
 import * as GroupService from 'src/services/GroupService';
 import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 import { useServerSideFilter } from 'src/composables/ServerSideFilter';
-// import { getAccessControlFilters } from 'src/composables/FiltersArray';
-import { accessControlFilters } from 'src/composables/FiltersArray';
+import PageFilter from 'src/composables/filters/PageFilter';
+import CountFilter from 'src/composables/filters/CountFilter';
+import AccessControlNameFilter from 'src/composables/filters/AccessControlNameFilter';
 
 const router = useRouter();
 const route = useRoute();
@@ -63,8 +64,11 @@ const {
   init,
   getFilters,
   generateQuery,
-} = useServerSideFilter(accessControlFilters);
-// } = useServerSideFilter(getAccessControlFilters());
+} = useServerSideFilter([
+  new PageFilter(),
+  new CountFilter(),
+  new AccessControlNameFilter(),
+]);
 
 let reloadGroupsEventRef;
 

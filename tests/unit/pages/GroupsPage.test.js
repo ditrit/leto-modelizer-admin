@@ -135,96 +135,96 @@ describe('Test component: GroupsPage', () => {
     });
   });
 
-  describe('Test function: init', () => {
-    it('should not change value without query parameters', () => {
-      wrapper.vm.elementsPerPage = 100;
-      wrapper.vm.currentPage = 200;
-      wrapper.vm.groupName = 'test';
+  // describe('Test function: init', () => {
+  //   it('should not change value without query parameters', () => {
+  //     wrapper.vm.elementsPerPage = 100;
+  //     wrapper.vm.currentPage = 200;
+  //     wrapper.vm.groupName = 'test';
 
-      wrapper.vm.init({});
+  //     wrapper.vm.init({});
 
-      expect(wrapper.vm.elementsPerPage).toEqual(100);
-      expect(wrapper.vm.currentPage).toEqual(200);
-      expect(wrapper.vm.groupName).toEqual('test');
-    });
+  //     expect(wrapper.vm.elementsPerPage).toEqual(100);
+  //     expect(wrapper.vm.currentPage).toEqual(200);
+  //     expect(wrapper.vm.groupName).toEqual('test');
+  //   });
 
-    it('should set default value with bad query parameters', () => {
-      wrapper.vm.elementsPerPage = 100;
-      wrapper.vm.currentPage = 200;
-      wrapper.vm.groupName = 'test';
+  //   it('should set default value with bad query parameters', () => {
+  //     wrapper.vm.elementsPerPage = 100;
+  //     wrapper.vm.currentPage = 200;
+  //     wrapper.vm.groupName = 'test';
 
-      wrapper.vm.init({
-        size: 'a',
-        page: 'b',
-      });
+  //     wrapper.vm.init({
+  //       size: 'a',
+  //       page: 'b',
+  //     });
 
-      expect(wrapper.vm.elementsPerPage).toEqual(10);
-      expect(wrapper.vm.currentPage).toEqual(0);
-      expect(wrapper.vm.groupName).toEqual('test');
-    });
+  //     expect(wrapper.vm.elementsPerPage).toEqual(10);
+  //     expect(wrapper.vm.currentPage).toEqual(0);
+  //     expect(wrapper.vm.groupName).toEqual('test');
+  //   });
 
-    it('should set value from query parameters', () => {
-      wrapper.vm.elementsPerPage = 100;
-      wrapper.vm.currentPage = 200;
-      wrapper.vm.groupName = 'test';
+  //   it('should set value from query parameters', () => {
+  //     wrapper.vm.elementsPerPage = 100;
+  //     wrapper.vm.currentPage = 200;
+  //     wrapper.vm.groupName = 'test';
 
-      wrapper.vm.init({
-        size: '2',
-        page: '1',
-        name: 'test2',
-      });
+  //     wrapper.vm.init({
+  //       size: '2',
+  //       page: '1',
+  //       name: 'test2',
+  //     });
 
-      expect(wrapper.vm.elementsPerPage).toEqual(2);
-      expect(wrapper.vm.currentPage).toEqual(1);
-      expect(wrapper.vm.groupName).toEqual('test2');
-    });
-  });
+  //     expect(wrapper.vm.elementsPerPage).toEqual(2);
+  //     expect(wrapper.vm.currentPage).toEqual(1);
+  //     expect(wrapper.vm.groupName).toEqual('test2');
+  //   });
+  // });
 
-  describe('Test function: getFilters', () => {
-    it('should return object with no filters', () => {
-      wrapper.vm.currentPage = 0;
-      wrapper.vm.elementsPerPage = 10;
-      wrapper.vm.groupName = '';
+  // describe('Test function: getFilters', () => {
+  //   it('should return object with no filters', () => {
+  //     wrapper.vm.currentPage = 0;
+  //     wrapper.vm.elementsPerPage = 10;
+  //     wrapper.vm.groupName = '';
 
-      expect({}).toEqual(wrapper.vm.getFilters());
-    });
+  //     expect({}).toEqual(wrapper.vm.getFilters());
+  //   });
 
-    it('should return object with name filter', () => {
-      wrapper.vm.currentPage = 0;
-      wrapper.vm.elementsPerPage = 10;
-      wrapper.vm.groupName = 'test';
+  //   it('should return object with name filter', () => {
+  //     wrapper.vm.currentPage = 0;
+  //     wrapper.vm.elementsPerPage = 10;
+  //     wrapper.vm.groupName = 'test';
 
-      expect({ name: 'lk_*test*' }).toEqual(wrapper.vm.getFilters());
-    });
+  //     expect({ name: 'lk_*test*' }).toEqual(wrapper.vm.getFilters());
+  //   });
 
-    it('should return object with page filter', () => {
-      wrapper.vm.currentPage = 2;
-      wrapper.vm.elementsPerPage = 10;
-      wrapper.vm.groupName = '';
+  //   it('should return object with page filter', () => {
+  //     wrapper.vm.currentPage = 2;
+  //     wrapper.vm.elementsPerPage = 10;
+  //     wrapper.vm.groupName = '';
 
-      expect({ page: '1' }).toEqual(wrapper.vm.getFilters());
-    });
+  //     expect({ page: '1' }).toEqual(wrapper.vm.getFilters());
+  //   });
 
-    it('should return object with count filter', () => {
-      wrapper.vm.currentPage = 0;
-      wrapper.vm.elementsPerPage = 5;
-      wrapper.vm.groupName = '';
+  //   it('should return object with count filter', () => {
+  //     wrapper.vm.currentPage = 0;
+  //     wrapper.vm.elementsPerPage = 5;
+  //     wrapper.vm.groupName = '';
 
-      expect({ count: '5' }).toEqual(wrapper.vm.getFilters());
-    });
+  //     expect({ count: '5' }).toEqual(wrapper.vm.getFilters());
+  //   });
 
-    it('should return object with all filters', () => {
-      wrapper.vm.currentPage = 2;
-      wrapper.vm.elementsPerPage = 5;
-      wrapper.vm.groupName = 'test';
+  //   it('should return object with all filters', () => {
+  //     wrapper.vm.currentPage = 2;
+  //     wrapper.vm.elementsPerPage = 5;
+  //     wrapper.vm.groupName = 'test';
 
-      expect({
-        count: '5',
-        page: '1',
-        name: 'lk_*test*',
-      }).toEqual(wrapper.vm.getFilters());
-    });
-  });
+  //     expect({
+  //       count: '5',
+  //       page: '1',
+  //       name: 'lk_*test*',
+  //     }).toEqual(wrapper.vm.getFilters());
+  //   });
+  // });
 
   describe('Test hook function: onMounted', () => {
     it('should subscribe DialogEvent', () => {

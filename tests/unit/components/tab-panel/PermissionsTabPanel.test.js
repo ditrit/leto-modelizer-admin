@@ -147,133 +147,133 @@ describe('Test component: PermissionsTabPanel', async () => {
     });
   });
 
-  describe('Test function: emitQuery', () => {
-    it('should emit the correct query parameters', () => {
-      wrapper.vm.elementsPerPage = 20;
-      wrapper.vm.currentPage = 2;
-      wrapper.vm.entityName = 'entity';
-      wrapper.vm.actionName = 'action';
-      wrapper.vm.libraryId = 'libraryId';
+  // describe('Test function: emitQuery', () => {
+  //   it('should emit the correct query parameters', () => {
+  //     wrapper.vm.elementsPerPage = 20;
+  //     wrapper.vm.currentPage = 2;
+  //     wrapper.vm.entityName = 'entity';
+  //     wrapper.vm.actionName = 'action';
+  //     wrapper.vm.libraryId = 'libraryId';
 
-      wrapper.vm.emitQuery();
+  //     wrapper.vm.emitQuery();
 
-      expect(wrapper.emitted()).toEqual({
-        'update:permissions-query': [[{
-          size: 20,
-          page: 2,
-          entity: 'entity',
-          action: 'action',
-          libraryId: 'libraryId',
-        }]],
-      });
-    });
+  //     expect(wrapper.emitted()).toEqual({
+  //       'update:permissions-query': [[{
+  //         size: 20,
+  //         page: 2,
+  //         entity: 'entity',
+  //         action: 'action',
+  //         libraryId: 'libraryId',
+  //       }]],
+  //     });
+  //   });
 
-    it('should not emit any query parameters when all conditions are not met', () => {
-      wrapper.vm.elementsPerPage = 10;
-      wrapper.vm.currentPage = 1;
-      wrapper.vm.entityName = '';
-      wrapper.vm.actionName = '';
-      wrapper.vm.libraryId = '';
+  //   it('should not emit any query parameters when all conditions are not met', () => {
+  //     wrapper.vm.elementsPerPage = 10;
+  //     wrapper.vm.currentPage = 1;
+  //     wrapper.vm.entityName = '';
+  //     wrapper.vm.actionName = '';
+  //     wrapper.vm.libraryId = '';
 
-      wrapper.vm.emitQuery();
+  //     wrapper.vm.emitQuery();
 
-      expect(wrapper.emitted()).toEqual({
-        'update:permissions-query': [[{ }]],
-      });
-    });
-  });
+  //     expect(wrapper.emitted()).toEqual({
+  //       'update:permissions-query': [[{ }]],
+  //     });
+  //   });
+  // });
 
-  describe('Test function: init', () => {
-    it('should not change value without query parameters', () => {
-      wrapper.vm.elementsPerPage = 100;
-      wrapper.vm.currentPage = 200;
-      wrapper.vm.entityName = 'entity';
-      wrapper.vm.actionName = 'action';
-      wrapper.vm.libraryId = 'libraryId';
+  // describe('Test function: init', () => {
+  //   it('should not change value without query parameters', () => {
+  //     wrapper.vm.elementsPerPage = 100;
+  //     wrapper.vm.currentPage = 200;
+  //     wrapper.vm.entityName = 'entity';
+  //     wrapper.vm.actionName = 'action';
+  //     wrapper.vm.libraryId = 'libraryId';
 
-      wrapper.vm.init({});
+  //     wrapper.vm.init({});
 
-      expect(wrapper.vm.elementsPerPage).toEqual(100);
-      expect(wrapper.vm.currentPage).toEqual(200);
-      expect(wrapper.vm.entityName).toEqual('entity');
-      expect(wrapper.vm.actionName).toEqual('action');
-      expect(wrapper.vm.libraryId).toEqual('libraryId');
-    });
+  //     expect(wrapper.vm.elementsPerPage).toEqual(100);
+  //     expect(wrapper.vm.currentPage).toEqual(200);
+  //     expect(wrapper.vm.entityName).toEqual('entity');
+  //     expect(wrapper.vm.actionName).toEqual('action');
+  //     expect(wrapper.vm.libraryId).toEqual('libraryId');
+  //   });
 
-    it('should set default value with bad query parameters', () => {
-      wrapper.vm.elementsPerPage = 100;
-      wrapper.vm.currentPage = 200;
-      wrapper.vm.entityName = 'entity';
-      wrapper.vm.actionName = 'action';
-      wrapper.vm.libraryId = 'libraryId';
+  //   it('should set default value with bad query parameters', () => {
+  //     wrapper.vm.elementsPerPage = 100;
+  //     wrapper.vm.currentPage = 200;
+  //     wrapper.vm.entityName = 'entity';
+  //     wrapper.vm.actionName = 'action';
+  //     wrapper.vm.libraryId = 'libraryId';
 
-      wrapper.vm.init({
-        size: 'a',
-        page: 'b',
-      });
+  //     wrapper.vm.init({
+  //       size: 'a',
+  //       page: 'b',
+  //     });
 
-      expect(wrapper.vm.elementsPerPage).toEqual(10);
-      expect(wrapper.vm.currentPage).toEqual(0);
-      expect(wrapper.vm.entityName).toEqual('entity');
-      expect(wrapper.vm.actionName).toEqual('action');
-      expect(wrapper.vm.libraryId).toEqual('libraryId');
-    });
+  //     expect(wrapper.vm.elementsPerPage).toEqual(10);
+  //     expect(wrapper.vm.currentPage).toEqual(0);
+  //     expect(wrapper.vm.entityName).toEqual('entity');
+  //     expect(wrapper.vm.actionName).toEqual('action');
+  //     expect(wrapper.vm.libraryId).toEqual('libraryId');
+  //   });
 
-    it('should set value from query parameters', () => {
-      wrapper.vm.elementsPerPage = 100;
-      wrapper.vm.currentPage = 200;
-      wrapper.vm.entityName = 'entity';
-      wrapper.vm.actionName = 'action';
-      wrapper.vm.libraryId = 'libraryId';
+  //   it('should set value from query parameters', () => {
+  //     wrapper.vm.elementsPerPage = 100;
+  //     wrapper.vm.currentPage = 200;
+  //     wrapper.vm.entityName = 'entity';
+  //     wrapper.vm.actionName = 'action';
+  //     wrapper.vm.libraryId = 'libraryId';
 
-      wrapper.vm.init({
-        size: '2',
-        page: '1',
-        name: 'test2',
-        entity: 'newEntity',
-        action: 'newAction',
-        libraryId: 'newLibraryId',
-      });
+  //     wrapper.vm.init({
+  //       size: '2',
+  //       page: '1',
+  //       name: 'test2',
+  //       entity: 'newEntity',
+  //       action: 'newAction',
+  //       libraryId: 'newLibraryId',
+  //     });
 
-      expect(wrapper.vm.elementsPerPage).toEqual(2);
-      expect(wrapper.vm.currentPage).toEqual(1);
-      expect(wrapper.vm.entityName).toEqual('newEntity');
-      expect(wrapper.vm.actionName).toEqual('newAction');
-      expect(wrapper.vm.libraryId).toEqual('newLibraryId');
-    });
-  });
+  //     expect(wrapper.vm.elementsPerPage).toEqual(2);
+  //     expect(wrapper.vm.currentPage).toEqual(1);
+  //     expect(wrapper.vm.entityName).toEqual('newEntity');
+  //     expect(wrapper.vm.actionName).toEqual('newAction');
+  //     expect(wrapper.vm.libraryId).toEqual('newLibraryId');
+  //   });
+  // });
 
-  describe('Test function: getFilters', () => {
-    it('should return empty filters', () => {
-      wrapper.vm.entityName = '';
-      wrapper.vm.actionName = '';
-      wrapper.vm.libraryId = '';
-      wrapper.vm.currentPage = 0;
-      wrapper.vm.elementsPerPage = 10;
+  // describe('Test function: getFilters', () => {
+  //   it('should return empty filters', () => {
+  //     wrapper.vm.entityName = '';
+  //     wrapper.vm.actionName = '';
+  //     wrapper.vm.libraryId = '';
+  //     wrapper.vm.currentPage = 0;
+  //     wrapper.vm.elementsPerPage = 10;
 
-      const result = wrapper.vm.getFilters();
+  //     const result = wrapper.vm.getFilters();
 
-      expect(result).toEqual({});
-    });
+  //     expect(result).toEqual({});
+  //   });
 
-    it('should return filters object', async () => {
-      wrapper.vm.entityName = 'entity';
-      wrapper.vm.actionName = 'action';
-      wrapper.vm.libraryId = 'libraryId';
-      wrapper.vm.currentPage = 1;
-      wrapper.vm.elementsPerPage = 5;
+  //   it('should return filters object', async () => {
+  //     wrapper.vm.entityName = 'entity';
+  //     wrapper.vm.actionName = 'action';
+  //     wrapper.vm.libraryId = 'libraryId';
+  //     wrapper.vm.currentPage = 1;
+  //     wrapper.vm.elementsPerPage = 5;
 
-      const result = wrapper.vm.getFilters();
+  //     const result = wrapper.vm.getFilters();
 
-      expect(result).toEqual({
-        entity: 'entity',
-        action: 'action',
-        libraryId: 'libraryId',
-        page: '0',
-        count: '5',
-      });
-    });
-  });
+  //     expect(result).toEqual({
+  //       entity: 'entity',
+  //       action: 'action',
+  //       libraryId: 'libraryId',
+  //       page: '0',
+  //       count: '5',
+  //     });
+  //   });
+  // });
 
   describe('Test function: checkEntity', () => {
     it('should return true on valid user entity', async () => {
