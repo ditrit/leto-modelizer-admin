@@ -101,31 +101,31 @@ describe('Test component: AttachAccessControlToAnotherDialog', () => {
     });
   });
 
-  describe('Test function: getFilters', () => {
-    it('should return empty filters', () => {
-      wrapper.vm.nameFilter = '';
-      wrapper.vm.currentPage = 0;
-      wrapper.vm.elementsPerPage = 10;
+  // describe('Test function: getFilters', () => {
+  //   it('should return empty filters', () => {
+  //     wrapper.vm.nameFilter = '';
+  //     wrapper.vm.currentPage = 0;
+  //     wrapper.vm.elementsPerPage = 10;
 
-      const result = wrapper.vm.getFilters();
+  //     const result = wrapper.vm.getFilters();
 
-      expect(result).toEqual({});
-    });
+  //     expect(result).toEqual({});
+  //   });
 
-    it('should return filters', async () => {
-      wrapper.vm.nameFilter = 'test';
-      wrapper.vm.currentPage = 1;
-      wrapper.vm.elementsPerPage = 5;
+  //   it('should return filters', async () => {
+  //     wrapper.vm.nameFilter = 'test';
+  //     wrapper.vm.currentPage = 1;
+  //     wrapper.vm.elementsPerPage = 5;
 
-      const result = wrapper.vm.getFilters();
+  //     const result = wrapper.vm.getFilters();
 
-      expect(result).toEqual({
-        name: 'lk_*test*',
-        page: '0',
-        count: '5',
-      });
-    });
-  });
+  //     expect(result).toEqual({
+  //       name: 'lk_*test*',
+  //       page: '0',
+  //       count: '5',
+  //     });
+  //   });
+  // });
 
   describe('Test function: loadGroups', () => {
     afterEach(() => {

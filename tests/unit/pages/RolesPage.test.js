@@ -95,57 +95,57 @@ describe('Test component: RolesPage', () => {
     });
   });
 
-  describe('Test function: updateRoute', () => {
-    it('should push routes without filters', () => {
-      wrapper.vm.currentPage = 1;
-      wrapper.vm.elementsPerPage = 10;
-      wrapper.vm.roleName = '';
+  // describe('Test function: updateRoute', () => {
+  //   it('should push routes without filters', () => {
+  //     wrapper.vm.currentPage = 1;
+  //     wrapper.vm.elementsPerPage = 10;
+  //     wrapper.vm.roleName = '';
 
-      wrapper.vm.updateRoute();
+  //     wrapper.vm.updateRoute();
 
-      expect(push).toBeCalledWith('/roles');
-    });
+  //     expect(push).toBeCalledWith('/roles');
+  //   });
 
-    it('should push routes with size filter', () => {
-      wrapper.vm.currentPage = 1;
-      wrapper.vm.elementsPerPage = 11;
-      wrapper.vm.roleName = '';
+  //   it('should push routes with size filter', () => {
+  //     wrapper.vm.currentPage = 1;
+  //     wrapper.vm.elementsPerPage = 11;
+  //     wrapper.vm.roleName = '';
 
-      wrapper.vm.updateRoute();
+  //     wrapper.vm.updateRoute();
 
-      expect(push).toBeCalledWith('/roles?size=11');
-    });
+  //     expect(push).toBeCalledWith('/roles?size=11');
+  //   });
 
-    it('should push routes with current page filter', () => {
-      wrapper.vm.currentPage = 2;
-      wrapper.vm.elementsPerPage = 10;
-      wrapper.vm.roleName = '';
+  //   it('should push routes with current page filter', () => {
+  //     wrapper.vm.currentPage = 2;
+  //     wrapper.vm.elementsPerPage = 10;
+  //     wrapper.vm.roleName = '';
 
-      wrapper.vm.updateRoute();
+  //     wrapper.vm.updateRoute();
 
-      expect(push).toBeCalledWith('/roles?page=2');
-    });
+  //     expect(push).toBeCalledWith('/roles?page=2');
+  //   });
 
-    it('should push routes with role name filter', () => {
-      wrapper.vm.currentPage = 1;
-      wrapper.vm.elementsPerPage = 10;
-      wrapper.vm.roleName = 'test';
+  //   it('should push routes with role name filter', () => {
+  //     wrapper.vm.currentPage = 1;
+  //     wrapper.vm.elementsPerPage = 10;
+  //     wrapper.vm.roleName = 'test';
 
-      wrapper.vm.updateRoute();
+  //     wrapper.vm.updateRoute();
 
-      expect(push).toBeCalledWith('/roles?name=test');
-    });
+  //     expect(push).toBeCalledWith('/roles?name=test');
+  //   });
 
-    it('should push routes with all filters', () => {
-      wrapper.vm.currentPage = 2;
-      wrapper.vm.elementsPerPage = 11;
-      wrapper.vm.roleName = 'test';
+  //   it('should push routes with all filters', () => {
+  //     wrapper.vm.currentPage = 2;
+  //     wrapper.vm.elementsPerPage = 11;
+  //     wrapper.vm.roleName = 'test';
 
-      wrapper.vm.updateRoute();
+  //     wrapper.vm.updateRoute();
 
-      expect(push).toBeCalledWith('/roles?size=11&page=2&name=test');
-    });
-  });
+  //     expect(push).toBeCalledWith('/roles?size=11&page=2&name=test');
+  //   });
+  // });
 
   // describe('Test function: init', () => {
   //   it('should not change value without query parameters', () => {

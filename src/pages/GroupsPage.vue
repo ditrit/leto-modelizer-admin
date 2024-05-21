@@ -96,6 +96,7 @@ function openRemoveGroupDialog(group) {
  * Update route url with value of filters and pagination.
  */
 function updateRoute() {
+  // console.log('generateqUERY', generateQuery());
   const query = new URLSearchParams(generateQuery()).toString();
   const querySuffix = query.length > 0 ? `?${query}` : '';
 
