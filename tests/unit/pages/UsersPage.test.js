@@ -75,11 +75,13 @@ describe('Test component: UsersPage', () => {
 
   describe('Test function: updateRoute', () => {
     it('should push users without filters', () => {
-      wrapper.vm.currentPage = 1;
-      wrapper.vm.elementsPerPage = 10;
-      wrapper.vm.userName = '';
-      wrapper.vm.userLogin = '';
-      wrapper.vm.userEmail = '';
+      wrapper.vm.filters = {
+        count: 10,
+        page: 1,
+        name: '',
+        login: '',
+        email: '',
+      };
 
       wrapper.vm.updateRoute();
 
@@ -87,11 +89,13 @@ describe('Test component: UsersPage', () => {
     });
 
     it('should push users with size filter', () => {
-      wrapper.vm.currentPage = 1;
-      wrapper.vm.elementsPerPage = 11;
-      wrapper.vm.userName = '';
-      wrapper.vm.userLogin = '';
-      wrapper.vm.userEmail = '';
+      wrapper.vm.filters = {
+        count: 11,
+        page: 1,
+        name: '',
+        login: '',
+        email: '',
+      };
 
       wrapper.vm.updateRoute();
 
@@ -99,11 +103,13 @@ describe('Test component: UsersPage', () => {
     });
 
     it('should push users with current page filter', () => {
-      wrapper.vm.currentPage = 2;
-      wrapper.vm.elementsPerPage = 10;
-      wrapper.vm.userName = '';
-      wrapper.vm.userLogin = '';
-      wrapper.vm.userEmail = '';
+      wrapper.vm.filters = {
+        count: 10,
+        page: 2,
+        name: '',
+        login: '',
+        email: '',
+      };
 
       wrapper.vm.updateRoute();
 
@@ -111,11 +117,13 @@ describe('Test component: UsersPage', () => {
     });
 
     it('should push users with user name filter', () => {
-      wrapper.vm.currentPage = 1;
-      wrapper.vm.elementsPerPage = 10;
-      wrapper.vm.userName = 'userName';
-      wrapper.vm.userLogin = '';
-      wrapper.vm.userEmail = '';
+      wrapper.vm.filters = {
+        count: 10,
+        page: 1,
+        name: 'userName',
+        login: '',
+        email: '',
+      };
 
       wrapper.vm.updateRoute();
 
@@ -123,11 +131,13 @@ describe('Test component: UsersPage', () => {
     });
 
     it('should push users with user login filter', () => {
-      wrapper.vm.currentPage = 1;
-      wrapper.vm.elementsPerPage = 10;
-      wrapper.vm.userName = '';
-      wrapper.vm.userLogin = 'userLogin';
-      wrapper.vm.userEmail = '';
+      wrapper.vm.filters = {
+        count: 10,
+        page: 1,
+        name: '',
+        login: 'userLogin',
+        email: '',
+      };
 
       wrapper.vm.updateRoute();
 
@@ -135,11 +145,13 @@ describe('Test component: UsersPage', () => {
     });
 
     it('should push users with user email filter', () => {
-      wrapper.vm.currentPage = 1;
-      wrapper.vm.elementsPerPage = 10;
-      wrapper.vm.userName = '';
-      wrapper.vm.userLogin = '';
-      wrapper.vm.userEmail = 'userEmail';
+      wrapper.vm.filters = {
+        count: 10,
+        page: 1,
+        name: '',
+        login: '',
+        email: 'userEmail',
+      };
 
       wrapper.vm.updateRoute();
 
@@ -147,93 +159,17 @@ describe('Test component: UsersPage', () => {
     });
 
     it('should push users with all filters', () => {
-      wrapper.vm.currentPage = 2;
-      wrapper.vm.elementsPerPage = 11;
-      wrapper.vm.userName = 'userName';
-      wrapper.vm.userLogin = 'userLogin';
-      wrapper.vm.userEmail = 'userEmail';
+      wrapper.vm.filters = {
+        count: 11,
+        page: 2,
+        name: 'userName',
+        login: 'userLogin',
+        email: 'userEmail',
+      };
 
       wrapper.vm.updateRoute();
 
       expect(push).toBeCalledWith('/users?size=11&page=2&name=userName&login=userLogin&email=userEmail');
-    });
-  });
-
-  describe('Test function: getFilters', () => {
-    it('should return object with no filters', () => {
-      wrapper.vm.currentPage = 0;
-      wrapper.vm.elementsPerPage = 10;
-      wrapper.vm.userName = '';
-      wrapper.vm.userLogin = '';
-      wrapper.vm.userEmail = '';
-
-      expect({}).toEqual(wrapper.vm.getFilters());
-    });
-
-    it('should return object with name filter', () => {
-      wrapper.vm.currentPage = 0;
-      wrapper.vm.elementsPerPage = 10;
-      wrapper.vm.userName = 'test';
-      wrapper.vm.userLogin = '';
-      wrapper.vm.userEmail = '';
-
-      expect({ name: 'lk_*test*' }).toEqual(wrapper.vm.getFilters());
-    });
-
-    it('should return object with login filter', () => {
-      wrapper.vm.currentPage = 0;
-      wrapper.vm.elementsPerPage = 10;
-      wrapper.vm.userName = '';
-      wrapper.vm.userLogin = 'test';
-      wrapper.vm.userEmail = '';
-
-      expect({ login: 'lk_*test*' }).toEqual(wrapper.vm.getFilters());
-    });
-
-    it('should return object with email filter', () => {
-      wrapper.vm.currentPage = 0;
-      wrapper.vm.elementsPerPage = 10;
-      wrapper.vm.userName = '';
-      wrapper.vm.userLogin = '';
-      wrapper.vm.userEmail = 'test';
-
-      expect({ email: 'lk_*test*' }).toEqual(wrapper.vm.getFilters());
-    });
-
-    it('should return object with page filter', () => {
-      wrapper.vm.currentPage = 2;
-      wrapper.vm.elementsPerPage = 10;
-      wrapper.vm.userName = '';
-      wrapper.vm.userLogin = '';
-      wrapper.vm.userEmail = '';
-
-      expect({ page: '1' }).toEqual(wrapper.vm.getFilters());
-    });
-
-    it('should return object with count filter', () => {
-      wrapper.vm.currentPage = 0;
-      wrapper.vm.elementsPerPage = 5;
-      wrapper.vm.userName = '';
-      wrapper.vm.userLogin = '';
-      wrapper.vm.userEmail = '';
-
-      expect({ count: '5' }).toEqual(wrapper.vm.getFilters());
-    });
-
-    it('should return object with all filters', () => {
-      wrapper.vm.currentPage = 2;
-      wrapper.vm.elementsPerPage = 5;
-      wrapper.vm.userName = 'userName';
-      wrapper.vm.userLogin = 'userLogin';
-      wrapper.vm.userEmail = 'userEmail';
-
-      expect({
-        count: '5',
-        page: '1',
-        name: 'lk_*userName*',
-        login: 'lk_*userLogin*',
-        email: 'lk_*userEmail*',
-      }).toEqual(wrapper.vm.getFilters());
     });
   });
 
@@ -242,65 +178,6 @@ describe('Test component: UsersPage', () => {
       wrapper.vm.search();
 
       expect(wrapper.vm.users).toEqual(('users'));
-    });
-  });
-
-  describe('Test function: init', () => {
-    it('should not change value without query parameters', () => {
-      wrapper.vm.elementsPerPage = 100;
-      wrapper.vm.currentPage = 200;
-      wrapper.vm.userName = 'userName';
-      wrapper.vm.userLogin = 'userLogin';
-      wrapper.vm.userEmail = 'userEmail';
-
-      wrapper.vm.init({});
-
-      expect(wrapper.vm.elementsPerPage).toEqual(100);
-      expect(wrapper.vm.currentPage).toEqual(200);
-      expect(wrapper.vm.userName).toEqual('userName');
-      expect(wrapper.vm.userLogin).toEqual('userLogin');
-      expect(wrapper.vm.userEmail).toEqual('userEmail');
-    });
-
-    it('should set default value with bad query parameters', () => {
-      wrapper.vm.elementsPerPage = 100;
-      wrapper.vm.currentPage = 200;
-      wrapper.vm.userName = 'userName';
-      wrapper.vm.userLogin = 'userLogin';
-      wrapper.vm.userEmail = 'userEmail';
-
-      wrapper.vm.init({
-        size: 'a',
-        page: 'b',
-      });
-
-      expect(wrapper.vm.elementsPerPage).toEqual(10);
-      expect(wrapper.vm.currentPage).toEqual(0);
-      expect(wrapper.vm.userName).toEqual('userName');
-      expect(wrapper.vm.userLogin).toEqual('userLogin');
-      expect(wrapper.vm.userEmail).toEqual('userEmail');
-    });
-
-    it('should set value from query parameters', () => {
-      wrapper.vm.elementsPerPage = 100;
-      wrapper.vm.currentPage = 200;
-      wrapper.vm.userName = 'userName';
-      wrapper.vm.userLogin = 'userLogin';
-      wrapper.vm.userEmail = 'userEmail';
-
-      wrapper.vm.init({
-        size: '2',
-        page: '1',
-        name: 'name',
-        login: 'login',
-        email: 'email',
-      });
-
-      expect(wrapper.vm.elementsPerPage).toEqual(2);
-      expect(wrapper.vm.currentPage).toEqual(1);
-      expect(wrapper.vm.userName).toEqual('name');
-      expect(wrapper.vm.userLogin).toEqual('login');
-      expect(wrapper.vm.userEmail).toEqual('email');
     });
   });
 
