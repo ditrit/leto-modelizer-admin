@@ -67,9 +67,7 @@ import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 import ReloadRolesEvent from 'src/composables/events/ReloadRolesEvent';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import { useServerSideFilter } from 'src/composables/ServerSideFilter';
-import PageFilter from 'src/composables/filters/PageFilter';
-import CountFilter from 'src/composables/filters/CountFilter';
-import AccessControlNameFilter from 'src/composables/filters/AccessControlNameFilter';
+import accessControlFilters from 'src/composables/filters/AccessControlFilters';
 
 const emits = defineEmits([
   'update:access-control-query',
@@ -108,11 +106,7 @@ const {
   init,
   getFilters,
   generateQuery,
-} = useServerSideFilter([
-  new PageFilter(),
-  new CountFilter(),
-  new AccessControlNameFilter(props.subType),
-]);
+} = useServerSideFilter(accessControlFilters(props.subType));
 
 const translationKey = computed(() => (props.type === 'role' ? 'Role' : 'Group'));
 

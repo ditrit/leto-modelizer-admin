@@ -51,9 +51,7 @@ import ReloadUsersEvent from 'src/composables/events/ReloadUsersEvent';
 import DialogEvent from 'src/composables/events/DialogEvent';
 import UsersTable from 'src/components/tables/UsersTable.vue';
 import { useServerSideFilter } from 'src/composables/ServerSideFilter';
-import PageFilter from 'src/composables/filters/PageFilter';
-import CountFilter from 'src/composables/filters/CountFilter';
-import StringFilter from 'src/composables/filters/StringFilter';
+import userFilters from 'src/composables/filters/UserFilters';
 
 const emits = defineEmits([
   'update:users-query',
@@ -80,13 +78,7 @@ const {
   init,
   getFilters,
   generateQuery,
-} = useServerSideFilter([
-  new PageFilter(),
-  new CountFilter(),
-  new StringFilter('name', 'name', 'name'),
-  new StringFilter('login', 'login', 'login'),
-  new StringFilter('email', 'email', 'email'),
-]);
+} = useServerSideFilter(userFilters);
 
 let reloadUsersEventRef;
 

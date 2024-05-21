@@ -1,11 +1,11 @@
-// example pour User filters si duplication dans Sonar
-
 import StringFilter from 'src/composables/filters/StringFilter';
-import PaginationFilters from 'src/composables/filters/PaginationFilters'; // à créer
+import PageFilter from 'src/composables/filters/PageFilter';
+import CountFilter from 'src/composables/filters/CountFilter';
 
 export default [
-  ...PaginationFilters, // à créer
-  new StringFilter('name', 'name'),
-  new StringFilter('login', 'login'),
-  new StringFilter('email', 'email'),
+  new PageFilter(),
+  new CountFilter(),
+  new StringFilter('name', 'name', 'name'),
+  new StringFilter('login', 'login', 'login'),
+  new StringFilter('email', 'email', 'email'),
 ];
