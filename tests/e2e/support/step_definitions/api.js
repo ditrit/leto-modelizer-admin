@@ -77,7 +77,7 @@ const defaultResponse = {
     pageNumber: 0,
   },
   totalPages: 1,
-  size: 5,
+  size: 10,
   totalElements: 0,
 };
 
@@ -104,22 +104,6 @@ function setUserIntercepts() {
   });
 
   cy.intercept('GET', '/api/users', {
-    statusCode: 200,
-    body: {
-      ...defaultResponse,
-      content: [adminUser, user],
-    },
-  });
-
-  cy.intercept('GET', '/api/users?page=0', {
-    statusCode: 200,
-    body: {
-      ...defaultResponse,
-      content: [adminUser, user],
-    },
-  });
-
-  cy.intercept('GET', '/api/users?page=0&count=5', {
     statusCode: 200,
     body: {
       ...defaultResponse,
@@ -175,22 +159,6 @@ function setUserIntercepts() {
     },
   });
 
-  cy.intercept('GET', '/api/users/admin/roles?page=0&count=5', {
-    statusCode: 200,
-    body: {
-      ...defaultResponse,
-      content: [superAdmin],
-    },
-  });
-
-  cy.intercept('GET', '/api/users/login/roles?page=0&count=5', {
-    statusCode: 200,
-    body: {
-      ...defaultResponse,
-      content: [dev],
-    },
-  });
-
   cy.intercept('GET', '/api/users/login/roles', {
     statusCode: 200,
     body: {
@@ -208,14 +176,6 @@ function setUserIntercepts() {
   });
 
   cy.intercept('GET', '/api/users/admin/groups', {
-    statusCode: 200,
-    body: {
-      ...defaultResponse,
-      content: [group1],
-    },
-  });
-
-  cy.intercept('GET', '/api/users/admin/groups?page=0&count=5', {
     statusCode: 200,
     body: {
       ...defaultResponse,
@@ -255,12 +215,7 @@ function setUserIntercepts() {
       content: [
         user,
       ],
-      pageable: {
-        pageNumber: 0,
-      },
-      totalPages: 1,
-      size: 10,
-      totalElements: 3,
+      ...defaultResponse,
     },
   });
 
@@ -270,12 +225,7 @@ function setUserIntercepts() {
       content: [
         user,
       ],
-      pageable: {
-        pageNumber: 0,
-      },
-      totalPages: 1,
-      size: 10,
-      totalElements: 3,
+      ...defaultResponse,
     },
   });
 
@@ -300,15 +250,7 @@ function setGroupIntercepts() {
     },
   });
 
-  cy.intercept('GET', '/api/groups?page=0&count=5', {
-    statusCode: 200,
-    body: {
-      ...defaultResponse,
-      content: [group1, group2],
-    },
-  });
-
-  cy.intercept('GET', '/api/groups?name=lk_*test*&page=0&count=5', {
+  cy.intercept('GET', '/api/groups?name=lk_*test*', {
     statusCode: 200,
     body: {
       content: [
@@ -316,12 +258,7 @@ function setGroupIntercepts() {
         group2,
         group3,
       ],
-      pageable: {
-        pageNumber: 0,
-      },
-      totalPages: 1,
-      size: 10,
-      totalElements: 3,
+      ...defaultResponse,
     },
   });
 
@@ -389,14 +326,6 @@ function setGroupIntercepts() {
     },
   });
 
-  cy.intercept('GET', '/api/groups/2/users?page=0&count=5', {
-    statusCode: 200,
-    body: {
-      ...defaultResponse,
-      content: [adminUser],
-    },
-  });
-
   cy.intercept('GET', '/api/groups/3/users', {
     statusCode: 200,
     body: {
@@ -414,14 +343,6 @@ function setGroupIntercepts() {
   });
 
   cy.intercept('GET', '/api/groups/2/groups', {
-    statusCode: 200,
-    body: {
-      ...defaultResponse,
-      content: [group1],
-    },
-  });
-
-  cy.intercept('GET', '/api/groups/2/groups?page=0&count=5', {
     statusCode: 200,
     body: {
       ...defaultResponse,
@@ -454,14 +375,6 @@ function setGroupIntercepts() {
   });
 
   cy.intercept('GET', '/api/groups/2/roles', {
-    statusCode: 200,
-    body: {
-      ...defaultResponse,
-      content: [dev],
-    },
-  });
-
-  cy.intercept('GET', '/api/groups/2/roles?page=0&count=5', {
     statusCode: 200,
     body: {
       ...defaultResponse,
@@ -576,12 +489,7 @@ function setRoleIntercepts() {
         admin,
         dev,
       ],
-      pageable: {
-        pageNumber: 0,
-      },
-      totalPages: 1,
-      size: 10,
-      totalElements: 3,
+      ...defaultResponse,
     },
   });
 
@@ -609,16 +517,11 @@ function setRoleIntercepts() {
         admin,
         dev,
       ],
-      pageable: {
-        pageNumber: 0,
-      },
-      totalPages: 1,
-      size: 10,
-      totalElements: 3,
+      ...defaultResponse,
     },
   });
 
-  cy.intercept('GET', '/api/roles?name=lk_*test*&page=0', {
+  cy.intercept('GET', '/api/roles?name=lk_*test*', {
     statusCode: 200,
     body: {
       content: [
@@ -626,16 +529,11 @@ function setRoleIntercepts() {
         admin,
         dev,
       ],
-      pageable: {
-        pageNumber: 0,
-      },
-      totalPages: 1,
-      size: 10,
-      totalElements: 3,
+      ...defaultResponse,
     },
   });
 
-  cy.intercept('GET', '/api/roles?id=not_1&page=0&count=5', {
+  cy.intercept('GET', '/api/roles?id=not_1', {
     statusCode: 200,
     body: {
       ...defaultResponse,
@@ -646,7 +544,7 @@ function setRoleIntercepts() {
     },
   });
 
-  cy.intercept('GET', '/api/roles?id=not_2|not_1&page=0&count=5', {
+  cy.intercept('GET', '/api/roles?id=not_2|not_1', {
     statusCode: 200,
     body: {
       ...defaultResponse,
@@ -701,27 +599,7 @@ function setRoleIntercepts() {
     },
   });
 
-  cy.intercept('GET', '/api/roles/2/users?page=0&count=5', {
-    statusCode: 200,
-    body: {
-      ...defaultResponse,
-      content: [
-        adminUser,
-      ],
-    },
-  });
-
   cy.intercept('GET', '/api/roles/2/groups', {
-    statusCode: 200,
-    body: {
-      ...defaultResponse,
-      content: [
-        group1,
-      ],
-    },
-  });
-
-  cy.intercept('GET', '/api/roles/2/groups?page=0&count=5', {
     statusCode: 200,
     body: {
       ...defaultResponse,
@@ -741,27 +619,7 @@ function setRoleIntercepts() {
     },
   });
 
-  cy.intercept('GET', '/api/roles/2/roles?page=0&count=5', {
-    statusCode: 200,
-    body: {
-      ...defaultResponse,
-      content: [
-        dev,
-      ],
-    },
-  });
-
   cy.intercept('GET', '/api/roles/2/permissions', {
-    statusCode: 200,
-    body: {
-      ...defaultResponse,
-      content: [
-        permission1,
-      ],
-    },
-  });
-
-  cy.intercept('GET', '/api/roles/2/permissions?page=0&count=5', {
     statusCode: 200,
     body: {
       ...defaultResponse,

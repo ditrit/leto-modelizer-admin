@@ -100,6 +100,7 @@ Feature: Test roundtrip of the application: Users
     ## 301 Should disabled confirm button if no group is selected
     When I click on '[data-cy="users_table"] [data-cy="user_admin_button_show"]'
     Then I expect current url is '/users/admin'
+    And  I wait 1 second
 
     When I click on '[data-cy="page_user_groups_tab"]'
     Then I expect '[data-cy="groups_tab_panel"]' exists
@@ -209,16 +210,16 @@ Feature: Test roundtrip of the application: Users
     ## 801 Should change url on filter name
     When I set on '[data-cy="user_filter_name"]' text 'admin'
     And  I wait 2 seconds
-    Then I expect current url is 'users\?size=5&name=admin'
+    Then I expect current url is 'users\?name=admin'
 
     ## 802 Should change url on filter login
     When I set on '[data-cy="user_filter_name"]' text ''
     And  I set on '[data-cy="user_filter_login"]' text 'login'
     And  I wait 2 seconds
-    Then I expect current url is 'users\?size=5&login=login'
+    Then I expect current url is 'users\?login=login'
 
     ## 803 Should change url on filter email
     When I set on '[data-cy="user_filter_login"]' text ''
     And  I set on '[data-cy="user_filter_email"]' text 'test'
     And  I wait 2 seconds
-    Then I expect current url is 'users\?size=5&email=test'
+    Then I expect current url is 'users\?email=test'

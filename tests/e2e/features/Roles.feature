@@ -113,6 +113,7 @@ Feature: Test roundtrip of the application: Roles
     ## 301 Should disabled confirm button if no user is selected
     When I click on '[data-cy="roles_table"] [data-cy="role_2_button_show"]'
     Then I expect current url is '/roles/2'
+    And  I wait 1 second
 
     When I click on '[data-cy="page_role_users_tab"]'
     Then I expect '[data-cy="users_tab_panel"]' exists

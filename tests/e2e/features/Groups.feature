@@ -285,4 +285,4 @@ Feature: Test roundtrip of the application: Groups
     ## 1201 Should change url on filter name
     When I set on '[data-cy="group_filter_name"]' text 'test'
     And  I wait 2 seconds
-    Then I expect current url is 'groups\?size=5&name=test'
+    Then I expect current url is 'groups\?name=test'
