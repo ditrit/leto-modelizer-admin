@@ -4,8 +4,13 @@ Feature: Test roundtrip of the application: Users
   ## 101 Should display all users
 
   ################## Select user ##################
-  ## 201 Should display all users information
-  ## 202 Should redirect to users if user is not found
+  ## 201 Should display related groups
+  ## 202 Should change url on filter group name attached to the user
+  ## 203 Should display related roles
+  ## 204 Should change url on filter role name attached to the user
+  ## 205 Should display related permissions
+  ## 206 Should change url on filter permission entity attached to the user
+  ## 207 Should redirect to users if user is not found
 
   ################## Attach group ##################
   ## 301 Should disabled confirm button if no group is selected
@@ -56,39 +61,51 @@ Feature: Test roundtrip of the application: Users
     ################## Select users ###############
     ####################################################
 
-    ## 201 Should display all users information
     When I click on '[data-cy="users_table"] [data-cy="user_admin_button_show"]'
-    Then I expect current url is '/users/admin'
+    Then I expect current url is '/users/admin\?tab=groups'
     And  I expect '[data-cy="page_user_loading"]' not exists
     And  I expect '[data-cy="page_user_title"]' is 'Admin'
 
-    # Display related groups
+    ## 201 Should display related groups
+    And  I expect '[data-cy="page_user_groups_tab"]' exists
     And  I expect '[data-cy="groups_tab_panel"]' exists
     And  I expect '[data-cy="groups_title"]' exists
     And  I expect '[data-cy="groups_table"]' exists
     And  I expect '[data-cy="groups_table"] tbody tr:nth-child(1) td.group-name' is 'Group 1'
 
-    # Display related roles
+    ## 202 Should change url on filter group name attached to the user
+    When I set on '[data-cy="group_filter_name"]' text 'test'
+    And  I wait 1 second
+    Then I expect current url is 'users/admin\?tab=groups&name=test'
+
+    ## 203 Should display related roles
     When I click on '[data-cy="page_user_roles_tab"]'
-    Then I expect '[data-cy="page_user_roles_tab"]' exists
+    Then I expect current url is 'users/admin\?tab=roles'
     And  I expect '[data-cy="roles_tab_panel"]' exists
     And  I expect '[data-cy="roles_title"]' exists
     And  I expect '[data-cy="roles_table"]' exists
     And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'SUPER_ADMINISTRATOR'
 
-    # Display related permissions
+    ## 204 Should change url on filter role name attached to the user
+    When I set on '[data-cy="role_filter_name"]' text 'test'
+    And  I wait 1 second
+    Then I expect current url is 'users/admin\?tab=roles&name=test'
+
+    ## 205 Should display related permissions
     When I click on '[data-cy="page_user_permissions_tab"]'
-    Then I expect '[data-cy="page_user_permissions_tab"]' exists
+    Then I expect current url is 'users/admin\?tab=permissions'
     And  I expect '[data-cy="permissions_tab_panel"]' exists
     And  I expect '[data-cy="permissions_title"]' exists
     And  I expect '[data-cy="permissions_table"]' exists
     And  I expect '[data-cy="permissions_table"] tbody tr:nth-child(1) td.permission-entity' is 'Project'
     And  I expect '[data-cy="permissions_table"] tbody tr:nth-child(1) td.permission-action' is 'Create'
 
-    When I click on '[data-cy="page_user_go_back"]'
-    Then I expect current url is '/users'
+    ## 206 Should change url on filter permission entity attached to the user
+    When I select '[data-cy="permission_entity_Diagram"]' in '[data-cy="permission_filter_entity"]'
+    And  I wait 1 second
+    Then I expect current url is 'users/admin\?tab=permissions&entity=DIAGRAM'
 
-    ## 202 Should redirect to users if user is not found
+    ## 207 Should redirect to users if user is not found
     When I visit the '/users/unknown'
     Then I expect current url is '/users'
     And  I expect 'negative' toast to appear with text 'User not found.'
@@ -100,6 +117,7 @@ Feature: Test roundtrip of the application: Users
     ## 301 Should disabled confirm button if no group is selected
     When I click on '[data-cy="users_table"] [data-cy="user_admin_button_show"]'
     Then I expect current url is '/users/admin'
+    And  I wait 1 second
 
     When I click on '[data-cy="page_user_groups_tab"]'
     Then I expect '[data-cy="groups_tab_panel"]' exists
@@ -209,16 +227,16 @@ Feature: Test roundtrip of the application: Users
     ## 801 Should change url on filter name
     When I set on '[data-cy="user_filter_name"]' text 'admin'
     And  I wait 2 seconds
-    Then I expect current url is 'users\?size=5&name=admin'
+    Then I expect current url is 'users\?name=admin'
 
     ## 802 Should change url on filter login
     When I set on '[data-cy="user_filter_name"]' text ''
     And  I set on '[data-cy="user_filter_login"]' text 'login'
     And  I wait 2 seconds
-    Then I expect current url is 'users\?size=5&login=login'
+    Then I expect current url is 'users\?login=login'
 
     ## 803 Should change url on filter email
     When I set on '[data-cy="user_filter_login"]' text ''
     And  I set on '[data-cy="user_filter_email"]' text 'test'
     And  I wait 2 seconds
-    Then I expect current url is 'users\?size=5&email=test'
+    Then I expect current url is 'users\?email=test'
