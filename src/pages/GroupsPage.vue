@@ -19,10 +19,10 @@
       />
     </div>
     <access-control-table
-      v-model:filter-name="groupName"
-      v-model:current-page="currentPage"
+      v-model:filter-name="filters.name"
+      v-model:current-page="filters.page"
       v-model:max-page="maxPage"
-      v-model:elements-per-page="elementsPerPage"
+      v-model:elements-per-page="filters.count"
       v-model:total-elements="totalElements"
       access-control-type="group"
       :rows="groups"
@@ -48,16 +48,21 @@ import {
 } from 'vue';
 import * as GroupService from 'src/services/GroupService';
 import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
+import { useServerSideFilter } from 'src/composables/ServerSideFilter';
+import accessControlFilters from 'src/composables/filters/AccessControlFilters';
 
 const router = useRouter();
 const route = useRoute();
 const groups = ref([]);
-const groupName = ref('');
-const currentPage = ref(0);
 const maxPage = ref(0);
-const elementsPerPage = ref(10);
 const totalElements = ref(0);
 const loading = ref(false);
+const {
+  filters,
+  init,
+  getFilters,
+  generateQuery,
+} = useServerSideFilter(accessControlFilters());
 
 let reloadGroupsEventRef;
 
@@ -85,43 +90,10 @@ function openRemoveGroupDialog(group) {
  * Update route url with value of filters and pagination.
  */
 function updateRoute() {
-  const queryParameters = [];
+  const query = new URLSearchParams(generateQuery()).toString();
+  const querySuffix = query.length > 0 ? `?${query}` : '';
 
-  if (elementsPerPage.value !== 10) {
-    queryParameters.push(`size=${elementsPerPage.value}`);
-  }
-
-  if (currentPage.value !== 1) {
-    queryParameters.push(`page=${currentPage.value}`);
-  }
-
-  if (groupName.value?.length > 0) {
-    queryParameters.push(`name=${groupName.value}`);
-  }
-
-  router.push(queryParameters.length > 0 ? `/groups?${queryParameters.join('&')}` : '/groups');
-}
-
-/**
- * Create API filters from component ref.
- * @returns {object} Object that contains role filters.
- */
-function getFilters() {
-  const filters = {};
-
-  if (groupName.value?.length > 0) {
-    filters.name = `lk_*${groupName.value}*`;
-  }
-
-  if (currentPage.value >= 1) {
-    filters.page = `${currentPage.value - 1}`;
-  }
-
-  if (elementsPerPage.value !== 10) {
-    filters.count = `${elementsPerPage.value}`;
-  }
-
-  return filters;
+  router.push(`/groups${querySuffix}`);
 }
 
 /**
@@ -134,33 +106,15 @@ async function search() {
 
   return GroupService.find(getFilters()).then((data) => {
     groups.value = data.content;
-    currentPage.value = data.pageable.pageNumber + 1;
+    filters.value.page = data.pageable.pageNumber + 1;
     maxPage.value = data.totalPages;
-    elementsPerPage.value = data.size;
+    filters.value.count = data.size;
     totalElements.value = data.totalElements;
 
     return Promise.resolve();
   }).finally(() => {
     loading.value = false;
   });
-}
-
-/**
- * Init filters and pagination from query parameters in url.
- * @param {object} query - URL query parameters.
- */
-function init(query) {
-  if (query.size) {
-    elementsPerPage.value = parseInt(query.size, 10) || 10;
-  }
-
-  if (query.page) {
-    currentPage.value = parseInt(query.page, 10) || 0;
-  }
-
-  if (query.name) {
-    groupName.value = query.name;
-  }
 }
 
 onMounted(async () => {
