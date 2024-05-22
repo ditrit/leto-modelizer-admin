@@ -24,7 +24,12 @@ describe('Test component: RolePage', () => {
   beforeEach(() => {
     Notify.create = vi.fn();
     push = vi.fn();
-    useRoute.mockImplementation(() => ({ params: { id: 'id1' } }));
+    useRoute.mockImplementation(() => ({
+      params: { id: 'id1' },
+      query: {
+        tab: 'roles',
+      },
+    }));
     useRouter.mockImplementation(() => ({ push }));
 
     RoleService.findById.mockImplementation(() => Promise.resolve(role));
@@ -33,6 +38,54 @@ describe('Test component: RolePage', () => {
 
   it('should mount the component', () => {
     expect(wrapper).not.toBeNull();
+  });
+
+  describe('Test computed: currentTab', () => {
+    it('should be "roles"', () => {
+      expect(wrapper.vm.currentTab).toBe('roles');
+    });
+
+    it('should be "users" when route.query.tab is undefined', () => {
+      useRoute.mockImplementation(() => ({
+        params: { id: 'id1' },
+        query: {},
+      }));
+
+      wrapper = shallowMount(RolePage);
+
+      expect(wrapper.vm.currentTab).toBe('users');
+    });
+  });
+
+  describe('Test function: updateUrl', () => {
+    it('should update the URL with current tab query params', () => {
+      wrapper.vm.tabsQuery = { roles: { page: 1 } };
+
+      wrapper.vm.updateUrl('roles');
+
+      expect(push).toBeCalledWith('/roles/1?tab=roles&page=1');
+    });
+  });
+
+  describe('Test function: setTabsQuery', () => {
+    it('should set tabsQuery and call updateUrl', () => {
+      wrapper.vm.tabsQuery = {
+        users: {},
+        groups: {},
+        roles: {},
+        permissions: {},
+      };
+
+      wrapper.vm.setTabsQuery('users', { page: 1 });
+
+      expect(wrapper.vm.tabsQuery).toEqual({
+        users: { page: 1 },
+        groups: {},
+        roles: {},
+        permissions: {},
+      });
+      expect(push).toBeCalledWith('/roles/1?tab=users&page=1');
+    });
   });
 
   describe('Test function: loadRole', () => {

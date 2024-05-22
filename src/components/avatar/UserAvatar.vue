@@ -12,7 +12,7 @@
       :alt="login"
     />
     <template v-else>
-      {{ login.at(0).toUpperCase() }}
+      {{ login?.at(0).toUpperCase() }}
     </template>
   </q-avatar>
 </template>
@@ -48,6 +48,6 @@ async function loadUserPicture() {
 }
 
 onMounted(async () => {
-  loadUserPicture();
+  await loadUserPicture();
 });
 </script>

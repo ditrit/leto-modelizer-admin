@@ -42,10 +42,11 @@
       </q-item>
       <q-card-section class="q-pa-none">
         <q-tabs
-          v-model="currentTab"
+          :model-value="currentTab"
           no-caps
           active-color="primary"
           align="left"
+          @update:model-value="updateUrl"
         >
           <q-tab
             name="groups"
@@ -72,35 +73,43 @@
       />
     </q-card>
     <q-tab-panels
-      v-model="currentTab"
+      :model-value="currentTab"
       animated
       transition-prev="jump-up"
       transition-next="jump-down"
       class="bg-grey-1"
+      @update:model-value="updateUrl"
     >
       <access-control-tab-panel
         name="groups"
         type="group"
         sub-type="user"
         :entity="user"
+        @update:access-control-query="(v) => setTabsQuery('groups', v)"
       />
       <access-control-tab-panel
         name="roles"
         type="role"
         sub-type="user"
         :entity="user"
+        @update:access-control-query="(v) => setTabsQuery('roles', v)"
       />
       <permissions-tab-panel
         name="permissions"
         type="user"
         :entity="user"
+        @update:permissions-query="(v) => setTabsQuery('permissions', v)"
       />
     </q-tab-panels>
   </q-page>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import {
+  onMounted,
+  ref,
+  computed,
+} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import * as UserService from 'src/services/UserService';
 import { Notify } from 'quasar';
@@ -109,12 +118,38 @@ import UserAvatar from 'components/avatar/UserAvatar.vue';
 import AccessControlTabPanel from 'components/tab-panel/AccessControlTabPanel.vue';
 import PermissionsTabPanel from 'components/tab-panel/PermissionsTabPanel.vue';
 
-const loading = ref(false);
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
+const loading = ref(false);
 const user = ref({});
-const currentTab = ref('groups');
+const tabsQuery = ref({
+  groups: {},
+  roles: {},
+  permissions: {},
+});
+const currentTab = computed(() => route.query.tab || 'groups');
+
+/**
+ * Update url with current tab query params.
+ * @param {string} tab - Tab Name.
+ */
+function updateUrl(tab) {
+  const query = { tab, ...tabsQuery.value[tab] };
+  const queryString = new URLSearchParams(query).toString();
+
+  router.push(`/users/${user.value.login}?${queryString}`);
+}
+
+/**
+ * Set tabsQuery and call updateUrl.
+ * @param {string} tab - Tab name.
+ * @param {object} query - Query params object emitted from corresponding tab.
+ */
+function setTabsQuery(tab, query) {
+  tabsQuery.value[tab] = query;
+  updateUrl(tab);
+}
 
 /**
  * Load user from login in url. If the user does not exist, redirect to the users page.

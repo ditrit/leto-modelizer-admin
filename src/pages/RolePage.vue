@@ -23,10 +23,11 @@
       </q-card-section>
       <q-card-section class="q-pa-none">
         <q-tabs
-          v-model="currentTab"
+          :model-value="currentTab"
           no-caps
           active-color="primary"
           align="left"
+          @update:model-value="updateUrl"
         >
           <q-tab
             name="users"
@@ -58,16 +59,18 @@
       />
     </q-card>
     <q-tab-panels
-      v-model="currentTab"
+      :model-value="currentTab"
       animated
       transition-prev="jump-up"
       transition-next="jump-down"
       class="bg-grey-1"
+      @update:model-value="updateUrl"
     >
       <users-tab-panel
         name="users"
         type="role"
         :entity="role"
+        @update:users-query="(v) => setTabsQuery('users', v)"
       />
       <access-control-tab-panel
         name="groups"
@@ -76,6 +79,7 @@
         :entity="role"
         :is-super-admin="isSuperAdmin"
         :warning-text="$t('RolePage.text.addGroupMessage')"
+        @update:access-control-query="(v) => setTabsQuery('groups', v)"
       />
       <access-control-tab-panel
         name="roles"
@@ -84,6 +88,7 @@
         :entity="role"
         :is-super-admin="isSuperAdmin"
         :warning-text="$t('RolePage.text.addRoleMessage')"
+        @update:access-control-query="(v) => setTabsQuery('roles', v)"
       />
       <permissions-tab-panel
         name="permissions"
@@ -91,6 +96,7 @@
         :entity="role"
         :is-super-admin="isSuperAdmin"
         :warning-text="$t('RolePage.text.addPermissionMessage')"
+        @update:permissions-query="(v) => setTabsQuery('permissions', v)"
       />
     </q-tab-panels>
   </q-page>
@@ -110,13 +116,40 @@ import UsersTabPanel from 'components/tab-panel/UsersTabPanel.vue';
 import AccessControlTabPanel from 'components/tab-panel/AccessControlTabPanel.vue';
 import PermissionsTabPanel from 'components/tab-panel/PermissionsTabPanel.vue';
 
-const loading = ref(false);
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
+const loading = ref(false);
 const role = ref({});
-const currentTab = ref('users');
+const tabsQuery = ref({
+  users: {},
+  groups: {},
+  roles: {},
+  permissions: {},
+});
+const currentTab = computed(() => route.query.tab || 'users');
 const isSuperAdmin = computed(() => role.value.name === process.env.SUPER_ADMINISTRATOR_ROLE_NAME);
+
+/**
+ * Update url with current tab query params.
+ * @param {string} tab - Tab Name.
+ */
+function updateUrl(tab) {
+  const query = { tab, ...tabsQuery.value[tab] };
+  const queryString = new URLSearchParams(query).toString();
+
+  router.push(`/roles/${role.value.id}?${queryString}`);
+}
+
+/**
+ * Set tabsQuery and call updateUrl.
+ * @param {string} tab - Tab name.
+ * @param {object} query - Query params object emitted from corresponding tab.
+ */
+function setTabsQuery(tab, query) {
+  tabsQuery.value[tab] = query;
+  updateUrl(tab);
+}
 
 /**
  * Load role from id in url. If the role does not exist, redirect to the roles page.

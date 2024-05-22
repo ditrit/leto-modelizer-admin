@@ -11,8 +11,15 @@ Feature: Test roundtrip of the application: Groups
   ## 205 Should create group and go to its page
 
   ################## Select group ##################
-  ## 301 Should display all groups information
-  ## 302 Should redirect to groups if group is not found
+  ## 301 Should display related users
+  ## 302 Should change url on filter user name attached to the group
+  ## 303 Should display related groups
+  ## 304 Should change url on filter group name attached to the group
+  ## 305 Should display related roles
+  ## 306 Should change url on filter role name attached to the group
+  ## 307 Should display related permissions
+  ## 308 Should change url on filter permission entity attached to the group
+  ## 309 Should redirect to groups if group is not found
 
   ################## Attach user ##################
   ## 401 Should disabled confirm button if no user is selected
@@ -39,7 +46,7 @@ Feature: Test roundtrip of the application: Groups
   ## 1001 Should delete selected group
 
   ################## Filter group #################
-  ## 1101 Should change url on filter name
+  ## 1101 Should change url on filter group name
 
   Scenario: Roundtrip about Groups
     Given I visit the '/'
@@ -123,14 +130,13 @@ Feature: Test roundtrip of the application: Groups
     ################## Select groups ###############
     ####################################################
 
-    ## 301 Should display all groups information
     When I click on '[data-cy="page_group_go_back"]'
     And  I click on '[data-cy="groups_table"] [data-cy="group_1_button_show"]'
-    Then I expect current url is '/groups/1'
+    Then I expect current url is 'groups/1\?tab=users'
     And  I expect '[data-cy="page_group_loading"]' not exists
     And  I expect '[data-cy="page_group_title"]' is 'Group 1'
 
-    # Display related users
+    ## 301 Should display related users
     And  I expect '[data-cy="page_group_users_tab"]' exists
     And  I expect '[data-cy="users_tab_panel"]' exists
     And  I expect '[data-cy="users_title"]' exists
@@ -138,30 +144,49 @@ Feature: Test roundtrip of the application: Groups
     And  I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-name' is 'Admin'
     And  I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-login' is 'admin'
 
-    # Display related groups
+    ## 302 Should change url on filter user name attached to the group
+    When I set on '[data-cy="user_filter_name"]' text 'test'
+    Then I expect current url is 'groups/1\?tab=users&name=test'
+
+    ## 303 Should display related groups
     When I click on '[data-cy="page_group_groups_tab"]'
-    Then I expect '[data-cy="groups_tab_panel"]' exists
+    Then I expect current url is 'groups/1\?tab=groups'
+    And  I expect '[data-cy="groups_tab_panel"]' exists
     And  I expect '[data-cy="groups_title"]' exists
     And  I expect '[data-cy="groups_table"]' exists
     And  I expect '[data-cy="groups_table"] tbody tr:nth-child(1) td.group-name' is 'Group 1'
 
-    # Display related roles
+    ## 304 Should change url on filter group name attached to the group
+    When I set on '[data-cy="group_filter_name"]' text 'test'
+    And  I wait 1 second
+    Then I expect current url is 'groups/1\?tab=groups&name=test'
+
+    ## 305 Should display related roles
     When I click on '[data-cy="page_group_roles_tab"]'
-    Then I expect '[data-cy="roles_tab_panel"]' exists
+    Then I expect current url is 'groups/1\?tab=roles'
+    And  I expect '[data-cy="roles_tab_panel"]' exists
     And  I expect '[data-cy="roles_title"]' exists
     And  I expect '[data-cy="roles_table"]' exists
     And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'SUPER_ADMINISTRATOR'
 
-    # Display related permissions
+    ## 306 Should change url on filter role name attached to the group
+    When I set on '[data-cy="role_filter_name"]' text 'test'
+    And  I wait 1 second
+    Then I expect current url is 'groups/1\?tab=roles&name=test'
+
+    ## 307 Should display related permissions
     When I click on '[data-cy="page_group_permissions_tab"]'
-    Then I expect '[data-cy="permissions_tab_panel"]' exists
+    Then I expect current url is 'groups/1\?tab=permissions'
+    And  I expect '[data-cy="permissions_tab_panel"]' exists
     And  I expect '[data-cy="permissions_title"]' exists
     And  I expect '[data-cy="permissions_table"]' exists
 
-    When I click on '[data-cy="page_group_go_back"]'
-    Then I expect current url is '/groups'
+    ## 308 Should change url on filter permission entity attached to the group
+    When I select '[data-cy="permission_entity_Project"]' in '[data-cy="permission_filter_entity"]'
+    And  I wait 1 second
+    Then I expect current url is 'groups/1\?tab=permissions&entity=PROJECT'
 
-    ## 302 Should redirect to groups if group is not found
+    ## 309 Should redirect to groups if group is not found
     When I visit the '/groups/unknown'
     Then I expect current url is '/groups'
     And  I expect 'negative' toast to appear with text 'Group not found.'
@@ -282,7 +307,7 @@ Feature: Test roundtrip of the application: Groups
     ################## Filter group ################
     ####################################################
 
-    ## 1201 Should change url on filter name
+    ## 1101 Should change url on filter group name
     When I set on '[data-cy="group_filter_name"]' text 'test'
     And  I wait 2 seconds
-    Then I expect current url is 'groups\?size=5&name=test'
+    Then I expect current url is 'groups\?name=test'

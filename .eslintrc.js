@@ -80,6 +80,7 @@ module.exports = {
     'vue/singleline-html-element-content-newline': ['error', {
       'ignoreWhenNoAttributes': false,
     }],
-    'jsdoc/no-undefined-types': 'off'
+    'jsdoc/no-undefined-types': 'off',
+    'class-methods-use-this': 'off'
   }
 }

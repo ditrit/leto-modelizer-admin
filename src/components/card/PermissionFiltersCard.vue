@@ -22,6 +22,17 @@
         <template #prepend>
           <q-icon :name="$t('PermissionFiltersCard.icon.entity')" />
         </template>
+        <template #option="{ opt, selected, toggleOption }">
+          <q-item
+            :active="selected"
+            clickable
+            @click="toggleOption(opt)"
+          >
+            <q-item-section :data-cy="`permission_entity_${opt.label}`">
+              {{ opt.label }}
+            </q-item-section>
+          </q-item>
+        </template>
       </q-select>
       <q-select
         outlined
@@ -38,6 +49,17 @@
         data-cy="permission_filter_action"
         @update:model-value="(value) => $emit('update:action', value)"
       >
+        <template #option="{ opt, selected, toggleOption }">
+          <q-item
+            :active="selected"
+            clickable
+            @click="toggleOption(opt)"
+          >
+            <q-item-section :data-cy="`permission_action_${opt.label}`">
+              {{ opt.label }}
+            </q-item-section>
+          </q-item>
+        </template>
         <template #prepend>
           <q-icon :name="$t('PermissionFiltersCard.icon.action')" />
         </template>
@@ -68,6 +90,17 @@
           <q-item>
             <q-item-section class="text-grey">
               {{ $t('PermissionFiltersCard.text.noResults') }}
+            </q-item-section>
+          </q-item>
+        </template>
+        <template #option="{ opt, selected, toggleOption }">
+          <q-item
+            :active="selected"
+            clickable
+            @click="toggleOption(opt)"
+          >
+            <q-item-section :data-cy="`permission_libraryId_${opt.label}`">
+              {{ opt.label }}
             </q-item-section>
           </q-item>
         </template>

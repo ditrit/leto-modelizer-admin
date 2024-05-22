@@ -4,8 +4,15 @@ Feature: Test roundtrip of the application: Roles
   ## 101 Should display all roles
 
   ################## Select role #################
-  ## 201 Should display selected role information
-  ## 202 Should redirect to roles if role is not found
+  ## 201 Should display related users
+  ## 202 Should change url on filter user name attached to the role
+  ## 203 Should display related groups
+  ## 204 Should change url on filter group name attached to the role
+  ## 205 Should display related roles
+  ## 206 Should change url on filter role name attached to the role
+  ## 207 Should display related permissions
+  ## 208 Should change url on filter permission entity attached to the role
+  ## 209 Should redirect to roles if role is not found
 
   ################## Attach user #################
   ## 301 Should disabled confirm button if no user is selected
@@ -62,46 +69,63 @@ Feature: Test roundtrip of the application: Roles
     ################## Select roles ###############
     ####################################################
 
-    ## 201 Should display selected role information
     When I click on '[data-cy="roles_table"] [data-cy="role_2_button_show"]'
-    Then I expect current url is '/roles/2'
+    Then I expect current url is '/roles/2\?tab=users'
     And  I expect '[data-cy="page_role_loading"]' not exists
     And  I expect '[data-cy="page_role_title"]' exists
 
-    # Display related users
+    ## 201 Should display related users
+    And  I expect '[data-cy="page_role_users_tab"]' exists
     And  I expect '[data-cy="users_tab_panel"]' exists
     And  I expect '[data-cy="users_title"]' exists
     And  I expect '[data-cy="users_table"]' exists
     And  I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-name' is 'Admin'
+    And  I expect '[data-cy="users_table"] tbody tr:nth-child(1) td.user-login' is 'admin'
 
-    # Display related groups
+    ## 202 Should change url on filter user login attached to the role
+    When I set on '[data-cy="user_filter_login"]' text 'test'
+    Then I expect current url is 'roles/2\?tab=users&login=test'
+
+    ## 203 Should display related groups
     When I click on '[data-cy="page_role_groups_tab"]'
-    Then I expect '[data-cy="page_role_groups_tab"]' exists
+    Then I expect current url is 'roles/2\?tab=groups'
     And  I expect '[data-cy="groups_tab_panel"]' exists
     And  I expect '[data-cy="groups_title"]' exists
     And  I expect '[data-cy="groups_table"]' exists
     And  I expect '[data-cy="groups_table"] tbody tr:nth-child(1) td.group-name' is 'Group 1'
 
-    # Display related roles
+    ## 204 Should change url on filter group name attached to the role
+    When I set on '[data-cy="group_filter_name"]' text 'test'
+    And  I wait 1 second
+    Then I expect current url is 'roles/2\?tab=groups&name=test'
+
+    ## 205 Should display related roles
     When I click on '[data-cy="page_role_roles_tab"]'
-    Then I expect '[data-cy="page_role_roles_tab"]' exists
+    Then I expect current url is 'roles/2\?tab=roles'
     And  I expect '[data-cy="roles_tab_panel"]' exists
     And  I expect '[data-cy="roles_title"]' exists
     And  I expect '[data-cy="roles_table"]' exists
     And  I expect '[data-cy="roles_table"] tbody tr:nth-child(1) td.role-name' is 'Developer'
 
-    # Display related permissions
+    ## 206 Should change url on filter role name attached to the role
+    When I set on '[data-cy="role_filter_name"]' text 'test'
+    And  I wait 1 second
+    Then I expect current url is 'roles/2\?tab=roles&name=test'
+
+    ## 207 Should display related permissions
     When I click on '[data-cy="page_role_permissions_tab"]'
-    Then I expect '[data-cy="page_role_permissions_tab"]' exists
+    Then I expect current url is 'roles/2\?tab=permissions'
     And  I expect '[data-cy="permissions_tab_panel"]' exists
     And  I expect '[data-cy="permissions_title"]' exists
     And  I expect '[data-cy="permissions_table"]' exists
     And  I expect '[data-cy="permissions_table"] tbody tr:nth-child(1) td.permission-entity' is 'Project'
 
-    When I click on '[data-cy="page_role_go_back"]'
-    Then I expect current url is '/roles'
+    ## 208 Should change url on filter permission action attached to the role
+    When I select '[data-cy="permission_action_Create"]' in '[data-cy="permission_filter_action"]'
+    And  I wait 1 second
+    Then I expect current url is 'roles/2\?tab=permissions&action=CREATE'
 
-    ## 202 Should redirect to roles if role is not found
+    ## 209 Should redirect to roles if role is not found
     When I visit the '/roles/unknown'
     Then I expect current url is '/roles'
     And  I expect 'negative' toast to appear with text 'Role not found.'
@@ -113,6 +137,7 @@ Feature: Test roundtrip of the application: Roles
     ## 301 Should disabled confirm button if no user is selected
     When I click on '[data-cy="roles_table"] [data-cy="role_2_button_show"]'
     Then I expect current url is '/roles/2'
+    And  I wait 1 second
 
     When I click on '[data-cy="page_role_users_tab"]'
     Then I expect '[data-cy="users_tab_panel"]' exists

@@ -10,10 +10,10 @@
         <q-card-section>
           <access-control-table
             v-model:selected="selected"
-            v-model:filter-name="nameFilter"
-            v-model:current-page="currentPage"
+            v-model:filter-name="filters.name"
+            v-model:current-page="filters.page"
             v-model:max-page="maxPage"
-            v-model:elements-per-page="elementsPerPage"
+            v-model:elements-per-page="filters.count"
             v-model:total-elements="totalElements"
             :access-control-type="accessControlType"
             :rows="rows"
@@ -65,6 +65,8 @@ import * as UserService from 'src/services/UserService';
 import { Notify } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { useUserStore } from 'src/stores/UserStore';
+import { useServerSideFilter } from 'src/composables/ServerSideFilter';
+import accessControlFilters from 'src/composables/filters/AccessControlFilters';
 
 const { t } = useI18n();
 const userStore = useUserStore();
@@ -75,10 +77,7 @@ const targetAccessControlType = ref();
 const selectOnly = ref(false);
 const selected = ref([]);
 const rows = ref([]);
-const nameFilter = ref('');
-const currentPage = ref(0);
 const maxPage = ref(0);
-const elementsPerPage = ref(10);
 const totalElements = ref(0);
 const superAdministratorId = ref('');
 const translationKey = computed(() => {
@@ -88,6 +87,10 @@ const translationKey = computed(() => {
 
   return targetAccessControlType.value === 'role' ? 'AttachGroupToRole' : 'AttachGroupToGroup';
 });
+const {
+  filters,
+  getFilters,
+} = useServerSideFilter(accessControlFilters());
 
 /**
  * Get ID of role SUPER_ADMINISTRATOR.
@@ -98,28 +101,6 @@ async function getSuperAdministratorId() {
   }).then(({ content }) => {
     superAdministratorId.value = content[0].id;
   });
-}
-
-/**
- * Create API filters from component ref.
- * @returns {object} Object that contains role filters.
- */
-function getFilters() {
-  const filters = {};
-
-  if (nameFilter.value?.length > 0) {
-    filters.name = `lk_*${nameFilter.value}*`;
-  }
-
-  if (currentPage.value >= 1) {
-    filters.page = `${currentPage.value - 1}`;
-  }
-
-  if (elementsPerPage.value !== 10) {
-    filters.count = `${elementsPerPage.value}`;
-  }
-
-  return filters;
 }
 
 /**
@@ -164,9 +145,9 @@ async function search() {
 
   return promise().then((data) => {
     rows.value = data.content;
-    currentPage.value = data.pageable.pageNumber + 1;
+    filters.value.page = data.pageable.pageNumber + 1;
     maxPage.value = data.totalPages;
-    elementsPerPage.value = data.size;
+    filters.value.count = data.size;
     totalElements.value = data.totalElements;
   });
 }
