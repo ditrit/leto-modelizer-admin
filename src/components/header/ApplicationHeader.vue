@@ -5,12 +5,12 @@
   >
     <div>
       <q-img class="logo" />
-      <label
+      <span
         class="vertical-middle text-subtitle1 cursor-pointer text-white"
         data-cy="application-name"
       >
         {{ $t('ApplicationHeader.text.applicationName') }}
-      </label>
+      </span>
     </div>
     <div class="project-info">
       <h5
