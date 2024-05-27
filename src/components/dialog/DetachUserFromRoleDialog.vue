@@ -6,7 +6,7 @@
           {{ $t('DetachUserFromRoleDialog.text.title', { user: user.name, role: role.name }) }}
         </span>
       </q-card-section>
-      <q-form @submit="onSubmit">
+      <q-form @submit="detach">
         <q-card-section
           v-if="isCurrentUser"
           class="column flex-center"
@@ -54,62 +54,19 @@
 </template>
 
 <script setup>
-import { useDialog } from 'src/composables/Dialog';
-import { ref, computed } from 'vue';
-import ReloadUsersEvent from 'src/composables/events/ReloadUsersEvent';
-import DialogEvent from 'src/composables/events/DialogEvent';
-import * as RoleService from 'src/services/RoleService';
-import * as UserService from 'src/services/UserService';
-import { Notify } from 'quasar';
-import { useI18n } from 'vue-i18n';
-import { useUserStore } from 'src/stores/UserStore';
+import { useDetachDialog } from 'src/composables/DetachDialog';
 
-const userStore = useUserStore();
-const { t } = useI18n();
-const submitting = ref(false);
-const role = ref(null);
-const user = ref();
-const isCurrentUser = computed(() => user.value?.login === userStore.login);
-const { show } = useDialog('detach-user-from-role', (event) => {
-  submitting.value = false;
-  role.value = event.role;
-  user.value = event.user;
-});
-
-/**
- * Detach user, send event to reload users and close dialog.
- * If current user loses his admin access, open dialog redirect to Leto-Modelizer.
- * @returns {Promise<void>} Promise with nothing on success.
- */
-async function onSubmit() {
-  submitting.value = true;
-
-  await RoleService.dissociateRoleAndUser(user.value.login, role.value.id)
-    .then(async () => {
-      submitting.value = false;
-
-      Notify.create({
-        type: 'positive',
-        message: t('DetachUserFromRoleDialog.text.notifySuccess'),
-        html: true,
-      });
-
-      if (isCurrentUser.value) {
-        userStore.permissions = await UserService.getMyPermissions();
-
-        if (!userStore.isAdmin) {
-          DialogEvent.next({
-            key: 'redirect',
-            type: 'open',
-          });
-        }
-      }
-
-      if (!isCurrentUser.value || (isCurrentUser.value && userStore.isAdmin)) {
-        ReloadUsersEvent.next();
-      }
-
-      show.value = false;
-    });
-}
+const {
+  show,
+  submitting,
+  user,
+  role,
+  isCurrentUser,
+  detach,
+} = useDetachDialog(
+  'DetachUserFromRoleDialog',
+  'detach-user-from-role',
+  'role',
+  'user',
+);
 </script>
