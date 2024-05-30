@@ -273,6 +273,7 @@ export default {
       cancel: 'Cancel',
       confirm: 'Confirm',
       notifySuccess: 'Group is detached from user.',
+      notifyError: 'Error during group detachment from user.',
     },
   },
   DetachUserFromGroupDialog: {
@@ -282,6 +283,7 @@ export default {
       cancel: 'Cancel',
       confirm: 'Confirm',
       notifySuccess: 'User is detached from group.',
+      notifyError: 'Error during user detachment from group.',
     },
   },
   DetachRoleFromGroupDialog: {
@@ -327,6 +329,7 @@ export default {
       cancel: 'Cancel',
       confirm: 'Confirm',
       notifySuccess: 'Role is detached from user.',
+      notifyError: 'Error during role detachment from user.',
       warning: 'Losing your role means losing permission, and if you no longer have admin access, you will be redirected to Leto-Modelizer.',
     },
     icon: {
@@ -340,6 +343,7 @@ export default {
       cancel: 'Cancel',
       confirm: 'Confirm',
       notifySuccess: 'User is detached from role.',
+      notifyError: 'Error during user detachment from role.',
       warning: 'Losing your role means losing permission, and if you no longer have admin access, you will be redirected to Leto-Modelizer.',
     },
     icon: {

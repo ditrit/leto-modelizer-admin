@@ -6,7 +6,7 @@
           {{ $t('AttachGroupToUserDialog.text.title') }}
         </span>
       </q-card-section>
-      <q-form @submit="onSubmit">
+      <q-form @submit="attach">
         <q-card-section class="row items-center">
           <q-icon
             left
@@ -54,23 +54,12 @@
 </template>
 
 <script setup>
-import { useDialog } from 'src/composables/Dialog';
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import AccessControlTable from 'src/components/tables/AccessControlTable.vue';
-import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
 import * as GroupService from 'src/services/GroupService';
-import * as UserService from 'src/services/UserService';
-import { Notify } from 'quasar';
-import { useI18n } from 'vue-i18n';
-import { useUserStore } from 'src/stores/UserStore';
+import { useAttachDialog } from 'src/composables/AttachDialog';
 
-const userStore = useUserStore();
-const { t } = useI18n();
-const submitting = ref(false);
-const userLogin = ref('');
-const selected = ref([]);
 const groups = ref([]);
-const isCurrentUser = computed(() => userLogin.value === userStore.login);
 
 /**
  * Get groups.
@@ -82,63 +71,18 @@ async function search() {
   });
 }
 
-const { show } = useDialog('attach-group-to-user', (event) => {
-  submitting.value = false;
-  userLogin.value = event.userLogin;
-  selected.value = [];
-  return search();
-});
-
-/**
- * Attach one or more groups to a user.
- * @returns {Promise<void>} Promise with nothing on success.
- */
-async function onSubmit() {
-  submitting.value = true;
-
-  const groupIdList = selected.value.map(({ id }) => id);
-
-  await Promise.allSettled(groupIdList
-    .map((groupId) => GroupService.associateGroupAndUser(userLogin.value, groupId)
-      .catch(() => {
-        Notify.create({
-          type: 'negative',
-          message: t('AttachGroupToUserDialog.text.notifyError'),
-          html: true,
-        });
-
-        throw new Error(groupId);
-      })))
-    .then((results) => {
-      const failedRequestObjects = [];
-
-      results.forEach(({ status, reason }) => {
-        if (status === 'rejected' && reason.message) {
-          failedRequestObjects.push(...selected.value
-            .filter(({ id }) => id === reason.message));
-        }
-      });
-
-      selected.value = failedRequestObjects;
-
-      if (results.every(({ status }) => status === 'fulfilled')) {
-        Notify.create({
-          type: 'positive',
-          message: t('AttachGroupToUserDialog.text.notifySuccess'),
-          html: true,
-        });
-
-        show.value = false;
-      }
-    }).finally(async () => {
-      ReloadGroupsEvent.next();
-      submitting.value = false;
-
-      if (isCurrentUser.value) {
-        userStore.permissions = await UserService.getMyPermissions();
-      }
-    });
-}
+const {
+  show,
+  submitting,
+  selected,
+  attach,
+} = useAttachDialog(
+  'AttachGroupToUserDialog',
+  'attach-group-to-user',
+  'user',
+  'group',
+  search,
+);
 </script>
 
 <style scoped>

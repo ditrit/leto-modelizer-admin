@@ -7,7 +7,7 @@
                 { group: group.name, user: user.name }) }}
         </span>
       </q-card-section>
-      <q-form @submit="onSubmit">
+      <q-form @submit="detach">
         <q-card-section class="column flex-center">
           {{ $t('DetachGroupFromUserDialog.text.content') }}
         </q-card-section>
@@ -35,50 +35,18 @@
 </template>
 
 <script setup>
-import { useDialog } from 'src/composables/Dialog';
-import { ref, computed } from 'vue';
-import ReloadGroupsEvent from 'src/composables/events/ReloadGroupsEvent';
-import * as GroupService from 'src/services/GroupService';
-import * as UserService from 'src/services/UserService';
-import { Notify } from 'quasar';
-import { useI18n } from 'vue-i18n';
-import { useUserStore } from 'src/stores/UserStore';
+import { useDetachDialog } from 'src/composables/DetachDialog';
 
-const userStore = useUserStore();
-const { t } = useI18n();
-const submitting = ref(false);
-const group = ref(null);
-const user = ref();
-const isCurrentUser = computed(() => user.value?.login === userStore.login);
-
-const { show } = useDialog('detach-group-from-user', (event) => {
-  submitting.value = false;
-  group.value = event.group;
-  user.value = event.user;
-});
-
-/**
- * Detach group, send event to reload user groups and close dialog.
- * @returns {Promise<void>} Promise with nothing on success.
- */
-async function onSubmit() {
-  submitting.value = true;
-
-  await GroupService.dissociateGroupAndUser(user.value.login, group.value.id);
-
-  Notify.create({
-    type: 'positive',
-    message: t('DetachGroupFromUserDialog.text.notifySuccess'),
-    html: true,
-  });
-
-  ReloadGroupsEvent.next();
-
-  if (isCurrentUser.value) {
-    userStore.permissions = await UserService.getMyPermissions();
-  }
-
-  submitting.value = false;
-  show.value = false;
-}
+const {
+  show,
+  submitting,
+  user,
+  group,
+  detach,
+} = useDetachDialog(
+  'DetachGroupFromUserDialog',
+  'detach-group-from-user',
+  'user',
+  'group',
+);
 </script>

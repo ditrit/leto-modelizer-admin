@@ -6,7 +6,7 @@
           {{ $t('AttachPermissionToRoleDialog.text.title') }}
         </span>
       </q-card-section>
-      <q-form @submit="onSubmit">
+      <q-form @submit="attach">
         <q-card-section>
           <permissions-table
             v-model:selected="selected"
@@ -43,22 +43,11 @@
 </template>
 
 <script setup>
-import { useDialog } from 'src/composables/Dialog';
 import { ref } from 'vue';
 import PermissionsTable from 'src/components/tables/PermissionsTable.vue';
-import ReloadPermissionsEvent from 'src/composables/events/ReloadPermissionsEvent';
-import * as RoleService from 'src/services/RoleService';
-import * as UserService from 'src/services/UserService';
 import * as PermissionService from 'src/services/PermissionService';
-import { Notify } from 'quasar';
-import { useI18n } from 'vue-i18n';
-import { useUserStore } from 'src/stores/UserStore';
+import { useAttachDialog } from 'src/composables/AttachDialog';
 
-const userStore = useUserStore();
-const { t } = useI18n();
-const submitting = ref(false);
-const roleId = ref('');
-const selected = ref([]);
 const permissions = ref([]);
 
 /**
@@ -71,61 +60,18 @@ async function search() {
   });
 }
 
-const { show } = useDialog('attach-permission-to-role', (event) => {
-  submitting.value = false;
-  roleId.value = event.roleId;
-  selected.value = [];
-  return search();
-});
-
-/**
- * Attach one or more permissions to a role.
- * @returns {Promise<void>} Promise with nothing on success.
- */
-async function onSubmit() {
-  submitting.value = true;
-
-  const permissionIdList = selected.value.map(({ id }) => id);
-
-  await Promise.allSettled(permissionIdList
-    .map((permissionId) => RoleService.associateRoleAndPermission(roleId.value, permissionId)
-      .catch(() => {
-        Notify.create({
-          type: 'negative',
-          message: t('AttachPermissionToRoleDialog.text.notifyError'),
-          html: true,
-        });
-
-        throw new Error(permissionId);
-      })))
-    .then((results) => {
-      const failedRequestObjects = [];
-
-      results.forEach(({ status, reason }) => {
-        if (status === 'rejected' && reason.message) {
-          failedRequestObjects.push(...selected.value
-            .filter(({ id }) => id === reason.message));
-        }
-      });
-
-      selected.value = failedRequestObjects;
-
-      if (results.every(({ status }) => status === 'fulfilled')) {
-        Notify.create({
-          type: 'positive',
-          message: t('AttachPermissionToRoleDialog.text.notifySuccess'),
-          html: true,
-        });
-
-        show.value = false;
-      }
-    })
-    .finally(async () => {
-      ReloadPermissionsEvent.next();
-      submitting.value = false;
-      userStore.permissions = await UserService.getMyPermissions();
-    });
-}
+const {
+  show,
+  submitting,
+  selected,
+  attach,
+} = useAttachDialog(
+  'AttachPermissionToRoleDialog',
+  'attach-permission-to-role',
+  'role',
+  'permission',
+  search,
+);
 </script>
 
 <style scoped>

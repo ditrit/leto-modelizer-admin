@@ -6,7 +6,7 @@
           {{ $t('AttachUserToRoleDialog.text.title') }}
         </span>
       </q-card-section>
-      <q-form @submit="onSubmit">
+      <q-form @submit="attach">
         <q-card-section class="row items-center">
           <q-icon
             left
@@ -55,21 +55,11 @@
 </template>
 
 <script setup>
-import { useDialog } from 'src/composables/Dialog';
 import { ref } from 'vue';
 import UsersTable from 'src/components/tables/UsersTable.vue';
-import ReloadUsersEvent from 'src/composables/events/ReloadUsersEvent';
-import * as RoleService from 'src/services/RoleService';
 import * as UserService from 'src/services/UserService';
-import { Notify } from 'quasar';
-import { useI18n } from 'vue-i18n';
-import { useUserStore } from 'src/stores/UserStore';
+import { useAttachDialog } from 'src/composables/AttachDialog';
 
-const userStore = useUserStore();
-const { t } = useI18n();
-const submitting = ref(false);
-const roleId = ref('');
-const selected = ref([]);
 const users = ref([]);
 
 /**
@@ -82,64 +72,18 @@ async function search() {
   });
 }
 
-const { show } = useDialog('attach-user-to-role', (event) => {
-  submitting.value = false;
-  roleId.value = event.roleId;
-  selected.value = [];
-  return search();
-});
-
-/**
- * Attach one or more users to a role.
- * @returns {Promise<void>} Promise with nothing on success.
- */
-async function onSubmit() {
-  submitting.value = true;
-
-  const userLoginList = selected.value.map(({ login }) => login);
-
-  await Promise.allSettled(userLoginList
-    .map((userLogin) => RoleService.associateRoleAndUser(userLogin, roleId.value)
-      .catch(() => {
-        Notify.create({
-          type: 'negative',
-          message: t('AttachUserToRoleDialog.text.notifyError'),
-          html: true,
-        });
-
-        throw new Error(userLogin);
-      })))
-    .then((results) => {
-      const failedRequestObjects = [];
-
-      results.forEach(({ status, reason }) => {
-        if (status === 'rejected' && reason.message) {
-          failedRequestObjects.push(...selected.value
-            .filter(({ login }) => login === reason.message));
-        }
-      });
-
-      selected.value = failedRequestObjects;
-
-      if (results.every(({ status }) => status === 'fulfilled')) {
-        Notify.create({
-          type: 'positive',
-          message: t('AttachUserToRoleDialog.text.notifySuccess'),
-          html: true,
-        });
-
-        show.value = false;
-      }
-    })
-    .finally(async () => {
-      ReloadUsersEvent.next();
-      submitting.value = false;
-
-      if (userLoginList.includes(userStore.login)) {
-        userStore.permissions = await UserService.getMyPermissions();
-      }
-    });
-}
+const {
+  show,
+  submitting,
+  selected,
+  attach,
+} = useAttachDialog(
+  'AttachUserToRoleDialog',
+  'attach-user-to-role',
+  'role',
+  'user',
+  search,
+);
 </script>
 
 <style scoped>
