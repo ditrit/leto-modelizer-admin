@@ -72,5 +72,9 @@ export async function create(url, role) {
 export async function synchronize(id, url) {
   const api = await prepareRequest();
 
-  return api.put(`/libraries/${id}`, { url }).then(({ data }) => data);
+  return api.put(`/libraries/${id}`, url, {
+    headers: {
+      'Content-Type': 'text/plain',
+    },
+  }).then(({ data }) => data);
 }
