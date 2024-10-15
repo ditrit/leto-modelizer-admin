@@ -875,7 +875,7 @@ function setLibraryIntercepts() {
   });
 
   cy.intercept('PUT', '/api/libraries/1', (request) => {
-    const { url } = request.body;
+    const url = request.body;
 
     if (url === 'notFound') {
       request.reply({

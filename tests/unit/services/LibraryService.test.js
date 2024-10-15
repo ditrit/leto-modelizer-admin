@@ -114,7 +114,11 @@ describe('Test: LibraryService', () => {
 
       const result = await LibraryService.synchronize('id', 'url');
 
-      expect(mockPutRequest).toBeCalledWith('/libraries/id', { url: 'url' });
+      expect(mockPutRequest).toBeCalledWith('/libraries/id', 'url', {
+        headers: {
+          'Content-Type': 'text/plain',
+        },
+      });
       expect(result).toEqual({ id: 1 });
     });
   });
