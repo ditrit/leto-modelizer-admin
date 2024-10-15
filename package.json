@@ -1,6 +1,6 @@
 {
   "name": "leto-modelizer-admin",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Administration application for leto-modelizer.",
   "productName": "leto-modelizer-admin",
   "author": "Vincent Moittié <moittie.vincent@gmail.com>",
