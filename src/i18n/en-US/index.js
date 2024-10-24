@@ -627,6 +627,15 @@ export default {
       byName: 'fa-solid fa-magnifying-glass',
     },
   },
+  SecretFiltersCard: {
+    text: {
+      title: 'Filters',
+      byKey: 'by key',
+    },
+    icon: {
+      byKey: 'fa-solid fa-magnifying-glass',
+    },
+  },
   UserFiltersCard: {
     text: {
       filters: 'Filters',
