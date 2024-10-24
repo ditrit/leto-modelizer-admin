@@ -50,6 +50,16 @@ const routes = [
     ],
   },
   {
+    path: '/ai',
+    meta: {
+      name: 'ai',
+    },
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/AISettingsPage.vue') },
+    ],
+  },
+  {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue'),
   },

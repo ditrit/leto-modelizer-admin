@@ -1,15 +1,21 @@
 <template>
   <q-layout view="hHh lpR fFf">
     <application-header />
+
     <application-drawer />
+
     <q-page-container>
       <router-view />
     </q-page-container>
+
     <application-footer />
+
+    <add-secret-dialog />
     <remove-library-dialog />
     <remove-user-dialog />
     <remove-group-dialog />
     <remove-role-dialog />
+    <remove-secret-dialog />
     <detach-group-from-user-dialog />
     <detach-user-from-group-dialog />
     <detach-role-from-user-dialog />
@@ -23,6 +29,7 @@
     <attach-access-control-to-another-dialog />
     <attach-permission-to-role-dialog />
     <redirect-dialog />
+    <update-secret-dialog />
   </q-layout>
 </template>
 <script setup>
@@ -46,4 +53,7 @@ import AttachUserToRoleDialog from 'components/dialog/AttachUserToRoleDialog.vue
 import AttachAccessControlToAnotherDialog from 'components/dialog/AttachAccessControlToAnotherDialog.vue';
 import AttachPermissionToRoleDialog from 'components/dialog/AttachPermissionToRoleDialog.vue';
 import RedirectDialog from 'components/dialog/RedirectDialog.vue';
+import RemoveSecretDialog from 'components/dialog/RemoveSecretDialog.vue';
+import AddSecretDialog from 'components/dialog/AddSecretDialog.vue';
+import UpdateSecretDialog from 'components/dialog/UpdateSecretDialog.vue';
 </script>

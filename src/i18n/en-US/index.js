@@ -5,12 +5,14 @@ export default {
       groups: 'User Groups',
       libraries: 'Libraries',
       roles: 'Roles',
+      ai: 'AI settings',
     },
     icon: {
       users: 'fa-solid fa-user',
       groups: 'fa-solid fa-users',
       libraries: 'fa-solid fa-book-open',
       roles: 'fa-solid fa-screwdriver-wrench',
+      ai: 'fa-solid fa-toolbox',
     },
   },
   ApplicationFooter: {
@@ -34,6 +36,13 @@ export default {
   IndexPage: {
     text: {
       title: 'Users',
+    },
+  },
+  AISettingsPage: {
+    text: {
+      title: 'AI settings',
+      configurationsTab: 'Configuration',
+      secretsTab: 'Secrets',
     },
   },
   GroupsPage: {
@@ -196,6 +205,21 @@ export default {
       noData: 'fa-solid fa-face-frown-open',
     },
   },
+  SecretsTable: {
+    text: {
+      keyColumn: 'Key',
+      actionsColumn: 'Actions',
+      editAction: 'Edit secret',
+      updateDateColumn: 'Last update date',
+      removeAction: 'Remove secret',
+      noData: 'No secrets found.',
+    },
+    icon: {
+      editAction: 'fa-solid fa-pen',
+      removeAction: 'fa-solid fa-trash',
+      noData: 'fa-solid fa-face-frown-open',
+    },
+  },
   PermissionsTable: {
     text: {
       keyColumn: 'Description',
@@ -245,6 +269,40 @@ export default {
     },
     icon: {
       warning: 'fa-solid fa-triangle-exclamation',
+    },
+  },
+  AddSecretDialog: {
+    text: {
+      title: 'Add a new secret.',
+      cancel: 'Cancel',
+      confirm: 'Add',
+      notifySuccess: 'Secret is added.',
+      notifyError: 'Error during secret creation.',
+      key: 'Secret key',
+      value: 'Secret value',
+    },
+    icon: {
+      warning: 'fa-solid fa-triangle-exclamation',
+    },
+  },
+  UpdateSecretDialog: {
+    text: {
+      title: 'Update secret {key}.',
+      cancel: 'Cancel',
+      confirm: 'Update',
+      notifySuccess: 'Secret is updated.',
+      notifyError: 'Error during secret update.',
+      value: 'New secret value',
+    },
+  },
+  RemoveSecretDialog: {
+    text: {
+      title: 'Do you want to delete the secret {key} ?',
+      content: 'Please note, this action is irreversible.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifySuccess: 'Secret is deleted.',
+      notifyError: 'Error during secret deletion.',
     },
   },
   RemoveRoleDialog: {
@@ -541,6 +599,20 @@ export default {
       warning: 'fa-solid fa-triangle-exclamation',
     },
   },
+  ConfigurationsTabPanel: {
+    text: {
+      title: 'AI Configuration',
+    },
+  },
+  SecretsTabPanel: {
+    text: {
+      title: 'AI Secrets',
+      add: 'Add new secret',
+    },
+    icon: {
+      add: 'fa-solid fa-plus',
+    },
+  },
   UsersTabPanel: {
     text: {
       title: 'List of users attributed to {name}',
@@ -591,6 +663,15 @@ export default {
     },
     icon: {
       byName: 'fa-solid fa-magnifying-glass',
+    },
+  },
+  SecretFiltersCard: {
+    text: {
+      title: 'Filters',
+      byKey: 'by key',
+    },
+    icon: {
+      byKey: 'fa-solid fa-magnifying-glass',
     },
   },
   UserFiltersCard: {

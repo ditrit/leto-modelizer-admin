@@ -24,8 +24,8 @@ Administration application for leto-modelizer.
 
 ### Requirements
 
-- node - v18.14
-- npm - v8.19.3
+* node - [v20.16.0](https://nodejs.org/en/blog/release/v20.16.0)
+* npm - [v10.8.1](https://www.npmjs.com/package/npm/v/10.8.1)
 
 This server is based on [Quasar](https://quasar.dev/).
 
