@@ -62,6 +62,12 @@ const menuList = ref([
     url: '/libraries',
     name: 'libraries',
   },
+  {
+    icon: t('ApplicationDrawer.icon.ai'),
+    label: t('ApplicationDrawer.text.ai'),
+    url: '/ai',
+    name: 'ai',
+  },
 ]);
 </script>
 
