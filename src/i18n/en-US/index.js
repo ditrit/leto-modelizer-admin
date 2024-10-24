@@ -261,6 +261,16 @@ export default {
       warning: 'fa-solid fa-triangle-exclamation',
     },
   },
+  UpdateSecretDialog: {
+    text: {
+      title: 'Update secret {key}.',
+      cancel: 'Cancel',
+      confirm: 'Update',
+      notifySuccess: 'Secret is updated.',
+      notifyError: 'Error during secret update.',
+      value: 'New secret value',
+    },
+  },
   RemoveSecretDialog: {
     text: {
       title: 'Do you want to delete the secret {key} ?',
