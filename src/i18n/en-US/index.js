@@ -5,12 +5,14 @@ export default {
       groups: 'User Groups',
       libraries: 'Libraries',
       roles: 'Roles',
+      ai: 'AI settings',
     },
     icon: {
       users: 'fa-solid fa-user',
       groups: 'fa-solid fa-users',
       libraries: 'fa-solid fa-book-open',
       roles: 'fa-solid fa-screwdriver-wrench',
+      ai: 'fa-solid fa-toolbox',
     },
   },
   ApplicationFooter: {
@@ -34,6 +36,13 @@ export default {
   IndexPage: {
     text: {
       title: 'Users',
+    },
+  },
+  AISettingsPage: {
+    text: {
+      title: 'AI settings',
+      configurationsTab: 'Configuration',
+      secretsTab: 'Secrets',
     },
   },
   GroupsPage: {
