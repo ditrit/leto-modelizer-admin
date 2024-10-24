@@ -261,6 +261,16 @@ export default {
       warning: 'fa-solid fa-triangle-exclamation',
     },
   },
+  RemoveSecretDialog: {
+    text: {
+      title: 'Do you want to delete the secret {key} ?',
+      content: 'Please note, this action is irreversible.',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      notifySuccess: 'Secret is deleted.',
+      notifyError: 'Error during secret deletion.',
+    },
+  },
   RemoveRoleDialog: {
     text: {
       title: 'Do you want to delete the role {name} ?',
