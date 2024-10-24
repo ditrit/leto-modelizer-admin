@@ -590,6 +590,11 @@ export default {
       warning: 'fa-solid fa-triangle-exclamation',
     },
   },
+  ConfigurationsTabPanel: {
+    text: {
+      title: 'AI Configuration',
+    },
+  },
   SecretsTabPanel: {
     text: {
       title: 'AI Secrets',
