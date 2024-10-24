@@ -247,6 +247,20 @@ export default {
       warning: 'fa-solid fa-triangle-exclamation',
     },
   },
+  AddSecretDialog: {
+    text: {
+      title: 'Add a new secret.',
+      cancel: 'Cancel',
+      confirm: 'Add',
+      notifySuccess: 'Secret is added.',
+      notifyError: 'Error during secret creation.',
+      key: 'Secret key',
+      value: 'Secret value',
+    },
+    icon: {
+      warning: 'fa-solid fa-triangle-exclamation',
+    },
+  },
   RemoveRoleDialog: {
     text: {
       title: 'Do you want to delete the role {name} ?',
