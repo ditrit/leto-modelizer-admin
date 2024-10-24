@@ -196,6 +196,21 @@ export default {
       noData: 'fa-solid fa-face-frown-open',
     },
   },
+  SecretsTable: {
+    text: {
+      keyColumn: 'Key',
+      actionsColumn: 'Actions',
+      editAction: 'Edit secret',
+      updateDateColumn: 'Last update date',
+      removeAction: 'Remove secret',
+      noData: 'No secrets found.',
+    },
+    icon: {
+      editAction: 'fa-solid fa-pen',
+      removeAction: 'fa-solid fa-trash',
+      noData: 'fa-solid fa-face-frown-open',
+    },
+  },
   PermissionsTable: {
     text: {
       keyColumn: 'Description',
