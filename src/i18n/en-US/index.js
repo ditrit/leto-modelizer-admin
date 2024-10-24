@@ -590,6 +590,15 @@ export default {
       warning: 'fa-solid fa-triangle-exclamation',
     },
   },
+  SecretsTabPanel: {
+    text: {
+      title: 'AI Secrets',
+      add: 'Add new secret',
+    },
+    icon: {
+      add: 'fa-solid fa-plus',
+    },
+  },
   UsersTabPanel: {
     text: {
       title: 'List of users attributed to {name}',
