@@ -32,7 +32,6 @@ Feature: Test roundtrip of the application: Secrets
     ## 101 Should display all secrets
     And I expect '[data-cy="secrets_table"] tbody tr' appear 2 times on screen
     And I expect '[data-cy="secrets_table"] tbody tr:nth-child(1) td.secret-key' is 'SONAR_TOKEN'
-
     And I expect '[data-cy="secrets_table"] tbody tr:nth-child(2) td.secret-key' is 'GEMINI_TOKEN'
 
     ####################################################
