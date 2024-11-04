@@ -80,6 +80,16 @@ const defaultResponse = {
   size: 10,
   totalElements: 0,
 };
+const secret1 = {
+  id: '1',
+  key: 'SONAR_TOKEN',
+  updateDate: '2024-10-23T14:30:00.000+00:00',
+};
+const secret2 = {
+  id: '2',
+  key: 'GEMINI_TOKEN',
+  updateDate: '2024-10-23T15:00:00.000+00:00',
+};
 
 /**
  * User-specific intercepts
@@ -917,11 +927,96 @@ function setLibraryIntercepts() {
   });
 }
 
+/**
+ * Secret-specific intercepts
+ */
+function setSecretIntercepts() {
+  cy.intercept('GET', '/api/ai/secrets', (request) => {
+    request.reply({
+      statusCode: 200,
+      body: {
+        ...defaultResponse,
+        content: [secret1, secret2],
+      },
+    });
+  });
+
+  cy.intercept('GET', '/api/ai/secrets?key=lk_*SONAR*', {
+    statusCode: 200,
+    body: {
+      ...defaultResponse,
+      content: [secret1],
+    },
+  });
+
+  cy.intercept('GET', '/api/ai/secrets/1', {
+    statusCode: 200,
+    body: secret1,
+  });
+
+  cy.intercept('GET', '/api/ai/secrets/2', {
+    statusCode: 200,
+    body: secret2,
+  });
+
+  cy.intercept('DELETE', '/api/ai/secrets/2', (request) => {
+    request.reply({ statusCode: 204 });
+  });
+
+  cy.intercept('POST', '/api/ai/secrets', (request) => {
+    const { key } = request.body;
+
+    if (key === 'alreadyExist') {
+      request.reply({
+        statusCode: 400,
+        body: {
+          message: 'Secret with this key already exists',
+        },
+      });
+    } else {
+      request.reply({
+        statusCode: 200,
+        body: {
+          id: '1',
+        },
+      });
+    }
+  });
+
+  cy.intercept('PUT', '/api/ai/secrets/1', (request) => {
+    const { key } = request.body;
+
+    if (key === 'notFound') {
+      request.reply({
+        statusCode: 400,
+        body: {
+          message: 'Other error',
+        },
+      });
+    } else if (key === 'alreadyExist') {
+      request.reply({
+        statusCode: 400,
+        body: {
+          message: 'Secret with this key already exists',
+        },
+      });
+    } else {
+      request.reply({
+        statusCode: 200,
+        body: {
+          id: '1',
+        },
+      });
+    }
+  });
+}
+
 Before(() => {
   setUserIntercepts();
   setGroupIntercepts();
   setRoleIntercepts();
   setLibraryIntercepts();
+  setSecretIntercepts();
 
   cy.intercept('GET', '/api/permissions', {
     statusCode: 200,
