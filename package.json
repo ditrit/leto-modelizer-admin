@@ -19,6 +19,7 @@
   "dependencies": {
     "@quasar/extras": "=1.16.11",
     "axios": "=1.7.2",
+    "nunjucks": "=3.2.4",
     "pinia": "=2.1.7",
     "quasar": "=2.16.4",
     "v-viewer": "=3.0.13",
@@ -47,7 +48,6 @@
     "eslint-plugin-vue": "=9.26.0",
     "gherkin-lint": "=4.2.4",
     "jsdoc": "=4.0.3",
-    "nunjucks": "=3.2.4",
     "vitest": "=1.6.0"
   },
   "engines": {
