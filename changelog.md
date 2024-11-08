@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Table to display all secrets.
   * Add action to create a secret.
   * Add action to edit a secret.
-  * Add action to remove a secret. 
+  * Add action to remove a secret.
+  * Add actions and card to create/edit/delete a generic or custom configuration.
 
 ## [1.0.0] - 2024/10/15
 
