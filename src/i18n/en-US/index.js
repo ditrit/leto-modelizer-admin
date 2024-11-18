@@ -643,6 +643,37 @@ export default {
       warning: 'fa-solid fa-triangle-exclamation',
     },
   },
+  DefaultAIConfigurationCard: {
+    text: {
+      title: 'Global configuration',
+      addPlugin: 'Add AI model for a new plugin',
+      editPlugin: 'Update AI model for existing plugin',
+      newPluginNameLabel: 'Plugin name',
+      newPluginNameHint: '"default" for all unlisted plugin',
+      newPluginHandler: 'Select AI model for plugin',
+      save: 'Save',
+      update: 'Update',
+      notEmpty: 'Field is required.',
+      notifyDeleteSuccess: 'Configuration is deleted.',
+      notifySaveSuccess: 'Configuration is added.',
+      notifyUpdateSuccess: 'Configuration(s) is updated.',
+    },
+    icon: {
+      delete: 'fa-solid fa-trash',
+    },
+  },
+  CustomAIConfigurationCard: {
+    text: {
+      title: 'AI configuration: {handler}',
+      pluginTitle: 'Plugin configuration: { plugin }',
+      save: 'Save',
+      notEmpty: 'Field is required.',
+      notifySaveSuccess: 'Configuration is saved.',
+    },
+    icon: {
+      delete: 'fa-solid fa-trash',
+    },
+  },
   TablePaginationCard: {
     text: {
       content: '{current}/{max} of {total}',

@@ -91,6 +91,54 @@ const secret2 = {
   updateDate: '2024-10-23T15:00:00.000+00:00',
 };
 
+const configurations = [{
+  id: 'id_1',
+  handler: '',
+  key: 'plugin.preferences.plugin1',
+  value: 'handler1',
+}, {
+  id: 'id_2',
+  handler: '',
+  key: 'plugin.preferences.plugin2',
+  value: 'handler2',
+}, {
+  id: 'id_3',
+  handler: 'handler1',
+  key: 'key1',
+  value: 'value1',
+}, {
+  id: 'id_4',
+  handler: 'handler2',
+  key: 'key2',
+  value: 'value2',
+}];
+const descriptions = {
+  handler1: [{
+    handler: 'handler1',
+    key: 'key1',
+    type: 'text',
+    values: [],
+    defaultValue: 'value',
+    label: 'Label',
+    title: 'Title',
+    description: 'Description',
+    pluginDependent: false,
+    required: true,
+  }],
+  handler2: [{
+    handler: 'handler2',
+    key: 'key2',
+    type: 'text',
+    values: [],
+    defaultValue: 'value',
+    label: 'Label',
+    title: 'Title',
+    description: 'Description',
+    pluginDependent: false,
+    required: true,
+  }],
+};
+
 /**
  * User-specific intercepts
  */
@@ -1011,12 +1059,64 @@ function setSecretIntercepts() {
   });
 }
 
+/**
+ * Configuration-specific intercepts
+ */
+function setConfigurationIntercepts() {
+  cy.intercept('GET', '/api/ai/configurations', (request) => {
+    request.reply({
+      statusCode: 200,
+      body: {
+        ...defaultResponse,
+        content: configurations,
+      },
+    });
+  });
+
+  cy.intercept('GET', '/api/ai/proxy/descriptions', (request) => {
+    request.reply({
+      statusCode: 200,
+      body: descriptions,
+    });
+  });
+
+  cy.intercept('POST', '/api/ai/configurations', (request) => {
+    request.reply({
+      statusCode: 200,
+      body: {
+        id: '1',
+      },
+    });
+  });
+
+  cy.intercept('PUT', '/api/ai/configurations', (request) => {
+    request.reply({
+      statusCode: 200,
+      body: [],
+    });
+  });
+
+  cy.intercept('PUT', '/api/ai/configurations/*', (request) => {
+    request.reply({
+      statusCode: 200,
+      body: {
+        id: '1',
+      },
+    });
+  });
+
+  cy.intercept('DELETE', '/api/ai/configurations/*', (request) => {
+    request.reply({ statusCode: 204 });
+  });
+}
+
 Before(() => {
   setUserIntercepts();
   setGroupIntercepts();
   setRoleIntercepts();
   setLibraryIntercepts();
   setSecretIntercepts();
+  setConfigurationIntercepts();
 
   cy.intercept('GET', '/api/permissions', {
     statusCode: 200,
